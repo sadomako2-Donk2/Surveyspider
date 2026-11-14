@@ -1,0 +1,31 @@
+# Render Blueprint for SurveySpider.
+# In Render: New + > Blueprint > pick this repository. Render reads this file and creates the service.
+services:
+  - type: web
+    name: surveyspider
+    runtime: node
+    # "starter" (paid) is needed for the persistent disk below, which keeps surveys and responses
+    # between deploys and restarts. On "free" the site works, but all data is wiped on every restart.
+    plan: starter
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: DATA_DIR
+        value: /var/data
+      # Your Anthropic API key turns on the AI features. Render asks for it when you create the Blueprint.
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      # Code that unlocks the owner-only Business page. Render generates a random one; find it under Environment.
+      - key: ADMIN_CODE
+        generateValue: true
+      # Optional: AI requests allowed per visitor per hour (protects your API bill).
+      - key: AI_REQUESTS_PER_HOUR
+        value: "40"
+    disk:
+      name: surveyspider-data
+      mountPath: /var/data
+      sizeGB: 1
