@@ -477,7 +477,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   }
   const typeLabel = (q) => { if (q.type !== "rating") return QTYPES[q.type] || q.type; const s = scaleOf(q); return `Rating ${s.min}–${s.max}`; };
   const ATTN = { id: "attn", type: "single", text: "To show you are reading carefully, please choose \"Purple\".", options: ["Red", "Green", "Purple", "Blue"], required: true };
-  const TABS = [["home", "Home"], ["pricing", "Pricing"], ["create", "Create"], ["import", "Upload"], ["paper-survey", "Paper Survey"], ["studies", "My surveys"], ["results", "Analyze"], ["panel", "Take surveys"], ["library", "Library"], ["business", "Business"]];
+  const TABS = [["home", "Home"], ["pricing", "Pricing"], ["create", "Create Survey"], ["import", "Upload Survey"], ["paper-survey", "Paper Survey"], ["studies", "My surveys"], ["results", "Analyze"], ["panel", "Take surveys"], ["library", "Library"], ["business", "Business"]];
 
   const TEMPLATES = {
     cx: { group: "research", name: "Customer satisfaction", blurb: "Measure satisfaction and find what to fix first.", title: "Online shopping satisfaction", description: "A short survey about your experience shopping online. There are no right or wrong answers.", minutes: 5, reward: 1.0, target: 150, occupations: [],
