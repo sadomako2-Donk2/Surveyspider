@@ -477,7 +477,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   }
   const typeLabel = (q) => { if (q.type !== "rating") return QTYPES[q.type] || q.type; const s = scaleOf(q); return `Rating ${s.min}–${s.max}`; };
   const ATTN = { id: "attn", type: "single", text: "To show you are reading carefully, please choose \"Purple\".", options: ["Red", "Green", "Purple", "Blue"], required: true };
-  const TABS = [["home", "Home"], ["pricing", "Pricing"], ["create", "Create Survey"], ["import", "Upload Survey"], ["paper-survey", "Paper Survey"], ["studies", "My surveys"], ["results", "Analyze"], ["panel", "Take surveys"], ["library", "Library"], ["business", "Business"]];
+  const TABS = [["home", "Home"], ["pricing", "Pricing"], ["create", "Create Survey"], ["import", "Upload Survey"], ["paper-survey", "Paper Survey"], ["studies", "My Surveys"], ["results", "Analyze"], ["panel", "Take surveys"], ["library", "Library"], ["business", "Business"]];
 
   const TEMPLATES = {
     cx: { group: "research", name: "Customer satisfaction", blurb: "Measure satisfaction and find what to fix first.", title: "Online shopping satisfaction", description: "A short survey about your experience shopping online. There are no right or wrong answers.", minutes: 5, reward: 1.0, target: 150, occupations: [],
@@ -1289,7 +1289,7 @@ ${richSummary(st, rows)}`;
   function viewStudies() {
     if (S.mode === "loading") return loading();
     const mine = myStudies();
-    const head = `<div class="page-head"><div><span class="eyebrow">Researcher</span><h1>My studies</h1></div><a class="btn primary" href="#create" data-act="newstudy">New study</a></div>`;
+    const head = `<div class="page-head"><div><span class="eyebrow">Researcher</span><h1>My Surveys</h1></div><a class="btn primary" href="#create" data-act="newstudy">New study</a></div>`;
     if (!mine.length) return head + `<div class="empty"><h2>No studies yet</h2><p class="muted">Create your first study from a template. It takes about five minutes.</p><a class="btn primary" href="#create">Create a study</a></div>`;
     return head + `<div class="list">${mine.map((s) => {
       const used = usedSlots(s.id), cost = s.target * s.reward * (1 + FEE);
@@ -2252,7 +2252,7 @@ ${richSummary(st, rows)}`;
   const r2 = (x) => Math.round(x * 100) / 100;
   function f2fSurvey() {
     const F = S.f2f;
-    if (F.sourceId) { const st = studyById(F.sourceId); if (st) return { title: st.title, questions: st.questions, source: "My surveys" }; }
+    if (F.sourceId) { const st = studyById(F.sourceId); if (st) return { title: st.title, questions: st.questions, source: "My Surveys" }; }
     if (S.imp.status === "ready" && S.imp.questions && S.imp.questions.length) return { title: S.imp.title || S.imp.file, questions: S.imp.questions, source: S.imp.file };
     return null;
   }
