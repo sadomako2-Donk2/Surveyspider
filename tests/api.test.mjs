@@ -48,5 +48,10 @@ check("profiles are validated and private", (await call(B, "PUT", "/api/profile"
 const admin = (await call(C, "GET", "/api/me", undefined, { "X-Admin-Code": "test-admin-code" })).json;
 check("admin code unlocks the business view", admin.isAdmin === true && (await call(C, "GET", "/api/me", undefined, { "X-Admin-Code": "wrong" })).json.isAdmin === false);
 check("oversized uploads are refused", (await call(A, "PUT", "/api/studies/big", { ...study, id: "big", questions: Array(301).fill(study.questions[0]) })).status === 400);
+const fw = { id: "fw1", ref: "Q-TEST", contact: { name: "Ama", email: "ama@example.com" }, inputs: { method: "questionnaire", n: 300 }, quote: { total: 4321, per: 14.4, weeks: 5, lines: [] } };
+check("quote request needs a valid email", (await call(B, "PUT", "/api/fieldwork/fw0", { ...fw, id: "fw0", contact: { name: "x", email: "nope" } })).status === 400);
+check("client can send a quote request", (await call(B, "PUT", "/api/fieldwork/fw1", fw)).status === 200);
+check("requests are private to the client and the owner", (await call(B, "GET", "/api/data")).json.fieldwork.length === 1 && (await call(C, "GET", "/api/data")).json.fieldwork.length === 0 && (await call(C, "GET", "/api/data", undefined, { "X-Admin-Code": "test-admin-code" })).json.fieldwork.length === 1);
+check("only the owner can change request status", (await call(B, "PATCH", "/api/fieldwork/fw1", { status: "won" })).status === 403 && (await call(C, "PATCH", "/api/fieldwork/fw1", { status: "won" }, { "X-Admin-Code": "test-admin-code" })).status === 200);
 console.log(`\n${pass} passed, ${failN} failed`);
 server.close(); process.exit(failN ? 1 : 0);

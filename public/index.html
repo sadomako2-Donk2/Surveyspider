@@ -383,6 +383,20 @@ td.hi { font-weight: 700; color: var(--accent); }
 .pcheck label { flex-direction: row; gap: 8px; color: var(--ink); font-weight: 400; }
 @media (max-width: 760px) { .meters { grid-template-columns: repeat(2, minmax(0, 1fr)); } .grade { grid-template-columns: 1fr; } .metric-row { grid-template-columns: 1fr; } }
 
+/* Paper-to-pen */
+.f2f-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 460px); gap: 20px; align-items: start; }
+.f2f-side { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 72px); }
+.quote { border-color: color-mix(in srgb, var(--gold) 55%, var(--line)); }
+.quote-head { display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap; align-items: flex-start; }
+.quote-total { font-family: var(--font-display); font-weight: 800; font-size: 2.4rem; line-height: 1.1; font-variant-numeric: tabular-nums; color: var(--ink); }
+.quote-head { flex-direction: column; }
+.quote-time { display: flex; flex-direction: column; font-size: 0.82rem; color: var(--muted); border-left: 3px solid var(--gold); padding-left: 10px; }
+.quote-time b { font-family: var(--font-display); color: var(--ink); font-size: 1rem; }
+.quote-table td:first-child { min-width: 180px; }
+.quote-table tr.qgroup td { font-family: var(--font-display); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); padding-top: 14px; border-bottom: 0; }
+.quote-table tr.qtotal td { font-weight: 700; font-size: 1rem; border-top: 2px solid var(--ink); border-bottom: 0; }
+@media (max-width: 960px) { .f2f-grid { grid-template-columns: 1fr; } .f2f-side { position: static; } }
+
 #toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 8px; font-size: 0.9rem; z-index: 20; max-width: calc(100% - 32px); }
 footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--muted); font-size: 0.82rem; }
 
@@ -463,7 +477,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   }
   const typeLabel = (q) => { if (q.type !== "rating") return QTYPES[q.type] || q.type; const s = scaleOf(q); return `Rating ${s.min}–${s.max}`; };
   const ATTN = { id: "attn", type: "single", text: "To show you are reading carefully, please choose \"Purple\".", options: ["Red", "Green", "Purple", "Blue"], required: true };
-  const TABS = [["home", "Home"], ["pricing", "Pricing"], ["create", "Create"], ["import", "Upload"], ["studies", "My surveys"], ["results", "Analyze"], ["panel", "Take surveys"], ["library", "Library"], ["business", "Business"]];
+  const TABS = [["home", "Home"], ["pricing", "Pricing"], ["create", "Create"], ["import", "Upload"], ["paper-to-pen", "Paper-to-Pen Survey"], ["studies", "My surveys"], ["results", "Analyze"], ["panel", "Take surveys"], ["library", "Library"], ["business", "Business"]];
 
   const TEMPLATES = {
     cx: { group: "research", name: "Customer satisfaction", blurb: "Measure satisfaction and find what to fix first.", title: "Online shopping satisfaction", description: "A short survey about your experience shopping online. There are no right or wrong answers.", minutes: 5, reward: 1.0, target: 150, occupations: [],
@@ -515,6 +529,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     imp: { status: "idle" }, importNote: null,
     gen: { status: "idle" }, billing: "annual", anTab: "summary", aiCheck: null, ask: { q: "", a: "", busy: false },
     segQ: null, segKey: "country", driverOut: null, reports: {}, aiBusy: null,
+    fieldwork: [], f2f: { method: "questionnaire", n: 300, groups: 4, perGroup: 8, country: "Ghana", setting: "urban", audience: "general", capture: "tablet", minutes: "", languages: 0, backTranslation: false, record: false, transcription: true, incentive: "", report: "summary", urgency: "standard", sourceId: "", ref: null, requesting: false },
     actions: [], filter: { key: "", val: "", days: 0 }, studio: { test: "desc", q: null, g: "country", a: "country", b: null, items: null }, chat: {}, actionDraft: null, confirmActDel: null
   };
   let DB = null, DL = null, SAMPLE = null, demo = null, pending = false, API = false;
@@ -544,7 +559,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   }
   async function refreshServer() {
     const d = await api("GET", "/api/data");
-    S.studies = d.studies || []; S.responses = d.responses || []; S.actions = d.actions || []; S.profile = d.profile || null; S.stale = false;
+    S.studies = d.studies || []; S.responses = d.responses || []; S.actions = d.actions || []; S.fieldwork = d.fieldwork || []; S.profile = d.profile || null; S.stale = false;
   }
   async function startServer(me) {
     API = true; S.mode = "live"; S.uid = me.uid; S.isOwner = !!me.isAdmin; DL = browserDL; SAMPLE = me.ai ? serverSample() : null;
@@ -557,12 +572,12 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   function startDemo(msg) {
     S.mode = "demo"; S.uid = "demo-you"; S.isOwner = true;
     demo = ls.get("cohortly-demo") || { studies: {}, responses: {}, profile: null };
-    demo.actions = demo.actions || {};
+    demo.actions = demo.actions || {}; demo.fieldwork = demo.fieldwork || {};
     S.profile = demo.profile; syncDemo();
     if (msg) S.notice = msg;
     render();
   }
-  function syncDemo() { S.studies = Object.values(demo.studies); S.responses = Object.values(demo.responses); S.actions = Object.values(demo.actions || {}); }
+  function syncDemo() { S.studies = Object.values(demo.studies); S.responses = Object.values(demo.responses); S.actions = Object.values(demo.actions || {}); S.fieldwork = Object.values(demo.fieldwork || {}); }
   function persistDemo() { ls.set("cohortly-demo", demo); syncDemo(); }
   const sync = (p) => p.then(refreshServer);
   const backend = {
@@ -572,6 +587,18 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     async patchResponse(id, p) { if (API) return sync(api("PATCH", "/api/responses/" + encodeURIComponent(id), p)); if (DB) return DB.collection("responses").doc(id).update(p); Object.assign(demo.responses[id], p); persistDemo(); },
     async putAction(a) { if (API) return sync(api("PUT", "/api/actions/" + encodeURIComponent(a.id), a)); if (DB) return DB.collection("actions").doc(a.id).set(a); demo.actions[a.id] = a; persistDemo(); },
     async delAction(id) { if (API) return sync(api("DELETE", "/api/actions/" + encodeURIComponent(id))); if (DB) return DB.collection("actions").doc(id).delete(); delete demo.actions[id]; persistDemo(); },
+    async putFieldwork(r) {
+      if (API) return sync(api("PUT", "/api/fieldwork/" + encodeURIComponent(r.id), r));
+      const strip = ({ requesterId, ...x }) => x;
+      if (DB) return DB.collection("fieldwork").doc(S.uid).set({ requests: [...S.fieldwork.filter((x) => x.requesterId === S.uid).map(strip), strip(r)].slice(-50) });
+      demo.fieldwork[r.id] = r; persistDemo();
+    },
+    async setFieldStatus(r, status) {
+      if (API) return sync(api("PATCH", "/api/fieldwork/" + encodeURIComponent(r.id), { status }));
+      const strip = ({ requesterId, ...x }) => x;
+      if (DB) return DB.collection("fieldwork").doc(r.requesterId).set({ requests: S.fieldwork.filter((x) => x.requesterId === r.requesterId).map((x) => strip(x.id === r.id ? { ...x, status } : x)) });
+      demo.fieldwork[r.id].status = status; persistDemo();
+    },
     async putProfile(p) { if (API) return sync(api("PUT", "/api/profile", p)); if (DB) return DB.doc("data/users/" + S.uid + "/profile").set(p); demo.profile = p; persistDemo(); }
   };
   function errMsg(e) {
@@ -610,7 +637,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   // ---------- render shell ----------
   function isTyping() { const a = document.activeElement; return !!(a && $("#main").contains(a) && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)); }
   function softRender() {
-    if (S.view === "create" || S.view === "import" || (S.view === "panel" && S.taking)) { renderTabs(); return; }
+    if (S.view === "create" || S.view === "import" || S.view === "paper-to-pen" || (S.view === "panel" && S.taking)) { renderTabs(); return; }
     if (isTyping()) { pending = true; renderTabs(); return; }
     render();
   }
@@ -621,12 +648,12 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     const b = $("#banner");
     const msg = S.notice || (S.mode === "demo" ? "Demo mode: everything you create is saved in this browser only. Open the published page while signed in to claude.ai to share data with other people." : "") || (S.stale ? "Can't reach the saved data yet. What you see may be out of date." : "");
     b.hidden = !msg; b.textContent = msg;
-    $("#foot").textContent = `SurveySpider prototype · platform fee ${Math.round(FEE * 100)}% of participant rewards · ${S.mode === "live" ? "Data is shared with everyone who can open this page." : S.mode === "demo" ? "Demo data stays in this browser." : "Connecting…"}`;
+    $("#foot").textContent = `SurveySpider prototype · platform fee ${Math.round(FEE * 100)}% of participant rewards · ${S.mode === "live" ? (API ? "Your surveys and answers are stored on SurveySpider's server and only shown to the people they belong to." : "Data is shared with everyone who can open this page.") : S.mode === "demo" ? "Demo data stays in this browser." : "Connecting…"}`;
   }
   function render() {
     pending = false;
     renderTabs();
-    const v = { home: viewHome, pricing: viewPricing, import: viewImport, create: viewCreate, studies: viewStudies, panel: viewPanel, results: viewResults, library: viewLibrary, business: viewBusiness }[S.view] || viewHome;
+    const v = { home: viewHome, pricing: viewPricing, import: viewImport, "paper-to-pen": viewF2F, create: viewCreate, studies: viewStudies, panel: viewPanel, results: viewResults, library: viewLibrary, business: viewBusiness }[S.view] || viewHome;
     $("#main").innerHTML = v();
     if (S.view === "create" && S.draft) updateCost();
   }
@@ -721,6 +748,10 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
       </div>
       <div class="band-list">${train.map(([k, t]) => `<button class="band-item" data-act="tpl" data-key="${k}"><b>${esc(t.name)}</b><span>${esc(t.blurb)}</span></button>`).join("")}</div>
     </section>
+    <section class="split card" style="align-items:center">
+      <div class="stack" style="gap:8px"><span class="eyebrow gold">Paper-to-pen survey</span><h2 class="h2xl">Need people interviewed face to face?</h2><p class="muted">Our field teams run questionnaires, one-to-one interviews and focus groups in person, on paper or tablet. Upload your questionnaire and get a full quote in US dollars instantly.</p></div>
+      <div class="row wrap" style="justify-content:flex-end"><a class="btn gold" href="#paper-to-pen">Get an instant quote</a></div>
+    </section>
     <section class="cta-strip">
       <div><h2>Paid plans from $15 a month</h2><p class="muted">Up to 75% less than comparable SurveyMonkey plans. Start free with 300 responses a month.</p></div>
       <a class="btn primary" href="#pricing">Compare plans</a>
@@ -766,6 +797,9 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
       </section>
       <div class="split">
         <section class="card"><h2>Participant panel</h2><p class="muted">Recruit real people for any survey. You set the reward, with a guide of at least $8 per hour, and pay a ${Math.round(FEE * 100)}% platform fee on top. The fee drops to 20% on the Research plan and for verified academic accounts.</p><p class="hint">For comparison, Prolific charges 33.3% for academic and 42.8% for commercial customers (<a href="https://www.prolific.com/pricing" target="_blank" rel="noopener">Prolific pricing</a>).</p></section>
+        <section class="card"><h2>Paper-to-pen fieldwork</h2><p class="muted">Face-to-face questionnaires, in-depth interviews and focus groups are priced per project. Upload your questionnaire on the Paper-to-Pen Survey tab for an instant quote in US dollars.</p><a class="btn" href="#paper-to-pen" style="align-self:flex-start">Get a quote</a></section>
+      </div>
+      <div class="split">
         <section class="card"><h2>Questions about pricing</h2><dl class="kv" style="grid-template-columns:1fr;gap:4px 0"><dt>What counts as an AI action?</dt><dd>One AI survey draft, question check, insight report or Ask your data question.</dd><dt>Can I change plans later?</dt><dd>Yes. Upgrades apply at once and downgrades at your next billing date.</dd><dt>Do unused responses roll over?</dt><dd>No. Yearly plans give you the whole year's responses up front.</dd></dl></section>
       </div>`;
   }
@@ -2200,6 +2234,200 @@ ${richSummary(st, rows)}`;
     xlBusy(false);
   }
 
+  // ================= PAPER-TO-PEN: face-to-face fieldwork with an instant USD quote =================
+  // Indicative rate card (USD). Tier A: high-cost markets; B: middle-income; C: lower-cost markets (default).
+  const F2F_TIER = { "United States": "A", "United Kingdom": "A", Canada: "A", Germany: "A", France: "A", Netherlands: "A", Spain: "A", Italy: "A", Australia: "A", "South Africa": "B", Brazil: "B", Mexico: "B" };
+  const tierOf = (c) => F2F_TIER[c] || "C";
+  const RATE = {
+    A: { min: 1.5, minFee: 12, idiMin: 60, idiRecruit: 70, transcribe: 1.4, fgdModerate: 800, fgdVenue: 350, fgdRecruit: 90, entry: 2 },
+    B: { min: 0.75, minFee: 5, idiMin: 25, idiRecruit: 25, transcribe: 0.9, fgdModerate: 400, fgdVenue: 150, fgdRecruit: 35, entry: 1.2 },
+    C: { min: 0.4, minFee: 3, idiMin: 15, idiRecruit: 12, transcribe: 0.6, fgdModerate: 220, fgdVenue: 80, fgdRecruit: 15, entry: 1 }
+  };
+  const F2F_METHODS = { questionnaire: "Face-to-face questionnaire", idi: "In-depth interviews (one-to-one)", fgd: "Focus group discussions" };
+  const AUDIENCE = { general: ["General public", 1], group: ["A specific group (students, employees, patients…)", 1.25], business: ["Business owners or professionals", 1.6], exec: ["Senior executives or hard-to-reach people", 2.2] };
+  const SETTING = { urban: ["Cities and towns", 1, 15], mixed: ["Urban and rural mix", 1.15, 25], rural: ["Mostly rural", 1.35, 40] };
+  const REPORTS = { none: ["Data only (dashboard and Excel)", 0], summary: ["Summary report", 250], full: ["Full report and presentation", 650] };
+  const TIME_PER = { single: 0.3, multi: 0.45, likert: 0.3, rating: 0.3, number: 0.35, text: 1.2 };
+  const r2 = (x) => Math.round(x * 100) / 100;
+  function f2fSurvey() {
+    const F = S.f2f;
+    if (F.sourceId) { const st = studyById(F.sourceId); if (st) return { title: st.title, questions: st.questions, source: "My surveys" }; }
+    if (S.imp.status === "ready" && S.imp.questions && S.imp.questions.length) return { title: S.imp.title || S.imp.file, questions: S.imp.questions, source: S.imp.file };
+    return null;
+  }
+  function f2fMinutes(F, sv) {
+    if (+F.minutes > 0) return Math.min(240, Math.round(+F.minutes));
+    if (F.method === "fgd") return 90;
+    const qs = sv ? sv.questions : [];
+    if (F.method === "idi") return Math.min(90, Math.max(30, Math.round(qs.reduce((a, q) => a + (q.type === "text" ? 4 : 1.5), 0)) + 5));
+    return Math.max(5, Math.round(1.5 + qs.reduce((a, q) => a + (TIME_PER[q.type] || 0.3), 0)));
+  }
+  const f2fGroups = (F) => Math.max(1, Math.min(60, Math.floor(+F.groups || 1)));
+  const f2fPerGroup = (F) => Math.max(4, Math.min(12, Math.floor(+F.perGroup || 8)));
+  function f2fQuote(F, sv) {
+    const tier = tierOf(F.country), T = RATE[tier], aud = AUDIENCE[F.audience][1], set = SETTING[F.setting][1], travel = SETTING[F.setting][2];
+    const qn = sv ? sv.questions.length : 0, mins = f2fMinutes(F, sv), n = Math.max(1, Math.min(100000, Math.floor(+F.n || 0))), langs = Math.max(0, Math.min(10, Math.floor(+F.languages || 0)));
+    const L = [];
+    const add = (group, label, qty, unit) => { const amount = r2(qty * unit); if (amount > 0) L.push({ group, label, qty, unit: r2(unit), amount }); return amount; };
+    let field = 0, days = 0, people = "";
+    if (F.method === "questionnaire") {
+      field += add("Fieldwork", `Interviewer fee per completed interview (${mins} min)`, n, Math.max(T.minFee, mins * T.min) * aud * set);
+      if (F.capture === "paper") {
+        const pages = Math.ceil(qn / 6) + 1;
+        add("Data capture", `Printing questionnaires (${pages} pages each)`, n, pages * 0.08);
+        add("Data capture", "Double data entry and cleaning", n, Math.max(1, qn) * 0.06 * T.entry);
+      } else add("Data capture", "Tablet data collection (devices, offline app, daily upload)", n, 0.6);
+      if (F.record) add("Data capture", "Audio recording for quality checks", n, 0.5);
+      const perDay = Math.max(2, Math.floor(330 / (mins + travel))), team = Math.min(30, Math.max(2, Math.ceil(n / (perDay * 8))));
+      days = Math.ceil(n / (perDay * team)); people = `${team} interviewers, about ${perDay} interviews each per day`;
+    } else if (F.method === "idi") {
+      field += add("Fieldwork", `Skilled interviewer per in-depth interview (${mins} min)`, n, Math.max(T.idiMin, mins * T.min * 2.2) * aud * set);
+      field += add("Fieldwork", "Recruiting and scheduling each participant", n, T.idiRecruit * aud);
+      if (F.transcription) add("Transcripts", `Word-for-word transcription (${mins} audio min each)`, n, mins * T.transcribe);
+      if (F.transcription && langs) add("Transcripts", "Translating transcripts into English", n, mins * 0.8);
+      const team = Math.min(8, Math.max(1, Math.ceil(n / 12)));
+      days = Math.ceil(n / (3 * team)); people = `${team} interviewer${team > 1 ? "s" : ""}, about 3 interviews each per day`;
+    } else {
+      const g = f2fGroups(F), pp = f2fPerGroup(F);
+      field += add("Fieldwork", "Moderator per group (about 90 min)", g, T.fgdModerate * set);
+      field += add("Fieldwork", "Venue, refreshments and recording", g, T.fgdVenue * set);
+      field += add("Fieldwork", `Recruiting participants (${pp} per group)`, g * pp, T.fgdRecruit * aud);
+      if (F.transcription) add("Transcripts", "Transcription per group (90 min of audio)", g, 90 * T.transcribe * 1.3);
+      if (F.transcription && langs) add("Transcripts", "Translating transcripts into English", g, 90 * 0.8 * 1.3);
+      days = Math.ceil(g / 2); people = "1 moderator team, up to 2 groups a day";
+    }
+    const resp = F.method === "fgd" ? f2fGroups(F) * f2fPerGroup(F) : n;
+    add("Fieldwork", "Supervision and quality back-checks (15% of fieldwork)", 1, field * 0.15);
+    add("Set-up", "Questionnaire review, interviewer briefing and training", 1, 180 + qn * 4 + (F.method !== "questionnaire" ? 120 : 0));
+    if (langs) {
+      add("Set-up", `Translation into ${langs} extra language${langs > 1 ? "s" : ""}`, langs, 60 + qn * 6);
+      if (F.backTranslation) add("Set-up", "Independent back-translation check", langs, (60 + qn * 6) * 0.6);
+    }
+    add("Management", "Project management (12%)", 1, L.reduce((a, x) => a + x.amount, 0) * 0.12);
+    if (F.urgency === "rush") add("Management", "Rush start within 5 working days (+25% on fieldwork)", 1, field * 1.15 * 0.25);
+    if (REPORTS[F.report][1]) add("Reporting", REPORTS[F.report][0], 1, REPORTS[F.report][1]);
+    if (+F.incentive > 0) add("Incentives", "Thank-you payments to respondents (passed through at cost)", resp, Math.min(500, +F.incentive));
+    const total = r2(L.reduce((a, x) => a + x.amount, 0));
+    const totalDays = (F.urgency === "rush" ? 3 : 5) + (langs ? 3 : 0) + days + { none: 2, summary: 4, full: 8 }[F.report];
+    return { lines: L, total, per: r2(total / resp), resp, mins, tier, fieldDays: days, weeks: Math.max(1, Math.ceil(totalDays / 5)), people, qn, n };
+  }
+  const usd = (x) => "$" + (+x).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const usd0 = (x) => "$" + Math.round(+x).toLocaleString("en-US");
+  function f2fReady(F, sv) { return !!sv || +F.minutes > 0 || F.method === "fgd"; }
+  function quoteHtml() {
+    const F = S.f2f, sv = f2fSurvey();
+    if (!f2fReady(F, sv)) return `<div class="empty"><h2>Your quote appears here</h2><p class="muted">Upload your questionnaire, pick one of your surveys, or enter the interview length, and the price is worked out instantly.</p></div>`;
+    const q = f2fQuote(F, sv);
+    if (!S.f2f.ref) S.f2f.ref = "Q-" + Date.now().toString(36).toUpperCase().slice(-6);
+    const groups = [...new Set(q.lines.map((l) => l.group))];
+    const unitName = F.method === "fgd" ? "participant" : F.method === "idi" ? "interview" : "completed interview";
+    const onlineReward = Math.ceil(((MIN_HOURLY * 1.25 * Math.max(3, q.mins * 0.7)) / 60) * 20) / 20, online = q.n * onlineReward * (1 + FEE);
+    return `<div class="quote-head"><div><span class="eyebrow gold">Instant quote · US dollars</span><div class="quote-total">${usd0(q.total)}</div><span class="hint">${usd(q.per)} per ${unitName} · ref ${esc(S.f2f.ref)} · valid 30 days</span></div>
+      <div class="quote-time"><b>About ${q.weeks} week${q.weeks > 1 ? "s" : ""}</b><span>${q.fieldDays} day${q.fieldDays > 1 ? "s" : ""} of fieldwork</span><span>${esc(q.people)}</span></div></div>
+      <div class="table-wrap"><table class="quote-table"><thead><tr><th>Item</th><th>Qty</th><th>Unit</th><th>Amount</th></tr></thead><tbody>
+      ${groups.map((g) => `<tr class="qgroup"><td colspan="4">${esc(g)}</td></tr>` + q.lines.filter((l) => l.group === g).map((l) => `<tr><td>${esc(l.label)}</td><td class="n">${int(l.qty)}</td><td class="n">${usd(l.unit)}</td><td class="n">${usd(l.amount)}</td></tr>`).join("")).join("")}
+      <tr class="qtotal"><td colspan="3">Total</td><td class="n">${usd(q.total)}</td></tr></tbody></table></div>
+      ${F.method === "questionnaire" ? `<p class="callout">Running the same survey online with the SurveySpider panel would cost about <b>${usd0(online)}</b>. Face-to-face reaches people who aren't online, can't read well, or need an interviewer to explain questions.</p>` : ""}
+      <details><summary>What this price assumes</summary><ul class="steps">
+        <li>${q.mins} minutes per ${F.method === "fgd" ? "group" : "interview"}${+F.minutes > 0 ? " (your figure)" : sv ? ` (estimated from ${q.qn} questions)` : ""}.</li>
+        <li>${esc(F.country)} fieldwork at ${q.tier === "A" ? "high-cost" : q.tier === "B" ? "middle" : "standard"} market rates, ${esc(SETTING[F.setting][0].toLowerCase())}.</li>
+        <li>Audience: ${esc(AUDIENCE[F.audience][0].toLowerCase())}. Harder-to-reach people take longer to find.</li>
+        <li>Prices exclude local taxes. The final price is confirmed after a short call about sampling and locations.</li></ul></details>
+      <div class="row wrap"><button class="btn gold" data-act="f2fRequest">Request this fieldwork</button><button class="btn" data-act="f2fXl">Download quote (Excel)</button></div>`;
+  }
+  function updateQuote() { const b = $("#quoteBox"); if (b) b.innerHTML = quoteHtml(); }
+  function viewF2F() {
+    const F = S.f2f, sv = f2fSurvey(), im = S.imp, mine = myStudies();
+    const sel = (key, obj, label) => `<label for="f2-${key}">${label}<select id="f2-${key}" data-f2f="${key}">${Object.entries(obj).map(([k, v]) => `<option value="${esc(k)}"${F[key] === k ? " selected" : ""}>${esc(Array.isArray(v) ? v[0] : v)}</option>`).join("")}</select></label>`;
+    const num = (key, label, attrs, ph) => `<label for="f2-${key}">${label}<input id="f2-${key}" type="number" data-f2f="${key}" value="${esc(F[key])}" ${attrs || ""} ${ph ? `placeholder="${esc(ph)}"` : ""}></label>`;
+    const chk = (key, label) => `<label class="inline" for="f2-${key}"><input type="checkbox" id="f2-${key}" data-f2f="${key}" ${F[key] ? "checked" : ""}>${label}</label>`;
+    const status = im.status === "reading" ? `<div class="status"><span class="spin" aria-hidden="true"></span><span>Reading ${esc(im.file)}…</span></div>` : im.status === "error" && !F.sourceId ? `<div class="status err"><span>${esc(im.error)}</span><button class="btn small ghost" data-act="impReset">Try another file</button></div>` : "";
+    const source = sv ? `<section class="card"><div class="qmeta"><div><span class="eyebrow gold">Your survey</span><h2>${esc(sv.title || "Uploaded survey")}</h2></div><button class="btn small ghost" data-act="f2fClear">Use a different survey</button></div>
+        <p class="muted">${sv.questions.length} questions · about ${f2fMinutes({ ...F, minutes: "" }, sv)} minutes per ${F.method === "fgd" ? "group" : "interview"} face to face</p>
+        <details><summary>See the questions</summary><ol class="steps">${sv.questions.map((q) => `<li>${esc(q.text)} <span class="hint">(${esc(typeLabel(q))})</span></li>`).join("")}</ol></details></section>`
+      : `<label class="drop" for="impFile"><b>Upload your questionnaire or interview guide</b><span class="muted">Word, PDF, Excel or text. It's read in your browser and priced instantly.</span><span class="types"><span class="pill">Word .docx</span><span class="pill">PDF</span><span class="pill">Excel .xlsx</span><span class="pill">Text</span></span><input class="sr-only" type="file" id="impFile" accept=".docx,.pdf,.xlsx,.csv,.txt,.md,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"></label>${status}
+        <details><summary>Or paste the questions as text</summary><div class="stack" style="margin-top:10px"><textarea id="impText" rows="6" placeholder="1. How often do you visit the clinic?&#10;a) Weekly&#10;b) Monthly&#10;c) Rarely"></textarea><div><button class="btn" data-act="impPaste">Read pasted text</button></div></div></details>
+        ${mine.length ? `<label for="f2fPick">Or use one of your surveys<select id="f2fPick"><option value="">Choose a survey…</option>${mine.map((s) => `<option value="${esc(s.id)}">${esc(s.title || "Untitled")}</option>`).join("")}</select></label>` : ""}`;
+    const sizeFields = F.method === "fgd" ? `<div class="grid2">${num("groups", "Number of groups", 'min="1" max="60" step="1"')}${num("perGroup", "People per group", 'min="4" max="12" step="1"')}</div>` : num("n", F.method === "idi" ? "Number of interviews" : "Completed interviews needed", 'min="1" step="1"');
+    return `<div class="page-head"><div><span class="eyebrow gold">Paper-to-pen survey</span><h1>Face-to-face surveys and interviews, priced instantly</h1><p class="muted" style="max-width:66ch">Our field teams interview people in person, on paper or tablet, for questionnaires, one-to-one interviews and focus groups. Upload your questionnaire and see the full price in US dollars straight away.</p></div></div>
+      <div class="f2f-grid">
+        <div class="stack">${source}
+          <section class="card"><h2>Your project</h2>
+            ${sel("method", F2F_METHODS, "How should we collect the data?")}
+            ${sizeFields}
+            <div class="grid2">
+              <label for="f2-country">Country<select id="f2-country" data-f2f="country">${COUNTRIES.map((c) => `<option${F.country === c ? " selected" : ""}>${esc(c)}</option>`).join("")}</select></label>
+              ${sel("setting", SETTING, "Where")}
+            </div>
+            ${sel("audience", AUDIENCE, "Who should we interview?")}
+            <div class="grid2">
+              ${F.method === "questionnaire" ? sel("capture", { tablet: "Tablet (faster, fewer errors)", paper: "Paper and pen, entered afterwards" }, "Recording answers") : ""}
+              ${num("minutes", "Minutes per " + (F.method === "fgd" ? "group" : "interview"), 'min="1" max="240" step="1"', `${f2fMinutes({ ...F, minutes: "" }, sv)} (estimated)`)}
+              ${num("languages", "Extra languages besides English", 'min="0" max="10" step="1"')}
+              ${num("incentive", "Thank-you payment per person (USD)", 'min="0" max="500" step="0.5"', "0")}
+            </div>
+            <div class="stack" style="gap:8px">${chk("backTranslation", "Independent back-translation check (when translating)")}${F.method === "questionnaire" ? chk("record", "Audio-record interviews for quality checks") : chk("transcription", "Word-for-word transcripts")}</div>
+            <div class="grid2">${sel("report", REPORTS, "What you get at the end")}${sel("urgency", { standard: "Standard start (about 2 weeks)", rush: "Rush start (within 5 working days)" }, "Timing")}</div>
+          </section>
+        </div>
+        <aside class="stack f2f-side">
+          <section class="card quote" id="quoteBox" aria-live="polite">${quoteHtml()}</section>
+          ${S.f2f.requesting ? requestForm() : ""}
+        </aside>
+      </div>`;
+  }
+  function requestForm() {
+    return `<form class="card" id="f2fForm" novalidate><h2>Request this fieldwork</h2><p class="hint">We'll confirm sampling, locations and dates, then send a final quote. No payment is taken now.</p>
+      <div class="grid2"><label for="fw-name">Your name<input id="fw-name" maxlength="80" autocomplete="name"></label><label for="fw-org">Organisation<input id="fw-org" maxlength="120" autocomplete="organization"></label>
+      <label for="fw-email">Email<input id="fw-email" type="email" maxlength="160" autocomplete="email"></label><label for="fw-phone">Phone (optional)<input id="fw-phone" type="tel" maxlength="40" autocomplete="tel"></label>
+      <label for="fw-start" class="span2">Preferred start date<input id="fw-start" type="date" min="${todayISO()}"></label></div>
+      <label for="fw-notes">Anything else we should know?<textarea id="fw-notes" rows="3" maxlength="1200" placeholder="Regions, languages, sampling quotas, deadlines…"></textarea></label>
+      <label class="inline" for="fw-ok"><input type="checkbox" id="fw-ok">You can contact me about this quote.</label>
+      <div id="fw-err"></div><div class="row"><button class="btn primary" type="submit">Send request</button><button class="btn ghost" type="button" data-act="f2fCancel">Cancel</button></div></form>`;
+  }
+  async function sendF2FRequest() {
+    const v = (id) => ($(id).value || "").trim(), errs = [];
+    const contact = { name: v("#fw-name"), org: v("#fw-org"), email: v("#fw-email"), phone: v("#fw-phone"), start: $("#fw-start").value || "", notes: v("#fw-notes") };
+    if (!contact.name) errs.push("Enter your name.");
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(contact.email)) errs.push("Enter a valid email address.");
+    if (!$("#fw-ok").checked) errs.push("Tick the box so we can contact you.");
+    if (errs.length) { $("#fw-err").innerHTML = `<div class="errs">${errs.map(esc).join("<br>")}</div>`; return; }
+    const F = S.f2f, sv = f2fSurvey(), q = f2fQuote(F, sv);
+    const inputs = { method: F.method, n: q.n, groups: F.groups, perGroup: F.perGroup, country: F.country, setting: F.setting, audience: F.audience, capture: F.capture, minutes: q.mins, languages: F.languages, backTranslation: !!F.backTranslation, record: !!F.record, transcription: !!F.transcription, incentive: +F.incentive || 0, report: F.report, urgency: F.urgency };
+    const r = { id: newId("fw"), ref: F.ref, requesterId: S.uid, status: "new", createdAt: Date.now(), contact, inputs, survey: sv ? { title: sv.title || "", questions: sv.questions.length, source: sv.source, list: sv.questions.slice(0, 150).map((x) => ({ type: x.type, text: x.text.slice(0, 300), options: (x.options || []).slice(0, 20) })) } : null, quote: { total: q.total, per: q.per, weeks: q.weeks, lines: q.lines } };
+    const ok = await save(() => backend.putFieldwork(r), "Request sent. We'll be in touch within 2 working days.");
+    if (ok) { S.f2f.requesting = false; S.f2f.ref = null; render(); }
+  }
+  async function exportQuoteXlsx() {
+    const F = S.f2f, sv = f2fSurvey(); if (!f2fReady(F, sv)) return;
+    const q = f2fQuote(F, sv); xlBusy(true);
+    try {
+      const wb = await xlBook();
+      const ws = xlSheet(wb, "Quote", `Fieldwork quote ${S.f2f.ref || ""}`, `SurveySpider · ${F2F_METHODS[F.method]} · ${new Date().toLocaleDateString("en-US", { dateStyle: "medium" })} · valid 30 days · US dollars`);
+      xlRows(ws, [["Survey", sv ? sv.title : "Not uploaded"], ["Method", F2F_METHODS[F.method]], ["Country and setting", `${F.country}, ${SETTING[F.setting][0].toLowerCase()}`], ["Audience", AUDIENCE[F.audience][0]], ["Minutes per " + (F.method === "fgd" ? "group" : "interview"), q.mins], ["Estimated timeline", `About ${q.weeks} week${q.weeks > 1 ? "s" : ""} (${q.fieldDays} day${q.fieldDays > 1 ? "s" : ""} of fieldwork)`]], (r) => (r.getCell(1).font = { bold: true, color: { argb: XL.navy } }));
+      ws.addRow([]);
+      xlHead(ws.addRow(["Item", "Group", "Qty", "Unit price", "Amount"]));
+      const first = ws.rowCount + 1;
+      q.lines.forEach((l) => { const r = ws.addRow([l.label, l.group, l.qty, l.unit, null]); r.getCell(5).value = { formula: `C${r.number}*D${r.number}`, result: l.amount }; r.getCell(4).numFmt = r.getCell(5).numFmt = '"$"#,##0.00'; });
+      const last = ws.rowCount;
+      const t = ws.addRow(["Total", "", "", "", { formula: `SUM(E${first}:E${last})`, result: q.total }]); t.font = { bold: true, color: { argb: XL.navy } }; t.getCell(5).numFmt = '"$"#,##0.00';
+      t.eachCell((c) => (c.fill = { type: "pattern", pattern: "solid", fgColor: { argb: XL.goldSoft } }));
+      const p = ws.addRow([`Per ${F.method === "fgd" ? "participant" : "interview"}`, "", q.resp, "", { formula: `E${t.number}/C${t.number + 1}`, result: q.per }]); p.getCell(5).numFmt = '"$"#,##0.00';
+      ws.addRow([]); ws.addRow(["Indicative price, excluding local taxes. Confirmed after a short call about sampling and locations."]).font = { italic: true, color: { argb: XL.muted } };
+      xlWidths(ws, [62, 16, 10, 14, 16]);
+      if (sv) { const qs = xlSheet(wb, "Questions"); xlHead(qs.addRow(["No.", "Question", "Type", "Answer options or scale"])); xlRows(qs, sv.questions.map((x, i) => [i + 1, x.text, QTYPES[x.type] || x.type, optText({ ...x, options: x.options || [] })])); xlWidths(qs, [6, 70, 18, 50]); }
+      await xlSave(wb, `fieldwork-quote-${(S.f2f.ref || "draft").toLowerCase()}.xlsx`);
+    } catch (e) { toast("The quote couldn't be exported."); }
+    xlBusy(false);
+  }
+  function fieldworkAdmin() {
+    const list = [...S.fieldwork].sort((a, b) => b.createdAt - a.createdAt);
+    const st = { new: "New", contacted: "Contacted", quoted: "Final quote sent", won: "Won", lost: "Lost" };
+    const won = list.filter((r) => r.status === "won").reduce((a, r) => a + ((r.quote && r.quote.total) || 0), 0);
+    return `<section class="card"><div class="qmeta"><h2>Paper-to-pen requests</h2><span class="hint">${list.length} request${list.length === 1 ? "" : "s"} · ${usd0(won)} won</span></div>
+      ${list.length ? `<div class="table-wrap"><table><thead><tr><th>Date</th><th>Client</th><th>Project</th><th>Quote</th><th>Status</th></tr></thead><tbody>${list.map((r) => `<tr><td class="n">${fmtDate(r.createdAt)}<br><span class="hint">${esc(r.ref || "")}</span></td><td><b>${esc(r.contact.name)}</b>${r.contact.org ? `<br>${esc(r.contact.org)}` : ""}<br><span class="hint">${esc(r.contact.email)}${r.contact.phone ? " · " + esc(r.contact.phone) : ""}</span></td><td>${esc(F2F_METHODS[r.inputs.method] || r.inputs.method)}<br><span class="hint">${r.inputs.method === "fgd" ? `${esc(r.inputs.groups)} groups` : `${int(r.inputs.n)} interviews`} · ${esc(r.inputs.country)} · ${r.survey ? esc(short(r.survey.title, 40)) : "no survey"}</span>${r.contact.notes ? `<br><span class="hint">“${esc(short(r.contact.notes, 120))}”</span>` : ""}</td><td class="n">${usd0(r.quote.total)}<br><span class="hint">~${r.quote.weeks} wk</span></td><td><select data-fw="${esc(r.id)}" aria-label="Status">${Object.entries(st).map(([k, v]) => `<option value="${k}"${r.status === k ? " selected" : ""}>${v}</option>`).join("")}</select></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No requests yet. They appear here when clients send a quote from the Paper-to-Pen Survey tab.</p>`}</section>`;
+  }
+
   // ---------- BUSINESS ----------
   function viewBusiness() {
     if (!S.isOwner) return API ? `<form class="card" id="adminForm" style="max-width:460px"><h2>Owner sign-in</h2><p class="muted">Enter the admin code from your Render dashboard (Environment → ADMIN_CODE).</p><label for="adminCode">Admin code<input id="adminCode" type="password" autocomplete="off"></label><div class="row"><button class="btn primary" type="submit">Open business view</button></div></form>` : `<div class="empty"><h2>Only the site owner can see this page</h2></div>`;
@@ -2220,7 +2448,8 @@ ${richSummary(st, rows)}`;
         ${S.studies.length ? `<div class="table-wrap"><table><thead><tr><th>Study</th><th>Status</th><th>Responses</th><th>Reward</th><th>Per hour</th><th>Fee earned</th></tr></thead><tbody>
         ${[...S.studies].sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0)).map((s) => { const ap = approved.filter((r) => r.studyId === s.id); return `<tr><td>${esc(s.title || "Untitled")}</td><td><span class="pill${s.status === "live" ? " live" : ""}">${s.status}</span></td><td class="n">${int(usedSlots(s.id))} / ${int(s.target)}</td><td class="n">${money(s.reward)}</td><td class="n${hourly(s) < MIN_HOURLY ? " warn" : ""}">${money(hourly(s))}</td><td class="n">${money(ap.reduce((a, r) => a + r.reward, 0) * FEE)}</td></tr>`; }).join("")}
         </tbody></table></div>` : `<p class="muted">No studies yet.</p>`}
-      </section>`;
+      </section>
+      ${fieldworkAdmin()}`;
   }
 
   // ---------- events ----------
@@ -2266,6 +2495,9 @@ ${richSummary(st, rows)}`;
         saveDraftLocal(); return;
       }
     }
+    if (t.dataset && t.dataset.f2f) { const k = t.dataset.f2f; S.f2f[k] = t.type === "checkbox" ? t.checked : t.value; if (k === "method") render(); else updateQuote(); return; }
+    if (t.id === "f2fPick") { S.f2f.sourceId = t.value; render(); return; }
+    if (t.dataset && t.dataset.fw) { const r = S.fieldwork.find((x) => x.id === t.dataset.fw); if (r) save(() => backend.setFieldStatus(r, t.value), "Request status updated."); return; }
     if (t.id === "impFile") { if (t.files && t.files[0]) readFile(t.files[0]); t.value = ""; return; }
     if (t.id === "libSearch") { S.libQuery = t.value; $("#libList").innerHTML = libList(); }
     if (t.id === "libScholar") { const v = t.value.trim(); $("#scholarLink").href = v ? "https://scholar.google.com/scholar?q=" + encodeURIComponent(v) : "https://scholar.google.com/"; }
@@ -2299,6 +2531,7 @@ ${richSummary(st, rows)}`;
     if (e.target.id === "askForm") { runAsk(($("#askQ").value || "").trim()); return; }
     if (e.target.id === "chatForm") { const q = ($("#chatQ").value || "").trim(); if (q) runChat(q); return; }
     if (e.target.id === "actionForm") { saveAction(); return; }
+    if (e.target.id === "f2fForm") { sendF2FRequest(); return; }
     if (e.target.id === "adminForm") { const v = ($("#adminCode").value || "").trim(); try { localStorage.setItem("ss-admin", v); } catch (_) {} try { const me = await api("GET", "/api/me"); S.isOwner = !!me.isAdmin; if (S.isOwner) { await refreshServer(); toast("Signed in as owner."); } else toast("That code isn't right."); } catch (_) { toast("Couldn't check the code. Try again."); } render(); return; }
     if (e.target.id === "profileForm") {
       const age = Math.floor(+$("#p-age").value), gender = $("#p-gender").value, country = $("#p-country").value, occupation = $("#p-occ").value;
@@ -2360,6 +2593,10 @@ ${richSummary(st, rows)}`;
       case "approve": await save(() => backend.patchResponse(id, { status: "approved" }), "Response approved. The participant will be paid."); break;
       case "reject": await save(() => backend.patchResponse(id, { status: "rejected" }), "Response rejected. The place is open again."); break;
       case "csv": exportCsv(); break;
+      case "f2fRequest": S.f2f.requesting = true; render(); { const f = $("#f2fForm"); if (f) { f.scrollIntoView({ block: "start" }); $("#fw-name").focus(); } } break;
+      case "f2fCancel": S.f2f.requesting = false; render(); break;
+      case "f2fXl": exportQuoteXlsx(); break;
+      case "f2fClear": S.f2f.sourceId = ""; S.imp = { status: "idle" }; render(); break;
       case "xlSurvey": exportSurveyXlsx(id ? studyById(id) : S.draft); break;
       case "xlAnalysis": exportAnalysisXlsx(studyById(S.resultsId)); break;
       case "publish": {
@@ -2377,9 +2614,9 @@ ${richSummary(st, rows)}`;
   const refreshSoon = () => { if (API && document.visibilityState === "visible") refreshServer().then(softRender).catch(() => {}); };
   document.addEventListener("visibilitychange", refreshSoon);
   window.addEventListener("focus", refreshSoon);
-  main.addEventListener("dragover", (e) => { const d = e.target.closest(".drop"); if (!d || S.view !== "import") return; e.preventDefault(); d.classList.add("over"); });
+  main.addEventListener("dragover", (e) => { const d = e.target.closest(".drop"); if (!d || (S.view !== "import" && S.view !== "paper-to-pen")) return; e.preventDefault(); d.classList.add("over"); });
   main.addEventListener("dragleave", (e) => { const d = e.target.closest(".drop"); if (d) d.classList.remove("over"); });
-  main.addEventListener("drop", (e) => { const d = e.target.closest(".drop"); if (!d || S.view !== "import") return; e.preventDefault(); d.classList.remove("over"); const f = e.dataTransfer && e.dataTransfer.files[0]; if (f) readFile(f); });
+  main.addEventListener("drop", (e) => { const d = e.target.closest(".drop"); if (!d || (S.view !== "import" && S.view !== "paper-to-pen")) return; e.preventDefault(); d.classList.remove("over"); const f = e.dataTransfer && e.dataTransfer.files[0]; if (f) readFile(f); });
 
   // ---------- IMPORT: Word / PDF / text → questions ----------
   const LIBS = {
@@ -2651,6 +2888,7 @@ ${im.text.slice(0, 60000)}
     const settle = (snap) => { if (!snap.metadata.fromCache && gotStudies && gotResp) { clearTimeout(timer); S.stale = false; } };
     const fail = (what) => (err) => { clearTimeout(timer); S.mode = "live"; S.notice = `Couldn't load ${what} (${err.code}). Reload the page to try again.`; softRender(); };
     DB.collection("studies").onSnapshot((snap) => { S.studies = snap.docs.map((d) => ({ ...d.data(), id: d.id })); gotStudies = true; if (gotResp) S.mode = "live"; settle(snap); softRender(); }, fail("studies"));
+    DB.collection("fieldwork").limit(1000).onSnapshot((snap) => { S.fieldwork = snap.docs.flatMap((d) => (((d.data() || {}).requests) || []).map((r) => ({ ...r, requesterId: d.id }))); softRender(); }, () => {});
     DB.collection("actions").limit(1000).onSnapshot((snap) => { S.actions = snap.docs.map((d) => ({ ...d.data(), id: d.id })); softRender(); }, () => {});
     DB.collection("responses").limit(1000).onSnapshot((snap) => { S.responses = snap.docs.map((d) => ({ ...d.data(), id: d.id })); gotResp = true; if (gotStudies) S.mode = "live"; settle(snap); softRender(); }, fail("responses"));
     try { const p = await DB.doc("data/users/" + uid + "/profile").get(); if (p.exists) S.profile = p.data(); } catch (e) {}

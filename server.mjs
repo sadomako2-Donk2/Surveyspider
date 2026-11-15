@@ -24,7 +24,7 @@ const ICON = readFileSync(path.join(here, "public", "icon.svg"));
 // ---------- storage ----------
 mkdirSync(DATA_DIR, { recursive: true });
 const FILE = path.join(DATA_DIR, "store.json");
-let db = { studies: {}, responses: {}, actions: {}, profiles: {} };
+let db = { studies: {}, responses: {}, actions: {}, profiles: {}, fieldwork: {} };
 if (existsSync(FILE)) { try { db = { ...db, ...JSON.parse(readFileSync(FILE, "utf8")) }; } catch (e) { console.error("Could not read store.json; starting empty.", e); } }
 let saveTimer = null;
 function flush() { const tmp = FILE + ".tmp"; writeFileSync(tmp, JSON.stringify(db)); renameSync(tmp, FILE); }
@@ -143,7 +143,8 @@ async function handleApi(req, res, url) {
     const mine = new Set(Object.values(db.studies).filter((s) => s.ownerId === uid).map((s) => s.id));
     const responses = Object.values(db.responses).map((r) => (me.isAdmin || mine.has(r.studyId) || r.participantId === uid ? r : stub(r)));
     const actions = Object.values(db.actions).filter((a) => me.isAdmin || a.ownerId === uid);
-    return send(res, 200, { studies, responses, actions, profile: db.profiles[uid] || null });
+    const fieldwork = Object.values(db.fieldwork).filter((f) => me.isAdmin || f.requesterId === uid);
+    return send(res, 200, { studies, responses, actions, fieldwork, profile: db.profiles[uid] || null });
   }
 
   if (kind === "studies" && okId(id)) {
@@ -189,6 +190,29 @@ async function handleApi(req, res, url) {
       if (!st || (st.ownerId !== uid && !me.isAdmin) || typeof b.title !== "string") return fail(res, 400, "invalid_argument", "Actions can only be added to your own surveys.");
       db.actions[id] = { ...b, id, ownerId: cur ? cur.ownerId : uid, updatedAt: Date.now() };
       persist(); return send(res, 200, { ok: true });
+    }
+  }
+
+  if (kind === "fieldwork" && okId(id)) {
+    const cur = db.fieldwork[id];
+    if (m === "PUT") {
+      if (cur) return fail(res, 409, "invalid_argument", "This request was already sent.");
+      const b = await readBody(req, 200_000), c = isObj(b) ? b.contact : null;
+      if (!isObj(c) || typeof c.name !== "string" || !c.name.trim() || typeof c.email !== "string" || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(c.email) || !isObj(b.quote) || !isObj(b.inputs)) return fail(res, 400, "invalid_argument", "Add your name, a valid email address and a quote.");
+      const mine = Object.values(db.fieldwork).filter((f) => f.requesterId === uid && Date.now() - f.createdAt < 864e5).length;
+      if (mine >= 20) return fail(res, 429, "rate_limited", "Too many requests today. Please contact us directly.");
+      const clip = (v, n) => String(v || "").slice(0, n);
+      db.fieldwork[id] = { id, ref: clip(b.ref, 20), requesterId: uid, status: "new", createdAt: Date.now(),
+        contact: { name: clip(c.name, 80), org: clip(c.org, 120), email: clip(c.email, 160), phone: clip(c.phone, 40), start: clip(c.start, 10), notes: clip(c.notes, 1200) },
+        inputs: b.inputs, survey: isObj(b.survey) ? b.survey : null, quote: b.quote };
+      persist(); return send(res, 200, { ok: true });
+    }
+    if (m === "PATCH") {
+      if (!me.isAdmin) return fail(res, 403, "invalid_argument", "Only the site owner can update requests.");
+      if (!cur) return fail(res, 404, "invalid_argument", "Request not found.");
+      const b = await readBody(req, 5_000);
+      if (!isObj(b) || !["new", "contacted", "quoted", "won", "lost"].includes(b.status)) return fail(res, 400, "invalid_argument", "Unknown status.");
+      cur.status = b.status; persist(); return send(res, 200, { ok: true });
     }
   }
 
