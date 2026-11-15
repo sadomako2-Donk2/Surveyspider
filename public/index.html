@@ -559,7 +559,8 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   }
   async function refreshServer() {
     const d = await api("GET", "/api/data");
-    S.studies = d.studies || []; S.responses = d.responses || []; S.actions = d.actions || []; S.fieldwork = d.fieldwork || []; S.profile = d.profile || null; S.stale = false;
+    S.studies = d.studies || []; S.responses = d.responses || []; S.actions = d.actions || []; S.fieldwork = d.fieldwork || [];
+    if (typeof d.ai === "boolean" && d.ai !== !!SAMPLE) { SAMPLE = d.ai ? serverSample() : null; if (!isTyping()) setTimeout(render, 0); } // AI switched on or off while the page was open S.profile = d.profile || null; S.stale = false;
   }
   async function startServer(me) {
     API = true; S.mode = "live"; S.uid = me.uid; S.isOwner = !!me.isAdmin; DL = browserDL; SAMPLE = me.ai ? serverSample() : null;

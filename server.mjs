@@ -144,7 +144,7 @@ async function handleApi(req, res, url) {
     const responses = Object.values(db.responses).map((r) => (me.isAdmin || mine.has(r.studyId) || r.participantId === uid ? r : stub(r)));
     const actions = Object.values(db.actions).filter((a) => me.isAdmin || a.ownerId === uid);
     const fieldwork = Object.values(db.fieldwork).filter((f) => me.isAdmin || f.requesterId === uid);
-    return send(res, 200, { studies, responses, actions, fieldwork, profile: db.profiles[uid] || null });
+    return send(res, 200, { studies, responses, actions, fieldwork, profile: db.profiles[uid] || null, ai: !!client });
   }
 
   if (kind === "studies" && okId(id)) {
