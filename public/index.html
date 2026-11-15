@@ -59,7 +59,10 @@ a { color: var(--accent); }
 
 /* Top bar */
 .topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line); }
-.topbar-inner { max-width: 1180px; margin: 0 auto; display: flex; align-items: center; gap: 20px; padding-block: 10px; }
+.topbar-inner { max-width: 1180px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 20px; padding-block: 10px; }
+/* Below 1500px the tabs get their own row under the logo and account, so every tab stays visible. */
+@media (max-width: 1499px) { .topbar-inner { padding-block: 8px 6px; } .tabs { order: 3; flex: 1 0 100%; margin-left: -12px; } }
+@media (min-width: 1500px) { .topbar-inner { max-width: 1440px; } }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); white-space: nowrap; flex: none; }
 .brand svg { display: block; }
 .logo-mark .web { stroke: var(--ink); opacity: 0.9; }
@@ -69,7 +72,7 @@ a { color: var(--accent); }
 .brand .wm b { font-family: var(--font-display); font-weight: 800; font-size: 1.22rem; letter-spacing: 0.01em; }
 .brand .wm small { white-space: nowrap; font-family: var(--font-display); font-weight: 600; font-size: 0.56rem; letter-spacing: 0.28em; color: var(--muted); margin-top: 3px; }
 .tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; min-width: 0; }
-.tabs a { padding: 7px 12px; border-radius: 8px; color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+.tabs a { padding: 7px 11px; border-radius: 8px; color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
 .tabs a:hover { color: var(--ink); background: var(--bg); }
 .tabs a[aria-current="page"] { color: var(--ink); background: var(--accent-soft); }
 .count { font-family: var(--font-mono); font-size: 0.7rem; background: var(--gold); color: #0e1d3a; border-radius: 999px; padding: 0 6px; }
@@ -397,6 +400,25 @@ td.hi { font-weight: 700; color: var(--accent); }
 .quote-table tr.qtotal td { font-weight: 700; font-size: 1rem; border-top: 2px solid var(--ink); border-bottom: 0; }
 @media (max-width: 960px) { .f2f-grid { grid-template-columns: 1fr; } .f2f-side { position: static; } }
 
+/* Accounts */
+.acct { flex: none; margin-left: auto; position: relative; order: 2; }
+.acct-menu { border: 0; padding: 0; border-radius: 0; }
+.acct-menu summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 3px 10px 3px 3px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); }
+.acct-menu summary::-webkit-details-marker { display: none; }
+.avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #b88a2c, #e9c46a); color: #0e1d3a; display: grid; place-items: center; font-family: var(--font-display); font-weight: 800; font-size: 0.74rem; flex: none; }
+.acct-name { font-size: 0.86rem; font-weight: 500; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.acct-pop { position: absolute; right: 0; top: calc(100% + 8px); background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px; min-width: 230px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 14px 34px -18px rgba(14, 29, 58, 0.5); z-index: 6; }
+.acct-pop .btn { align-self: flex-start; margin-top: 6px; }
+.auth-wrap { display: flex; justify-content: center; padding-block: 8px 24px; }
+.auth-card { width: 100%; max-width: 440px; gap: 14px; padding: 28px; }
+.btn.google { justify-content: center; background: var(--surface); border-color: var(--line); font-weight: 600; padding: 11px 16px; gap: 10px; }
+.btn.google:hover { border-color: var(--ink); }
+.btn.google svg { width: 18px; height: 18px; }
+.or { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 0.82rem; }
+.or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.linkbtn { font: inherit; background: none; border: 0; color: var(--accent); text-decoration: underline; cursor: pointer; padding: 0; }
+@media (max-width: 560px) { .acct-name { display: none; } .acct-menu summary { padding: 3px; } }
+
 #toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 8px; font-size: 0.9rem; z-index: 20; max-width: calc(100% - 32px); }
 footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--muted); font-size: 0.82rem; }
 
@@ -439,6 +461,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
       <span class="wm"><b>Survey<span class="gold-text">Spider</span></b><small>SURVEYS · INSIGHTS · AI</small></span>
     </a>
     <nav class="tabs" id="tabs" aria-label="Workspaces"></nav>
+    <div class="acct" id="acct"></div>
   </div>
 </header>
 <div class="gutter"><div class="banner" id="banner" hidden></div></div>
@@ -477,7 +500,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   }
   const typeLabel = (q) => { if (q.type !== "rating") return QTYPES[q.type] || q.type; const s = scaleOf(q); return `Rating ${s.min}–${s.max}`; };
   const ATTN = { id: "attn", type: "single", text: "To show you are reading carefully, please choose \"Purple\".", options: ["Red", "Green", "Purple", "Blue"], required: true };
-  const TABS = [["home", "Home"], ["pricing", "Pricing"], ["create", "Create Survey"], ["import", "Upload Survey"], ["paper-survey", "Paper Survey"], ["studies", "My Surveys"], ["results", "Analyze"], ["panel", "Take surveys"], ["library", "Library"], ["business", "Business"]];
+  const TABS = [["home", "Home"], ["pricing", "Pricing"], ["create", "Create Survey"], ["import", "Upload Survey"], ["paper-survey", "Paper Survey"], ["studies", "My Surveys"], ["results", "Analyze"], ["panel", "Take surveys"], ["library", "Library"], ["business", "Business"], ["signin", "Sign in"]];
 
   const TEMPLATES = {
     cx: { group: "research", name: "Customer satisfaction", blurb: "Measure satisfaction and find what to fix first.", title: "Online shopping satisfaction", description: "A short survey about your experience shopping online. There are no right or wrong answers.", minutes: 5, reward: 1.0, target: 150, occupations: [],
@@ -529,6 +552,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     imp: { status: "idle" }, importNote: null,
     gen: { status: "idle" }, billing: "annual", anTab: "summary", aiCheck: null, ask: { q: "", a: "", busy: false },
     segQ: null, segKey: "country", driverOut: null, reports: {}, aiBusy: null,
+    user: null, authCfg: { google: false }, authMode: "signin", authError: "", returnTo: "",
     fieldwork: [], f2f: { method: "questionnaire", n: 300, groups: 4, perGroup: 8, country: "Ghana", setting: "urban", audience: "general", capture: "tablet", minutes: "", languages: 0, backTranslation: false, record: false, transcription: true, incentive: "", report: "summary", urgency: "standard", sourceId: "", ref: null, requesting: false },
     actions: [], filter: { key: "", val: "", days: 0 }, studio: { test: "desc", q: null, g: "country", a: "country", b: null, items: null }, chat: {}, actionDraft: null, confirmActDel: null
   };
@@ -562,8 +586,15 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     S.studies = d.studies || []; S.responses = d.responses || []; S.actions = d.actions || []; S.fieldwork = d.fieldwork || [];
     if (typeof d.ai === "boolean" && d.ai !== !!SAMPLE) { SAMPLE = d.ai ? serverSample() : null; if (!isTyping()) setTimeout(render, 0); } // AI switched on or off while the page was open S.profile = d.profile || null; S.stale = false;
   }
+  function applyMe(me) { S.uid = me.uid; S.user = me.user || null; S.isOwner = !!me.isAdmin; S.authCfg = { google: !!me.google }; if (me.ai && !SAMPLE) SAMPLE = serverSample(); if (!me.ai) SAMPLE = null; }
+  async function reloadMe() { applyMe(await api("GET", "/api/me")); await refreshServer(); }
   async function startServer(me) {
-    API = true; S.mode = "live"; S.uid = me.uid; S.isOwner = !!me.isAdmin; DL = browserDL; SAMPLE = me.ai ? serverSample() : null;
+    API = true; S.mode = "live"; DL = browserDL; applyMe(me);
+    const qs = new URLSearchParams(location.search);
+    if (qs.get("auth") === "google") { try { await api("POST", "/api/auth/claim"); } catch (e) {} setTimeout(() => toast("Signed in with Google."), 300); }
+    const ae = qs.get("auth_error");
+    if (ae) S.authError = { google_off: "Google sign-in isn't switched on yet. Use your email and a password for now.", google_email: "Your Google account's email address isn't verified, so we can't use it to sign in.", google_failed: "Google sign-in didn't finish. Please try again." }[ae] || "Sign-in didn't finish. Please try again.";
+    if (qs.has("auth") || ae) history.replaceState(null, "", location.pathname + location.hash);
     try { await refreshServer(); } catch (e) { S.stale = true; }
     render();
     setInterval(() => { refreshServer().then(softRender).catch(() => { S.stale = true; softRender(); }); }, 15000);
@@ -604,6 +635,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   };
   function errMsg(e) {
     const c = e && e.code;
+    if (c === "auth_required") return "Sign in to continue.";
     if (c === "quota_exceeded") return "Storage is full. Delete old drafts or closed studies, then try again.";
     if (c === "invalid_argument") return "You can't save here. Ask the site owner for Contributor access.";
     if (c === "resource_exhausted") return "Too many saves at once. Wait a moment and try again.";
@@ -611,7 +643,66 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   }
   async function save(fn, okMsg) {
     try { await fn(); if (okMsg) toast(okMsg); render(); return true; }
-    catch (e) { toast(errMsg(e)); render(); return false; }
+    catch (e) {
+      if (e && e.code === "auth_required") { requireSignIn("Sign in or create a free account to save your work."); return false; }
+      toast(e && e.message && API && e.code === "invalid_argument" ? e.message : errMsg(e)); render(); return false;
+    }
+  }
+  // ---------- accounts (own-server mode) ----------
+  function requireSignIn(msg, mode) {
+    const h = location.hash.replace("#", "");
+    S.returnTo = !h || h === "signin" ? "studies" : h; S.authMode = mode || "signin";
+    toast(msg || "Sign in to continue."); go("signin");
+  }
+  const signInPrompt = (title, text) => `<div class="empty"><h2>${esc(title)}</h2><p class="muted">${esc(text || "It's free. Use your email or your Google account.")}</p><div class="row wrap"><button class="btn primary" data-act="goSignin" data-m="signin">Sign in</button><button class="btn" data-act="goSignin" data-m="signup">Create a free account</button></div></div>`;
+  const firstName = (u) => (u && u.name ? u.name.split(/\s+/)[0] : u ? u.email.split("@")[0] : "");
+  function renderAcct() {
+    const el = $("#acct"); if (!el) return;
+    if (!API) { el.innerHTML = ""; return; }
+    if (!S.user) { el.innerHTML = S.view === "signin" ? "" : `<a class="btn small primary" href="#signin" data-act="goSignin" data-m="signin">Sign in</a>`; return; }
+    const u = S.user, ini = ((u.name || u.email).trim().split(/\s+/).map((w) => w[0]).join("").slice(0, 2) || "?").toUpperCase();
+    el.innerHTML = `<details class="acct-menu"><summary aria-label="Account menu"><span class="avatar" aria-hidden="true">${esc(ini)}</span><span class="acct-name">${esc(firstName(u))}</span></summary>
+      <div class="acct-pop"><b>${esc(u.name || "Your account")}</b><span class="hint">${esc(u.email)}</span><span class="hint">${u.google ? "Signed in with Google" : "Email and password"}${S.isOwner ? " · site owner" : ""}</span><button class="btn small" data-act="signout">Sign out</button></div></details>`;
+  }
+  const GOOGLE_G = `<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>`;
+  function viewSignin() {
+    if (!API) return `<div class="empty"><h2>You're already signed in</h2><p class="muted">On claude.ai, SurveySpider uses your Claude account. Separate sign-in is used on the SurveySpider website.</p></div>`;
+    if (S.user) return `<div class="auth-wrap"><section class="card auth-card"><span class="eyebrow gold">Signed in</span><h1>Welcome${firstName(S.user) ? ", " + esc(firstName(S.user)) : ""}</h1><p class="muted">You're signed in as ${esc(S.user.email)}.</p><div class="row wrap"><a class="btn primary" href="#${esc(S.returnTo || "studies")}">Continue</a><button class="btn ghost" data-act="signout">Sign out</button></div></section></div>`;
+    const up = S.authMode === "signup";
+    return `<div class="auth-wrap"><section class="card auth-card">
+      <span class="eyebrow gold">${up ? "Free account" : "Welcome back"}</span>
+      <h1>${up ? "Create your account" : "Sign in to SurveySpider"}</h1>
+      <p class="muted">${up ? "Build and launch surveys, take part and get paid, and see your results on any device." : "Pick up where you left off, on any device."}</p>
+      ${S.authCfg.google ? `<a class="btn google" href="/auth/google?next=${encodeURIComponent(S.returnTo || "studies")}">${GOOGLE_G}<span>Continue with Google</span></a><div class="or"><span>or with your email</span></div>` : ""}
+      ${S.authError ? `<div class="errs">${esc(S.authError)}</div>` : ""}
+      <form id="authForm" class="stack" novalidate>
+        ${up ? `<label for="au-name">Your name<input id="au-name" autocomplete="name" maxlength="80"></label>` : ""}
+        <label for="au-email">Email<input id="au-email" type="email" autocomplete="email" maxlength="160" required></label>
+        <label for="au-pass">Password<input id="au-pass" type="password" autocomplete="${up ? "new-password" : "current-password"}" minlength="8" maxlength="200" required></label>
+        ${up ? `<p class="hint">At least 8 characters.</p>` : ""}
+        <div id="authErr"></div>
+        <button class="btn primary big" type="submit" style="align-self:stretch;justify-content:center">${up ? "Create account" : "Sign in"}</button>
+      </form>
+      <p class="hint">${up ? `Already have an account? <button type="button" class="linkbtn" data-act="authMode" data-m="signin">Sign in</button>` : `New to SurveySpider? <button type="button" class="linkbtn" data-act="authMode" data-m="signup">Create a free account</button>`}</p>
+    </section></div>`;
+  }
+  async function submitAuth() {
+    const up = S.authMode === "signup", email = ($("#au-email").value || "").trim(), password = $("#au-pass").value || "", name = up ? ($("#au-name").value || "").trim() : "";
+    const bad = !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) ? "Enter a valid email address." : up && password.length < 8 ? "Use a password of at least 8 characters." : !password ? "Enter your password." : "";
+    if (bad) { $("#authErr").innerHTML = `<div class="errs">${esc(bad)}</div>`; return; }
+    const btn = $("#authForm button[type=submit]"); btn.disabled = true;
+    try {
+      await api("POST", up ? "/api/auth/signup" : "/api/auth/login", { email, password, name });
+      S.authError = ""; await reloadMe();
+      toast(up ? "Account created. Welcome to SurveySpider!" : "Signed in.");
+      go(S.returnTo || "studies");
+    } catch (e) { btn.disabled = false; $("#authErr").innerHTML = `<div class="errs">${esc((e && e.message) || "Couldn't sign in. Please try again.")}</div>`; }
+  }
+  async function signOut() {
+    try { await api("POST", "/api/auth/logout"); } catch (e) {}
+    S.chat = {}; S.reports = {}; S.draft = null; ls.del("cohortly-draft");
+    try { await reloadMe(); } catch (e) {}
+    toast("Signed out."); go("home");
   }
 
   // ---------- derived data ----------
@@ -644,7 +735,8 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   }
   function renderTabs() {
     const avail = S.profile ? openStudies().filter((s) => eligible(s, S.profile)).length : 0;
-    $("#tabs").innerHTML = TABS.filter(([k]) => k !== "business" || S.isOwner).map(([k, v]) =>
+    renderAcct();
+    $("#tabs").innerHTML = TABS.filter(([k]) => k !== "signin" && (k !== "business" || S.isOwner)).map(([k, v]) =>
       `<a href="#${k}"${S.view === k ? ' aria-current="page"' : ""}>${v}${k === "panel" && avail ? `<span class="count">${avail}</span>` : ""}</a>`).join("");
     const b = $("#banner");
     const msg = S.notice || (S.mode === "demo" ? "Demo mode: everything you create is saved in this browser only. Open the published page while signed in to claude.ai to share data with other people." : "") || (S.stale ? "Can't reach the saved data yet. What you see may be out of date." : "");
@@ -654,7 +746,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   function render() {
     pending = false;
     renderTabs();
-    const v = { home: viewHome, pricing: viewPricing, import: viewImport, "paper-survey": viewF2F, create: viewCreate, studies: viewStudies, panel: viewPanel, results: viewResults, library: viewLibrary, business: viewBusiness }[S.view] || viewHome;
+    const v = { signin: viewSignin, home: viewHome, pricing: viewPricing, import: viewImport, "paper-survey": viewF2F, create: viewCreate, studies: viewStudies, panel: viewPanel, results: viewResults, library: viewLibrary, business: viewBusiness }[S.view] || viewHome;
     $("#main").innerHTML = v();
     if (S.view === "create" && S.draft) updateCost();
   }
@@ -810,6 +902,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   function aiError(e, fallback) {
     const c = e && e.code;
     if (c === "cancelled") return;
+    if (c === "auth_required") { requireSignIn("Sign in to use the AI features. It's free to create an account."); return; }
     if (c === "not_granted" || c === "sampling_disabled") { SAMPLE = null; toast("AI is turned off for this page. Everything else still works."); }
     else if (c === "rate_limited") toast("You've used AI a lot recently. Try again later.");
     else toast(fallback);
@@ -1289,6 +1382,7 @@ ${richSummary(st, rows)}`;
   // ---------- MY STUDIES ----------
   function viewStudies() {
     if (S.mode === "loading") return loading();
+    if (API && !S.user) return `<div class="page-head"><div><span class="eyebrow">Researcher</span><h1>My Surveys</h1></div></div>` + signInPrompt("Sign in to see your surveys", "Your surveys, responses and results are kept in your account. It's free to sign up.");
     const mine = myStudies();
     const head = `<div class="page-head"><div><span class="eyebrow">Researcher</span><h1>My Surveys</h1></div><a class="btn primary" href="#create" data-act="newstudy">New study</a></div>`;
     if (!mine.length) return head + `<div class="empty"><h2>No studies yet</h2><p class="muted">Create your first study from a template. It takes about five minutes.</p><a class="btn primary" href="#create">Create a study</a></div>`;
@@ -1314,6 +1408,7 @@ ${richSummary(st, rows)}`;
   function viewPanel() {
     if (S.taking) { const st = studyById(S.taking); if (st) return viewTake(st); S.taking = null; }
     if (S.mode === "loading") return loading();
+    if (API && !S.user) return `<div class="page-head"><div><span class="eyebrow">Participant</span><h1>Studies you can take</h1></div></div>` + signInPrompt("Sign in to take surveys and get paid", "Create a free participant account, fill in a short profile, and we'll show you the studies you qualify for.");
     const p = S.profile;
     const mineR = myResponses();
     const approved = mineR.filter((r) => r.status === "approved").reduce((a, r) => a + r.reward, 0);
@@ -1471,6 +1566,7 @@ ${richSummary(st, rows)}`;
   function ageBand(a) { a = +a; if (!a) return "Unknown"; if (a < 25) return "18–24"; if (a < 35) return "25–34"; if (a < 45) return "35–44"; if (a < 55) return "45–54"; if (a < 65) return "55–64"; return "65+"; }
   function viewResults() {
     if (S.mode === "loading") return loading();
+    if (API && !S.user) return `<div class="page-head"><div><span class="eyebrow gold">Analyze</span><h1>Results and insights</h1></div></div>` + signInPrompt("Sign in to analyse your results");
     const mine = myStudies().filter((s) => s.status !== "draft");
     const head = (extra) => `<div class="page-head"><div><span class="eyebrow gold">Analyze</span><h1>Results and insights</h1></div>${extra || ""}</div>`;
     if (!mine.length) return head() + `<div class="empty"><h2>No launched surveys yet</h2><p class="muted">Results appear here once you launch a survey and people start answering.</p><a class="btn primary" href="#create">Create a survey</a></div>`;
@@ -2534,6 +2630,7 @@ ${richSummary(st, rows)}`;
     if (e.target.id === "chatForm") { const q = ($("#chatQ").value || "").trim(); if (q) runChat(q); return; }
     if (e.target.id === "actionForm") { saveAction(); return; }
     if (e.target.id === "f2fForm") { sendF2FRequest(); return; }
+    if (e.target.id === "authForm") { submitAuth(); return; }
     if (e.target.id === "adminForm") { const v = ($("#adminCode").value || "").trim(); try { localStorage.setItem("ss-admin", v); } catch (_) {} try { const me = await api("GET", "/api/me"); S.isOwner = !!me.isAdmin; if (S.isOwner) { await refreshServer(); toast("Signed in as owner."); } else toast("That code isn't right."); } catch (_) { toast("Couldn't check the code. Try again."); } render(); return; }
     if (e.target.id === "profileForm") {
       const age = Math.floor(+$("#p-age").value), gender = $("#p-gender").value, country = $("#p-country").value, occupation = $("#p-occ").value;
@@ -2588,13 +2685,16 @@ ${richSummary(st, rows)}`;
       case "close": await save(() => backend.putStudy({ ...clone(st), status: "closed", updatedAt: Date.now() }), "Study closed. No new responses will be accepted."); break;
       case "reopen": await save(() => backend.putStudy({ ...clone(st), status: "live", updatedAt: Date.now() }), "Study reopened."); break;
       case "results": S.resultsId = id; go("results"); break;
-      case "take": S.taking = id; S.takeStart = Date.now(); render(); window.scrollTo(0, 0); break;
+      case "take": if (API && !S.user) { requireSignIn("Sign in to take surveys and get paid."); break; } S.taking = id; S.takeStart = Date.now(); render(); window.scrollTo(0, 0); break;
       case "leave": S.taking = null; render(); break;
       case "editprofile": S.editProfile = true; render(); break;
       case "cancelprofile": S.editProfile = false; render(); break;
       case "approve": await save(() => backend.patchResponse(id, { status: "approved" }), "Response approved. The participant will be paid."); break;
       case "reject": await save(() => backend.patchResponse(id, { status: "rejected" }), "Response rejected. The place is open again."); break;
       case "csv": exportCsv(); break;
+      case "goSignin": e.preventDefault(); { const h = location.hash.replace("#", ""); if (h && h !== "signin") S.returnTo = h; } S.authMode = b.dataset.m || "signin"; S.authError = ""; go("signin"); break;
+      case "authMode": S.authMode = b.dataset.m; S.authError = ""; render(); break;
+      case "signout": signOut(); break;
       case "f2fRequest": S.f2f.requesting = true; render(); { const f = $("#f2fForm"); if (f) { f.scrollIntoView({ block: "start" }); $("#fw-name").focus(); } } break;
       case "f2fCancel": S.f2f.requesting = false; render(); break;
       case "f2fXl": exportQuoteXlsx(); break;
@@ -2612,6 +2712,12 @@ ${richSummary(st, rows)}`;
       case "libtoggle": S.libOpen = S.libOpen === id ? null : id; $("#libList").innerHTML = libList(); break;
     }
   });
+  $("#acct").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-act]"); if (!b) return;
+    if (b.dataset.act === "signout") { e.preventDefault(); b.closest("details").open = false; signOut(); }
+    if (b.dataset.act === "goSignin") { e.preventDefault(); const h = location.hash.replace("#", ""); if (h && h !== "signin") S.returnTo = h; S.authMode = "signin"; S.authError = ""; go("signin"); }
+  });
+  document.addEventListener("click", (e) => { const d = $(".acct-menu[open]"); if (d && !d.contains(e.target)) d.open = false; });
   window.addEventListener("hashchange", () => { route(); render(); window.scrollTo(0, 0); if (API) refreshServer().then(softRender).catch(() => {}); });
   const refreshSoon = () => { if (API && document.visibilityState === "visible") refreshServer().then(softRender).catch(() => {}); };
   document.addEventListener("visibilitychange", refreshSoon);

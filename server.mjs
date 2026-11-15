@@ -3,7 +3,8 @@
 // and calls Claude for the AI features with the server's own ANTHROPIC_API_KEY.
 import http from "node:http";
 import { readFileSync, existsSync, mkdirSync, writeFileSync, renameSync } from "node:fs";
-import { createHash, timingSafeEqual } from "node:crypto";
+import { createHash, timingSafeEqual, randomBytes, scrypt as scryptCb } from "node:crypto";
+import { promisify } from "node:util";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import Anthropic from "@anthropic-ai/sdk";
@@ -15,6 +16,14 @@ const ADMIN_CODE = process.env.ADMIN_CODE || "";
 const MODEL = process.env.CLAUDE_MODEL || "claude-opus-5-5";
 const AI_LIMIT = Number(process.env.AI_REQUESTS_PER_HOUR) || 40; // per visitor
 const client = process.env.ANTHROPIC_API_KEY ? new Anthropic() : null;
+const scrypt = promisify(scryptCb);
+// Sign-in. Google is optional: set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to turn it on.
+const GOOGLE_ID = process.env.GOOGLE_CLIENT_ID || "", GOOGLE_SECRET = process.env.GOOGLE_CLIENT_SECRET || "";
+const GOOGLE_AUTH_URL = process.env.GOOGLE_AUTH_URL || "https://accounts.google.com/o/oauth2/v2/auth";
+const GOOGLE_TOKEN_URL = process.env.GOOGLE_TOKEN_URL || "https://oauth2.googleapis.com/token";
+const PUBLIC_URL = (process.env.PUBLIC_URL || process.env.RENDER_EXTERNAL_URL || "").replace(/\/+$/, "");
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "").split(",").map((x) => x.trim().toLowerCase()).filter(Boolean);
+const SESSION_DAYS = 30;
 
 // ---------- page ----------
 const SHELL_HEAD = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="icon" type="image/svg+xml" href="/icon.svg"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>`;
@@ -24,21 +33,130 @@ const ICON = readFileSync(path.join(here, "public", "icon.svg"));
 // ---------- storage ----------
 mkdirSync(DATA_DIR, { recursive: true });
 const FILE = path.join(DATA_DIR, "store.json");
-let db = { studies: {}, responses: {}, actions: {}, profiles: {}, fieldwork: {} };
+let db = { studies: {}, responses: {}, actions: {}, profiles: {}, fieldwork: {}, users: {}, sessions: {} };
 if (existsSync(FILE)) { try { db = { ...db, ...JSON.parse(readFileSync(FILE, "utf8")) }; } catch (e) { console.error("Could not read store.json; starting empty.", e); } }
 let saveTimer = null;
 function flush() { const tmp = FILE + ".tmp"; writeFileSync(tmp, JSON.stringify(db)); renameSync(tmp, FILE); }
 function persist() { clearTimeout(saveTimer); saveTimer = setTimeout(flush, 250); }
+for (const [k, v] of Object.entries(db.sessions)) if (v.expires < Date.now()) delete db.sessions[k];
 for (const sig of ["SIGTERM", "SIGINT"]) process.on(sig, () => { clearTimeout(saveTimer); try { flush(); } catch (e) {} process.exit(0); });
 
 // ---------- identity ----------
 const sha = (s) => createHash("sha256").update(s).digest("hex");
+function cookies(req) {
+  const out = {};
+  String(req.headers.cookie || "").split(";").forEach((p) => { const i = p.indexOf("="); if (i > 0) { try { out[p.slice(0, i).trim()] = decodeURIComponent(p.slice(i + 1).trim()); } catch (e) {} } });
+  return out;
+}
+const isHttps = (req) => String(req.headers["x-forwarded-proto"] || "").split(",")[0].trim() === "https";
+function addCookie(res, c) { const cur = res.getHeader("Set-Cookie"); res.setHeader("Set-Cookie", cur ? [].concat(cur, c) : [c]); }
+const cookieStr = (req, name, val, maxAge, p = "/") => `${name}=${val}; Path=${p}; HttpOnly; SameSite=Lax; Max-Age=${maxAge}${isHttps(req) ? "; Secure" : ""}`;
+function sessionUser(req) {
+  const t = cookies(req).ss_session;
+  if (!t || !/^[0-9a-f]{64}$/.test(t)) return null;
+  const sess = db.sessions[sha(t)];
+  if (!sess || sess.expires < Date.now()) return null;
+  return db.users[sess.userId] || null;
+}
+function startSession(req, res, user) {
+  const tok = randomBytes(32).toString("hex");
+  db.sessions[sha(tok)] = { userId: user.id, createdAt: Date.now(), expires: Date.now() + SESSION_DAYS * 864e5 };
+  user.lastLogin = Date.now(); persist();
+  addCookie(res, cookieStr(req, "ss_session", tok, SESSION_DAYS * 86400));
+}
+const publicUser = (u) => (u ? { id: u.id, email: u.email, name: u.name || "", google: !!u.googleSub, password: !!u.passHash } : null);
+const findByEmail = (email) => Object.values(db.users).find((u) => u.email === email) || null;
 function who(req) {
+  const user = sessionUser(req);
   const t = String(req.headers["x-client-token"] || "");
-  const uid = /^[0-9a-f]{48}$/.test(t) ? "c_" + sha(t).slice(0, 24) : null;
+  const anon = /^[0-9a-f]{48}$/.test(t) ? "c_" + sha(t).slice(0, 24) : null;
   const code = String(req.headers["x-admin-code"] || "");
-  const isAdmin = !!ADMIN_CODE && code.length === ADMIN_CODE.length && timingSafeEqual(Buffer.from(code), Buffer.from(ADMIN_CODE));
-  return { uid, isAdmin };
+  const codeOk = !!ADMIN_CODE && code.length === ADMIN_CODE.length && timingSafeEqual(Buffer.from(code), Buffer.from(ADMIN_CODE));
+  return { uid: user ? user.id : anon, user, anon, isAdmin: codeOk || (!!user && ADMIN_EMAILS.includes(user.email)) };
+}
+// Move anything a visitor made before signing in into their account.
+function claim(anon, uid) {
+  if (!anon || !uid || anon === uid) return 0;
+  let n = 0;
+  for (const x of Object.values(db.studies)) if (x.ownerId === anon) { x.ownerId = uid; n++; }
+  for (const x of Object.values(db.responses)) { if (x.participantId === anon) { x.participantId = uid; n++; } if (x.ownerId === anon) x.ownerId = uid; }
+  for (const x of Object.values(db.actions)) if (x.ownerId === anon) { x.ownerId = uid; n++; }
+  for (const x of Object.values(db.fieldwork)) if (x.requesterId === anon) { x.requesterId = uid; n++; }
+  if (db.profiles[anon]) { if (!db.profiles[uid]) db.profiles[uid] = db.profiles[anon]; delete db.profiles[anon]; n++; }
+  if (n) persist();
+  return n;
+}
+const tries = new Map();
+function tooMany(key, max = 10, windowMs = 15 * 60e3) {
+  const now = Date.now(), list = (tries.get(key) || []).filter((t) => now - t < windowMs);
+  list.push(now); tries.set(key, list); return list.length > max;
+}
+const EMAIL_RX = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+async function hashPassword(pw, salt) { return (await scrypt(pw, salt, 64)).toString("hex"); }
+async function handleAuth(req, res, me, action) {
+  if (action === "logout") {
+    const t = cookies(req).ss_session; if (t) delete db.sessions[sha(t)];
+    addCookie(res, cookieStr(req, "ss_session", "", 0)); persist(); return send(res, 200, { ok: true });
+  }
+  if (action === "claim") { if (!me.user) return fail(res, 401, "auth_required", "Sign in first."); return send(res, 200, { claimed: claim(me.anon, me.user.id) }); }
+  const b = await readBody(req, 10_000);
+  const email = String((b && b.email) || "").trim().toLowerCase(), pw = String((b && b.password) || "");
+  if (!EMAIL_RX.test(email) || email.length > 160) return fail(res, 400, "invalid_argument", "Enter a valid email address.");
+  if (tooMany((req.headers["x-forwarded-for"] || req.socket.remoteAddress || "") + "|" + email)) return fail(res, 429, "rate_limited", "Too many attempts. Wait 15 minutes and try again.");
+  const existing = findByEmail(email);
+  if (action === "signup") {
+    if (pw.length < 8 || pw.length > 200) return fail(res, 400, "invalid_argument", "Use a password of at least 8 characters.");
+    if (existing) return fail(res, 409, "invalid_argument", existing.passHash ? "An account with this email already exists. Sign in instead." : "This email signs in with Google. Use Continue with Google.");
+    const salt = randomBytes(16).toString("hex");
+    const user = { id: "u_" + randomBytes(12).toString("hex"), email, name: String((b && b.name) || "").trim().slice(0, 80), salt, passHash: await hashPassword(pw, salt), createdAt: Date.now() };
+    db.users[user.id] = user; startSession(req, res, user); claim(me.anon, user.id);
+    return send(res, 200, { user: publicUser(user) });
+  }
+  if (action === "login") {
+    if (existing && !existing.passHash) return fail(res, 401, "invalid_argument", "This email signs in with Google. Use Continue with Google.");
+    const ok = existing && timingSafeEqual(Buffer.from(await hashPassword(pw, existing.salt), "hex"), Buffer.from(existing.passHash, "hex"));
+    if (!ok) return fail(res, 401, "invalid_argument", "Wrong email or password.");
+    startSession(req, res, existing); claim(me.anon, existing.id);
+    return send(res, 200, { user: publicUser(existing) });
+  }
+  return fail(res, 404, "not_found", "Unknown sign-in route.");
+}
+// ---------- Google sign-in (OAuth 2.0 authorization code flow) ----------
+const oauthStates = new Map();
+const baseUrl = (req) => PUBLIC_URL || `${isHttps(req) ? "https" : "http"}://${req.headers.host}`;
+const redirect = (res, to) => { res.writeHead(302, { Location: to, "Cache-Control": "no-store" }); res.end(); };
+function googleStart(req, res, url) {
+  if (!GOOGLE_ID || !GOOGLE_SECRET) return redirect(res, "/?auth_error=google_off#signin");
+  const state = randomBytes(16).toString("hex"), nxt = /^[a-z-]{1,30}$/.test(url.searchParams.get("next") || "") ? url.searchParams.get("next") : "studies";
+  oauthStates.set(state, { next: nxt, exp: Date.now() + 10 * 60e3 });
+  for (const [k, v] of oauthStates) if (v.exp < Date.now()) oauthStates.delete(k);
+  addCookie(res, cookieStr(req, "ss_oauth", state, 600, "/auth"));
+  const q = new URLSearchParams({ client_id: GOOGLE_ID, redirect_uri: baseUrl(req) + "/auth/google/callback", response_type: "code", scope: "openid email profile", state, prompt: "select_account" });
+  return redirect(res, `${GOOGLE_AUTH_URL}?${q}`);
+}
+async function googleCallback(req, res, url) {
+  const state = url.searchParams.get("state") || "", code = url.searchParams.get("code") || "", saved = oauthStates.get(state);
+  if (!saved || saved.exp < Date.now() || cookies(req).ss_oauth !== state || !code) return redirect(res, "/?auth_error=google_failed#signin");
+  oauthStates.delete(state);
+  addCookie(res, cookieStr(req, "ss_oauth", "", 0, "/auth"));
+  try {
+    const r = await fetch(GOOGLE_TOKEN_URL, { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ code, client_id: GOOGLE_ID, client_secret: GOOGLE_SECRET, redirect_uri: baseUrl(req) + "/auth/google/callback", grant_type: "authorization_code" }) });
+    const tok = await r.json();
+    if (!r.ok || !tok.id_token) throw new Error("token exchange failed: " + r.status);
+    // The ID token came straight from Google's token endpoint over HTTPS with our client secret, so its claims can be read directly.
+    const claims = JSON.parse(Buffer.from(String(tok.id_token).split(".")[1], "base64url").toString("utf8"));
+    if (!["https://accounts.google.com", "accounts.google.com"].includes(claims.iss) || claims.aud !== GOOGLE_ID || claims.exp * 1000 < Date.now()) throw new Error("bad id token");
+    if (claims.email_verified !== true && claims.email_verified !== "true") return redirect(res, "/?auth_error=google_email#signin");
+    const email = String(claims.email || "").toLowerCase();
+    let user = Object.values(db.users).find((u) => u.googleSub === claims.sub) || findByEmail(email);
+    if (user) { user.googleSub = claims.sub; if (!user.name && claims.name) user.name = String(claims.name).slice(0, 80); }
+    else { user = { id: "u_" + randomBytes(12).toString("hex"), email, name: String(claims.name || "").slice(0, 80), googleSub: claims.sub, createdAt: Date.now() }; db.users[user.id] = user; }
+    startSession(req, res, user);
+    return redirect(res, `/?auth=google#${saved.next}`);
+  } catch (e) {
+    console.error("Google sign-in error", e.message);
+    return redirect(res, "/?auth_error=google_failed#signin");
+  }
 }
 
 // ---------- helpers ----------
@@ -97,6 +215,7 @@ async function runClaude(params, signal) {
 }
 async function handleAI(req, res, me) {
   if (!client) return fail(res, 503, "sampling_disabled", "AI is not configured on this server.");
+  if (!me.user) return fail(res, 401, "auth_required", "Sign in to use the AI features.");
   if (!allowAI(me.uid || req.socket.remoteAddress)) return fail(res, 429, "rate_limited", "Too many AI requests. Try again later.");
   const body = await readBody(req, 600_000);
   const messages = toMessages(body && body.input);
@@ -133,10 +252,12 @@ async function handleApi(req, res, url) {
   const me = who(req), seg = url.pathname.split("/").filter(Boolean).map(decodeURIComponent); // ["api", kind, id?]
   const kind = seg[1], id = seg[2], m = req.method;
   if (kind === "ai" && m === "POST") return handleAI(req, res, me);
+  if (kind === "auth" && m === "POST") return handleAuth(req, res, me, id);
   if (!me.uid) return fail(res, 401, "invalid_argument", "Missing or malformed client token.");
+  const needUser = () => fail(res, 401, "auth_required", "Sign in or create a free account to continue.");
   const uid = me.uid;
 
-  if (kind === "me" && m === "GET") return send(res, 200, { uid, isAdmin: me.isAdmin, ai: !!client });
+  if (kind === "me" && m === "GET") return send(res, 200, { uid, user: publicUser(me.user), isAdmin: me.isAdmin, ai: !!client, google: !!(GOOGLE_ID && GOOGLE_SECRET) });
 
   if (kind === "data" && m === "GET") {
     const studies = Object.values(db.studies).filter((s) => s.status !== "draft" || s.ownerId === uid || me.isAdmin);
@@ -148,6 +269,7 @@ async function handleApi(req, res, url) {
   }
 
   if (kind === "studies" && okId(id)) {
+    if (!me.user && !me.isAdmin) return needUser();
     const cur = db.studies[id];
     if (cur && cur.ownerId !== uid && !me.isAdmin) return fail(res, 403, "invalid_argument", "Only the survey's owner can change it.");
     if (m === "DELETE") { delete db.studies[id]; persist(); return send(res, 204); }
@@ -160,11 +282,12 @@ async function handleApi(req, res, url) {
   }
 
   if (kind === "responses" && okId(id)) {
+    if (!me.user && !me.isAdmin) return needUser();
     const cur = db.responses[id];
     if (m === "PUT") {
       const b = await readBody(req, 200_000), st = isObj(b) ? db.studies[b.studyId] : null;
       if (!st || id !== `${st.id}-${uid}` || !isObj(b.answers)) return fail(res, 400, "invalid_argument", "That isn't a valid response.");
-      if (cur) return fail(res, 409, "invalid_argument", "You have already taken this survey.");
+      if (cur || Object.values(db.responses).some((r) => r.studyId === st.id && r.participantId === uid)) return fail(res, 409, "invalid_argument", "You have already taken this survey.");
       if (st.status !== "live") return fail(res, 409, "invalid_argument", "This survey is closed.");
       if (usedSlots(st.id) >= st.target) return fail(res, 409, "invalid_argument", "This survey is full.");
       const status = b.passedAttention !== false && !b.speeder ? "approved" : "flagged";
@@ -182,6 +305,7 @@ async function handleApi(req, res, url) {
   }
 
   if (kind === "actions" && okId(id)) {
+    if (!me.user && !me.isAdmin) return needUser();
     const cur = db.actions[id];
     if (cur && cur.ownerId !== uid && !me.isAdmin) return fail(res, 403, "invalid_argument", "Only the action's owner can change it.");
     if (m === "DELETE") { delete db.actions[id]; persist(); return send(res, 204); }
@@ -217,6 +341,7 @@ async function handleApi(req, res, url) {
   }
 
   if (kind === "profile" && m === "PUT") {
+    if (!me.user) return needUser();
     const b = await readBody(req, 5_000);
     if (!isObj(b) || !(b.age >= 18 && b.age <= 120)) return fail(res, 400, "invalid_argument", "That isn't a valid profile.");
     db.profiles[uid] = { age: Math.floor(b.age), gender: String(b.gender || "").slice(0, 40), country: String(b.country || "").slice(0, 60), occupation: String(b.occupation || "").slice(0, 60), updatedAt: Date.now() };
@@ -231,7 +356,13 @@ export const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, "http://localhost");
   try {
     for (const [k, v] of Object.entries(SECURITY)) res.setHeader(k, v);
+    if (req.method !== "GET" && req.method !== "HEAD" && req.headers.origin) {
+      let sameSite = false; try { sameSite = new URL(req.headers.origin).host === req.headers.host; } catch (e) {}
+      if (!sameSite) return fail(res, 403, "invalid_argument", "Cross-site request refused.");
+    }
     if (url.pathname.startsWith("/api/")) return await handleApi(req, res, url);
+    if (url.pathname === "/auth/google" && req.method === "GET") return googleStart(req, res, url);
+    if (url.pathname === "/auth/google/callback" && req.method === "GET") return await googleCallback(req, res, url);
     if (url.pathname === "/healthz") return send(res, 200, { ok: true });
     if (url.pathname === "/icon.svg") { res.writeHead(200, { "Content-Type": "image/svg+xml", "Cache-Control": "public, max-age=86400" }); return res.end(ICON); }
     if (req.method === "GET" && (url.pathname === "/" || url.pathname === "/index.html")) { res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache" }); return res.end(PAGE); }
@@ -242,5 +373,5 @@ export const server = http.createServer(async (req, res) => {
   }
 });
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  server.listen(PORT, () => console.log(`SurveySpider running on port ${PORT}. AI ${client ? "on (" + MODEL + ")" : "off: set ANTHROPIC_API_KEY"}. Data in ${DATA_DIR}.`));
+  server.listen(PORT, () => console.log(`SurveySpider running on port ${PORT}. AI ${client ? "on (" + MODEL + ")" : "off: set ANTHROPIC_API_KEY"}. Google sign-in ${GOOGLE_ID && GOOGLE_SECRET ? "on" : "off"}. Data in ${DATA_DIR}.`));
 }

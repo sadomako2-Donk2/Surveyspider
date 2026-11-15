@@ -36,6 +36,26 @@ npm test
 
 Checks the statistics library against SciPy reference values and the server's permission rules.
 
-## How accounts work today
+## Accounts and sign-in
 
-Each browser gets a random private key stored in that browser. It acts as an anonymous account: the server only lets that browser edit its own surveys, answers and actions. Clearing browser data or switching devices starts a new account. Proper sign-in (email/password or Google) is the recommended next step before taking paying customers.
+People sign in with **email and password** or **Continue with Google**. Signing in is needed to save surveys, take paid surveys, review responses, add actions, save a profile and use AI. Browsing, pricing and Paper Survey quotes work without an account. Anything a visitor made before signing in moves into their new account.
+
+- Passwords are hashed with scrypt; sessions use an HttpOnly, SameSite cookie that lasts 30 days.
+- Repeated wrong passwords are rate-limited. Cross-site requests are refused.
+- `ADMIN_EMAILS` (comma-separated) makes those accounts site owners automatically. `ADMIN_CODE` still works too.
+
+### Turn on Google sign-in
+
+1. Go to https://console.cloud.google.com and create (or pick) a project.
+2. **APIs & Services → OAuth consent screen**: choose **External**, fill in the app name (SurveySpider), support email and your domain, then publish the app.
+3. **APIs & Services → Credentials → Create credentials → OAuth client ID**, type **Web application**.
+   - Authorised JavaScript origin: `https://surveyspider.onrender.com`
+   - Authorised redirect URI: `https://surveyspider.onrender.com/auth/google/callback`
+   - If you add your own domain later, add the same two entries for it.
+4. Copy the **Client ID** and **Client secret** into Render → your service → **Environment** as `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`, then **Save, rebuild, and deploy**.
+
+The Google button appears on the sign-in page as soon as both values are set.
+
+### Not included yet
+
+Email verification and "forgot password" emails need an email-sending service (for example Resend or SendGrid). Until then, a person who forgets their password can use Continue with Google with the same email address, or the site owner can help.
