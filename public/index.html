@@ -383,7 +383,7 @@ td.hi { font-weight: 700; color: var(--accent); }
 .pcheck label { flex-direction: row; gap: 8px; color: var(--ink); font-weight: 400; }
 @media (max-width: 760px) { .meters { grid-template-columns: repeat(2, minmax(0, 1fr)); } .grade { grid-template-columns: 1fr; } .metric-row { grid-template-columns: 1fr; } }
 
-/* Paper-to-pen */
+/* Paper survey */
 .f2f-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 460px); gap: 20px; align-items: start; }
 .f2f-side { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 72px); }
 .quote { border-color: color-mix(in srgb, var(--gold) 55%, var(--line)); }
@@ -477,7 +477,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   }
   const typeLabel = (q) => { if (q.type !== "rating") return QTYPES[q.type] || q.type; const s = scaleOf(q); return `Rating ${s.min}–${s.max}`; };
   const ATTN = { id: "attn", type: "single", text: "To show you are reading carefully, please choose \"Purple\".", options: ["Red", "Green", "Purple", "Blue"], required: true };
-  const TABS = [["home", "Home"], ["pricing", "Pricing"], ["create", "Create"], ["import", "Upload"], ["paper-to-pen", "Paper-to-Pen Survey"], ["studies", "My surveys"], ["results", "Analyze"], ["panel", "Take surveys"], ["library", "Library"], ["business", "Business"]];
+  const TABS = [["home", "Home"], ["pricing", "Pricing"], ["create", "Create"], ["import", "Upload"], ["paper-survey", "Paper Survey"], ["studies", "My surveys"], ["results", "Analyze"], ["panel", "Take surveys"], ["library", "Library"], ["business", "Business"]];
 
   const TEMPLATES = {
     cx: { group: "research", name: "Customer satisfaction", blurb: "Measure satisfaction and find what to fix first.", title: "Online shopping satisfaction", description: "A short survey about your experience shopping online. There are no right or wrong answers.", minutes: 5, reward: 1.0, target: 150, occupations: [],
@@ -637,7 +637,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   // ---------- render shell ----------
   function isTyping() { const a = document.activeElement; return !!(a && $("#main").contains(a) && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)); }
   function softRender() {
-    if (S.view === "create" || S.view === "import" || S.view === "paper-to-pen" || (S.view === "panel" && S.taking)) { renderTabs(); return; }
+    if (S.view === "create" || S.view === "import" || S.view === "paper-survey" || (S.view === "panel" && S.taking)) { renderTabs(); return; }
     if (isTyping()) { pending = true; renderTabs(); return; }
     render();
   }
@@ -653,12 +653,13 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   function render() {
     pending = false;
     renderTabs();
-    const v = { home: viewHome, pricing: viewPricing, import: viewImport, "paper-to-pen": viewF2F, create: viewCreate, studies: viewStudies, panel: viewPanel, results: viewResults, library: viewLibrary, business: viewBusiness }[S.view] || viewHome;
+    const v = { home: viewHome, pricing: viewPricing, import: viewImport, "paper-survey": viewF2F, create: viewCreate, studies: viewStudies, panel: viewPanel, results: viewResults, library: viewLibrary, business: viewBusiness }[S.view] || viewHome;
     $("#main").innerHTML = v();
     if (S.view === "create" && S.draft) updateCost();
   }
   function route() {
-    const h = location.hash.replace("#", "");
+    let h = location.hash.replace("#", "");
+    if (h === "paper-to-pen") h = "paper-survey"; // old links keep working
     S.view = TABS.some(([k]) => k === h) ? h : "home";
     if (S.view !== "panel") S.taking = null;
     S.confirmDel = null;
@@ -749,8 +750,8 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
       <div class="band-list">${train.map(([k, t]) => `<button class="band-item" data-act="tpl" data-key="${k}"><b>${esc(t.name)}</b><span>${esc(t.blurb)}</span></button>`).join("")}</div>
     </section>
     <section class="split card" style="align-items:center">
-      <div class="stack" style="gap:8px"><span class="eyebrow gold">Paper-to-pen survey</span><h2 class="h2xl">Need people interviewed face to face?</h2><p class="muted">Our field teams run questionnaires, one-to-one interviews and focus groups in person, on paper or tablet. Upload your questionnaire and get a full quote in US dollars instantly.</p></div>
-      <div class="row wrap" style="justify-content:flex-end"><a class="btn gold" href="#paper-to-pen">Get an instant quote</a></div>
+      <div class="stack" style="gap:8px"><span class="eyebrow gold">Paper survey</span><h2 class="h2xl">Need people interviewed face to face?</h2><p class="muted">Our field teams run questionnaires, one-to-one interviews and focus groups in person, on paper or tablet. Upload your questionnaire and get a full quote in US dollars instantly.</p></div>
+      <div class="row wrap" style="justify-content:flex-end"><a class="btn gold" href="#paper-survey">Get an instant quote</a></div>
     </section>
     <section class="cta-strip">
       <div><h2>Paid plans from $15 a month</h2><p class="muted">Up to 75% less than comparable SurveyMonkey plans. Start free with 300 responses a month.</p></div>
@@ -797,7 +798,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
       </section>
       <div class="split">
         <section class="card"><h2>Participant panel</h2><p class="muted">Recruit real people for any survey. You set the reward, with a guide of at least $8 per hour, and pay a ${Math.round(FEE * 100)}% platform fee on top. The fee drops to 20% on the Research plan and for verified academic accounts.</p><p class="hint">For comparison, Prolific charges 33.3% for academic and 42.8% for commercial customers (<a href="https://www.prolific.com/pricing" target="_blank" rel="noopener">Prolific pricing</a>).</p></section>
-        <section class="card"><h2>Paper-to-pen fieldwork</h2><p class="muted">Face-to-face questionnaires, in-depth interviews and focus groups are priced per project. Upload your questionnaire on the Paper-to-Pen Survey tab for an instant quote in US dollars.</p><a class="btn" href="#paper-to-pen" style="align-self:flex-start">Get a quote</a></section>
+        <section class="card"><h2>Paper survey fieldwork</h2><p class="muted">Face-to-face questionnaires, in-depth interviews and focus groups are priced per project. Upload your questionnaire on the Paper Survey tab for an instant quote in US dollars.</p><a class="btn" href="#paper-survey" style="align-self:flex-start">Get a quote</a></section>
       </div>
       <div class="split">
         <section class="card"><h2>Questions about pricing</h2><dl class="kv" style="grid-template-columns:1fr;gap:4px 0"><dt>What counts as an AI action?</dt><dd>One AI survey draft, question check, insight report or Ask your data question.</dd><dt>Can I change plans later?</dt><dd>Yes. Upgrades apply at once and downgrades at your next billing date.</dd><dt>Do unused responses roll over?</dt><dd>No. Yearly plans give you the whole year's responses up front.</dd></dl></section>
@@ -2234,7 +2235,7 @@ ${richSummary(st, rows)}`;
     xlBusy(false);
   }
 
-  // ================= PAPER-TO-PEN: face-to-face fieldwork with an instant USD quote =================
+  // ================= PAPER SURVEY: face-to-face fieldwork with an instant USD quote =================
   // Indicative rate card (USD). Tier A: high-cost markets; B: middle-income; C: lower-cost markets (default).
   const F2F_TIER = { "United States": "A", "United Kingdom": "A", Canada: "A", Germany: "A", France: "A", Netherlands: "A", Spain: "A", Italy: "A", Australia: "A", "South Africa": "B", Brazil: "B", Mexico: "B" };
   const tierOf = (c) => F2F_TIER[c] || "C";
@@ -2349,7 +2350,7 @@ ${richSummary(st, rows)}`;
         <details><summary>Or paste the questions as text</summary><div class="stack" style="margin-top:10px"><textarea id="impText" rows="6" placeholder="1. How often do you visit the clinic?&#10;a) Weekly&#10;b) Monthly&#10;c) Rarely"></textarea><div><button class="btn" data-act="impPaste">Read pasted text</button></div></div></details>
         ${mine.length ? `<label for="f2fPick">Or use one of your surveys<select id="f2fPick"><option value="">Choose a survey…</option>${mine.map((s) => `<option value="${esc(s.id)}">${esc(s.title || "Untitled")}</option>`).join("")}</select></label>` : ""}`;
     const sizeFields = F.method === "fgd" ? `<div class="grid2">${num("groups", "Number of groups", 'min="1" max="60" step="1"')}${num("perGroup", "People per group", 'min="4" max="12" step="1"')}</div>` : num("n", F.method === "idi" ? "Number of interviews" : "Completed interviews needed", 'min="1" step="1"');
-    return `<div class="page-head"><div><span class="eyebrow gold">Paper-to-pen survey</span><h1>Face-to-face surveys and interviews, priced instantly</h1><p class="muted" style="max-width:66ch">Our field teams interview people in person, on paper or tablet, for questionnaires, one-to-one interviews and focus groups. Upload your questionnaire and see the full price in US dollars straight away.</p></div></div>
+    return `<div class="page-head"><div><span class="eyebrow gold">Paper survey</span><h1>Face-to-face surveys and interviews, priced instantly</h1><p class="muted" style="max-width:66ch">Our field teams interview people in person, on paper or tablet, for questionnaires, one-to-one interviews and focus groups. Upload your questionnaire and see the full price in US dollars straight away.</p></div></div>
       <div class="f2f-grid">
         <div class="stack">${source}
           <section class="card"><h2>Your project</h2>
@@ -2424,8 +2425,8 @@ ${richSummary(st, rows)}`;
     const list = [...S.fieldwork].sort((a, b) => b.createdAt - a.createdAt);
     const st = { new: "New", contacted: "Contacted", quoted: "Final quote sent", won: "Won", lost: "Lost" };
     const won = list.filter((r) => r.status === "won").reduce((a, r) => a + ((r.quote && r.quote.total) || 0), 0);
-    return `<section class="card"><div class="qmeta"><h2>Paper-to-pen requests</h2><span class="hint">${list.length} request${list.length === 1 ? "" : "s"} · ${usd0(won)} won</span></div>
-      ${list.length ? `<div class="table-wrap"><table><thead><tr><th>Date</th><th>Client</th><th>Project</th><th>Quote</th><th>Status</th></tr></thead><tbody>${list.map((r) => `<tr><td class="n">${fmtDate(r.createdAt)}<br><span class="hint">${esc(r.ref || "")}</span></td><td><b>${esc(r.contact.name)}</b>${r.contact.org ? `<br>${esc(r.contact.org)}` : ""}<br><span class="hint">${esc(r.contact.email)}${r.contact.phone ? " · " + esc(r.contact.phone) : ""}</span></td><td>${esc(F2F_METHODS[r.inputs.method] || r.inputs.method)}<br><span class="hint">${r.inputs.method === "fgd" ? `${esc(r.inputs.groups)} groups` : `${int(r.inputs.n)} interviews`} · ${esc(r.inputs.country)} · ${r.survey ? esc(short(r.survey.title, 40)) : "no survey"}</span>${r.contact.notes ? `<br><span class="hint">“${esc(short(r.contact.notes, 120))}”</span>` : ""}</td><td class="n">${usd0(r.quote.total)}<br><span class="hint">~${r.quote.weeks} wk</span></td><td><select data-fw="${esc(r.id)}" aria-label="Status">${Object.entries(st).map(([k, v]) => `<option value="${k}"${r.status === k ? " selected" : ""}>${v}</option>`).join("")}</select></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No requests yet. They appear here when clients send a quote from the Paper-to-Pen Survey tab.</p>`}</section>`;
+    return `<section class="card"><div class="qmeta"><h2>Paper survey requests</h2><span class="hint">${list.length} request${list.length === 1 ? "" : "s"} · ${usd0(won)} won</span></div>
+      ${list.length ? `<div class="table-wrap"><table><thead><tr><th>Date</th><th>Client</th><th>Project</th><th>Quote</th><th>Status</th></tr></thead><tbody>${list.map((r) => `<tr><td class="n">${fmtDate(r.createdAt)}<br><span class="hint">${esc(r.ref || "")}</span></td><td><b>${esc(r.contact.name)}</b>${r.contact.org ? `<br>${esc(r.contact.org)}` : ""}<br><span class="hint">${esc(r.contact.email)}${r.contact.phone ? " · " + esc(r.contact.phone) : ""}</span></td><td>${esc(F2F_METHODS[r.inputs.method] || r.inputs.method)}<br><span class="hint">${r.inputs.method === "fgd" ? `${esc(r.inputs.groups)} groups` : `${int(r.inputs.n)} interviews`} · ${esc(r.inputs.country)} · ${r.survey ? esc(short(r.survey.title, 40)) : "no survey"}</span>${r.contact.notes ? `<br><span class="hint">“${esc(short(r.contact.notes, 120))}”</span>` : ""}</td><td class="n">${usd0(r.quote.total)}<br><span class="hint">~${r.quote.weeks} wk</span></td><td><select data-fw="${esc(r.id)}" aria-label="Status">${Object.entries(st).map(([k, v]) => `<option value="${k}"${r.status === k ? " selected" : ""}>${v}</option>`).join("")}</select></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No requests yet. They appear here when clients send a quote from the Paper Survey tab.</p>`}</section>`;
   }
 
   // ---------- BUSINESS ----------
@@ -2614,9 +2615,9 @@ ${richSummary(st, rows)}`;
   const refreshSoon = () => { if (API && document.visibilityState === "visible") refreshServer().then(softRender).catch(() => {}); };
   document.addEventListener("visibilitychange", refreshSoon);
   window.addEventListener("focus", refreshSoon);
-  main.addEventListener("dragover", (e) => { const d = e.target.closest(".drop"); if (!d || (S.view !== "import" && S.view !== "paper-to-pen")) return; e.preventDefault(); d.classList.add("over"); });
+  main.addEventListener("dragover", (e) => { const d = e.target.closest(".drop"); if (!d || (S.view !== "import" && S.view !== "paper-survey")) return; e.preventDefault(); d.classList.add("over"); });
   main.addEventListener("dragleave", (e) => { const d = e.target.closest(".drop"); if (d) d.classList.remove("over"); });
-  main.addEventListener("drop", (e) => { const d = e.target.closest(".drop"); if (!d || (S.view !== "import" && S.view !== "paper-to-pen")) return; e.preventDefault(); d.classList.remove("over"); const f = e.dataTransfer && e.dataTransfer.files[0]; if (f) readFile(f); });
+  main.addEventListener("drop", (e) => { const d = e.target.closest(".drop"); if (!d || (S.view !== "import" && S.view !== "paper-survey")) return; e.preventDefault(); d.classList.remove("over"); const f = e.dataTransfer && e.dataTransfer.files[0]; if (f) readFile(f); });
 
   // ---------- IMPORT: Word / PDF / text → questions ----------
   const LIBS = {
