@@ -22,6 +22,9 @@ const GOOGLE_ID = process.env.GOOGLE_CLIENT_ID || "", GOOGLE_SECRET = process.en
 const GOOGLE_AUTH_URL = process.env.GOOGLE_AUTH_URL || "https://accounts.google.com/o/oauth2/v2/auth";
 const GOOGLE_TOKEN_URL = process.env.GOOGLE_TOKEN_URL || "https://oauth2.googleapis.com/token";
 const PUBLIC_URL = (process.env.PUBLIC_URL || process.env.RENDER_EXTERNAL_URL || "").replace(/\/+$/, "");
+// When PUBLIC_URL is set (e.g. https://www.surveyspider.com), visitors on any other address
+// (surveyspider.onrender.com, the bare domain) are sent there, so everyone uses one address.
+const CANONICAL = (() => { try { return process.env.PUBLIC_URL ? new URL(process.env.PUBLIC_URL) : null; } catch (e) { return null; } })();
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "").split(",").map((x) => x.trim().toLowerCase()).filter(Boolean);
 const SESSION_DAYS = 30;
 // Password-reset emails through Resend (https://resend.com). Off until RESEND_API_KEY is set.
@@ -478,6 +481,11 @@ export const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, "http://localhost");
   try {
     for (const [k, v] of Object.entries(SECURITY)) res.setHeader(k, v);
+    const host = String(req.headers.host || "").toLowerCase();
+    if (CANONICAL && host && host !== CANONICAL.host && url.pathname !== "/healthz" && !/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host)) {
+      res.writeHead(req.method === "GET" || req.method === "HEAD" ? 301 : 308, { Location: CANONICAL.origin + req.url });
+      return res.end();
+    }
     if (req.method !== "GET" && req.method !== "HEAD" && req.headers.origin) {
       let sameSite = false; try { sameSite = new URL(req.headers.origin).host === req.headers.host; } catch (e) {}
       if (!sameSite) return fail(res, 403, "invalid_argument", "Cross-site request refused.");

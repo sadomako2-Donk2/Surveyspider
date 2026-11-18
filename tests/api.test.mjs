@@ -192,5 +192,13 @@ await C.call("POST", "/api/auth/forgot", { email: "xss@example.com" }); await wa
 const xm = emails[emails.length - 1];
 check("names are escaped in the email HTML", xm.to[0] === "xss@example.com" && !/<script/i.test(xm.html) && xm.html.includes("&lt;script&gt;"));
 
+// --- one public address ---
+const viaHost = (host, pathname) => new Promise((resolve) => http.get({ host: "127.0.0.1", port: server.address().port, path: pathname, headers: { Host: host } }, (r) => { r.resume(); resolve({ status: r.statusCode, location: r.headers.location }); }));
+const old = await viaHost("surveyspider.onrender.com", "/?x=1");
+check("other addresses redirect to PUBLIC_URL, keeping the path", old.status === 301 && old.location === "https://surveyspider.test/?x=1");
+check("the bare domain redirects too", (await viaHost("bare-domain.test", "/pricing")).location === "https://surveyspider.test/pricing");
+check("the public address itself is served", (await viaHost("surveyspider.test", "/")).status === 200);
+check("Render's health check is never redirected", (await viaHost("surveyspider.onrender.com", "/healthz")).status === 200);
+
 console.log(`\n${pass} passed, ${failN} failed`);
 server.close(); fakeGoogle.close(); fakeResend.close(); process.exit(failN ? 1 : 0);
