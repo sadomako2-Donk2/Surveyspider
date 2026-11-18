@@ -54,6 +54,10 @@ function browser(ch) {
 }
 let pass = 0, failN = 0;
 const check = (name, ok) => { ok ? pass++ : failN++; console.log(`${ok ? "PASS" : "FAIL"}  ${name}`); };
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+const lastMail = (addr, rx) => [...emails].reverse().find((e) => e.to[0] === addr && rx.test(e.subject));
+const tokenIn = (m, param) => m && new URL(m.text.match(/https:\/\/\S+/)[0]).searchParams.get(param);
+async function confirmLatest(addr) { await wait(150); return (await browser("z").call("POST", "/api/auth/verify", { token: tokenIn(lastMail(addr, /Confirm/), "verify") })).status === 200; }
 const study = { id: "s1", title: "Test survey", status: "live", target: 2, reward: 1, minutes: 5, questions: [{ id: "q1", type: "single", text: "Pick", options: ["A", "B"], required: true }], screen: { minAge: 18, maxAge: 99, countries: [], occupations: [] } };
 
 const A = browser("a"), B = browser("b"), C = browser("c");
@@ -78,6 +82,22 @@ check("sign-up creates an account and a session", su.status === 200 && su.json.u
 check("session cookie is HttpOnly and SameSite", su.setCookie.some((c) => /ss_session=/.test(c) && /HttpOnly/.test(c) && /SameSite=Lax/.test(c)));
 const meA = (await A.call("GET", "/api/me")).json;
 check("signed-in user gets an account id", meA.user && /^u_/.test(meA.uid) && meA.uid === meA.user.id);
+// --- email verification ---
+await wait(150);
+const v1 = lastMail("a@example.com", /Confirm your email/);
+check("sign-up sends a confirmation email", !!v1 && /verify=[0-9a-f]{64}#studies/.test(v1.text) && v1.text.startsWith("Hi Researcher,"));
+check("new email accounts start unconfirmed", meA.user.verified === false);
+check("unconfirmed users can save drafts", (await A.call("PUT", "/api/studies/dv", { ...study, id: "dv", status: "draft" })).status === 200);
+check("unconfirmed users can't launch surveys", (await A.call("PUT", "/api/studies/dv", { ...study, id: "dv", status: "live" })).json.code === "verify_required");
+check("unconfirmed users can't use AI", (await A.call("POST", "/api/ai", { input: "hi" })).json.code === "verify_required");
+check("'send it again' sends a new link", (await A.call("POST", "/api/auth/resend-verification")).status === 200 && (await wait(150), tokenIn(lastMail("a@example.com", /Confirm/), "verify") !== tokenIn(v1, "verify")));
+check("the older link stops working", (await C.call("POST", "/api/auth/verify", { token: tokenIn(v1, "verify") })).status === 400);
+check("a made-up confirmation token is refused", (await C.call("POST", "/api/auth/verify", { token: "e".repeat(64) })).status === 400);
+const vNew = tokenIn(lastMail("a@example.com", /Confirm/), "verify");
+check("the confirmation link confirms the email (no sign-in needed)", (await C.call("POST", "/api/auth/verify", { token: vNew })).status === 200 && (await A.call("GET", "/api/me")).json.user.verified === true && (await C.call("GET", "/api/me")).json.user === null);
+check("a confirmation link works only once", (await C.call("POST", "/api/auth/verify", { token: vNew })).status === 400);
+check("confirmed users can launch", (await A.call("PUT", "/api/studies/dv", { ...study, id: "dv", status: "live" })).status === 200);
+await A.call("DELETE", "/api/studies/dv");
 check("work done before sign-up moves into the account", (await A.call("GET", "/api/data")).json.fieldwork.length === 1);
 check("duplicate sign-up is refused", (await B.call("POST", "/api/auth/signup", { email: "a@example.com", password: "another pass 2" })).status === 409);
 check("wrong password is refused", (await B.call("POST", "/api/auth/login", { email: "a@example.com", password: "wrong password" })).status === 401);
@@ -90,6 +110,8 @@ check("repeated wrong guesses are rate-limited", limited);
 
 // --- permissions between two signed-in people ---
 await B.call("POST", "/api/auth/signup", { email: "b@example.com", password: "participant pw" });
+check("unconfirmed participants can't take paid surveys", (await A.call("PUT", "/api/studies/s1", study)).status === 200 && (await B.call("PUT", `/api/responses/s1-${(await B.call("GET", "/api/me")).json.uid}`, { studyId: "s1", answers: { q1: "A" } })).json.code === "verify_required");
+await confirmLatest("b@example.com");
 const meB = (await B.call("GET", "/api/me")).json;
 check("owner can create a survey", (await A.call("PUT", "/api/studies/s1", study)).status === 200);
 check("another user cannot edit it", (await B.call("PUT", "/api/studies/s1", { ...study, title: "hacked" })).status === 403);
@@ -115,7 +137,7 @@ check("cross-site requests are refused", (await A.call("PUT", "/api/studies/s9",
 
 // --- admin access ---
 check("admin code unlocks the business view", (await C.call("GET", "/api/me", undefined, { "X-Admin-Code": "test-admin-code" })).json.isAdmin === true && (await C.call("GET", "/api/me", undefined, { "X-Admin-Code": "wrong" })).json.isAdmin === false);
-const Boss = browser("d"); await Boss.call("POST", "/api/auth/signup", { email: "boss@example.com", password: "owner password" });
+const Boss = browser("d"); await Boss.call("POST", "/api/auth/signup", { email: "boss@example.com", password: "owner password" }); await confirmLatest("boss@example.com");
 check("emails in ADMIN_EMAILS are owners automatically", (await Boss.call("GET", "/api/me")).json.isAdmin === true && (await Boss.call("PATCH", "/api/fieldwork/fw1", { status: "won" })).status === 200);
 
 // --- Google sign-in ---
@@ -127,14 +149,13 @@ check("a forged state is refused", (await G.call("GET", `/auth/google/callback?s
 const cb = await G.call("GET", `/auth/google/callback?state=${state}&code=ok`);
 check("Google callback signs the user in and returns them to their page", cb.status === 302 && cb.location === "/?auth=google#create" && !!G.jar.ss_session);
 const meG = (await G.call("GET", "/api/me")).json;
-check("Google account gets name and verified email", meG.user && meG.user.email === "ama@example.com" && meG.user.name === "Ama Mensah" && meG.user.google);
+check("Google account gets name and verified email", meG.user && meG.user.email === "ama@example.com" && meG.user.name === "Ama Mensah" && meG.user.google && meG.user.verified === true);
 check("a reused state is refused", (await G.call("GET", `/auth/google/callback?state=${state}&code=ok`)).location.includes("auth_error"));
 const G2 = browser("f"); const s2 = new URL((await G2.call("GET", "/auth/google")).location).searchParams.get("state");
 check("Google accounts with unverified email are refused", (await G2.call("GET", `/auth/google/callback?state=${s2}&code=unverified`)).location.includes("auth_error=google_email"));
 check("password sign-in on a Google-only account explains what to do", /Google/.test((await B.call("POST", "/api/auth/login", { email: "ama@example.com", password: "whatever12" })).json.message));
 
 // --- forgot password (Resend) ---
-const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 const R = browser("7"), R2 = browser("8");
 await R.call("POST", "/api/auth/signup", { name: "Rita Reset", email: "rita@example.com", password: "first password" });
 await R2.call("POST", "/api/auth/login", { email: "rita@example.com", password: "first password" });
@@ -159,12 +180,13 @@ const done = await C.call("POST", "/api/auth/reset", { token: fresh, password: "
 check("a valid link sets the new password and signs in", done.status === 200 && done.json.user.email === "rita@example.com" && !!C.jar.ss_session);
 check("the old password no longer works", (await browser("9").call("POST", "/api/auth/login", { email: "rita@example.com", password: "first password" })).status === 401);
 check("the new password works", (await browser("0").call("POST", "/api/auth/login", { email: "rita@example.com", password: "brand new password" })).status === 200);
+check("resetting by email also confirms the address", (await browser("0").call("POST", "/api/auth/login", { email: "rita@example.com", password: "brand new password" })).json.user.verified === true);
 check("every other session is signed out", (await R.call("GET", "/api/me")).json.user === null && (await R2.call("GET", "/api/me")).json.user === null);
 check("a reset link works only once", (await C.call("POST", "/api/auth/reset", { token: fresh, password: "another password" })).status === 400);
-const sentBefore = emails.filter((e) => e.to[0] === "rita@example.com").length;
+const sentBefore = emails.filter((e) => e.to[0] === "rita@example.com" && /Reset/.test(e.subject)).length;
 for (let i = 0; i < 4; i++) await C.call("POST", "/api/auth/forgot", { email: "rita@example.com" });
 await wait(300);
-check("at most 3 reset emails per address per hour", sentBefore === 2 && emails.filter((e) => e.to[0] === "rita@example.com").length === 3);
+check("at most 3 reset emails per address per hour", sentBefore === 2 && emails.filter((e) => e.to[0] === "rita@example.com" && /Reset/.test(e.subject)).length === 3);
 const X = browser("x"); await X.call("POST", "/api/auth/signup", { name: "<script>alert(1)</script>", email: "xss@example.com", password: "xss password" });
 await C.call("POST", "/api/auth/forgot", { email: "xss@example.com" }); await wait(200);
 const xm = emails[emails.length - 1];

@@ -38,13 +38,17 @@ const ICON = readFileSync(path.join(here, "public", "icon.svg"));
 // ---------- storage ----------
 mkdirSync(DATA_DIR, { recursive: true });
 const FILE = path.join(DATA_DIR, "store.json");
-let db = { studies: {}, responses: {}, actions: {}, profiles: {}, fieldwork: {}, users: {}, sessions: {}, resets: {} };
+let db = { studies: {}, responses: {}, actions: {}, profiles: {}, fieldwork: {}, users: {}, sessions: {}, resets: {}, verifies: {} };
 if (existsSync(FILE)) { try { db = { ...db, ...JSON.parse(readFileSync(FILE, "utf8")) }; } catch (e) { console.error("Could not read store.json; starting empty.", e); } }
 let saveTimer = null;
 function flush() { const tmp = FILE + ".tmp"; writeFileSync(tmp, JSON.stringify(db)); renameSync(tmp, FILE); }
 function persist() { clearTimeout(saveTimer); saveTimer = setTimeout(flush, 250); }
 for (const [k, v] of Object.entries(db.sessions)) if (v.expires < Date.now()) delete db.sessions[k];
 for (const [k, v] of Object.entries(db.resets)) if (v.expires < Date.now()) delete db.resets[k];
+for (const [k, v] of Object.entries(db.verifies)) if (v.expires < Date.now()) delete db.verifies[k];
+// Accounts created before email verification existed count as confirmed, so nobody gets locked out.
+for (const u of Object.values(db.users)) if (u.emailVerified === undefined) u.emailVerified = true;
+const VERIFY_HOURS = 48;
 for (const sig of ["SIGTERM", "SIGINT"]) process.on(sig, () => { clearTimeout(saveTimer); try { flush(); } catch (e) {} process.exit(0); });
 
 // ---------- identity ----------
@@ -70,7 +74,7 @@ function startSession(req, res, user) {
   user.lastLogin = Date.now(); persist();
   addCookie(res, cookieStr(req, "ss_session", tok, SESSION_DAYS * 86400));
 }
-const publicUser = (u) => (u ? { id: u.id, email: u.email, name: u.name || "", google: !!u.googleSub, password: !!u.passHash } : null);
+const publicUser = (u) => (u ? { id: u.id, email: u.email, name: u.name || "", google: !!u.googleSub, password: !!u.passHash, verified: u.emailVerified !== false } : null);
 const findByEmail = (email) => Object.values(db.users).find((u) => u.email === email) || null;
 function who(req) {
   const user = sessionUser(req);
@@ -108,6 +112,8 @@ async function handleAuth(req, res, me, action) {
   const ip = String(req.headers["x-forwarded-for"] || req.socket.remoteAddress || "").split(",")[0].trim();
   if (action === "forgot") return forgotPassword(req, res, ip);
   if (action === "reset") return resetPassword(req, res, me, ip);
+  if (action === "verify") return confirmEmail(req, res, ip);
+  if (action === "resend-verification") return resendVerification(req, res, me);
   const b = await readBody(req, 10_000);
   const email = String((b && b.email) || "").trim().toLowerCase(), pw = String((b && b.password) || "");
   if (!EMAIL_RX.test(email) || email.length > 160) return fail(res, 400, "invalid_argument", "Enter a valid email address.");
@@ -118,6 +124,8 @@ async function handleAuth(req, res, me, action) {
     if (existing) return fail(res, 409, "invalid_argument", existing.passHash ? "An account with this email already exists. Sign in instead." : "This email signs in with Google. Use Continue with Google.");
     const salt = randomBytes(16).toString("hex");
     const user = { id: "u_" + randomBytes(12).toString("hex"), email, name: String((b && b.name) || "").trim().slice(0, 80), salt, passHash: await hashPassword(pw, salt), createdAt: Date.now() };
+    user.emailVerified = false;
+    if (!queueVerification(req, user)) user.emailVerified = true; // no email service yet: don't block new users
     db.users[user.id] = user; startSession(req, res, user); claim(me.anon, user.id);
     return send(res, 200, { user: publicUser(user) });
   }
@@ -142,23 +150,59 @@ async function sendEmail(to, subject, html, text) {
   const r = await fetch(RESEND_URL, { method: "POST", headers: { Authorization: `Bearer ${RESEND_KEY}`, "Content-Type": "application/json" }, body: JSON.stringify({ from: EMAIL_FROM, to: [to], subject, html, text }) });
   if (!r.ok) throw new Error(`Resend ${r.status}: ${(await r.text()).slice(0, 300)}`);
 }
-function resetEmail(user, link) {
+// One branded layout for every SurveySpider email (HTML plus a plain-text version).
+function brandEmail(user, { paragraphs, button, link, footer }) {
   const first = user.name ? user.name.trim().split(/\s+/)[0] : "";
-  const L = escHtml(link);
+  const L = escHtml(link), hi = first ? "Hi " + first + "," : "Hi,";
   const html = `<!doctype html><html><body style="margin:0;background:#f5f6f9;font-family:Arial,Helvetica,sans-serif;color:#0e1d3a">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f6f9;padding:32px 12px"><tr><td align="center">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#ffffff;border:1px solid #dde2ec;border-radius:12px">
 <tr><td style="padding:28px 32px 0;font-size:22px;font-weight:800"><span style="color:#0e1d3a">Survey</span><span style="color:#b88a2c">Spider</span></td></tr>
 <tr><td style="padding:20px 32px 6px;font-size:15px;line-height:1.6">
-<p style="margin:0 0 14px">${first ? "Hi " + escHtml(first) + "," : "Hi,"}</p>
-<p style="margin:0 0 14px">We received a request to reset the password for your SurveySpider account (${escHtml(user.email)}). Click the button to choose a new one. The link works for ${RESET_MINUTES} minutes and can be used once.</p></td></tr>
-<tr><td style="padding:6px 32px 22px"><a href="${L}" style="display:inline-block;background:#10285a;color:#ffffff;text-decoration:none;font-weight:bold;padding:12px 22px;border-radius:8px">Choose a new password</a></td></tr>
+<p style="margin:0 0 14px">${escHtml(hi)}</p>
+${paragraphs.map((x) => `<p style="margin:0 0 14px">${escHtml(x)}</p>`).join("")}</td></tr>
+<tr><td style="padding:6px 32px 22px"><a href="${L}" style="display:inline-block;background:#10285a;color:#ffffff;text-decoration:none;font-weight:bold;padding:12px 22px;border-radius:8px">${escHtml(button)}</a></td></tr>
 <tr><td style="padding:0 32px 28px;font-size:13px;line-height:1.6;color:#56627a">
 <p style="margin:0 0 10px">If the button doesn't work, copy this link into your browser:<br><a href="${L}" style="color:#10285a;word-break:break-all">${L}</a></p>
-<p style="margin:0">If you didn't ask for this, you can ignore this email. Your password won't change.</p></td></tr>
+<p style="margin:0">${escHtml(footer)}</p></td></tr>
 </table></td></tr></table></body></html>`;
-  const text = `${first ? "Hi " + first + "," : "Hi,"}\n\nWe received a request to reset the password for your SurveySpider account (${user.email}).\nChoose a new password here. The link works for ${RESET_MINUTES} minutes and can be used once:\n\n${link}\n\nIf you didn't ask for this, you can ignore this email. Your password won't change.\n`;
+  const text = `${hi}\n\n${paragraphs.join("\n\n")}\n\n${button}:\n${link}\n\n${footer}\n`;
   return { html, text };
+}
+const resetEmail = (user, link) => brandEmail(user, {
+  paragraphs: [`We received a request to reset the password for your SurveySpider account (${user.email}). Click the button to choose a new one. The link works for ${RESET_MINUTES} minutes and can be used once.`],
+  button: "Choose a new password", link, footer: "If you didn't ask for this, you can ignore this email. Your password won't change." });
+const verifyEmailMsg = (user, link) => brandEmail(user, {
+  paragraphs: [`Welcome to SurveySpider! Please confirm that ${user.email} is your email address.`, `Once it's confirmed you can launch surveys, take paid studies and use the AI features. The link works for ${VERIFY_HOURS} hours.`],
+  button: "Confirm my email", link, footer: "If you didn't create a SurveySpider account, you can ignore this email." });
+// Create a confirmation link and email it in the background. Returns false if no email can be sent.
+function queueVerification(req, user) {
+  const base = trustedBase(req);
+  if (!RESEND_KEY || !base) return false;
+  for (const [k, v] of Object.entries(db.verifies)) if (v.userId === user.id) delete db.verifies[k];
+  const tok = randomBytes(32).toString("hex");
+  db.verifies[sha(tok)] = { userId: user.id, createdAt: Date.now(), expires: Date.now() + VERIFY_HOURS * 3600e3 };
+  persist();
+  const m = verifyEmailMsg(user, `${base}/?verify=${tok}#studies`);
+  sendEmail(user.email, "Confirm your email for SurveySpider", m.html, m.text).catch((e) => console.error("Verification email failed:", e.message));
+  return true;
+}
+const needsVerify = (u) => !!u && u.emailVerified === false && !!RESEND_KEY;
+async function confirmEmail(req, res, ip) {
+  const b = await readBody(req, 5_000);
+  if (tooMany("verify-ip|" + ip, 30, 3600e3)) return fail(res, 429, "rate_limited", "Too many attempts. Try again in an hour.");
+  const tok = String((b && b.token) || ""), key = /^[0-9a-f]{64}$/.test(tok) ? sha(tok) : null, v = key ? db.verifies[key] : null, user = v ? db.users[v.userId] : null;
+  if (!v || v.expires < Date.now() || !user) { if (key) delete db.verifies[key]; return fail(res, 400, "invalid_argument", "This confirmation link has expired or has already been used. Sign in and we'll send you a new one."); }
+  for (const [k, x] of Object.entries(db.verifies)) if (x.userId === user.id) delete db.verifies[k];
+  user.emailVerified = true; user.verifiedAt = Date.now(); persist();
+  return send(res, 200, { ok: true, email: user.email });
+}
+function resendVerification(req, res, me) {
+  if (!me.user) return fail(res, 401, "auth_required", "Sign in first.");
+  if (!needsVerify(me.user)) return send(res, 200, { ok: true, already: true });
+  if (tooMany("verify-send|" + me.user.id, 3, 3600e3)) return fail(res, 429, "rate_limited", "We've already sent several emails. Check your spam folder, or try again in an hour.");
+  if (!queueVerification(req, me.user)) return fail(res, 503, "unavailable", "Confirmation emails can't be sent right now.");
+  return send(res, 200, { ok: true });
 }
 async function forgotPassword(req, res, ip) {
   const b = await readBody(req, 5_000);
@@ -189,6 +233,7 @@ async function resetPassword(req, res, me, ip) {
   if (!r || r.expires < Date.now() || !user) { if (key) delete db.resets[key]; return fail(res, 400, "invalid_argument", "This reset link has expired or has already been used. Ask for a new one."); }
   if (pw.length < 8 || pw.length > 200) return fail(res, 400, "invalid_argument", "Use a password of at least 8 characters.");
   delete db.resets[key];
+  user.emailVerified = true; // the reset link proved they own the address
   user.salt = randomBytes(16).toString("hex"); user.passHash = await hashPassword(pw, user.salt); user.passwordChangedAt = Date.now();
   for (const [k, v] of Object.entries(db.sessions)) if (v.userId === user.id) delete db.sessions[k]; // sign out everywhere else
   startSession(req, res, user); claim(me.anon, user.id);
@@ -223,8 +268,8 @@ async function googleCallback(req, res, url) {
     if (claims.email_verified !== true && claims.email_verified !== "true") return redirect(res, "/?auth_error=google_email#signin");
     const email = String(claims.email || "").toLowerCase();
     let user = Object.values(db.users).find((u) => u.googleSub === claims.sub) || findByEmail(email);
-    if (user) { user.googleSub = claims.sub; if (!user.name && claims.name) user.name = String(claims.name).slice(0, 80); }
-    else { user = { id: "u_" + randomBytes(12).toString("hex"), email, name: String(claims.name || "").slice(0, 80), googleSub: claims.sub, createdAt: Date.now() }; db.users[user.id] = user; }
+    if (user) { user.googleSub = claims.sub; user.emailVerified = true; if (!user.name && claims.name) user.name = String(claims.name).slice(0, 80); }
+    else { user = { id: "u_" + randomBytes(12).toString("hex"), email, name: String(claims.name || "").slice(0, 80), googleSub: claims.sub, emailVerified: true, createdAt: Date.now() }; db.users[user.id] = user; }
     startSession(req, res, user);
     return redirect(res, `/?auth=google#${saved.next}`);
   } catch (e) {
@@ -288,8 +333,9 @@ async function runClaude(params, signal) {
   }
 }
 async function handleAI(req, res, me) {
-  if (!client) return fail(res, 503, "sampling_disabled", "AI is not configured on this server.");
   if (!me.user) return fail(res, 401, "auth_required", "Sign in to use the AI features.");
+  if (needsVerify(me.user)) return fail(res, 403, "verify_required", `Confirm your email address first. We sent a link to ${me.user.email}.`);
+  if (!client) return fail(res, 503, "sampling_disabled", "AI is not configured on this server.");
   if (!allowAI(me.uid || req.socket.remoteAddress)) return fail(res, 429, "rate_limited", "Too many AI requests. Try again later.");
   const body = await readBody(req, 600_000);
   const messages = toMessages(body && body.input);
@@ -350,6 +396,7 @@ async function handleApi(req, res, url) {
     if (m === "PUT") {
       const b = await readBody(req, 400_000);
       if (!isObj(b) || !Array.isArray(b.questions) || b.questions.length > 300 || typeof b.title !== "string") return fail(res, 400, "invalid_argument", "That isn't a valid survey.");
+      if (b.status === "live" && (!cur || cur.status !== "live") && needsVerify(me.user)) return fail(res, 403, "verify_required", `Confirm your email address before launching. We sent a link to ${me.user.email}.`);
       db.studies[id] = { ...b, id, ownerId: cur ? cur.ownerId : uid, updatedAt: Date.now() };
       persist(); return send(res, 200, { ok: true });
     }
@@ -360,6 +407,7 @@ async function handleApi(req, res, url) {
     const cur = db.responses[id];
     if (m === "PUT") {
       const b = await readBody(req, 200_000), st = isObj(b) ? db.studies[b.studyId] : null;
+      if (needsVerify(me.user)) return fail(res, 403, "verify_required", `Confirm your email address before taking paid surveys. We sent a link to ${me.user.email}.`);
       if (!st || id !== `${st.id}-${uid}` || !isObj(b.answers)) return fail(res, 400, "invalid_argument", "That isn't a valid response.");
       if (cur || Object.values(db.responses).some((r) => r.studyId === st.id && r.participantId === uid)) return fail(res, 409, "invalid_argument", "You have already taken this survey.");
       if (st.status !== "live") return fail(res, 409, "invalid_argument", "This survey is closed.");

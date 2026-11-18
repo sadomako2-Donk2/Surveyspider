@@ -69,6 +69,11 @@ The Google button appears on the sign-in page as soon as both values are set.
 
 The "Forgot password?" link appears on the sign-in page once `RESEND_API_KEY` is set. Reset links work once, expire after 60 minutes, always point at the site's real address (`RENDER_EXTERNAL_URL`, or `PUBLIC_URL` if you set one for your own domain), and sign the person out on every other device. The form gives the same answer whether or not an account exists, and allows at most 3 emails per address per hour.
 
-### Not included yet
+### Email verification
 
-Email verification at sign-up (confirming people own the address they register with). It can reuse the same Resend setup.
+When `RESEND_API_KEY` is set, people who sign up with email and password get a "Confirm your email" message. The link works once and lasts 48 hours. Until they confirm, they can sign in, browse, save drafts and fill in their profile, but can't launch surveys, take paid studies or use AI. A banner reminds them and offers **Send it again** (at most 3 emails an hour).
+
+- Google accounts count as confirmed (Google has already verified the address).
+- Resetting a password through an emailed link also confirms the address.
+- Accounts created before verification was added count as confirmed.
+- Without `RESEND_API_KEY`, new accounts are confirmed automatically so sign-up keeps working.

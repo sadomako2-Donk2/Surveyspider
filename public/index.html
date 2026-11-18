@@ -586,17 +586,22 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     S.studies = d.studies || []; S.responses = d.responses || []; S.actions = d.actions || []; S.fieldwork = d.fieldwork || [];
     if (typeof d.ai === "boolean" && d.ai !== !!SAMPLE) { SAMPLE = d.ai ? serverSample() : null; if (!isTyping()) setTimeout(render, 0); } // AI switched on or off while the page was open S.profile = d.profile || null; S.stale = false;
   }
-  function applyMe(me) { S.uid = me.uid; S.user = me.user || null; S.isOwner = !!me.isAdmin; S.authCfg = { google: !!me.google, reset: !!me.emailReset }; if (me.ai && !SAMPLE) SAMPLE = serverSample(); if (!me.ai) SAMPLE = null; }
+  function applyMe(me) { S.uid = me.uid; S.user = me.user || null; S.isOwner = !!me.isAdmin; S.authCfg = { google: !!me.google, reset: !!me.emailReset, verify: !!me.emailReset }; if (me.ai && !SAMPLE) SAMPLE = serverSample(); if (!me.ai) SAMPLE = null; }
   async function reloadMe() { applyMe(await api("GET", "/api/me")); await refreshServer(); }
   async function startServer(me) {
     API = true; S.mode = "live"; DL = browserDL; applyMe(me);
     const qs = new URLSearchParams(location.search);
     if (qs.get("auth") === "google") { try { await api("POST", "/api/auth/claim"); } catch (e) {} setTimeout(() => toast("Signed in with Google."), 300); }
+    const vt = qs.get("verify");
+    if (vt && /^[0-9a-f]{64}$/.test(vt)) {
+      try { await api("POST", "/api/auth/verify", { token: vt }); applyMe(await api("GET", "/api/me")); setTimeout(() => toast("Email confirmed. Thanks! You can now launch surveys, take paid studies and use AI."), 300); }
+      catch (e) { S.notice = (e && e.message) || "That confirmation link didn't work."; setTimeout(() => { S.notice = ""; renderTabs(); }, 15000); }
+    }
     const rt = qs.get("reset");
     if (rt && /^[0-9a-f]{64}$/.test(rt)) { S.resetToken = rt; S.authMode = "reset"; S.authError = ""; }
     const ae = qs.get("auth_error");
     if (ae) S.authError = { google_off: "Google sign-in isn't switched on yet. Use your email and a password for now.", google_email: "Your Google account's email address isn't verified, so we can't use it to sign in.", google_failed: "Google sign-in didn't finish. Please try again." }[ae] || "Sign-in didn't finish. Please try again.";
-    if (qs.has("auth") || ae || rt) history.replaceState(null, "", location.pathname + (rt ? "#signin" : location.hash));
+    if (qs.has("auth") || ae || rt || vt) history.replaceState(null, "", location.pathname + (rt ? "#signin" : location.hash));
     if (rt) { S.view = "signin"; }
     try { await refreshServer(); } catch (e) { S.stale = true; }
     render();
@@ -648,6 +653,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     try { await fn(); if (okMsg) toast(okMsg); render(); return true; }
     catch (e) {
       if (e && e.code === "auth_required") { requireSignIn("Sign in or create a free account to save your work."); return false; }
+      if (e && e.code === "verify_required") { toast(e.message); render(); return false; }
       toast(e && e.message && API && e.code === "invalid_argument" ? e.message : errMsg(e)); render(); return false;
     }
   }
@@ -657,6 +663,13 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     S.returnTo = !h || h === "signin" ? "studies" : h; S.authMode = mode || "signin";
     toast(msg || "Sign in to continue."); go("signin");
   }
+  const unverified = () => API && !!S.user && S.user.verified === false && S.authCfg.verify;
+  async function resendVerify(btn) {
+    if (btn) btn.disabled = true;
+    try { const r = await api("POST", "/api/auth/resend-verification"); toast(r && r.already ? "Your email is already confirmed." : `Sent. Check ${S.user.email}, including the spam folder.`); if (r && r.already) await reloadMe(); }
+    catch (e) { toast((e && e.message) || "Couldn't send the email. Try again later."); }
+    if (btn) btn.disabled = false;
+  }
   const signInPrompt = (title, text) => `<div class="empty"><h2>${esc(title)}</h2><p class="muted">${esc(text || "It's free. Use your email or your Google account.")}</p><div class="row wrap"><button class="btn primary" data-act="goSignin" data-m="signin">Sign in</button><button class="btn" data-act="goSignin" data-m="signup">Create a free account</button></div></div>`;
   const firstName = (u) => (u && u.name ? u.name.split(/\s+/)[0] : u ? u.email.split("@")[0] : "");
   function renderAcct() {
@@ -665,7 +678,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     if (!S.user) { el.innerHTML = S.view === "signin" ? "" : `<a class="btn small primary" href="#signin" data-act="goSignin" data-m="signin">Sign in</a>`; return; }
     const u = S.user, ini = ((u.name || u.email).trim().split(/\s+/).map((w) => w[0]).join("").slice(0, 2) || "?").toUpperCase();
     el.innerHTML = `<details class="acct-menu"><summary aria-label="Account menu"><span class="avatar" aria-hidden="true">${esc(ini)}</span><span class="acct-name">${esc(firstName(u))}</span></summary>
-      <div class="acct-pop"><b>${esc(u.name || "Your account")}</b><span class="hint">${esc(u.email)}</span><span class="hint">${u.google ? "Signed in with Google" : "Email and password"}${S.isOwner ? " · site owner" : ""}</span><button class="btn small" data-act="signout">Sign out</button></div></details>`;
+      <div class="acct-pop"><b>${esc(u.name || "Your account")}</b><span class="hint">${esc(u.email)}</span><span class="hint">${u.google ? "Signed in with Google" : "Email and password"}${S.isOwner ? " · site owner" : ""}</span>${unverified() ? `<span class="hint warn">Email not confirmed yet</span>` : ""}<button class="btn small" data-act="signout">Sign out</button></div></details>`;
   }
   const GOOGLE_G = `<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>`;
   function viewSignin() {
@@ -715,7 +728,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     try {
       await api("POST", up ? "/api/auth/signup" : "/api/auth/login", { email, password, name });
       S.authError = ""; S.authMode = "signin"; await reloadMe();
-      toast(up ? "Account created. Welcome to SurveySpider!" : "Signed in.");
+      toast(up ? (unverified() ? `Account created. Check ${email} for a link to confirm your address.` : "Account created. Welcome to SurveySpider!") : "Signed in.");
       go(S.returnTo || "studies");
     } catch (e) { btn.disabled = false; $("#authErr").innerHTML = `<div class="errs">${esc((e && e.message) || "Couldn't sign in. Please try again.")}</div>`; }
   }
@@ -780,6 +793,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     const b = $("#banner");
     const msg = S.notice || (S.mode === "demo" ? "Demo mode: everything you create is saved in this browser only. Open the published page while signed in to claude.ai to share data with other people." : "") || (S.stale ? "Can't reach the saved data yet. What you see may be out of date." : "");
     b.hidden = !msg; b.textContent = msg;
+    if (!msg && unverified()) { b.hidden = false; b.innerHTML = `<b>Confirm your email address.</b> We sent a link to ${esc(S.user.email)}. You can browse and save drafts now; confirm to launch surveys, take paid studies and use AI. <button type="button" class="linkbtn" data-act="resendVerify">Send it again</button>`; }
     $("#foot").textContent = `SurveySpider prototype · platform fee ${Math.round(FEE * 100)}% of participant rewards · ${S.mode === "live" ? (API ? "Your surveys and answers are stored on SurveySpider's server and only shown to the people they belong to." : "Data is shared with everyone who can open this page.") : S.mode === "demo" ? "Demo data stays in this browser." : "Connecting…"}`;
   }
   function render() {
@@ -942,6 +956,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     const c = e && e.code;
     if (c === "cancelled") return;
     if (c === "auth_required") { requireSignIn("Sign in to use the AI features. It's free to create an account."); return; }
+    if (c === "verify_required") { toast(e.message); renderTabs(); return; }
     if (c === "not_granted" || c === "sampling_disabled") { SAMPLE = null; toast("AI is turned off for this page. Everything else still works."); }
     else if (c === "rate_limited") toast("You've used AI a lot recently. Try again later.");
     else toast(fallback);
@@ -2726,7 +2741,7 @@ ${richSummary(st, rows)}`;
       case "close": await save(() => backend.putStudy({ ...clone(st), status: "closed", updatedAt: Date.now() }), "Study closed. No new responses will be accepted."); break;
       case "reopen": await save(() => backend.putStudy({ ...clone(st), status: "live", updatedAt: Date.now() }), "Study reopened."); break;
       case "results": S.resultsId = id; go("results"); break;
-      case "take": if (API && !S.user) { requireSignIn("Sign in to take surveys and get paid."); break; } S.taking = id; S.takeStart = Date.now(); render(); window.scrollTo(0, 0); break;
+      case "take": if (API && !S.user) { requireSignIn("Sign in to take surveys and get paid."); break; } if (unverified()) { toast(`Confirm your email first. We sent a link to ${S.user.email}.`); break; } S.taking = id; S.takeStart = Date.now(); render(); window.scrollTo(0, 0); break;
       case "leave": S.taking = null; render(); break;
       case "editprofile": S.editProfile = true; render(); break;
       case "cancelprofile": S.editProfile = false; render(); break;
@@ -2753,6 +2768,7 @@ ${richSummary(st, rows)}`;
       case "libtoggle": S.libOpen = S.libOpen === id ? null : id; $("#libList").innerHTML = libList(); break;
     }
   });
+  $("#banner").addEventListener("click", (e) => { const b = e.target.closest('[data-act="resendVerify"]'); if (b) resendVerify(b); });
   $("#acct").addEventListener("click", (e) => {
     const b = e.target.closest("[data-act]"); if (!b) return;
     if (b.dataset.act === "signout") { e.preventDefault(); b.closest("details").open = false; signOut(); }
