@@ -16,6 +16,15 @@ const fakeGoogle = http.createServer((req, res) => {
   });
 });
 await new Promise((r) => fakeGoogle.listen(0, r));
+// A stand-in for Resend's email API that records what would be sent.
+const emails = [];
+const fakeResend = http.createServer((req, res) => {
+  let body = ""; req.on("data", (c) => (body += c)); req.on("end", () => {
+    if (req.headers.authorization !== "Bearer test-resend-key") { res.writeHead(401); return res.end("{}"); }
+    emails.push(JSON.parse(body)); res.writeHead(200, { "Content-Type": "application/json" }); res.end(JSON.stringify({ id: "em_" + emails.length }));
+  });
+});
+await new Promise((r) => fakeResend.listen(0, r));
 
 process.env.DATA_DIR = mkdtempSync(path.join(tmpdir(), "ss-"));
 process.env.ADMIN_CODE = "test-admin-code";
@@ -24,6 +33,10 @@ process.env.GOOGLE_CLIENT_ID = GOOGLE_ID;
 process.env.GOOGLE_CLIENT_SECRET = "test-secret";
 process.env.GOOGLE_TOKEN_URL = `http://127.0.0.1:${fakeGoogle.address().port}/token`;
 delete process.env.ANTHROPIC_API_KEY;
+process.env.RESEND_API_KEY = "test-resend-key";
+process.env.RESEND_API_URL = `http://127.0.0.1:${fakeResend.address().port}/emails`;
+process.env.EMAIL_FROM = "SurveySpider <hello@surveyspider.test>";
+process.env.PUBLIC_URL = "https://surveyspider.test";
 const { server } = await import("../server.mjs");
 await new Promise((r) => server.listen(0, r));
 const base = `http://127.0.0.1:${server.address().port}`;
@@ -120,5 +133,42 @@ const G2 = browser("f"); const s2 = new URL((await G2.call("GET", "/auth/google"
 check("Google accounts with unverified email are refused", (await G2.call("GET", `/auth/google/callback?state=${s2}&code=unverified`)).location.includes("auth_error=google_email"));
 check("password sign-in on a Google-only account explains what to do", /Google/.test((await B.call("POST", "/api/auth/login", { email: "ama@example.com", password: "whatever12" })).json.message));
 
+// --- forgot password (Resend) ---
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+const R = browser("7"), R2 = browser("8");
+await R.call("POST", "/api/auth/signup", { name: "Rita Reset", email: "rita@example.com", password: "first password" });
+await R2.call("POST", "/api/auth/login", { email: "rita@example.com", password: "first password" });
+check("reset emails are advertised when Resend is configured", (await R.call("GET", "/api/me")).json.emailReset === true);
+check("forgot-password needs a valid email", (await C.call("POST", "/api/auth/forgot", { email: "nope" })).status === 400);
+const before = emails.length;
+check("unknown emails get the same answer", (await C.call("POST", "/api/auth/forgot", { email: "nobody@example.com" })).status === 200);
+await wait(200); check("no email is sent for unknown accounts", emails.length === before);
+check("known emails get the same answer", (await C.call("POST", "/api/auth/forgot", { email: "Rita@Example.com" })).status === 200);
+await wait(200);
+const mail = emails[emails.length - 1];
+const link = mail && (mail.text.match(/https:\/\/\S+/) || [])[0];
+const token = link && new URL(link).searchParams.get("reset");
+check("reset email goes to the account, from the configured sender", mail && mail.to[0] === "rita@example.com" && mail.from === "SurveySpider <hello@surveyspider.test>" && /Reset your SurveySpider password/.test(mail.subject));
+check("reset link points at the real site, never the request's Host", link && link.startsWith("https://surveyspider.test/?reset=") && /#signin$/.test(link) && mail.html.includes("Hi Rita"));
+check("forged Host headers can't redirect the link", (await C.call("POST", "/api/auth/forgot", { email: "rita@example.com" }, { "X-Forwarded-Host": "evil.example" })).status === 200 && (await wait(200), emails[emails.length - 1].text.includes("https://surveyspider.test/")));
+const fresh = new URL(emails[emails.length - 1].text.match(/https:\/\/\S+/)[0]).searchParams.get("reset");
+check("asking again cancels the older link", (await C.call("POST", "/api/auth/reset", { token, password: "new password 1" })).status === 400);
+check("a made-up token is refused", (await C.call("POST", "/api/auth/reset", { token: "f".repeat(64), password: "new password 1" })).status === 400);
+check("a short new password is refused (and the link still works)", (await C.call("POST", "/api/auth/reset", { token: fresh, password: "short" })).status === 400);
+const done = await C.call("POST", "/api/auth/reset", { token: fresh, password: "brand new password" });
+check("a valid link sets the new password and signs in", done.status === 200 && done.json.user.email === "rita@example.com" && !!C.jar.ss_session);
+check("the old password no longer works", (await browser("9").call("POST", "/api/auth/login", { email: "rita@example.com", password: "first password" })).status === 401);
+check("the new password works", (await browser("0").call("POST", "/api/auth/login", { email: "rita@example.com", password: "brand new password" })).status === 200);
+check("every other session is signed out", (await R.call("GET", "/api/me")).json.user === null && (await R2.call("GET", "/api/me")).json.user === null);
+check("a reset link works only once", (await C.call("POST", "/api/auth/reset", { token: fresh, password: "another password" })).status === 400);
+const sentBefore = emails.filter((e) => e.to[0] === "rita@example.com").length;
+for (let i = 0; i < 4; i++) await C.call("POST", "/api/auth/forgot", { email: "rita@example.com" });
+await wait(300);
+check("at most 3 reset emails per address per hour", sentBefore === 2 && emails.filter((e) => e.to[0] === "rita@example.com").length === 3);
+const X = browser("x"); await X.call("POST", "/api/auth/signup", { name: "<script>alert(1)</script>", email: "xss@example.com", password: "xss password" });
+await C.call("POST", "/api/auth/forgot", { email: "xss@example.com" }); await wait(200);
+const xm = emails[emails.length - 1];
+check("names are escaped in the email HTML", xm.to[0] === "xss@example.com" && !/<script/i.test(xm.html) && xm.html.includes("&lt;script&gt;"));
+
 console.log(`\n${pass} passed, ${failN} failed`);
-server.close(); fakeGoogle.close(); process.exit(failN ? 1 : 0);
+server.close(); fakeGoogle.close(); fakeResend.close(); process.exit(failN ? 1 : 0);

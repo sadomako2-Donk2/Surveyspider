@@ -56,6 +56,19 @@ People sign in with **email and password** or **Continue with Google**. Signing 
 
 The Google button appears on the sign-in page as soon as both values are set.
 
+### Turn on "Forgot password?" emails (Resend)
+
+1. Create a free account at https://resend.com.
+2. **Domains → Add Domain**: add a domain you own (for example `surveyspider.com`) and add the DNS records Resend shows at your domain registrar. Wait until it says **Verified**.
+   - Without your own domain you can only use Resend's test sender `onboarding@resend.dev`, which delivers **only to the email address you signed up to Resend with**. That's fine for trying it out, not for real users.
+3. **API Keys → Create API Key** with "Sending access". Copy it (starts with `re_`).
+4. In Render → your service → **Environment**, add:
+   - `RESEND_API_KEY` = the key
+   - `EMAIL_FROM` = `SurveySpider <noreply@yourdomain.com>` (an address on your verified domain)
+   - then **Save, rebuild, and deploy**.
+
+The "Forgot password?" link appears on the sign-in page once `RESEND_API_KEY` is set. Reset links work once, expire after 60 minutes, always point at the site's real address (`RENDER_EXTERNAL_URL`, or `PUBLIC_URL` if you set one for your own domain), and sign the person out on every other device. The form gives the same answer whether or not an account exists, and allows at most 3 emails per address per hour.
+
 ### Not included yet
 
-Email verification and "forgot password" emails need an email-sending service (for example Resend or SendGrid). Until then, a person who forgets their password can use Continue with Google with the same email address, or the site owner can help.
+Email verification at sign-up (confirming people own the address they register with). It can reuse the same Resend setup.

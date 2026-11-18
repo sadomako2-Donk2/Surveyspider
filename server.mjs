@@ -24,6 +24,11 @@ const GOOGLE_TOKEN_URL = process.env.GOOGLE_TOKEN_URL || "https://oauth2.googlea
 const PUBLIC_URL = (process.env.PUBLIC_URL || process.env.RENDER_EXTERNAL_URL || "").replace(/\/+$/, "");
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "").split(",").map((x) => x.trim().toLowerCase()).filter(Boolean);
 const SESSION_DAYS = 30;
+// Password-reset emails through Resend (https://resend.com). Off until RESEND_API_KEY is set.
+const RESEND_KEY = process.env.RESEND_API_KEY || "";
+const RESEND_URL = process.env.RESEND_API_URL || "https://api.resend.com/emails";
+const EMAIL_FROM = process.env.EMAIL_FROM || "SurveySpider <onboarding@resend.dev>";
+const RESET_MINUTES = 60;
 
 // ---------- page ----------
 const SHELL_HEAD = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="icon" type="image/svg+xml" href="/icon.svg"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>`;
@@ -33,12 +38,13 @@ const ICON = readFileSync(path.join(here, "public", "icon.svg"));
 // ---------- storage ----------
 mkdirSync(DATA_DIR, { recursive: true });
 const FILE = path.join(DATA_DIR, "store.json");
-let db = { studies: {}, responses: {}, actions: {}, profiles: {}, fieldwork: {}, users: {}, sessions: {} };
+let db = { studies: {}, responses: {}, actions: {}, profiles: {}, fieldwork: {}, users: {}, sessions: {}, resets: {} };
 if (existsSync(FILE)) { try { db = { ...db, ...JSON.parse(readFileSync(FILE, "utf8")) }; } catch (e) { console.error("Could not read store.json; starting empty.", e); } }
 let saveTimer = null;
 function flush() { const tmp = FILE + ".tmp"; writeFileSync(tmp, JSON.stringify(db)); renameSync(tmp, FILE); }
 function persist() { clearTimeout(saveTimer); saveTimer = setTimeout(flush, 250); }
 for (const [k, v] of Object.entries(db.sessions)) if (v.expires < Date.now()) delete db.sessions[k];
+for (const [k, v] of Object.entries(db.resets)) if (v.expires < Date.now()) delete db.resets[k];
 for (const sig of ["SIGTERM", "SIGINT"]) process.on(sig, () => { clearTimeout(saveTimer); try { flush(); } catch (e) {} process.exit(0); });
 
 // ---------- identity ----------
@@ -99,6 +105,9 @@ async function handleAuth(req, res, me, action) {
     addCookie(res, cookieStr(req, "ss_session", "", 0)); persist(); return send(res, 200, { ok: true });
   }
   if (action === "claim") { if (!me.user) return fail(res, 401, "auth_required", "Sign in first."); return send(res, 200, { claimed: claim(me.anon, me.user.id) }); }
+  const ip = String(req.headers["x-forwarded-for"] || req.socket.remoteAddress || "").split(",")[0].trim();
+  if (action === "forgot") return forgotPassword(req, res, ip);
+  if (action === "reset") return resetPassword(req, res, me, ip);
   const b = await readBody(req, 10_000);
   const email = String((b && b.email) || "").trim().toLowerCase(), pw = String((b && b.password) || "");
   if (!EMAIL_RX.test(email) || email.length > 160) return fail(res, 400, "invalid_argument", "Enter a valid email address.");
@@ -121,6 +130,71 @@ async function handleAuth(req, res, me, action) {
   }
   return fail(res, 404, "not_found", "Unknown sign-in route.");
 }
+// ---------- forgot password (email via Resend) ----------
+const escHtml = (v) => String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+// Reset links must point at the real site. On Render, RENDER_EXTERNAL_URL is set automatically; locally we allow localhost.
+function trustedBase(req) {
+  if (PUBLIC_URL) return PUBLIC_URL;
+  const host = String(req.headers.host || "");
+  return /^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host) ? `http://${host}` : null;
+}
+async function sendEmail(to, subject, html, text) {
+  const r = await fetch(RESEND_URL, { method: "POST", headers: { Authorization: `Bearer ${RESEND_KEY}`, "Content-Type": "application/json" }, body: JSON.stringify({ from: EMAIL_FROM, to: [to], subject, html, text }) });
+  if (!r.ok) throw new Error(`Resend ${r.status}: ${(await r.text()).slice(0, 300)}`);
+}
+function resetEmail(user, link) {
+  const first = user.name ? user.name.trim().split(/\s+/)[0] : "";
+  const L = escHtml(link);
+  const html = `<!doctype html><html><body style="margin:0;background:#f5f6f9;font-family:Arial,Helvetica,sans-serif;color:#0e1d3a">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f6f9;padding:32px 12px"><tr><td align="center">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#ffffff;border:1px solid #dde2ec;border-radius:12px">
+<tr><td style="padding:28px 32px 0;font-size:22px;font-weight:800"><span style="color:#0e1d3a">Survey</span><span style="color:#b88a2c">Spider</span></td></tr>
+<tr><td style="padding:20px 32px 6px;font-size:15px;line-height:1.6">
+<p style="margin:0 0 14px">${first ? "Hi " + escHtml(first) + "," : "Hi,"}</p>
+<p style="margin:0 0 14px">We received a request to reset the password for your SurveySpider account (${escHtml(user.email)}). Click the button to choose a new one. The link works for ${RESET_MINUTES} minutes and can be used once.</p></td></tr>
+<tr><td style="padding:6px 32px 22px"><a href="${L}" style="display:inline-block;background:#10285a;color:#ffffff;text-decoration:none;font-weight:bold;padding:12px 22px;border-radius:8px">Choose a new password</a></td></tr>
+<tr><td style="padding:0 32px 28px;font-size:13px;line-height:1.6;color:#56627a">
+<p style="margin:0 0 10px">If the button doesn't work, copy this link into your browser:<br><a href="${L}" style="color:#10285a;word-break:break-all">${L}</a></p>
+<p style="margin:0">If you didn't ask for this, you can ignore this email. Your password won't change.</p></td></tr>
+</table></td></tr></table></body></html>`;
+  const text = `${first ? "Hi " + first + "," : "Hi,"}\n\nWe received a request to reset the password for your SurveySpider account (${user.email}).\nChoose a new password here. The link works for ${RESET_MINUTES} minutes and can be used once:\n\n${link}\n\nIf you didn't ask for this, you can ignore this email. Your password won't change.\n`;
+  return { html, text };
+}
+async function forgotPassword(req, res, ip) {
+  const b = await readBody(req, 5_000);
+  const email = String((b && b.email) || "").trim().toLowerCase();
+  if (!EMAIL_RX.test(email) || email.length > 160) return fail(res, 400, "invalid_argument", "Enter a valid email address.");
+  if (!RESEND_KEY) return fail(res, 503, "unavailable", "Password reset emails aren't switched on yet. Use Continue with Google, or contact the site owner.");
+  const base = trustedBase(req);
+  if (!base) return fail(res, 503, "unavailable", "Password reset isn't configured on this server (set PUBLIC_URL).");
+  if (tooMany("forgot-ip|" + ip, 10, 3600e3)) return fail(res, 429, "rate_limited", "Too many reset requests. Try again in an hour.");
+  const user = findByEmail(email);
+  // Same answer whether or not the account exists, and the email is sent in the background,
+  // so this form can't be used to discover who has an account.
+  if (user && !tooMany("forgot|" + email, 3, 3600e3)) {
+    for (const [k, v] of Object.entries(db.resets)) if (v.userId === user.id) delete db.resets[k];
+    const tok = randomBytes(32).toString("hex");
+    db.resets[sha(tok)] = { userId: user.id, createdAt: Date.now(), expires: Date.now() + RESET_MINUTES * 60e3 };
+    persist();
+    const m = resetEmail(user, `${base}/?reset=${tok}#signin`);
+    sendEmail(user.email, "Reset your SurveySpider password", m.html, m.text).catch((e) => console.error("Password reset email failed:", e.message));
+  }
+  return send(res, 200, { ok: true });
+}
+async function resetPassword(req, res, me, ip) {
+  const b = await readBody(req, 5_000);
+  if (tooMany("reset-ip|" + ip, 20, 3600e3)) return fail(res, 429, "rate_limited", "Too many attempts. Try again in an hour.");
+  const tok = String((b && b.token) || ""), pw = String((b && b.password) || "");
+  const key = /^[0-9a-f]{64}$/.test(tok) ? sha(tok) : null, r = key ? db.resets[key] : null, user = r ? db.users[r.userId] : null;
+  if (!r || r.expires < Date.now() || !user) { if (key) delete db.resets[key]; return fail(res, 400, "invalid_argument", "This reset link has expired or has already been used. Ask for a new one."); }
+  if (pw.length < 8 || pw.length > 200) return fail(res, 400, "invalid_argument", "Use a password of at least 8 characters.");
+  delete db.resets[key];
+  user.salt = randomBytes(16).toString("hex"); user.passHash = await hashPassword(pw, user.salt); user.passwordChangedAt = Date.now();
+  for (const [k, v] of Object.entries(db.sessions)) if (v.userId === user.id) delete db.sessions[k]; // sign out everywhere else
+  startSession(req, res, user); claim(me.anon, user.id);
+  return send(res, 200, { user: publicUser(user) });
+}
+
 // ---------- Google sign-in (OAuth 2.0 authorization code flow) ----------
 const oauthStates = new Map();
 const baseUrl = (req) => PUBLIC_URL || `${isHttps(req) ? "https" : "http"}://${req.headers.host}`;
@@ -257,7 +331,7 @@ async function handleApi(req, res, url) {
   const needUser = () => fail(res, 401, "auth_required", "Sign in or create a free account to continue.");
   const uid = me.uid;
 
-  if (kind === "me" && m === "GET") return send(res, 200, { uid, user: publicUser(me.user), isAdmin: me.isAdmin, ai: !!client, google: !!(GOOGLE_ID && GOOGLE_SECRET) });
+  if (kind === "me" && m === "GET") return send(res, 200, { uid, user: publicUser(me.user), isAdmin: me.isAdmin, ai: !!client, google: !!(GOOGLE_ID && GOOGLE_SECRET), emailReset: !!RESEND_KEY });
 
   if (kind === "data" && m === "GET") {
     const studies = Object.values(db.studies).filter((s) => s.status !== "draft" || s.ownerId === uid || me.isAdmin);
@@ -373,5 +447,5 @@ export const server = http.createServer(async (req, res) => {
   }
 });
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  server.listen(PORT, () => console.log(`SurveySpider running on port ${PORT}. AI ${client ? "on (" + MODEL + ")" : "off: set ANTHROPIC_API_KEY"}. Google sign-in ${GOOGLE_ID && GOOGLE_SECRET ? "on" : "off"}. Data in ${DATA_DIR}.`));
+  server.listen(PORT, () => console.log(`SurveySpider running on port ${PORT}. AI ${client ? "on (" + MODEL + ")" : "off: set ANTHROPIC_API_KEY"}. Google sign-in ${GOOGLE_ID && GOOGLE_SECRET ? "on" : "off"}. Reset emails ${RESEND_KEY ? "on (from " + EMAIL_FROM + ")" : "off: set RESEND_API_KEY"}. Data in ${DATA_DIR}.`));
 }

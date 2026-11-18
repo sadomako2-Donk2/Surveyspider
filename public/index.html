@@ -586,15 +586,18 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     S.studies = d.studies || []; S.responses = d.responses || []; S.actions = d.actions || []; S.fieldwork = d.fieldwork || [];
     if (typeof d.ai === "boolean" && d.ai !== !!SAMPLE) { SAMPLE = d.ai ? serverSample() : null; if (!isTyping()) setTimeout(render, 0); } // AI switched on or off while the page was open S.profile = d.profile || null; S.stale = false;
   }
-  function applyMe(me) { S.uid = me.uid; S.user = me.user || null; S.isOwner = !!me.isAdmin; S.authCfg = { google: !!me.google }; if (me.ai && !SAMPLE) SAMPLE = serverSample(); if (!me.ai) SAMPLE = null; }
+  function applyMe(me) { S.uid = me.uid; S.user = me.user || null; S.isOwner = !!me.isAdmin; S.authCfg = { google: !!me.google, reset: !!me.emailReset }; if (me.ai && !SAMPLE) SAMPLE = serverSample(); if (!me.ai) SAMPLE = null; }
   async function reloadMe() { applyMe(await api("GET", "/api/me")); await refreshServer(); }
   async function startServer(me) {
     API = true; S.mode = "live"; DL = browserDL; applyMe(me);
     const qs = new URLSearchParams(location.search);
     if (qs.get("auth") === "google") { try { await api("POST", "/api/auth/claim"); } catch (e) {} setTimeout(() => toast("Signed in with Google."), 300); }
+    const rt = qs.get("reset");
+    if (rt && /^[0-9a-f]{64}$/.test(rt)) { S.resetToken = rt; S.authMode = "reset"; S.authError = ""; }
     const ae = qs.get("auth_error");
     if (ae) S.authError = { google_off: "Google sign-in isn't switched on yet. Use your email and a password for now.", google_email: "Your Google account's email address isn't verified, so we can't use it to sign in.", google_failed: "Google sign-in didn't finish. Please try again." }[ae] || "Sign-in didn't finish. Please try again.";
-    if (qs.has("auth") || ae) history.replaceState(null, "", location.pathname + location.hash);
+    if (qs.has("auth") || ae || rt) history.replaceState(null, "", location.pathname + (rt ? "#signin" : location.hash));
+    if (rt) { S.view = "signin"; }
     try { await refreshServer(); } catch (e) { S.stale = true; }
     render();
     setInterval(() => { refreshServer().then(softRender).catch(() => { S.stale = true; softRender(); }); }, 15000);
@@ -667,6 +670,23 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   const GOOGLE_G = `<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>`;
   function viewSignin() {
     if (!API) return `<div class="empty"><h2>You're already signed in</h2><p class="muted">On claude.ai, SurveySpider uses your Claude account. Separate sign-in is used on the SurveySpider website.</p></div>`;
+    if (S.authMode === "forgot") return `<div class="auth-wrap"><section class="card auth-card"><span class="eyebrow gold">Forgot password</span><h1>Reset your password</h1>
+      <p class="muted">Enter the email address for your account and we'll send you a link to choose a new password.</p>
+      <form id="forgotForm" class="stack" novalidate><label for="fp-email">Email<input id="fp-email" type="email" autocomplete="email" maxlength="160" value="${esc(S.forgotEmail || "")}" required></label><div id="authErr"></div>
+      <button class="btn primary big" type="submit" style="align-self:stretch;justify-content:center">Send reset link</button></form>
+      <p class="hint"><button type="button" class="linkbtn" data-act="authMode" data-m="signin">Back to sign in</button></p></section></div>`;
+    if (S.authMode === "forgotSent") return `<div class="auth-wrap"><section class="card auth-card"><span class="eyebrow gold">Check your email</span><h1>We've sent you a link</h1>
+      <p class="muted">If there's a SurveySpider account for <b>${esc(S.forgotEmail || "that address")}</b>, an email with a reset link is on its way. The link works for 60 minutes and can be used once.</p>
+      <p class="hint">Nothing after a few minutes? Check your spam or junk folder, or <button type="button" class="linkbtn" data-act="authMode" data-m="forgot">send another link</button>.</p>
+      <div><button class="btn" data-act="authMode" data-m="signin">Back to sign in</button></div></section></div>`;
+    if (S.authMode === "reset") return `<div class="auth-wrap"><section class="card auth-card"><span class="eyebrow gold">New password</span><h1>Choose a new password</h1>
+      <p class="muted">After you save it, you'll be signed in here and signed out on every other device.</p>
+      <form id="resetForm" class="stack" novalidate>
+        <label for="rp-pass">New password<input id="rp-pass" type="password" autocomplete="new-password" minlength="8" maxlength="200" required></label>
+        <label for="rp-pass2">Type it again<input id="rp-pass2" type="password" autocomplete="new-password" minlength="8" maxlength="200" required></label>
+        <p class="hint">At least 8 characters.</p><div id="authErr"></div>
+        <button class="btn primary big" type="submit" style="align-self:stretch;justify-content:center">Save new password</button></form>
+      <p class="hint"><button type="button" class="linkbtn" data-act="authMode" data-m="forgot">Need a new link?</button></p></section></div>`;
     if (S.user) return `<div class="auth-wrap"><section class="card auth-card"><span class="eyebrow gold">Signed in</span><h1>Welcome${firstName(S.user) ? ", " + esc(firstName(S.user)) : ""}</h1><p class="muted">You're signed in as ${esc(S.user.email)}.</p><div class="row wrap"><a class="btn primary" href="#${esc(S.returnTo || "studies")}">Continue</a><button class="btn ghost" data-act="signout">Sign out</button></div></section></div>`;
     const up = S.authMode === "signup";
     return `<div class="auth-wrap"><section class="card auth-card">
@@ -679,6 +699,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
         ${up ? `<label for="au-name">Your name<input id="au-name" autocomplete="name" maxlength="80"></label>` : ""}
         <label for="au-email">Email<input id="au-email" type="email" autocomplete="email" maxlength="160" required></label>
         <label for="au-pass">Password<input id="au-pass" type="password" autocomplete="${up ? "new-password" : "current-password"}" minlength="8" maxlength="200" required></label>
+        ${!up && S.authCfg.reset ? `<div style="margin-top:-8px;text-align:right"><button type="button" class="linkbtn" data-act="authMode" data-m="forgot">Forgot password?</button></div>` : ""}
         ${up ? `<p class="hint">At least 8 characters.</p>` : ""}
         <div id="authErr"></div>
         <button class="btn primary big" type="submit" style="align-self:stretch;justify-content:center">${up ? "Create account" : "Sign in"}</button>
@@ -693,14 +714,32 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     const btn = $("#authForm button[type=submit]"); btn.disabled = true;
     try {
       await api("POST", up ? "/api/auth/signup" : "/api/auth/login", { email, password, name });
-      S.authError = ""; await reloadMe();
+      S.authError = ""; S.authMode = "signin"; await reloadMe();
       toast(up ? "Account created. Welcome to SurveySpider!" : "Signed in.");
       go(S.returnTo || "studies");
     } catch (e) { btn.disabled = false; $("#authErr").innerHTML = `<div class="errs">${esc((e && e.message) || "Couldn't sign in. Please try again.")}</div>`; }
   }
+  async function submitForgot() {
+    const email = ($("#fp-email").value || "").trim();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { $("#authErr").innerHTML = `<div class="errs">Enter a valid email address.</div>`; return; }
+    const btn = $("#forgotForm button[type=submit]"); btn.disabled = true;
+    try { await api("POST", "/api/auth/forgot", { email }); S.forgotEmail = email; S.authMode = "forgotSent"; render(); }
+    catch (e) { btn.disabled = false; $("#authErr").innerHTML = `<div class="errs">${esc((e && e.message) || "Couldn't send the email. Please try again.")}</div>`; }
+  }
+  async function submitReset() {
+    const a = $("#rp-pass").value || "", b2 = $("#rp-pass2").value || "";
+    const bad = a.length < 8 ? "Use a password of at least 8 characters." : a !== b2 ? "The two passwords don't match." : "";
+    if (bad) { $("#authErr").innerHTML = `<div class="errs">${esc(bad)}</div>`; return; }
+    const btn = $("#resetForm button[type=submit]"); btn.disabled = true;
+    try {
+      await api("POST", "/api/auth/reset", { token: S.resetToken, password: a });
+      S.resetToken = null; S.authMode = "signin"; await reloadMe();
+      toast("Password updated. You're signed in."); go(S.returnTo || "studies");
+    } catch (e) { btn.disabled = false; $("#authErr").innerHTML = `<div class="errs">${esc((e && e.message) || "Couldn't save the new password. Please try again.")}</div>`; }
+  }
   async function signOut() {
     try { await api("POST", "/api/auth/logout"); } catch (e) {}
-    S.chat = {}; S.reports = {}; S.draft = null; ls.del("cohortly-draft");
+    S.chat = {}; S.reports = {}; S.draft = null; S.authMode = "signin"; ls.del("cohortly-draft");
     try { await reloadMe(); } catch (e) {}
     toast("Signed out."); go("home");
   }
@@ -2631,6 +2670,8 @@ ${richSummary(st, rows)}`;
     if (e.target.id === "actionForm") { saveAction(); return; }
     if (e.target.id === "f2fForm") { sendF2FRequest(); return; }
     if (e.target.id === "authForm") { submitAuth(); return; }
+    if (e.target.id === "forgotForm") { submitForgot(); return; }
+    if (e.target.id === "resetForm") { submitReset(); return; }
     if (e.target.id === "adminForm") { const v = ($("#adminCode").value || "").trim(); try { localStorage.setItem("ss-admin", v); } catch (_) {} try { const me = await api("GET", "/api/me"); S.isOwner = !!me.isAdmin; if (S.isOwner) { await refreshServer(); toast("Signed in as owner."); } else toast("That code isn't right."); } catch (_) { toast("Couldn't check the code. Try again."); } render(); return; }
     if (e.target.id === "profileForm") {
       const age = Math.floor(+$("#p-age").value), gender = $("#p-gender").value, country = $("#p-country").value, occupation = $("#p-occ").value;
@@ -2693,7 +2734,7 @@ ${richSummary(st, rows)}`;
       case "reject": await save(() => backend.patchResponse(id, { status: "rejected" }), "Response rejected. The place is open again."); break;
       case "csv": exportCsv(); break;
       case "goSignin": e.preventDefault(); { const h = location.hash.replace("#", ""); if (h && h !== "signin") S.returnTo = h; } S.authMode = b.dataset.m || "signin"; S.authError = ""; go("signin"); break;
-      case "authMode": S.authMode = b.dataset.m; S.authError = ""; render(); break;
+      case "authMode": { const em = $("#au-email") || $("#fp-email"); if (em && em.value) S.forgotEmail = em.value.trim(); } S.authMode = b.dataset.m; S.authError = ""; render(); break;
       case "signout": signOut(); break;
       case "f2fRequest": S.f2f.requesting = true; render(); { const f = $("#f2fForm"); if (f) { f.scrollIntoView({ block: "start" }); $("#fw-name").focus(); } } break;
       case "f2fCancel": S.f2f.requesting = false; render(); break;
