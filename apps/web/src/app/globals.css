@@ -421,6 +421,10 @@ h3,
   gap: 40px;
   align-items: center;
 }
+.hero.solo {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 860px;
+}
 .pillars {
   display: grid;
   grid-template-columns: 1fr 1fr;

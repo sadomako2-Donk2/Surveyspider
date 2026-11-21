@@ -45,7 +45,7 @@ export default async function Home() {
   return (
     <main id="main" className="wrap stack xl">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(org) }} />
-      <section className="hero">
+      <section className="hero solo">
         <div>
           <span className="eyebrow">Centre for Research Methods and Analytics · Ghana</span>
           <h1 className="display">
@@ -71,20 +71,6 @@ export default async function Home() {
             </Link>
           </div>
         </div>
-        <nav className="pillars" aria-label="Afrimetrica's services">
-          {UNITS.map((u) => (
-            <Link key={u.key} className="pillar" href={u.href}>
-              <span className="eyebrow">{u.brand}</span>
-              <b>{u.title}</b>
-              <span>{u.points[0]}</span>
-            </Link>
-          ))}
-          <Link className="pillar wide" href="/resources">
-            <span className="eyebrow">Afrimetrica Knowledge Hub</span>
-            <b>Guides, templates and open data</b>
-            <span>Free resources for better research</span>
-          </Link>
-        </nav>
       </section>
       <Photo slot="home" wide priority />
 
