@@ -29,10 +29,10 @@ export const PHOTOS = {
     suggest: "A training session, fieldwork team or workshop in progress",
   },
   homeAcademy: {
-    file: "training.webp",
-    alt: "A trainer points to charts and a map of Africa on a screen while participants at a table listen and take notes",
+    file: "academy-class.webp",
+    alt: "A trainer speaks to a class seated with laptops, in front of a screen titled Research and Data Analytics Training",
     caption: "Illustrative image",
-    position: "center 35%",
+    position: "center 30%",
     where: "Home page, next to “Practical training in research methods”",
     suggest: "Participants working together in an Academy course",
   },
