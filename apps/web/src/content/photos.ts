@@ -73,3 +73,14 @@ export const PHOTOS = {
 } satisfies Record<string, PhotoSlot>;
 
 export type PhotoKey = keyof typeof PHOTOS;
+
+/** The home page slideshow, in order: it starts with the first. Every slot listed must have a photo. */
+export const SLIDESHOW: PhotoKey[] = [
+  "home",
+  "training",
+  "homeAcademy",
+  "surveys",
+  "analytics",
+  "consultancy",
+  "about",
+];

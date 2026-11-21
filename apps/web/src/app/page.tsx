@@ -3,6 +3,8 @@ import Link from "next/link";
 import { CourseCard } from "@/components/academy/CourseCard";
 import { Band, Ticks } from "@/components/site/blocks";
 import { Photo } from "@/components/site/Photo";
+import { Slideshow } from "@/components/site/Slideshow";
+import { PHOTOS, SLIDESHOW } from "@/content/photos";
 import { GUIDES, UNITS } from "@/content/pages";
 import { SITE } from "@/lib/site";
 import { getDb } from "@/lib/db";
@@ -72,7 +74,12 @@ export default async function Home() {
           </div>
         </div>
       </section>
-      <Photo slot="home" wide priority />
+      <Slideshow
+        slides={SLIDESHOW.map((k) => {
+          const p: { file: string; alt: string; position?: string } = PHOTOS[k];
+          return { file: p.file, alt: p.alt, position: p.position };
+        })}
+      />
 
       <section className="stack">
         <div className="section-head">
