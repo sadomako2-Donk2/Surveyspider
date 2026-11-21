@@ -1,5 +1,6 @@
 import "server-only";
 import type { PrismaClient, Role, User } from "@/generated/prisma/client";
+import { Prisma } from "@/generated/prisma/client";
 import { AFRIMETRICA_ORG } from "../../../prisma/seed-lib";
 import { authConfig } from "../config";
 import { audit } from "../audit";
@@ -14,8 +15,22 @@ export async function roleIn(db: PrismaClient, userId: string, organisationId: s
   return m?.role ?? null;
 }
 
+/**
+ * The Afrimetrica organisation, created on first use. Two requests can try to create it at the same
+ * moment; the loser of that race simply reads the one the other created.
+ */
 export async function afrimetricaOrg(db: PrismaClient) {
-  return db.organisation.upsert({ where: { slug: AFRIMETRICA_ORG.slug }, update: {}, create: { ...AFRIMETRICA_ORG } });
+  try {
+    return await db.organisation.upsert({
+      where: { slug: AFRIMETRICA_ORG.slug },
+      update: {},
+      create: { ...AFRIMETRICA_ORG },
+    });
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002")
+      return db.organisation.findUniqueOrThrow({ where: { slug: AFRIMETRICA_ORG.slug } });
+    throw e;
+  }
 }
 
 /** Site administrators are owners and admins of the Afrimetrica organisation. */
@@ -35,11 +50,17 @@ export async function grantAdminFromEnv(db: PrismaClient, user: User): Promise<v
   const org = await afrimetricaOrg(db);
   const role = await roleIn(db, user.id, org.id);
   if (atLeast(role, "ADMIN")) return;
-  await db.membership.upsert({
-    where: { userId_organisationId: { userId: user.id, organisationId: org.id } },
-    update: { role: "ADMIN" },
-    create: { userId: user.id, organisationId: org.id, role: "ADMIN" },
-  });
+  try {
+    await db.membership.upsert({
+      where: { userId_organisationId: { userId: user.id, organisationId: org.id } },
+      update: { role: "ADMIN" },
+      create: { userId: user.id, organisationId: org.id, role: "ADMIN" },
+    });
+  } catch (e) {
+    // Same person signing in twice at once: the membership already exists, which is what we wanted.
+    if (!(e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002")) throw e;
+    return;
+  }
   await audit(db, {
     actorId: null,
     organisationId: org.id,

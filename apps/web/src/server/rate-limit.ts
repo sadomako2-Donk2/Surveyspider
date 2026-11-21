@@ -15,3 +15,9 @@ export async function tooMany(db: PrismaClient, key: string, max: number, window
     RETURNING "count"`;
   return (rows[0]?.count ?? 0) > max;
 }
+
+/** True if `key` has already used up its limit in the current window. Doesn't count an attempt. */
+export async function isLimited(db: PrismaClient, key: string, max: number): Promise<boolean> {
+  const b = await db.rateLimitBucket.findUnique({ where: { key } });
+  return !!b && b.resetAt > new Date() && b.count >= max;
+}

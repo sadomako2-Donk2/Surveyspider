@@ -79,7 +79,7 @@ describe("analysis data", () => {
   it("leaves out test and rejected responses, uses P-codes, and counts unchanged questions across versions", async () => {
     const { owner, id, v1, answer } = await setup();
     await answer(owner, v1.id, { [v1.questions[0]!.id]: "Agree", [v1.questions[1]!.id]: 0 }); // owner's test
-    const a = await answer(await signedIn(), v1.id, { [v1.questions[0]!.id]: "Agree", [v1.questions[1]!.id]: 8 });
+    await answer(await signedIn(), v1.id, { [v1.questions[0]!.id]: "Agree", [v1.questions[1]!.id]: 8 });
     const b = await answer(await signedIn(), v1.id, { [v1.questions[0]!.id]: "Disagree", [v1.questions[1]!.id]: 2 });
     await owner.call((req) => S.reviewResponse(b.json!.id)(req, db), { method: "PATCH", body: { status: "REJECTED" } });
     // Version 2 keeps question 1 as it was and rewords question 2.

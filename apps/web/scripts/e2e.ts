@@ -39,7 +39,7 @@ fakeResend.listen(MAIL_PORT, "127.0.0.1", async () => {
               PUBLIC_URL: "",
               GOOGLE_CLIENT_ID: "",
               ADMIN_EMAILS:
-                "e2e-admin-desktop@example.com,e2e-admin-mobile@example.com,e2e-inbox-desktop@example.com,e2e-inbox-mobile@example.com,e2e-boss-desktop@example.com",
+                "e2e-admin-desktop@example.com,e2e-admin-mobile@example.com,e2e-inbox-desktop@example.com,e2e-inbox-mobile@example.com,e2e-boss-desktop@example.com,e2e-analysis-admin-desktop@example.com,e2e-analysis-admin-mobile@example.com",
             },
           }).on("exit", (code) => resolve(code ?? 1)),
         ),

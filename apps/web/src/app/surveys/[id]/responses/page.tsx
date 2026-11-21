@@ -56,6 +56,9 @@ export default async function Responses({
           <h1>{latestVersion(survey).title}</h1>
         </div>
         <div className="ctas tight">
+          <Link className="btn small primary" href={`/surveys/${id}/analyze`}>
+            Analyze
+          </Link>
           <Link className="btn small" href={`/surveys/${id}/edit`}>
             Edit survey
           </Link>
@@ -129,7 +132,7 @@ export default async function Responses({
           <p className="muted">No responses yet.</p>
         )}
         <p className="hint">
-          Charts, statistics and AI insights for these answers arrive in the Analyze step. The attention check (“
+          Charts, statistics and insights are on the Analyze page. The attention check (“
           {ATTENTION.answer}”) is never stored as an answer.
         </p>
       </section>

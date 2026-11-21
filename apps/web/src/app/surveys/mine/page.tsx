@@ -65,9 +65,14 @@ export default async function MySurveys() {
                         Edit
                       </Link>
                       {s.status !== "DRAFT" && (
-                        <Link className="btn small" href={`/surveys/${s.id}/responses`}>
-                          Responses
-                        </Link>
+                        <>
+                          <Link className="btn small" href={`/surveys/${s.id}/responses`}>
+                            Responses
+                          </Link>
+                          <Link className="btn small" href={`/surveys/${s.id}/analyze`}>
+                            Analyze
+                          </Link>
+                        </>
                       )}
                       {s.status === "DRAFT" && !s.launchedAt && <DeleteDraft id={s.id} />}
                     </div>

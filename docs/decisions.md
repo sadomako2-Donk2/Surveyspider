@@ -64,4 +64,9 @@
 | 2026-11 | Owner-only access to answers is part of the analysis database query, not a check after loading | Blueprint: administrators can't automatically read answers; a bug elsewhere can't leak them |
 | 2026-11 | Across versions, answers count together only for questions that are identical in wording, type, options and scale | Changed questions aren't mixed with old answers; nothing is guessed |
 | 2026-11 | Groups under 3 people are left out of every breakdown, comparison and test and only counted as "hidden" | Same rule as Phase 1; protects participants' anonymity |
+| 2026-11 | Analyze charts use one validated hue per mode (#3d5fa8 light, #a98428 dark) with values as text | Passes the dataviz palette checks (lightness band, chroma, contrast); single-series bars need no legend |
+| 2026-11 | Status labels use darker/lighter text shades (`--good-ink`, `--warn-ink`) | Phase 1's green and orange labels fall below 4.5:1 for small text |
+| 2026-11 | Creating the Afrimetrica organisation and admin membership tolerates simultaneous requests | Found by tests: two admins confirming at once caused a database error |
+| 2026-11 | AI analyst, AI reports, hidden patterns and action tracking from Phase 1 are not yet in Phase 2 | Step 8 covers the statistics and Analyze core; these can follow as their own step |
+| 2026-11 | Email confirmation counts only failed attempts per connection (30 an hour) | Found by tests: a training room or office sharing one internet address would block each other after 30 confirmations; links can't be guessed anyway |
 

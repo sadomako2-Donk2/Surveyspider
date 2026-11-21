@@ -22,7 +22,7 @@ import {
   trustedBase,
   validEmail,
 } from "../http";
-import { tooMany } from "../rate-limit";
+import { isLimited, tooMany } from "../rate-limit";
 import { hashPassword, passwordProblem, verifyPassword } from "./password";
 import { assertCanManage, grantAdminFromEnv, RoleError, ROLES } from "./roles";
 import { clearSessionCookie, currentUser, endSession, startSession } from "./session";
@@ -157,9 +157,12 @@ export const me = handle(async (req, db) => json(200, await meResponse(db, await
 
 export const verifyEmail = handle(async (req, db) => {
   const b = await readJson(req);
-  if (await tooMany(db, `verify-ip|${clientIp(req)}`, 30, 3600e3))
-    return TOO_MANY("Too many attempts. Try again in an hour.");
+  // Only failed attempts count: links can't be guessed, and many people confirming from one office or
+  // training room (one shared internet address) must not block each other.
+  const key = `verify-fail-ip|${clientIp(req)}`;
+  if (await isLimited(db, key, 30)) return TOO_MANY("Too many attempts. Try again in an hour.");
   const t = await takeToken(db, b.token, "VERIFY_EMAIL");
+  if (!t && (await tooMany(db, key, 30, 3600e3))) return TOO_MANY("Too many attempts. Try again in an hour.");
   if (!t)
     return fail(
       400,

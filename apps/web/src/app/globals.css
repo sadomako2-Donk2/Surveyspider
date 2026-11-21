@@ -1296,3 +1296,192 @@ details > summary {
     justify-self: start;
   }
 }
+
+/* ---------- analyze (step 8) ---------- */
+/* Chart fill: one hue per mode, validated with the dataviz palette checks (lightness band, chroma, >=3:1 on the surface). */
+:root {
+  --chart-1: #3d5fa8;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --chart-1: #a98428;
+  }
+}
+.bars {
+  margin: 0;
+}
+.bars ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.bar-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 34%) minmax(0, 1fr) minmax(90px, auto);
+  gap: 10px;
+  align-items: center;
+  padding: 5px 4px;
+  border-radius: 6px;
+}
+.bar-row:hover,
+.bar-row:focus-visible {
+  background: var(--bg);
+}
+.bar-label {
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+.bar-track {
+  height: 12px;
+  background: var(--bg);
+  border-radius: 0 4px 4px 0;
+  overflow: hidden;
+}
+.bar-fill {
+  display: block;
+  height: 100%;
+  background: var(--chart-1);
+  border-radius: 0 4px 4px 0;
+  min-width: 2px;
+}
+.bar-value {
+  font-size: 0.88rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .bar-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .bar-track {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: end;
+}
+.filter-row label:not(.inline) {
+  flex: 1 1 220px;
+}
+.insights {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+.insight {
+  gap: 6px;
+}
+.insight p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+.insight .tag {
+  align-self: flex-start;
+}
+.tag.good {
+  color: var(--good);
+  background: color-mix(in srgb, var(--good) 14%, transparent);
+}
+.tag.warn {
+  color: var(--signal);
+  background: var(--signal-soft);
+}
+.tag.info {
+  color: var(--gold-ink);
+  background: var(--gold-soft);
+}
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+.stat-row div {
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.stat-row dt {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.stat-row dd {
+  margin: 2px 0 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.result {
+  margin: 0;
+  padding: 10px 12px;
+  border-left: 3px solid var(--line);
+  background: var(--bg);
+  border-radius: 0 8px 8px 0;
+}
+.result.sig {
+  border-left-color: var(--gold);
+}
+.text-answers {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.q-result h3 {
+  font-size: 1rem;
+}
+.subtab {
+  font: inherit;
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 8px 12px;
+  color: var(--muted);
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.subtab[aria-selected="true"] {
+  color: var(--ink);
+  border-bottom-color: var(--gold);
+}
+th[scope="row"] {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+/* Status label text: darker (light mode) / lighter (dark mode) than the status hue so small labels reach 4.5:1. */
+:root {
+  --good-ink: #17633f;
+  --warn-ink: #8a4a12;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --good-ink: #7ad8a8;
+    --warn-ink: #f2b072;
+  }
+}
+.tag.good {
+  color: var(--good-ink);
+}
+.tag.warn {
+  color: var(--warn-ink);
+}
+/* The sample report on /surveys sits on navy: keep its light label colours. */
+.report-mock .tag.good {
+  color: #84e2b3;
+  background: rgba(132, 226, 179, 0.12);
+}
+.report-mock .tag.warn {
+  color: #f4b46e;
+  background: rgba(244, 180, 110, 0.14);
+}

@@ -483,3 +483,31 @@ describe("site administrators and organisation roles", () => {
     expect(r.json!.code).toBe("verify_required");
   });
 });
+
+describe("concurrency", () => {
+  it("creates the Afrimetrica organisation once when several admins confirm at the same moment", async () => {
+    const { afrimetricaOrg } = await import("@/server/auth/roles");
+    await db.organisation.deleteMany({ where: { slug: "afrimetrica", memberships: { none: {} } } });
+    const orgs = await Promise.all(Array.from({ length: 8 }, () => afrimetricaOrg(db)));
+    expect(new Set(orgs.map((o) => o.id)).size).toBe(1);
+  });
+});
+
+describe("email confirmation limits", () => {
+  it("doesn't block a room of people confirming from one shared connection, but stops guessing", async () => {
+    const office = "10.77.0.1";
+    for (let i = 0; i < 35; i++) {
+      const email = `office-${i}-${Date.now()}@example.com`;
+      const before = fakes.mails.length;
+      await browser(`10.77.1.${i}`).call(signup, { body: { email, password: "office password 1" } });
+      const t = tokenIn(await mailTo(email, /Confirm/, before), "/verify-email");
+      expect((await browser(office).call(verify, { body: { token: t } })).status).toBe(200);
+    }
+    const guesser = browser("10.77.0.2");
+    const codes = [];
+    for (let i = 0; i < 32; i++)
+      codes.push((await guesser.call(verify, { body: { token: i.toString(16).padStart(64, "0") } })).status);
+    expect(codes.slice(0, 30).every((c) => c === 400)).toBe(true);
+    expect(codes.slice(30)).toEqual([429, 429]);
+  });
+});
