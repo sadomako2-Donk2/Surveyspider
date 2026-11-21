@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export default async function ResetPassword({ searchParams }: { searchParams: Promise<{ token?: string }> }) {
   const token = (await searchParams).token ?? "";
   return (
-    <main className="wrap auth-wrap">
+    <main id="main" className="wrap auth-wrap">
       <ResetForm token={/^[0-9a-f]{64}$/.test(token) ? token : ""} />
     </main>
   );

@@ -18,7 +18,7 @@ export default async function Account({ searchParams }: { searchParams: Promise<
   const u = me.user!;
   const first = u.name.trim().split(/\s+/)[0];
   return (
-    <main className="wrap stack">
+    <main id="main" className="wrap stack">
       {q.password === "updated" && <p className="notice">Password updated. You&apos;re signed in.</p>}
       {q.signed_in === "google" && <p className="notice">Signed in with Google.</p>}
       {me.needsVerification && (

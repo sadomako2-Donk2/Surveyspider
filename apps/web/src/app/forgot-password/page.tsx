@@ -5,7 +5,7 @@ export const metadata: Metadata = { title: "Forgot password", robots: { index: f
 
 export default function ForgotPassword() {
   return (
-    <main className="wrap auth-wrap">
+    <main id="main" className="wrap auth-wrap">
       <ForgotForm />
     </main>
   );

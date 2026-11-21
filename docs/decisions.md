@@ -27,4 +27,10 @@
 | 2026-11 | Rate limits kept in the database | Hold across restarts and multiple server processes |
 | 2026-11 | Google callback stays at `/auth/google/callback` | No change needed in Google Cloud Console at cut-over |
 | 2026-11 | Site administrators = owners/admins of the "afrimetrica" organisation | One role system for staff and client organisations |
+| 2026-11 | Public pages are pre-rendered static HTML; only Contact reads the database | Fast, cheap, and the site still shows if the database is down |
+| 2026-11 | Until step 6, enquiry buttons open the live Phase 1 form | No dead ends; the `EnquirySlot` component is replaced by real forms in step 6 |
+| 2026-11 | Training lists the eight course topics until step 5 | Shows what we teach without inventing dates or fees |
+| 2026-11 | Small gold text uses a deeper gold (`--gold-ink` #85601a) | The original gold fails WCAG AA contrast for small text; headings keep the bright gold |
+| 2026-11 | System fonts instead of Google Fonts for now | No third-party requests and works offline in CI; Montserrat/Inter can be self-hosted later |
+| 2026-11 | Open data links focus on Ghana and Africa (Ghana Statistical Service, DHS, Afrobarometer) | More relevant to Afrimetrica's audience than Data.gov and Statista |
 

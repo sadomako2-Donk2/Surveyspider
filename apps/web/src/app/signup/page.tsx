@@ -12,7 +12,7 @@ export default async function SignUp({ searchParams }: { searchParams: Promise<R
   const next = safeNext((await searchParams).next);
   if (await getCurrentUser()) redirect(next);
   return (
-    <main className="wrap auth-wrap">
+    <main id="main" className="wrap auth-wrap">
       <AuthForm mode="signup" next={next} google={googleEnabled()} />
     </main>
   );

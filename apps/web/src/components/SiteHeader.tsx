@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { NAV } from "@/lib/site";
+import { NavLinks } from "@/components/site/NavLinks";
 
 export function Logo() {
   return (
@@ -32,12 +32,12 @@ export function Logo() {
   );
 }
 
-// Static on purpose: the header never touches the database, so public pages stay fast and cacheable.
+// Never touches the database, so public pages stay fast and cacheable.
 export function SiteHeader() {
   return (
     <header className="topbar">
       <div className="topbar-inner">
-        <Link className="brand" href="/" aria-label="Afrimetrica home">
+        <Link className="brand" href="/">
           <Logo />
           <span className="wm">
             <b>
@@ -46,13 +46,7 @@ export function SiteHeader() {
             <small>RESEARCH METHODS &amp; ANALYTICS</small>
           </span>
         </Link>
-        <nav className="tabs" aria-label="Main">
-          {NAV.map((n) => (
-            <Link key={n.href} href={n.href}>
-              {n.label}
-            </Link>
-          ))}
-        </nav>
+        <NavLinks />
       </div>
     </header>
   );

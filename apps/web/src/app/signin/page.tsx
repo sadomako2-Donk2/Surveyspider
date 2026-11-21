@@ -20,7 +20,7 @@ export default async function SignIn({ searchParams }: { searchParams: Promise<R
   const next = safeNext(q.next);
   if (await getCurrentUser()) redirect(next);
   return (
-    <main className="wrap auth-wrap">
+    <main id="main" className="wrap auth-wrap">
       <AuthForm
         mode="signin"
         next={next}
