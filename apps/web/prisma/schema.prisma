@@ -1,0 +1,420 @@
+// Afrimetrica Phase 2 data model. See docs/data-model.md for the reasoning.
+// Conventions:
+// - ids are cuid strings; Phase 1 ids are kept in `legacyId` columns for the step-9 migration.
+// - money is stored in minor units (cents, pesewas, pence) as Int, with a Currency.
+// - published SurveyVersions and their Questions are immutable (enforced by a database trigger).
+// - AuditEvent rows are append-only (enforced by a database trigger).
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------- people and organisations ----------
+
+model User {
+  id              String    @id @default(cuid())
+  legacyId        String?   @unique
+  email           String    @unique // always stored lower-case
+  name            String    @default("")
+  phone           String?
+  passwordHash    String?
+  googleSubject   String?   @unique
+  emailVerifiedAt DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  memberships        Membership[]
+  enrollments        Enrollment[]
+  surveys            Survey[]            @relation("SurveyOwner")
+  responses          Response[]          @relation("Participant")
+  consentRecords     ConsentRecord[]
+  enquiries          Enquiry[]
+  fieldworkRequests  FieldworkRequest[]
+  insightActions     InsightAction[]
+  participantProfile ParticipantProfile?
+}
+
+model Organisation {
+  id          String       @id @default(cuid())
+  slug        String       @unique
+  name        String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  memberships Membership[]
+  surveys     Survey[]
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  ANALYST
+  MEMBER
+}
+
+model Membership {
+  id             String       @id @default(cuid())
+  userId         String
+  organisationId String
+  role           Role         @default(MEMBER)
+  createdAt      DateTime     @default(now())
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organisation   Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, organisationId])
+  @@index([organisationId])
+}
+
+model ParticipantProfile {
+  userId     String   @id
+  age        Int
+  gender     String
+  country    String
+  occupation String
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ---------- Afrimetrica Academy ----------
+
+enum CourseStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum Currency {
+  USD
+  GHS
+  GBP
+  EUR
+}
+
+model Course {
+  id          String          @id @default(cuid())
+  legacyId    String?         @unique
+  slug        String          @unique
+  title       String
+  status      CourseStatus    @default(DRAFT)
+  level       String          @default("")
+  format      String          @default("")
+  duration    String          @default("")
+  summary     String          @default("")
+  description String          @default("")
+  outcomes    String[]
+  audience    String          @default("")
+  certificate Boolean         @default(true)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  sessions    CourseSession[]
+  enrollments Enrollment[]
+
+  @@index([status])
+}
+
+model CourseSession {
+  id          String       @id @default(cuid())
+  legacyId    String?      @unique
+  courseId    String
+  startsOn    DateTime?    @db.Date
+  endsOn      DateTime?    @db.Date
+  location    String       @default("")
+  seats       Int          @default(0) // 0 = no limit
+  feeMinor    Int          @default(0)
+  currency    Currency     @default(USD)
+  createdAt   DateTime     @default(now())
+  course      Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  enrollments Enrollment[]
+
+  @@index([courseId, startsOn])
+}
+
+enum EnrollmentStatus {
+  REGISTERED
+  INTEREST
+  CONFIRMED
+  ATTENDED
+  COMPLETED
+  CANCELLED
+}
+
+model Enrollment {
+  id           String           @id @default(cuid())
+  legacyId     String?          @unique
+  userId       String
+  courseId     String
+  sessionId    String? // null = interest without a date
+  status       EnrollmentStatus @default(REGISTERED)
+  name         String
+  email        String
+  phone        String           @default("")
+  organisation String           @default("")
+  notes        String           @default("")
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course       Course           @relation(fields: [courseId], references: [id], onDelete: Restrict)
+  session      CourseSession?   @relation(fields: [sessionId], references: [id], onDelete: Restrict)
+
+  // Also: a partial unique index (one active registration per person, course and date) in the init migration.
+  @@index([courseId])
+  @@index([sessionId, status])
+  @@index([userId])
+}
+
+// ---------- Afrimetrica Surveys ----------
+
+enum SurveyStatus {
+  DRAFT
+  LIVE
+  CLOSED
+}
+
+model Survey {
+  id                 String          @id @default(cuid())
+  legacyId           String?         @unique
+  ownerId            String
+  organisationId     String?
+  status             SurveyStatus    @default(DRAFT)
+  // Fieldwork settings can change while a survey runs; the questions cannot (they live in versions).
+  rewardMinor        Int             @default(0)
+  rewardCurrency     Currency        @default(USD)
+  targetResponses    Int             @default(0)
+  estimatedMinutes   Int             @default(0)
+  screening          Json            @default("{}")
+  attentionCheck     Boolean         @default(false)
+  libraryHeadline    String?
+  libraryPublishedAt DateTime?
+  launchedAt         DateTime?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  owner              User            @relation("SurveyOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  organisation       Organisation?   @relation(fields: [organisationId], references: [id], onDelete: SetNull)
+  versions           SurveyVersion[]
+  responses          Response[]
+  insightActions     InsightAction[]
+
+  @@index([ownerId])
+  @@index([status])
+}
+
+model SurveyVersion {
+  id             String          @id @default(cuid())
+  surveyId       String
+  number         Int
+  title          String
+  description    String          @default("")
+  consentText    String          @default("")
+  publishedAt    DateTime? // once set, this version and its questions can't change
+  createdAt      DateTime        @default(now())
+  survey         Survey          @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  questions      Question[]
+  responses      Response[]
+  consentRecords ConsentRecord[]
+
+  @@unique([surveyId, number])
+}
+
+enum QuestionType {
+  SINGLE // multiple choice, one answer
+  MULTI // checkboxes
+  RATING // numbered scale, e.g. 0-10
+  LIKERT // labelled agreement/frequency scale
+  TEXT
+  NUMBER
+}
+
+model Question {
+  id        String        @id @default(cuid())
+  legacyId  String?
+  versionId String
+  position  Int
+  type      QuestionType
+  text      String
+  options   String[]
+  scale     Json? // { min, max, minLabel, maxLabel } for RATING
+  required  Boolean       @default(true)
+  version   SurveyVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
+  answers   Answer[]
+
+  @@unique([versionId, position])
+}
+
+model ConsentRecord {
+  id              String        @id @default(cuid())
+  surveyVersionId String
+  participantId   String
+  statement       String // the exact wording the participant agreed to
+  givenAt         DateTime      @default(now())
+  surveyVersion   SurveyVersion @relation(fields: [surveyVersionId], references: [id], onDelete: Restrict)
+  participant     User          @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  response        Response?
+
+  @@index([participantId])
+}
+
+enum ResponseStatus {
+  APPROVED
+  FLAGGED
+  REJECTED
+}
+
+model Response {
+  id              String         @id @default(cuid())
+  legacyId        String?        @unique
+  surveyId        String
+  surveyVersionId String
+  participantId   String
+  consentRecordId String?        @unique
+  status          ResponseStatus @default(APPROVED)
+  isTest          Boolean        @default(false)
+  rewardMinor     Int            @default(0)
+  rewardCurrency  Currency       @default(USD)
+  passedAttention Boolean?
+  speeder         Boolean        @default(false)
+  durationSeconds Int?
+  submittedAt     DateTime       @default(now())
+  survey          Survey         @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  surveyVersion   SurveyVersion  @relation(fields: [surveyVersionId], references: [id], onDelete: Restrict)
+  participant     User           @relation("Participant", fields: [participantId], references: [id], onDelete: Restrict)
+  consentRecord   ConsentRecord? @relation(fields: [consentRecordId], references: [id], onDelete: SetNull)
+  answers         Answer[]
+
+  @@unique([surveyId, participantId]) // one response per person per survey
+  @@index([surveyVersionId])
+}
+
+model Answer {
+  id         String   @id @default(cuid())
+  responseId String
+  questionId String
+  value      Json // string, number, or string[] depending on the question type
+  response   Response @relation(fields: [responseId], references: [id], onDelete: Cascade)
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Restrict)
+
+  @@unique([responseId, questionId])
+  @@index([questionId])
+}
+
+model InsightAction {
+  id         String    @id @default(cuid())
+  legacyId   String?   @unique
+  surveyId   String
+  ownerId    String
+  title      String
+  why        String    @default("")
+  questionId String?
+  priority   String    @default("medium")
+  status     String    @default("planned")
+  assignee   String    @default("")
+  dueOn      DateTime? @db.Date
+  kpi        Json?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  survey     Survey    @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  owner      User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@index([surveyId])
+}
+
+// ---------- enquiries, fieldwork, settings, audit ----------
+
+enum EnquiryType {
+  ANALYTICS
+  CONSULTANCY
+  TRAINING
+  CONTACT
+}
+
+enum EnquiryStatus {
+  NEW
+  CONTACTED
+  IN_PROGRESS
+  WON
+  CLOSED
+}
+
+// One table for consultancy, analytics, training and contact enquiries (see docs/decisions.md).
+model Enquiry {
+  id           String        @id @default(cuid())
+  legacyId     String?       @unique
+  type         EnquiryType
+  status       EnquiryStatus @default(NEW)
+  requesterId  String? // null when sent without an account
+  name         String
+  email        String
+  phone        String        @default("")
+  organisation String        @default("")
+  subject      String        @default("")
+  message      String
+  service      String        @default("")
+  timeline     String        @default("")
+  budget       String        @default("")
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  requester    User?         @relation(fields: [requesterId], references: [id], onDelete: SetNull)
+
+  @@index([type, status])
+  @@index([requesterId])
+}
+
+enum FieldworkStatus {
+  NEW
+  CONTACTED
+  QUOTED
+  WON
+  LOST
+}
+
+// Paper Survey (face-to-face) fieldwork quote requests.
+model FieldworkRequest {
+  id             String          @id @default(cuid())
+  legacyId       String?         @unique
+  ref            String          @unique
+  status         FieldworkStatus @default(NEW)
+  requesterId    String?
+  name           String
+  email          String
+  phone          String          @default("")
+  organisation   String          @default("")
+  preferredStart String          @default("")
+  notes          String          @default("")
+  inputs         Json
+  quote          Json
+  quoteTotalUsd  Int // whole US dollars, for sorting and totals
+  surveySnapshot Json?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  requester      User?           @relation(fields: [requesterId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+}
+
+model SiteSetting {
+  key         String   @id
+  value       Json
+  updatedAt   DateTime @updatedAt
+  updatedById String?
+}
+
+// Append-only log of administrative and security-relevant actions.
+// actorId is deliberately not a foreign key: the log must outlive the accounts it mentions.
+model AuditEvent {
+  id             String   @id @default(cuid())
+  actorId        String?
+  organisationId String?
+  action         String // e.g. "course.publish", "enquiry.status"
+  entityType     String
+  entityId       String
+  metadata       Json     @default("{}")
+  ipHash         String?
+  createdAt      DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([actorId])
+  @@index([createdAt])
+}

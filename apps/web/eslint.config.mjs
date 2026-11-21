@@ -6,6 +6,7 @@ export default defineConfig([
   ...nextVitals,
   ...nextTs,
   globalIgnores([
+    "src/generated/**",
     ".next/**",
     "out/**",
     "build/**",

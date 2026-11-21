@@ -1,0 +1,122 @@
+[
+  {
+    "title": "Research Design Fundamentals",
+    "level": "Introductory",
+    "format": "In person",
+    "duration": "2 days",
+    "summary": "Plan a sound study, from a clear research question to a workable analysis plan.",
+    "description": "This course takes participants through the decisions that shape a credible study: framing research questions, choosing a design, defining variables, planning sampling and data collection, and writing an analysis plan before any data is collected.\n\nSessions combine short explanations with group work on participants' own projects.",
+    "outcomes": [
+      "Write focused research questions and objectives",
+      "Choose an appropriate study design",
+      "Plan sampling, data collection and analysis",
+      "Recognise common threats to validity"
+    ],
+    "audience": "Postgraduate students, early-career researchers and programme staff starting a study."
+  },
+  {
+    "title": "Questionnaire Design and Survey Methods",
+    "level": "Introductory",
+    "format": "Hybrid",
+    "duration": "2 days",
+    "summary": "Write questions people can answer accurately and run a survey that produces usable data.",
+    "description": "Participants learn how to turn objectives into measurable questions, write clear and neutral wording, choose answer formats and scales, structure a questionnaire, and pilot it. The course also covers sampling basics, online and face-to-face collection, and data quality checks.\n\nParticipants build and test a questionnaire in Afrimetrica Surveys during the course.",
+    "outcomes": [
+      "Translate objectives into measurable questions",
+      "Avoid leading, double-barrelled and vague questions",
+      "Choose suitable scales, including Likert scales",
+      "Pilot a questionnaire and check data quality"
+    ],
+    "audience": "Anyone who designs or commissions surveys."
+  },
+  {
+    "title": "Sampling and Sample Size",
+    "level": "Intermediate",
+    "format": "Online",
+    "duration": "1 day",
+    "summary": "Choose a sampling approach and calculate how many responses you really need.",
+    "description": "The course covers probability and non-probability sampling, stratification and clustering, sampling frames, margin of error and confidence, sample size for subgroups, and adjusting for response rates and design effects.",
+    "outcomes": [
+      "Choose an appropriate sampling strategy",
+      "Calculate sample sizes for common designs",
+      "Account for non-response and design effects",
+      "Explain sampling limitations honestly in reports"
+    ],
+    "audience": "Researchers, evaluators and analysts planning surveys."
+  },
+  {
+    "title": "Quantitative Data Analysis with SPSS, Stata or R",
+    "level": "Intermediate",
+    "format": "In person",
+    "duration": "3 days",
+    "summary": "Clean, analyse and interpret survey and research data with a statistical package.",
+    "description": "Hands-on sessions cover data cleaning, descriptive statistics, cross-tabulation and chi-square tests, t-tests and ANOVA, correlation and linear regression, and an introduction to logistic regression. Participants work with real datasets and learn to report results clearly.",
+    "outcomes": [
+      "Prepare and clean a dataset for analysis",
+      "Choose and run appropriate statistical tests",
+      "Interpret and report results correctly",
+      "Produce tables and charts for reports"
+    ],
+    "audience": "Researchers and analysts with basic statistics knowledge."
+  },
+  {
+    "title": "Qualitative Research and Thematic Analysis",
+    "level": "Intermediate",
+    "format": "In person",
+    "duration": "2 days",
+    "summary": "Plan interviews and focus groups and analyse what people say rigorously.",
+    "description": "The course covers qualitative designs, interview and focus group guides, facilitation, transcription, coding and thematic analysis, and how to report qualitative findings credibly.",
+    "outcomes": [
+      "Design interview and focus group guides",
+      "Facilitate discussions that produce rich data",
+      "Code transcripts and develop themes",
+      "Report qualitative findings with appropriate evidence"
+    ],
+    "audience": "Researchers, evaluators and students using qualitative methods."
+  },
+  {
+    "title": "Monitoring and Evaluation for Programmes",
+    "level": "Intermediate",
+    "format": "Hybrid",
+    "duration": "3 days",
+    "summary": "Build a practical M&E framework, indicators and data system for a programme.",
+    "description": "Participants develop a theory of change and results framework, define indicators, plan baselines and data collection, and design reporting and learning processes. The course also introduces common evaluation designs and how to commission an evaluation.",
+    "outcomes": [
+      "Develop a theory of change and results framework",
+      "Write measurable indicators with targets",
+      "Plan baseline, monitoring and evaluation data",
+      "Use M&E findings for decisions and learning"
+    ],
+    "audience": "Programme managers, M&E officers and NGO staff."
+  },
+  {
+    "title": "Research Ethics and Data Protection",
+    "level": "Introductory",
+    "format": "Online",
+    "duration": "1 day",
+    "summary": "Protect participants and their data from consent to archiving.",
+    "description": "The course covers informed consent, confidentiality and anonymisation, working with vulnerable groups, ethics review, and handling personal data responsibly, including the principles of Ghana's Data Protection Act and good practice for storing and sharing research data.",
+    "outcomes": [
+      "Design informed consent processes",
+      "Anonymise and protect personal data",
+      "Prepare for ethics review",
+      "Plan secure storage, retention and sharing"
+    ],
+    "audience": "Researchers, students and data collection teams."
+  },
+  {
+    "title": "Data Visualisation and Research Reporting",
+    "level": "Introductory",
+    "format": "Online",
+    "duration": "1 day",
+    "summary": "Turn results into clear charts, summaries and reports that decision-makers use.",
+    "description": "Participants learn to choose the right chart, design clean tables, write findings and recommendations in plain language, and structure reports and briefs for different audiences.",
+    "outcomes": [
+      "Choose effective charts for different data",
+      "Write clear findings and recommendations",
+      "Structure reports and policy briefs",
+      "Present results to non-specialists"
+    ],
+    "audience": "Researchers, analysts and communications staff."
+  }
+]
