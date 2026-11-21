@@ -1,4 +1,4 @@
-import { SITE, legalLine } from "@/lib/site";
+import { SITE } from "@/lib/site";
 
 // Placeholder only. The public pages are rebuilt in step 4 of docs/phase-2-prompts.md.
 export default function Home() {
@@ -9,7 +9,6 @@ export default function Home() {
       <p className="muted">
         {SITE.tagline}. This is the new application under construction. The live site still runs on Phase 1.
       </p>
-      <p className="muted">{legalLine()}</p>
     </main>
   );
 }

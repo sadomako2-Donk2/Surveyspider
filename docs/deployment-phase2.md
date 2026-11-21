@@ -13,7 +13,12 @@ Nothing here is needed yet. The live site keeps running on Phase 1 until cut-ove
 - **Build command:** `npm ci && npm run db:deploy && npm run build`
 - **Start command:** `npm start`
 - **Health check path:** `/healthz`
-- **Environment:** `DATABASE_URL` = the Internal Database URL, `NODE_VERSION` = `22`, plus the auth and email keys added in step 3.
+- **Environment:**
+  - `DATABASE_URL` = the Internal Database URL, `NODE_VERSION` = `22`
+  - `PUBLIC_URL` = the site's address once the domain works (until then Render's own address is used automatically)
+  - `RESEND_API_KEY`, `EMAIL_FROM` (copy from the Phase 1 service)
+  - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` (copy from Phase 1; the callback path `/auth/google/callback` is unchanged, but add the new service's address to the authorised redirect URIs in Google Cloud Console if it differs)
+  - `ADMIN_EMAILS` (become admin once that email is confirmed)
 
 `npm run db:deploy` (`prisma migrate deploy`) only applies new migrations. It never drops data.
 

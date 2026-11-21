@@ -20,4 +20,11 @@
 | 2026-11 | `effect` pinned to 3.22.5 via npm overrides | Fixes a high-severity advisory in a Prisma CLI dependency without downgrading Prisma |
 | 2026-11 | Database tests run in a fresh throwaway database per run | Never wipes an existing database; Prisma also blocks AI agents from `migrate reset` |
 | 2026-11 | The seed creates only the Afrimetrica organisation (and an owner if `SEED_OWNER_EMAIL` is set) | No invented courses, people or data; course templates live in `src/content/` for step 5 |
+| 2026-11 | Own auth code (ported from Phase 1) instead of an auth library | Keeps Phase 1 password hashes and behaviour; small, fully tested surface |
+| 2026-11 | Password hashes stored as `scrypt$N$r$p$salt$hash` | Parameters can be raised later; Phase 1 hashes import unchanged, so users keep their passwords |
+| 2026-11 | Sessions and email tokens stored as SHA-256 hashes | A database leak doesn't hand out working sessions or links |
+| 2026-11 | ADMIN_EMAILS grants admin only after the email is confirmed | Phase 1 granted it at sign-up, so anyone could register the owner's address first |
+| 2026-11 | Rate limits kept in the database | Hold across restarts and multiple server processes |
+| 2026-11 | Google callback stays at `/auth/google/callback` | No change needed in Google Cloud Console at cut-over |
+| 2026-11 | Site administrators = owners/admins of the "afrimetrica" organisation | One role system for staff and client organisations |
 

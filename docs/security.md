@@ -9,6 +9,13 @@
 - Groups smaller than 3 are suppressed in analysis.
 - Secrets only in Render environment variables.
 
+## Phase 2 additions (step 3)
+- Session cookies (`afri_session`): random 256-bit tokens, HttpOnly, SameSite=Lax, Secure over HTTPS, 30 days; only a hash is stored.
+- Email confirmation and reset links: one-time, hashed in the database, 48 hours / 60 minutes; the token is removed from the address bar after use; pages send no referrer.
+- Password reset signs out every other session. Unknown emails get the same answer as known ones.
+- Links in emails use PUBLIC_URL (or Render's own address), never the request's Host header.
+- Organisation roles: owners manage everyone; admins manage analysts and members; the last owner can't be removed. Every change is in the append-only audit log (IP addresses hashed).
+
 ## Before collecting real respondent data
 1. Register with Ghana's Data Protection Commission and review obligations under the Data Protection Act, 2012 (Act 843), plus GDPR if surveying people in the UK or EU.
 2. Publish a privacy notice and terms; add consent records to surveys.

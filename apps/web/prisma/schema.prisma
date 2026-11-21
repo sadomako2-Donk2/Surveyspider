@@ -37,6 +37,8 @@ model User {
   fieldworkRequests  FieldworkRequest[]
   insightActions     InsightAction[]
   participantProfile ParticipantProfile?
+  sessions           Session[]
+  authTokens         AuthToken[]
 }
 
 model Organisation {
@@ -417,4 +419,44 @@ model AuditEvent {
   @@index([entityType, entityId])
   @@index([actorId])
   @@index([createdAt])
+}
+
+// ---------- sign-in ----------
+
+// A signed-in browser. The cookie holds a random token; only its SHA-256 hash is stored here.
+model Session {
+  id         String   @id // sha256(token), hex
+  userId     String
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime
+  lastSeenAt DateTime @default(now())
+  userAgent  String   @default("")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+enum TokenPurpose {
+  VERIFY_EMAIL
+  RESET_PASSWORD
+}
+
+// One-time links sent by email. Only the SHA-256 hash of the token is stored.
+model AuthToken {
+  id        String       @id // sha256(token), hex
+  userId    String
+  purpose   TokenPurpose
+  createdAt DateTime     @default(now())
+  expiresAt DateTime
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, purpose])
+}
+
+// Fixed-window rate limits (sign-in attempts, emails sent, ...), shared by every server process.
+model RateLimitBucket {
+  key     String   @id
+  count   Int
+  resetAt DateTime
 }

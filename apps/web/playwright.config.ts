@@ -18,7 +18,7 @@ export default defineConfig({
   webServer: {
     command: `npm run start -- -p ${port}`,
     url: `http://127.0.0.1:${port}`,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false, // the server must use the throwaway database and fake email set up by scripts/e2e.ts
     timeout: 120_000,
   },
 });

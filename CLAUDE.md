@@ -30,6 +30,7 @@ Phase 2 (`cd apps/web`):
 - `npm run dev` — development server on port 3000.
 - `npm run lint`, `npm run typecheck`, `npm run format:check`, `npm test` (Vitest), `npm run build`, `npm run test:e2e` (Playwright; set `PW_CHROMIUM_PATH` to use an existing Chromium).
 - Database: copy `.env.example` to `.env`. `npm run db:migrate` (create/apply migrations in development), `npm run db:seed`, `npm run db:studio`, `npm run test:db` (runs in a throwaway database; needs a role with CREATEDB).
+- Auth lives in `src/server/auth/` (handlers are plain `Request → Response` functions, tested directly in `tests/db/auth.test.ts`). `npm run test:e2e` builds nothing: run `npm run build` first; it starts the app with a throwaway database and a fake email server.
 - Never run `prisma migrate reset` or `db push` against a shared or production database. Production uses `npm run db:deploy` only.
 - Rules that Prisma can't express (partial unique index, triggers, CHECKs) live in the SQL of the migration files; add new ones the same way and test them in `tests/db/`.
 - CI (`.github/workflows/ci.yml`) runs all of these plus the Phase 1 tests on every push to `main` or `phase-2` and on pull requests.

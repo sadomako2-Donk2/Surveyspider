@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { SITE } from "@/lib/site";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SITE, legalLine } from "@/lib/site";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -12,7 +13,17 @@ export const viewport: Viewport = { width: "device-width", initialScale: 1, view
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <SiteHeader />
+        {children}
+        <footer className="wrap foot">
+          <b>{SITE.name}</b> · Centre for Research Methods and Analytics
+          <br />
+          <span className="hint">
+            {SITE.tagline}. {legalLine()}
+          </span>
+        </footer>
+      </body>
     </html>
   );
 }
