@@ -488,6 +488,20 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
 @media (prefers-reduced-motion: no-preference) { .btn, .opt, .tpl { transition: border-color .15s, background-color .15s; } }
 /* photos on the public pages (illustrative images) */
 .hero-solo { grid-template-columns: minmax(0, 1fr); max-width: 860px; }
+/* home page slideshow */
+.slideshow { position: relative; border-radius: 18px; overflow: hidden; background: var(--navy-band); border-bottom: 3px solid var(--gold); aspect-ratio: 21 / 8; }
+.slides { display: flex; height: 100%; transition: transform .8s ease; }
+.slide { flex: 0 0 100%; height: 100%; }
+.slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.slide-ctl { position: absolute; left: 50%; transform: translateX(-50%); bottom: 12px; display: flex; align-items: center; gap: 2px; background: rgba(14,29,58,.7); border-radius: 999px; padding: 3px 8px 3px 3px; width: max-content; }
+.slide-ctl button { border: 0; cursor: pointer; }
+.slide-dot { width: 26px; height: 26px; border-radius: 50%; background: transparent; display: grid; place-items: center; padding: 0; }
+.slide-dot::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.6); }
+.slide-dot[aria-current="true"]::before { background: var(--gold-hi); width: 12px; height: 12px; }
+.slide-play { background: rgba(255,255,255,.14); color: #fff; border-radius: 999px; padding: 5px 12px; font: 600 .8rem var(--font-body); margin-right: 6px; }
+.slide-ctl button:focus-visible { outline: 3px solid var(--gold-hi); outline-offset: 2px; }
+@media (max-width: 700px) { .slideshow { aspect-ratio: 4 / 3; } }
+@media (prefers-reduced-motion: reduce) { .slides { transition: none; } }
 .photo { margin: 0; display: grid; gap: 6px; }
 .photo-frame { position: relative; aspect-ratio: 21 / 8; border-radius: 18px; overflow: hidden; background: var(--navy-band); border-bottom: 3px solid var(--gold); }
 .photo-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -2712,6 +2726,22 @@ ${richSummary(st, rows)}`;
     analytics: ["analytics.webp", "Three analysts look at a laptop together, with a dashboard of charts on the wall behind them", "center 8%"],
   };
   const photo = (k) => { const [f, alt, pos] = PHOTO[k]; return `<figure class="photo"><div class="photo-frame"><img src="/photos/${f}" alt="${esc(alt)}" loading="lazy" decoding="async" style="object-position:${pos}"></div></figure>`; };
+  // Home page slideshow: starts with the first photo and moves on every 5 seconds. Visitors can pause it
+  // (needed for accessibility); it starts paused for people who ask their device to reduce motion.
+  const SLIDES = ["home", "training", "academy", "surveys", "analytics", "consultancy", "about"];
+  let slideIdx = 0, slidePaused = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+  const slideshow = () => `<section class="slideshow" aria-roledescription="carousel" aria-label="Photos">
+    <div class="slides" style="transform:translateX(-${slideIdx * 100}%)">${SLIDES.map((k, i) => { const [f, alt, pos] = PHOTO[k]; return `<div class="slide" role="group" aria-roledescription="slide" aria-label="${i + 1} of ${SLIDES.length}"${i === slideIdx ? "" : ' aria-hidden="true"'}><img src="/photos/${f}" alt="${esc(alt)}" style="object-position:${pos}"${i ? ' fetchpriority="low"' : ""}></div>`; }).join("")}</div>
+    <div class="slide-ctl"><button class="slide-play" data-act="slidePause" aria-pressed="${slidePaused}">${slidePaused ? "Play" : "Pause"}</button>${SLIDES.map((_, i) => `<button class="slide-dot" data-act="slideGo" data-i="${i}" aria-label="Show photo ${i + 1}"${i === slideIdx ? ' aria-current="true"' : ""}></button>`).join("")}</div>
+  </section>`;
+  function showSlide(i) {
+    slideIdx = (i + SLIDES.length) % SLIDES.length;
+    const box = document.querySelector(".slideshow"); if (!box) return;
+    box.querySelector(".slides").style.transform = `translateX(-${slideIdx * 100}%)`;
+    box.querySelectorAll(".slide").forEach((s, j) => (j === slideIdx ? s.removeAttribute("aria-hidden") : s.setAttribute("aria-hidden", "true")));
+    box.querySelectorAll(".slide-dot").forEach((d, j) => (j === slideIdx ? d.setAttribute("aria-current", "true") : d.removeAttribute("aria-current")));
+  }
+  setInterval(() => { if (!slidePaused && !document.hidden) showSlide(slideIdx + 1); }, 5000);
   const UNITS = [
     { key: "training", brand: "Afrimetrica Academy", title: "Research methods training", text: "Short courses, institutional workshops and online learning in research design, survey methods, data analysis and evaluation.", points: ["Practical, hands-on sessions", "In-house workshops for your team", "Certificates of completion"], cta: "Explore courses" },
     { key: "surveys", brand: "Afrimetrica Surveys", title: "Survey tools", text: "Build questionnaires, collect responses online or face to face, and analyse them with built-in statistics and AI.", points: ["Word, PDF and Excel upload", "Paid participant panel", "Analysis and Excel reports"], cta: "Start a survey" },
@@ -2807,7 +2837,7 @@ ${richSummary(st, rows)}`;
         <div class="hero-ctas"><a class="btn gold big" href="#training">Explore courses</a><a class="btn primary big" href="#surveys">Start a survey</a><a class="btn big" href="#consultancy">Talk to a consultant</a></div>
       </div>
     </section>
-    ${photo("home")}
+    ${slideshow()}
     <section class="stack">
       <div class="section-head"><span class="eyebrow gold">What we do</span><h2 class="h2xl">One centre, four ways to strengthen your research</h2></div>
       <div class="units">${UNITS.map((u) => `<article class="card unit"><span class="eyebrow gold">${esc(u.brand)}</span><h3>${esc(u.title)}</h3><p class="muted">${esc(u.text)}</p><ul class="ticks small">${u.points.map((x) => `<li><div><span>${esc(x)}</span></div></li>`).join("")}</ul><a class="btn" href="#${u.key}" style="align-self:flex-start">${esc(u.cta)}</a></article>`).join("")}</div>
@@ -3180,6 +3210,8 @@ ${richSummary(st, rows)}`;
     switch (act) {
       case "tpl": S.draft = draftFromTemplate(b.dataset.key); S.aiCheck = null; S.importNote = null; saveDraftLocal(); if (S.view !== "create") go("create"); else { render(); window.scrollTo(0, 0); } break;
       case "billing": S.billing = b.dataset.v; render(); break;
+      case "slideGo": showSlide(+b.dataset.i); break;
+      case "slidePause": slidePaused = !slidePaused; b.textContent = slidePaused ? "Play" : "Pause"; b.setAttribute("aria-pressed", String(slidePaused)); break;
       case "plan": toast(b.dataset.id === "free" ? "You're on the Free plan. Every feature is unlocked in this prototype." : "Payments aren't connected yet, so every feature is unlocked in this prototype."); go("create"); break;
       case "genAI": generateSurvey(($("#genGoal").value || "").trim(), ($("#genAud").value || "").trim(), +$("#genN").value || 10); break;
       case "aiCheck": runAiCheck(); break;
