@@ -60,4 +60,8 @@
 | 2026-11 | `uuid` pinned to 11.1.1 via npm overrides | Clears a moderate advisory in an ExcelJS dependency |
 | 2026-11 | The pdf.js worker is copied into `public/` on install (not committed) | pdf.js reads PDFs in a separate worker that the site must serve; it stays in step with the installed version |
 | 2026-11 | AI features (drafting, question checker, AI file reading) and Paper Survey quotes are not yet in Phase 2 | Step 7 covers the survey core; they move with the Analyze rebuild (step 8) or as their own step |
+| 2026-11 | The statistics library lives in `apps/web/src/lib/stats` with a parity test against Phase 1 | Turbopack builds only files inside `apps/web`; the parity test proves the port changed no maths |
+| 2026-11 | Owner-only access to answers is part of the analysis database query, not a check after loading | Blueprint: administrators can't automatically read answers; a bug elsewhere can't leak them |
+| 2026-11 | Across versions, answers count together only for questions that are identical in wording, type, options and scale | Changed questions aren't mixed with old answers; nothing is guessed |
+| 2026-11 | Groups under 3 people are left out of every breakdown, comparison and test and only counted as "hidden" | Same rule as Phase 1; protects participants' anonymity |
 
