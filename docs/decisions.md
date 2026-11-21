@@ -33,4 +33,11 @@
 | 2026-11 | Small gold text uses a deeper gold (`--gold-ink` #85601a) | The original gold fails WCAG AA contrast for small text; headings keep the bright gold |
 | 2026-11 | System fonts instead of Google Fonts for now | No third-party requests and works offline in CI; Montserrat/Inter can be self-hosted later |
 | 2026-11 | Open data links focus on Ghana and Africa (Ghana Statistical Service, DHS, Afrobarometer) | More relevant to Afrimetrica's audience than Data.gov and Statista |
+| 2026-11 | Seat limits enforced with a row lock on the course date | Two people booking the last seat at the same moment can't both get it (tested with 6 at once) |
+| 2026-11 | Course addresses (`/training/<slug>`) are fixed when a course is created | Renaming a course doesn't break links people have shared |
+| 2026-11 | Dates with registrations can't be removed, and seats can't go below the number booked | Prevents silently dropping people's places |
+| 2026-11 | Courses with registrations are archived, not deleted | Keeps registration history for invoices and certificates |
+| 2026-11 | Unknown currencies are rejected (Phase 1 silently used USD) | Avoids publishing a wrong fee |
+| 2026-11 | CSV cells starting with = + - @ are prefixed with ' | Stops spreadsheet formula injection from names or notes typed by the public |
+| 2026-11 | People can cancel their own Registered/Interest places; Confirmed and later statuses only by Afrimetrica | A confirmed place may involve payment or invoicing |
 

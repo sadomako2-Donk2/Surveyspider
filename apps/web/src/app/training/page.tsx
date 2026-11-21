@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
+import { CourseCard } from "@/components/academy/CourseCard";
 import { EnquirySlot, PageHead, Ticks } from "@/components/site/blocks";
 import courseTemplates from "@/content/course-templates.json";
+import { getDb } from "@/lib/db";
+import { listPublishedCourses } from "@/server/academy/service";
+import { courseCardView } from "@/server/academy/view";
 
 export const metadata: Metadata = {
   title: "Training",
@@ -8,8 +12,19 @@ export const metadata: Metadata = {
     "Afrimetrica Academy: practical courses in research design, surveys, sampling, data analysis, qualitative methods, monitoring and evaluation, and research ethics.",
   alternates: { canonical: "/training" },
 };
+export const dynamic = "force-dynamic"; // dates and seats change as people register
 
-export default function Training() {
+async function courses() {
+  try {
+    return (await listPublishedCourses(getDb())).map(courseCardView);
+  } catch (e) {
+    console.error("Couldn't load courses:", e instanceof Error ? e.message : e);
+    return null;
+  }
+}
+
+export default async function Training() {
+  const list = await courses();
   return (
     <main id="main" className="wrap stack xl">
       <PageHead eyebrow="Afrimetrica Academy" title="Research methods training">
@@ -17,36 +32,49 @@ export default function Training() {
         evaluation. Public short courses, online learning and in-house workshops for your organisation.
       </PageHead>
 
-      {/* Step 5 replaces this list with the live course catalogue (dates, fees, seats and registration). */}
-      <section className="stack">
-        <div className="section-head">
-          <h2 className="h2xl">Topics we teach</h2>
-          <p className="muted">
-            Our course schedule is being finalised. Register your interest and we&apos;ll contact you when dates are
-            announced.
-          </p>
-        </div>
-        <div className="course-grid">
-          {courseTemplates.map((c) => (
-            <article key={c.title} className="card course">
-              <div className="pills">
-                {[c.level, c.format, c.duration].map((x) => (
-                  <span key={x} className="pill">
-                    {x}
-                  </span>
-                ))}
-              </div>
-              <h3>{c.title}</h3>
-              <p className="muted">{c.summary}</p>
-            </article>
-          ))}
-        </div>
-      </section>
+      {list && list.length ? (
+        <section className="stack" aria-labelledby="courses-h">
+          <h2 id="courses-h" className="h2xl">
+            Courses
+          </h2>
+          <div className="course-grid">
+            {list.map((c) => (
+              <CourseCard key={c.id} c={c} />
+            ))}
+          </div>
+        </section>
+      ) : (
+        <section className="stack">
+          <div className="section-head">
+            <h2 className="h2xl">Topics we teach</h2>
+            <p className="muted">
+              {list === null
+                ? "Course dates can't be shown right now. Please try again shortly."
+                : "Our course schedule is being finalised. Register your interest and we'll contact you when dates are announced."}
+            </p>
+          </div>
+          <div className="course-grid">
+            {courseTemplates.map((c) => (
+              <article key={c.title} className="card course">
+                <div className="pills">
+                  {[c.level, c.format, c.duration].map((x) => (
+                    <span key={x} className="pill">
+                      {x}
+                    </span>
+                  ))}
+                </div>
+                <h3>{c.title}</h3>
+                <p className="muted">{c.summary}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
 
       <div className="split">
         <EnquirySlot
           phase1Anchor="training"
-          title="Register interest or book in-house training"
+          title="Training for your organisation"
           intro="Tell us what you'd like to learn, how many people would attend and where. We run public courses and tailored in-house workshops."
         />
         <section className="card">

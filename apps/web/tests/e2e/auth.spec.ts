@@ -1,20 +1,6 @@
+import { linkFromEmail } from "./support/mail";
 import { expect, test, type Page } from "@playwright/test";
 
-interface Mail {
-  to: string[];
-  subject: string;
-  text: string;
-}
-async function linkFromEmail(to: string, subject: RegExp, path: string): Promise<string> {
-  for (let i = 0; i < 50; i++) {
-    const mails = (await (await fetch(process.env.FAKE_MAIL_URL!)).json()) as Mail[];
-    const m = mails.reverse().find((x) => x.to[0] === to && subject.test(x.subject));
-    const link = m?.text.match(/https?:\/\/\S+/)?.[0];
-    if (link && new URL(link).pathname === path) return link;
-    await new Promise((r) => setTimeout(r, 100));
-  }
-  throw new Error(`No ${subject} email for ${to}`);
-}
 const noOverflow = (page: Page) => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1);
 
 test("sign up, confirm email, sign out, sign in, reset password", async ({ page }, info) => {
@@ -25,6 +11,7 @@ test("sign up, confirm email, sign out, sign in, reset password", async ({ page 
   await page.goto("/account");
   await expect(page).toHaveURL(/\/signin\?next=%2Faccount|\/signin\?next=\/account/);
   await page.getByRole("link", { name: "Create a free account" }).click();
+  await page.waitForURL(/\/signup/);
   await page.getByLabel("Your name").fill("Ama Mensah");
   await page.getByLabel("Email").fill(email);
   await page.getByLabel("Password").fill("short");

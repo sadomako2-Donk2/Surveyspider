@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CourseCard } from "@/components/academy/CourseCard";
 import { Band, Ticks } from "@/components/site/blocks";
 import { GUIDES, UNITS } from "@/content/pages";
 import { SITE } from "@/lib/site";
+import { getDb } from "@/lib/db";
 import { siteUrl } from "@/lib/url";
+import { listPublishedCourses } from "@/server/academy/service";
+import { courseCardView } from "@/server/academy/view";
 
 export const metadata: Metadata = {
   title: { absolute: `${SITE.name} — Centre for Research Methods and Analytics` },
@@ -12,7 +16,22 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
-export default function Home() {
+// The page is cached and refreshed every 5 minutes, so the home page stays fast and works even if the database is busy.
+export const revalidate = 300;
+
+async function upcomingCourses() {
+  try {
+    return (await listPublishedCourses(getDb()))
+      .map(courseCardView)
+      .filter((c) => c.next)
+      .slice(0, 3);
+  } catch {
+    return []; // e.g. no database while building; the page refreshes itself later
+  }
+}
+
+export default async function Home() {
+  const upcoming = await upcomingCourses();
   const org = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -82,6 +101,27 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {upcoming.length > 0 && (
+        <section className="stack" aria-labelledby="upcoming-h">
+          <div className="row-between">
+            <div className="section-head">
+              <span className="eyebrow">Afrimetrica Academy</span>
+              <h2 id="upcoming-h" className="h2xl">
+                Upcoming courses
+              </h2>
+            </div>
+            <Link className="btn" href="/training">
+              All courses
+            </Link>
+          </div>
+          <div className="course-grid">
+            {upcoming.map((c) => (
+              <CourseCard key={c.id} c={c} />
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="split">
         <div className="stack">

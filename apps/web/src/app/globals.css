@@ -814,3 +814,220 @@ td.n {
     display: none;
   }
 }
+
+/* ---------- Academy (step 5) ---------- */
+.course {
+  position: relative;
+  gap: 10px;
+}
+.course h3 a.stretched {
+  color: inherit;
+  text-decoration: none;
+}
+.course h3 a.stretched::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+}
+.course:hover {
+  border-color: var(--gold);
+}
+.course-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.88rem;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  margin-top: auto;
+}
+.course-meta span:last-child {
+  color: var(--muted);
+}
+.detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 960px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.ses-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.ses {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.ses > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.reg-form {
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+.btn.small {
+  padding: 6px 10px;
+  font-size: 0.84rem;
+}
+.btn.danger {
+  color: var(--bad);
+}
+.pill.live {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: transparent;
+}
+.ctas.tight {
+  margin-top: 0;
+  gap: 8px;
+  align-items: center;
+}
+.row-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+label.inline {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink);
+}
+label.inline select {
+  width: auto;
+}
+label.inline input[type="checkbox"] {
+  width: auto;
+}
+label.inline.end {
+  align-self: end;
+  padding-bottom: 10px;
+}
+table.wide {
+  max-width: none;
+}
+td {
+  vertical-align: top;
+}
+.status-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+}
+.subtabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+}
+.subtabs a {
+  padding: 8px 12px;
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+}
+.subtabs a[aria-current="page"] {
+  color: var(--ink);
+  border-bottom-color: var(--gold);
+}
+.ses-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ses-row {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr)) auto;
+  gap: 10px;
+  align-items: end;
+}
+.ses-row legend {
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0 6px;
+}
+@media (max-width: 960px) {
+  .ses-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+label.inline {
+  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
+}
+label.inline select {
+  max-width: 100%;
+  min-width: 0;
+}
+/* On phones, tables marked .stack-table become one card per row, with each cell labelled. */
+@media (max-width: 640px) {
+  .stack-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+  .stack-table,
+  .stack-table tbody,
+  .stack-table tr,
+  .stack-table td {
+    display: block;
+    width: 100%;
+  }
+  .stack-table tr {
+    border-bottom: 1px solid var(--line);
+    padding: 10px 0;
+  }
+  .stack-table td {
+    border: 0;
+    padding: 4px 0;
+  }
+  .stack-table td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+}
+@media (max-width: 640px) {
+  .stack-table td:empty {
+    display: none;
+  }
+}

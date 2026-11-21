@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import Link from "next/link";
+import { CancelRegistration } from "@/components/academy/EnrollmentControls";
 import { ResendVerification, SignOutButton } from "@/components/auth/AccountActions";
+import { ENROLLMENT_LABEL, formatDates } from "@/lib/academy";
 import { getDb } from "@/lib/db";
 import { getCurrentUser } from "@/server/current-user";
 import { meResponse } from "@/server/auth/users";
@@ -14,7 +17,13 @@ export default async function Account({ searchParams }: { searchParams: Promise<
   const user = await getCurrentUser();
   if (!user) redirect("/signin?next=/account");
   const q = await searchParams;
-  const me = await meResponse(getDb(), user);
+  const db = getDb();
+  const me = await meResponse(db, user);
+  const enrollments = await db.enrollment.findMany({
+    where: { userId: user.id },
+    include: { course: { select: { title: true, slug: true, status: true } }, session: true },
+    orderBy: { createdAt: "desc" },
+  });
   const u = me.user!;
   const first = u.name.trim().split(/\s+/)[0];
   return (
@@ -63,9 +72,64 @@ export default async function Account({ searchParams }: { searchParams: Promise<
           {me.isSiteAdmin && <p className="hint">You&apos;re an Afrimetrica site administrator.</p>}
         </section>
       </div>
-      <p className="hint">
-        Your courses, surveys and enquiries will appear here as those parts of the new site are built.
-      </p>
+      <section className="card">
+        <div className="row-between">
+          <h2>My courses</h2>
+          <Link className="btn small" href="/training">
+            Browse courses
+          </Link>
+        </div>
+        {enrollments.length ? (
+          <div className="table-wrap">
+            <table className="wide stack-table">
+              <thead>
+                <tr>
+                  <th scope="col">Course</th>
+                  <th scope="col">Dates</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">
+                    <span className="sr-only">Actions</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {enrollments.map((e) => (
+                  <tr key={e.id}>
+                    <td data-label="Course">
+                      {e.course.status === "PUBLISHED" ? (
+                        <Link href={`/training/${e.course.slug}`}>{e.course.title}</Link>
+                      ) : (
+                        e.course.title
+                      )}
+                    </td>
+                    <td data-label="Dates">
+                      {e.session ? formatDates(e.session.startsOn, e.session.endsOn) : "Dates to be announced"}
+                    </td>
+                    <td data-label="Status">
+                      <span className={`pill${e.status === "CONFIRMED" || e.status === "COMPLETED" ? " live" : ""}`}>
+                        {ENROLLMENT_LABEL[e.status]}
+                      </span>
+                    </td>
+                    <td>
+                      {(e.status === "REGISTERED" || e.status === "INTEREST") && <CancelRegistration id={e.id} />}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="muted">You haven&apos;t registered for a course yet.</p>
+        )}
+      </section>
+      {me.isSiteAdmin && (
+        <p>
+          <Link className="btn gold" href="/admin">
+            Open the admin area
+          </Link>
+        </p>
+      )}
+      <p className="hint">Your surveys and enquiries will appear here as those parts of the new site are built.</p>
     </main>
   );
 }

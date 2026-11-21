@@ -21,3 +21,11 @@
 
 ## Afrimetrica Surveys
 - Unchanged from the earlier platform: builder with many question types and scales, Word/PDF/Excel upload, AI drafting and checking, participant panel with rewards, Analyze workspace, Excel exports, Paper Survey quotes in USD.
+
+## Phase 2 Academy (step 5)
+- Visitors: `/training` lists published courses with the next date, fee and seats left; `/training/<course>` shows the full description, outcomes, audience and every date.
+- Registration needs a signed-in account with a confirmed email (when email is switched on) and a phone number for dated sessions. Name and email come from the account.
+- Past and full dates can't be booked. "Register interest" works with or without dates.
+- My Account lists the person's registrations with status; Registered and Interest can be cancelled there.
+- Administrators (`/admin`): create courses from 8 templates or blank, edit, publish, archive or delete (only without registrations); add dates with venue, seats and fee in USD, GHS, GBP or EUR; see and filter registrations, set status, download CSV.
+- Every administrator action is written to the audit log; administrators (and ADMIN_EMAILS) are emailed for each registration.
