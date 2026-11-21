@@ -37,5 +37,5 @@ Source of truth: `apps/web/prisma/schema.prisma` and `apps/web/prisma/migrations
 
 ### Conventions
 - Money is an integer in minor units (cents, pesewas, pence) plus a currency.
-- Phase 1 ids are kept in `legacyId` for the step-9 import.
+- Phase 1 ids are kept in `legacyId` for the step-9 import (`docs/migration.md`). Course dates use `<course id>/<session id>`, because Phase 1 session ids were only unique within a course.
 - Answers are JSON: a string, a number or a list of strings, depending on the question type.

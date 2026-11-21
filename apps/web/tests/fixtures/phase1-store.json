@@ -1,0 +1,487 @@
+{
+  "studies": {
+    "s_live1": {
+      "id": "s_live1",
+      "title": "Course feedback",
+      "description": "Tell us about the course. Answers are anonymous.",
+      "minutes": 5,
+      "reward": 1.25,
+      "target": 100,
+      "attention": true,
+      "screen": { "minAge": 18, "maxAge": 99, "countries": [], "occupations": [] },
+      "questions": [
+        {
+          "id": "q_useful",
+          "type": "likert",
+          "text": "The course was useful.",
+          "options": ["Strongly disagree", "Disagree", "Neither agree nor disagree", "Agree", "Strongly agree"],
+          "required": true
+        },
+        {
+          "id": "q_nps",
+          "type": "rating",
+          "text": "How likely are you to recommend it?",
+          "options": [],
+          "required": true,
+          "scale": { "min": 0, "max": 10, "minLabel": "Not likely", "maxLabel": "Very likely" }
+        },
+        {
+          "id": "q_mode",
+          "type": "single",
+          "text": "How did you attend?",
+          "options": ["In person", "Online"],
+          "required": true
+        },
+        {
+          "id": "q_liked",
+          "type": "multi",
+          "text": "What did you like?",
+          "options": ["Trainer", "Materials", "Venue"],
+          "required": false
+        },
+        { "id": "q_years", "type": "number", "text": "Years of experience", "options": [], "required": false },
+        { "id": "q_more", "type": "text", "text": "What should we improve?", "options": [], "required": false }
+      ],
+      "status": "live",
+      "launchedAt": 1794860637122,
+      "library": { "headline": "Most people found the course useful", "publishedAt": 1795206237130 },
+      "aiReport": {
+        "headline": "Usefulness is high",
+        "summary": "Three of four found it useful.",
+        "generatedAt": 1795206237130,
+        "n": 3,
+        "findings": [{ "title": "Useful", "detail": "75% agreed." }],
+        "themes": [],
+        "recommendations": [{ "action": "Add examples", "why": "Asked for twice.", "priority": "high" }],
+        "caveats": ["Small sample."]
+      },
+      "ownerId": "u_bba20c3ffb0522d9ce5d98e6",
+      "updatedAt": 1795292637131
+    },
+    "s_draft1": {
+      "id": "s_draft1",
+      "title": "Draft idea",
+      "description": "",
+      "minutes": 3,
+      "reward": 0,
+      "target": 50,
+      "attention": false,
+      "screen": { "minAge": 18, "maxAge": 99, "countries": ["Ghana"], "occupations": [] },
+      "questions": [
+        { "id": "q_d1", "type": "single", "text": "", "options": ["Option 1", "Option 2"], "required": true }
+      ],
+      "status": "draft",
+      "ownerId": "u_bba20c3ffb0522d9ce5d98e6",
+      "updatedAt": 1795292637133
+    },
+    "s_closed1": {
+      "id": "s_closed1",
+      "title": "Old pulse check",
+      "description": "",
+      "minutes": 2,
+      "reward": 0.5,
+      "target": 10,
+      "attention": false,
+      "screen": { "minAge": 18, "maxAge": 99, "countries": [], "occupations": [] },
+      "questions": [
+        {
+          "id": "q_c1",
+          "type": "rating",
+          "text": "How are you?",
+          "options": [],
+          "required": true,
+          "scale": { "min": 1, "max": 5, "minLabel": "Bad", "maxLabel": "Good" }
+        }
+      ],
+      "status": "closed",
+      "launchedAt": 1792700637133,
+      "ownerId": "u_bba20c3ffb0522d9ce5d98e6",
+      "updatedAt": 1795292637134
+    }
+  },
+  "responses": {
+    "s_live1-u_a3c4ed2aa68390aeaf0ab651": {
+      "studyId": "s_live1",
+      "answers": {
+        "q_useful": "Strongly agree",
+        "q_nps": 10,
+        "q_mode": "In person",
+        "q_liked": ["Trainer", "Materials"],
+        "q_years": 12,
+        "q_more": "More examples",
+        "q_gone": "x",
+        "attn": "Purple"
+      },
+      "passedAttention": true,
+      "speeder": false,
+      "durationSec": 200,
+      "demographics": { "age": 34, "gender": "Woman", "country": "Ghana", "occupation": "Employed full-time" },
+      "id": "s_live1-u_a3c4ed2aa68390aeaf0ab651",
+      "participantId": "u_a3c4ed2aa68390aeaf0ab651",
+      "ownerId": "u_bba20c3ffb0522d9ce5d98e6",
+      "reward": 1.25,
+      "status": "approved",
+      "test": false,
+      "createdAt": 1795292637124
+    },
+    "s_live1-u_ebe5216954002023449a102d": {
+      "studyId": "s_live1",
+      "answers": {
+        "q_useful": "Agree",
+        "q_nps": 9,
+        "q_mode": "In person",
+        "q_liked": ["Trainer"],
+        "q_years": 3,
+        "q_gone": "y",
+        "attn": "Purple"
+      },
+      "passedAttention": true,
+      "speeder": false,
+      "durationSec": 210,
+      "demographics": {
+        "age": 41,
+        "gender": "Man",
+        "country": "Ghana",
+        "occupation": "Self-employed / business owner"
+      },
+      "id": "s_live1-u_ebe5216954002023449a102d",
+      "participantId": "u_ebe5216954002023449a102d",
+      "ownerId": "u_bba20c3ffb0522d9ce5d98e6",
+      "reward": 1.25,
+      "status": "approved",
+      "test": false,
+      "createdAt": 1795292637126
+    },
+    "s_live1-u_7f6b8162122d6ca031602814": {
+      "studyId": "s_live1",
+      "answers": {
+        "q_useful": "Agree",
+        "q_nps": 8,
+        "q_mode": "Online",
+        "q_liked": [],
+        "q_more": "Longer breaks",
+        "attn": "Purple"
+      },
+      "passedAttention": true,
+      "speeder": false,
+      "durationSec": 220,
+      "demographics": { "age": 29, "gender": "Woman", "country": "Ghana", "occupation": "Student" },
+      "id": "s_live1-u_7f6b8162122d6ca031602814",
+      "participantId": "u_7f6b8162122d6ca031602814",
+      "ownerId": "u_bba20c3ffb0522d9ce5d98e6",
+      "reward": 1.25,
+      "status": "approved",
+      "test": false,
+      "createdAt": 1795292637127
+    },
+    "s_live1-u_5d7d47d15500c36737356cc5": {
+      "studyId": "s_live1",
+      "answers": {
+        "q_useful": "Disagree",
+        "q_nps": 3,
+        "q_mode": "Online",
+        "q_liked": ["Venue"],
+        "q_years": 30,
+        "q_more": "Too fast",
+        "attn": "Purple"
+      },
+      "passedAttention": false,
+      "speeder": false,
+      "durationSec": 230,
+      "demographics": { "age": 52, "gender": "Man", "country": "Kenya", "occupation": "Retired" },
+      "id": "s_live1-u_5d7d47d15500c36737356cc5",
+      "participantId": "u_5d7d47d15500c36737356cc5",
+      "ownerId": "u_bba20c3ffb0522d9ce5d98e6",
+      "reward": 1.25,
+      "status": "rejected",
+      "test": false,
+      "createdAt": 1795292637128
+    },
+    "s_live1-u_bba20c3ffb0522d9ce5d98e6": {
+      "studyId": "s_live1",
+      "answers": { "q_useful": "Agree" },
+      "passedAttention": true,
+      "speeder": false,
+      "durationSec": 100,
+      "demographics": null,
+      "id": "s_live1-u_bba20c3ffb0522d9ce5d98e6",
+      "participantId": "u_bba20c3ffb0522d9ce5d98e6",
+      "ownerId": "u_bba20c3ffb0522d9ce5d98e6",
+      "reward": 1.25,
+      "status": "approved",
+      "test": true,
+      "createdAt": 1795292637129
+    }
+  },
+  "actions": {
+    "a_1": {
+      "studyId": "s_live1",
+      "title": "Add more worked examples",
+      "why": "Requested in comments",
+      "assignee": "Kofi",
+      "due": "2026-12-15",
+      "priority": "high",
+      "status": "planned",
+      "metricQ": "q_useful",
+      "baseline": { "value": 75, "at": 1795292637131 },
+      "target": 85,
+      "followId": "",
+      "createdAt": 1795292637131,
+      "id": "a_1",
+      "ownerId": "u_bba20c3ffb0522d9ce5d98e6",
+      "updatedAt": 1795292637132
+    }
+  },
+  "profiles": {
+    "u_a3c4ed2aa68390aeaf0ab651": {
+      "age": 34,
+      "gender": "Woman",
+      "country": "Ghana",
+      "occupation": "Employed full-time",
+      "updatedAt": 1795292636970
+    },
+    "u_ebe5216954002023449a102d": {
+      "age": 41,
+      "gender": "Man",
+      "country": "Ghana",
+      "occupation": "Self-employed / business owner",
+      "updatedAt": 1795292637024
+    },
+    "u_7f6b8162122d6ca031602814": {
+      "age": 29,
+      "gender": "Woman",
+      "country": "Ghana",
+      "occupation": "Student",
+      "updatedAt": 1795292637075
+    },
+    "u_5d7d47d15500c36737356cc5": {
+      "age": 52,
+      "gender": "Man",
+      "country": "Kenya",
+      "occupation": "Retired",
+      "updatedAt": 1795292637122
+    }
+  },
+  "fieldwork": {
+    "f_1": {
+      "id": "f_1",
+      "ref": "Q-AB12CD",
+      "requesterId": "c_a499c9ca9049f75e95419044",
+      "status": "quoted",
+      "createdAt": 1795292637145,
+      "contact": {
+        "name": "Clinic Lead",
+        "org": "Example Clinic",
+        "email": "clinic@example.org",
+        "phone": "",
+        "start": "2027-01-10",
+        "notes": "Two regions"
+      },
+      "inputs": { "method": "f2f", "sample": 400, "minutes": 20 },
+      "survey": { "title": "Patient survey", "questions": 18 },
+      "quote": { "total": 5321.4, "lines": [] }
+    }
+  },
+  "users": {
+    "u_bba20c3ffb0522d9ce5d98e6": {
+      "id": "u_bba20c3ffb0522d9ce5d98e6",
+      "email": "owner@example.com",
+      "name": "Abena Owner",
+      "salt": "17025f8b89dde8551310b2b11d9d0481",
+      "passHash": "b7c585172cd758d60a8616e0a96bd3acef2f078ff16bc71eba62576c9e3e752626729bfdb25dc0c9e1244f93f4930c33f6b8e3aed848c5e29c8a3f89475dba08",
+      "createdAt": 1795292636842,
+      "emailVerified": true,
+      "lastLogin": 1795292636842
+    },
+    "u_a51be3daa777f4bc72b10079": {
+      "id": "u_a51be3daa777f4bc72b10079",
+      "email": "boss@example.com",
+      "name": "Site Boss",
+      "salt": "6ddc296403c04ef20a277b99e9af88cb",
+      "passHash": "449a495d0a908610f33eb11976508660c2392ce7ac40d279e0ed60c37e74b86b7f377a7dc0e4ebd58354c200dd46fb8568b9b74e8be875c75f1529e7f063d303",
+      "createdAt": 1795292636899,
+      "emailVerified": true,
+      "lastLogin": 1795292636899
+    },
+    "u_a3c4ed2aa68390aeaf0ab651": {
+      "id": "u_a3c4ed2aa68390aeaf0ab651",
+      "email": "participant1@example.com",
+      "name": "Participant 1",
+      "salt": "966ef1d570fb3f42bcad65ff95b16982",
+      "passHash": "316a71983a78611104572ee80c38a1b7158573c4cebbfd59cb542bd8d87b1b8ca4afbe0eb453544a4d7479ed9d818be8cfd9782ca62dc80e0b9837f003109053",
+      "createdAt": 1795292636965,
+      "emailVerified": true,
+      "lastLogin": 1795292636965
+    },
+    "u_ebe5216954002023449a102d": {
+      "id": "u_ebe5216954002023449a102d",
+      "email": "participant2@example.com",
+      "name": "Participant 2",
+      "salt": "d02253b261ad07d2e7931552a003bcf7",
+      "passHash": "5bb0a3c0a11bc3d2242efbb47e1f1a803a9a6f9cd605d5ca324dd795c20cadc2bc4e85f9f8f5e15773ec0b6d0ec2d54b1191188f3ffc0e1228218ab35cebd574",
+      "createdAt": 1795292637019,
+      "emailVerified": true,
+      "lastLogin": 1795292637019
+    },
+    "u_7f6b8162122d6ca031602814": {
+      "id": "u_7f6b8162122d6ca031602814",
+      "email": "participant3@example.com",
+      "name": "Participant 3",
+      "salt": "7f965be9f5572501b0bce06a860b8a61",
+      "passHash": "8c0e43e38c754f80fbbd7a63f9add0b39846068ba68b742ef0e7046f7dc525c99e8c4a3dd2198f90efcb2a580c9c35cd53a853794f5d15ed753ecc1a8a2daf05",
+      "createdAt": 1795292637072,
+      "emailVerified": true,
+      "lastLogin": 1795292637072
+    },
+    "u_5d7d47d15500c36737356cc5": {
+      "id": "u_5d7d47d15500c36737356cc5",
+      "email": "participant4@example.com",
+      "name": "Participant 4",
+      "salt": "553c8bc801a62fb2c6f03e4c9243e91c",
+      "passHash": "43a496125ab1412897a40b690aa960999463befa4eff47a501394663894ffff97c8079f3a2bed53b3b8699074d48b6637af3345e1ec6f4b9c178fb32ad752a4e",
+      "createdAt": 1795292637119,
+      "emailVerified": true,
+      "lastLogin": 1795292637119
+    }
+  },
+  "sessions": {
+    "29f38f2df4922078a8de1040eb77f6aeeb468395c9c66bbf8762d9471610c244": {
+      "userId": "u_bba20c3ffb0522d9ce5d98e6",
+      "createdAt": 1795292636842,
+      "expires": 1797884636842
+    },
+    "743e0d2ba8dbe4a0a3aa239891584df9bea70fd204bca7e213a48db2cdbf881b": {
+      "userId": "u_a51be3daa777f4bc72b10079",
+      "createdAt": 1795292636899,
+      "expires": 1797884636899
+    },
+    "b0afd2fc1818dd13573b1b16a9d79fdc0e5a6ba88dee9624319c87e4aeddd78b": {
+      "userId": "u_a3c4ed2aa68390aeaf0ab651",
+      "createdAt": 1795292636965,
+      "expires": 1797884636965
+    },
+    "2d4ad99f17ae3b60e40894822b6b6eb0f07aa510667fcb4b6da9f92078c7c635": {
+      "userId": "u_ebe5216954002023449a102d",
+      "createdAt": 1795292637019,
+      "expires": 1797884637019
+    },
+    "fcc507a975fcd0c542c38b2cd2ca388aa9a9894dc15c850aaca3ad2e2416449e": {
+      "userId": "u_7f6b8162122d6ca031602814",
+      "createdAt": 1795292637072,
+      "expires": 1797884637072
+    },
+    "06fa6cb3b490f527ed08b4aa932a6b31bcf0e46d46aa8b8332be2c39e82f0c8e": {
+      "userId": "u_5d7d47d15500c36737356cc5",
+      "createdAt": 1795292637119,
+      "expires": 1797884637119
+    }
+  },
+  "resets": {},
+  "verifies": {},
+  "courses": {
+    "c_stats": {
+      "id": "c_stats",
+      "title": "Applied Statistics with R",
+      "status": "published",
+      "level": "Intermediate",
+      "format": "In person",
+      "duration": "3 days",
+      "summary": "Hands-on statistics.",
+      "description": "Regression and more.",
+      "audience": "Analysts",
+      "outcomes": ["Fit regression models"],
+      "certificate": true,
+      "sessions": [
+        {
+          "id": "ss_a",
+          "start": "2026-12-01",
+          "end": "2026-12-03",
+          "location": "Accra",
+          "seats": 20,
+          "fee": 450,
+          "currency": "GHS"
+        }
+      ],
+      "createdAt": 1795292637135,
+      "updatedAt": 1795292637135
+    },
+    "c_draft": {
+      "id": "c_draft",
+      "title": "Survey Design",
+      "status": "draft",
+      "level": "",
+      "format": "",
+      "duration": "",
+      "summary": "",
+      "description": "",
+      "audience": "",
+      "outcomes": [],
+      "certificate": false,
+      "sessions": [],
+      "createdAt": 1795292637136,
+      "updatedAt": 1795292637136
+    }
+  },
+  "enrollments": {
+    "e_1": {
+      "id": "e_1",
+      "userId": "u_a3c4ed2aa68390aeaf0ab651",
+      "courseId": "c_stats",
+      "sessionId": "ss_a",
+      "status": "confirmed",
+      "name": "Participant 1",
+      "email": "participant1@example.com",
+      "phone": "+233200000001",
+      "organisation": "Example Org",
+      "notes": "Vegetarian lunch",
+      "createdAt": 1795292637137,
+      "updatedAt": 1795292637140
+    },
+    "e_2": {
+      "id": "e_2",
+      "userId": "u_ebe5216954002023449a102d",
+      "courseId": "c_stats",
+      "sessionId": "",
+      "status": "interest",
+      "name": "Participant 2",
+      "email": "participant2@example.com",
+      "phone": "",
+      "organisation": "",
+      "notes": "",
+      "createdAt": 1795292637139
+    }
+  },
+  "enquiries": {
+    "q_1": {
+      "id": "q_1",
+      "type": "analytics",
+      "requesterId": "c_a499c9ca9049f75e95419044",
+      "status": "new",
+      "createdAt": 1795292637142,
+      "contact": { "name": "Visitor Without Account", "email": "visitor@example.org", "phone": "", "organisation": "" },
+      "subject": "Panel data",
+      "message": "We need help analysing panel data.",
+      "details": { "service": "Statistical analysis", "timeline": "1 month", "budget": "" }
+    },
+    "q_2": {
+      "id": "q_2",
+      "type": "consultancy",
+      "requesterId": "u_ebe5216954002023449a102d",
+      "status": "in_progress",
+      "createdAt": 1795292637143,
+      "contact": { "name": "Participant 2", "email": "participant2@example.com", "phone": "", "organisation": "" },
+      "subject": "",
+      "message": "Evaluation design for an NGO.",
+      "details": { "service": "", "timeline": "", "budget": "" }
+    }
+  },
+  "settings": {
+    "email": "hello@example.org",
+    "phone": "+233 30 000 0000",
+    "whatsapp": "",
+    "address": "Accra, Ghana",
+    "hours": "Mon–Fri 9–5",
+    "linkedin": "https://www.linkedin.com/company/example",
+    "updatedAt": 1795292637141
+  }
+}
