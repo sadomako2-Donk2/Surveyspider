@@ -2706,6 +2706,7 @@ ${richSummary(st, rows)}`;
     training: ["training.webp", "A trainer points to charts and a map of Africa on a screen while participants at a table listen and take notes", "center 35%"],
     academy: ["academy-class.webp", "A trainer speaks to a class seated with laptops, in front of a screen titled Research and Data Analytics Training", "center 30%"],
     surveys: ["surveys.webp", "An interviewer with a tablet talks with a smiling market trader at her stall", "center 35%"],
+    about: ["about.webp", "A busy African city street with office towers, traffic and banners reading Innovation for Africa and Data, Research, Analytics, Impact", "center 40%"],
     analytics: ["analytics.webp", "Three analysts look at a laptop together, with a dashboard of charts on the wall behind them", "center 8%"],
   };
   const photo = (k) => { const [f, alt, pos] = PHOTO[k]; return `<figure class="photo"><div class="photo-frame"><img src="/photos/${f}" alt="${esc(alt)}" loading="lazy" decoding="async" style="object-position:${pos}"></div><figcaption>Illustrative image</figcaption></figure>`; };
@@ -2829,6 +2830,7 @@ ${richSummary(st, rows)}`;
   function viewAbout() {
     const rows = [["Organisation", "Afrimetrica — Centre for Research Methods and Analytics"], ["Training", "Afrimetrica Academy"], ["Survey software", "Afrimetrica Surveys"], ["Analytics", "Afrimetrica Analytics"], ["Consultancy", "Afrimetrica Consulting"], ["Research resources", "Afrimetrica Knowledge Hub"], ["Legal operator", "Regelco International Ltd (Ghana)"]];
     return `<div class="page-head"><div><span class="eyebrow gold">About Afrimetrica</span><h1>A research centre built around good evidence</h1><p class="muted" style="max-width:66ch">Afrimetrica is a Ghana-based centre for research methods and analytics. We work with universities, public bodies, NGOs and businesses across Africa and beyond.</p></div></div>
+      ${photo("about")}
       <div class="split">
         <section class="card"><h2>Our mission</h2><p>To strengthen the quality and use of research by teaching sound methods, providing reliable tools for collecting data, and turning data into evidence people can act on.</p><h3>What we stand for</h3>
           <ul class="ticks small"><li><div><b>Rigour</b><span>Methods that are appropriate, transparent and honestly reported.</span></div></li><li><div><b>Practicality</b><span>Approaches that work in real field conditions and budgets.</span></div></li><li><div><b>Ethics and data protection</b><span>Respect for participants, informed consent and careful handling of personal data.</span></div></li><li><div><b>Building capacity</b><span>Leaving teams more skilled than we found them.</span></div></li></ul></section>
