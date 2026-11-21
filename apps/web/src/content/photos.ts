@@ -37,11 +37,13 @@ export const PHOTOS = {
     suggest: "Participants working together in an Academy course",
   },
   about: {
-    file: "about.jpg",
-    alt: "",
+    file: "about.webp",
+    alt: "A busy African city street with office towers, traffic and banners reading Innovation for Africa and Data, Research, Analytics, Impact",
+    caption: "Illustrative image",
+    position: "center 40%",
     where: "About page, under the heading",
-    // Kept for a real photo: an invented picture of the CEO or team would mislead visitors.
-    suggest: "A real photo of the CEO or team, or the office in Ghana",
+    // The CEO's photo will get its own place in the "Our team" section when it's ready.
+    suggest: "A city or office scene",
   },
   training: {
     file: "training.webp",
