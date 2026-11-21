@@ -25,6 +25,11 @@ export default async function Account({ searchParams }: { searchParams: Promise<
     select: { id: true, type: true, status: true, service: true, subject: true, createdAt: true },
     orderBy: { createdAt: "desc" },
   });
+  const fieldwork = await db.fieldworkRequest.findMany({
+    where: { requesterId: user.id },
+    select: { id: true, ref: true, status: true, quoteTotalUsd: true, createdAt: true },
+    orderBy: { createdAt: "desc" },
+  });
   const enrollments = await db.enrollment.findMany({
     where: { userId: user.id },
     include: { course: { select: { title: true, slug: true, status: true } }, session: true },
@@ -137,7 +142,7 @@ export default async function Account({ searchParams }: { searchParams: Promise<
       )}
       <section className="card">
         <h2>My enquiries</h2>
-        {enquiries.length ? (
+        {enquiries.length || fieldwork.length ? (
           <div className="table-wrap">
             <table className="wide stack-table">
               <thead>
@@ -148,6 +153,34 @@ export default async function Account({ searchParams }: { searchParams: Promise<
                 </tr>
               </thead>
               <tbody>
+                {fieldwork.map((f) => (
+                  <tr key={f.id}>
+                    <td data-label="Sent" className="n">
+                      {f.createdAt.toLocaleDateString("en-GB", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                        timeZone: "UTC",
+                      })}
+                    </td>
+                    <td data-label="About">
+                      Paper survey fieldwork · {f.ref} · US${f.quoteTotalUsd.toLocaleString("en-US")}
+                    </td>
+                    <td data-label="Status">
+                      <span className="pill">
+                        {
+                          {
+                            NEW: "Received",
+                            CONTACTED: "We've been in touch",
+                            QUOTED: "Final quote sent",
+                            WON: "Agreed",
+                            LOST: "Closed",
+                          }[f.status]
+                        }
+                      </span>
+                    </td>
+                  </tr>
+                ))}
                 {enquiries.map((e) => (
                   <tr key={e.id}>
                     <td data-label="Sent" className="n">

@@ -69,4 +69,6 @@
 | 2026-11 | Creating the Afrimetrica organisation and admin membership tolerates simultaneous requests | Found by tests: two admins confirming at once caused a database error |
 | 2026-11 | AI analyst, AI reports, hidden patterns and action tracking from Phase 1 are not yet in Phase 2 | Step 8 covers the statistics and Analyze core; these can follow as their own step |
 | 2026-11 | Email confirmation counts only failed attempts per connection (30 an hour) | Found by tests: a training room or office sharing one internet address would block each other after 30 confirmations; links can't be guessed anyway |
+| 2026-11 | Paper Survey requests are priced again on the server from the project details | Phase 1 stored the total sent by the browser, which could be altered |
+| 2026-11 | Paper Survey quotes need no account | Same as Phase 1; quotes are a sales tool; requests join an account once the email is confirmed |
 

@@ -5,6 +5,7 @@ const SECTIONS = [
   ["registrations", "/admin/registrations", "Registrations"],
   ["enquiries", "/admin/enquiries", "Enquiries"],
   ["surveys", "/admin/surveys", "Surveys"],
+  ["fieldwork", "/admin/fieldwork", "Paper surveys"],
   ["settings", "/admin/settings", "Contact details"],
   ["members", "/admin/members", "Team"],
   ["activity", "/admin/activity", "Activity"],

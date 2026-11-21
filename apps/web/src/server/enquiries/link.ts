@@ -2,7 +2,7 @@ import "server-only";
 import type { PrismaClient } from "@/generated/prisma/client";
 
 /**
- * Enquiries sent from an email address join that person's account once the address is confirmed.
+ * Enquiries and Paper Survey requests sent from an email address join that person's account once the address is confirmed.
  * Never before: otherwise anyone could sign up with someone else's address and read their enquiries.
  */
 export async function linkEnquiriesToConfirmedUser(

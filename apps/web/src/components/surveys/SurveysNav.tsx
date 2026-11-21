@@ -4,6 +4,7 @@ const LINKS = [
   ["overview", "/surveys", "Overview"],
   ["new", "/surveys/new", "Create"],
   ["import", "/surveys/import", "Upload"],
+  ["paper", "/surveys/paper", "Paper surveys"],
   ["mine", "/surveys/mine", "My surveys"],
   ["take", "/surveys/take", "Take surveys"],
 ] as const;

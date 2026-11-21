@@ -31,7 +31,7 @@ export default function Consultancy() {
           <h2>Need face-to-face interviews?</h2>
           <p className="muted">
             Upload your questionnaire and get an itemised fieldwork quote in US dollars straight away.{" "}
-            <Link href="/surveys">Find out more</Link>.
+            <Link href="/surveys/paper">Get a fieldwork quote</Link>.
           </p>
           <h3>Who we work with</h3>
           <Ticks

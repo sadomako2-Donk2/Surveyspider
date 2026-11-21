@@ -159,7 +159,7 @@ export default async function Home() {
         text="Tell us what you need to find out. We can help with design, fieldwork, analysis or the whole project."
         links={[
           { href: "/consultancy", title: "Discuss a project", text: "Research design, M&E and commissioned studies" },
-          { href: "/surveys", title: "Get a fieldwork quote", text: "Face-to-face interviews, priced instantly" },
+          { href: "/surveys/paper", title: "Get a fieldwork quote", text: "Face-to-face interviews, priced instantly" },
           { href: "/analytics", title: "Request data analysis", text: "Statistics, dashboards and reports" },
           { href: "/training", title: "Train your team", text: "In-house workshops on research methods" },
         ]}
