@@ -1,14 +1,13 @@
-import { existsSync } from "node:fs";
-import path from "node:path";
 import Image from "next/image";
 import { PHOTOS, type PhotoKey } from "@/content/photos";
 
-export const photoPath = (file: string) => path.join(process.cwd(), "public", "photos", file);
-
-/** One photo slot (see src/content/photos.ts). Shows nothing on the live site until the file is added. */
+/**
+ * One photo slot (see src/content/photos.ts). A slot is filled once it has a description (alt);
+ * tests/unit/photos.test.ts checks that every filled slot's file exists. Empty slots show nothing live.
+ */
 export function Photo({ slot, wide, priority }: { slot: PhotoKey; wide?: boolean; priority?: boolean }) {
-  const p = PHOTOS[slot] as (typeof PHOTOS)[PhotoKey] & { caption?: string; credit?: string };
-  if (!existsSync(photoPath(p.file))) {
+  const p = PHOTOS[slot] as (typeof PHOTOS)[PhotoKey] & { caption?: string; credit?: string; position?: string };
+  if (!p.alt.trim()) {
     if (process.env.NODE_ENV !== "development") return null;
     return (
       <figure className={`photo placeholder${wide ? " wide" : ""}`} aria-hidden="true">
@@ -29,6 +28,7 @@ export function Photo({ slot, wide, priority }: { slot: PhotoKey; wide?: boolean
           fill
           priority={priority}
           unoptimized={p.file.endsWith(".svg")}
+          style={p.position ? { objectPosition: p.position } : undefined}
           sizes={wide ? "(max-width: 1200px) 100vw, 1200px" : "(max-width: 900px) 100vw, 560px"}
         />
       </div>

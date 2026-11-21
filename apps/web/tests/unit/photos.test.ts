@@ -11,6 +11,11 @@ describe("website photos", () => {
       if (existsSync(path.join(dir, p.file))) expect([slot, p.alt.trim().length > 10]).toEqual([slot, true]);
   });
 
+  it("every slot with a description has its file, so no broken images appear", () => {
+    for (const [slot, p] of Object.entries(PHOTOS))
+      if (p.alt.trim()) expect([slot, existsSync(path.join(dir, p.file))]).toEqual([slot, true]);
+  });
+
   it("every image in public/photos belongs to a slot, so nothing is uploaded by mistake", () => {
     const files = new Set(Object.values(PHOTOS).map((p) => p.file));
     const images = readdirSync(dir).filter((f) => /\.(jpe?g|png|webp|avif|svg)$/i.test(f));
