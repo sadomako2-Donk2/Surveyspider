@@ -2,7 +2,7 @@
 // Serves the single-page app, stores shared data in a JSON file, enforces who may change what,
 // and calls Claude for the AI features with the server's own ANTHROPIC_API_KEY.
 import http from "node:http";
-import { readFileSync, existsSync, mkdirSync, writeFileSync, renameSync } from "node:fs";
+import { readFileSync, existsSync, mkdirSync, writeFileSync, renameSync, readdirSync } from "node:fs";
 import { createHash, timingSafeEqual, randomBytes, scrypt as scryptCb } from "node:crypto";
 import { promisify } from "node:util";
 import path from "node:path";
@@ -37,6 +37,9 @@ const RESET_MINUTES = 60;
 const SHELL_HEAD = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="icon" type="image/svg+xml" href="/icon.svg"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>`;
 const PAGE = SHELL_HEAD + readFileSync(path.join(here, "public", "index.html"), "utf8") + "</body></html>";
 const ICON = readFileSync(path.join(here, "public", "icon.svg"));
+// Photos for the public pages: every .webp in public/photos, read once at start. Only these exact names are served.
+const PHOTO_DIR = path.join(here, "public", "photos");
+const PHOTOS = new Map(existsSync(PHOTO_DIR) ? readdirSync(PHOTO_DIR).filter((f) => /^[a-z0-9-]+\.webp$/.test(f)).map((f) => [f, readFileSync(path.join(PHOTO_DIR, f))]) : []);
 
 // ---------- storage ----------
 mkdirSync(DATA_DIR, { recursive: true });
@@ -602,6 +605,7 @@ export const server = http.createServer(async (req, res) => {
     if (url.pathname === "/auth/google" && req.method === "GET") return googleStart(req, res, url);
     if (url.pathname === "/auth/google/callback" && req.method === "GET") return await googleCallback(req, res, url);
     if (url.pathname === "/healthz") return send(res, 200, { ok: true });
+    if (url.pathname.startsWith("/photos/") && PHOTOS.has(url.pathname.slice(8))) { res.writeHead(200, { "Content-Type": "image/webp", "Cache-Control": "public, max-age=86400" }); return res.end(PHOTOS.get(url.pathname.slice(8))); }
     if (url.pathname === "/icon.svg") { res.writeHead(200, { "Content-Type": "image/svg+xml", "Cache-Control": "public, max-age=86400" }); return res.end(ICON); }
     if (req.method === "GET" && (url.pathname === "/" || url.pathname === "/index.html")) { res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache" }); return res.end(PAGE); }
     res.writeHead(404, { "Content-Type": "text/plain" }); res.end("Not found");

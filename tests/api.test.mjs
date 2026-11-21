@@ -63,6 +63,9 @@ const study = { id: "s1", title: "Test survey", status: "live", target: 2, rewar
 const A = browser("a"), B = browser("b"), C = browser("c");
 const page = await fetch(base + "/"); check("home page is served", page.status === 200 && (await page.text()).includes("Afrimetrica"));
 check("health check responds", (await A.call("GET", "/healthz")).status === 200);
+const pic = await fetch(base + "/photos/home.webp");
+check("website photos are served", pic.status === 200 && pic.headers.get("content-type") === "image/webp" && (await pic.arrayBuffer()).byteLength > 1000);
+check("only listed photos are served (no other files)", (await fetch(base + "/photos/..%2Fserver.mjs")).status !== 200 && (await fetch(base + "/photos/missing.webp")).status !== 200);
 const anonA = (await A.call("GET", "/api/me")).json;
 check("visitors start signed out", anonA.user === null && /^c_/.test(anonA.uid));
 check("Google sign-in is advertised when configured", anonA.google === true);
