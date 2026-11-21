@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { EnquiryForm } from "@/components/enquiries/EnquiryForm";
 import { PageHead, ServiceCards } from "@/components/site/blocks";
+import { Photo } from "@/components/site/Photo";
 import { ANALYTICS_CARDS } from "@/content/pages";
 
 export const metadata: Metadata = {
@@ -18,6 +19,7 @@ export default function Analytics() {
         Send us your data and your questions. Our analysts clean it, analyse it with the right methods and give you
         results you can explain and defend.
       </PageHead>
+      <Photo slot="analytics" wide />
       <ServiceCards cards={ANALYTICS_CARDS} />
       <div className="split">
         <EnquiryForm

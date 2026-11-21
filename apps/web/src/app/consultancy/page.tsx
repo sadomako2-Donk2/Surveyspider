@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { EnquiryForm } from "@/components/enquiries/EnquiryForm";
 import { PageHead, ServiceCards, Ticks } from "@/components/site/blocks";
+import { Photo } from "@/components/site/Photo";
 import { CONSULTANCY_CARDS } from "@/content/pages";
 
 export const metadata: Metadata = {
@@ -18,6 +19,7 @@ export default function Consultancy() {
         From a single questionnaire review to a full multi-site study, we design, run and report research that stands up
         to scrutiny.
       </PageHead>
+      <Photo slot="consultancy" wide />
       <ServiceCards cards={CONSULTANCY_CARDS} />
       <div className="split">
         <EnquiryForm

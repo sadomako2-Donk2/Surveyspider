@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHead, Ticks } from "@/components/site/blocks";
+import { Photo } from "@/components/site/Photo";
 import { SurveysNav } from "@/components/surveys/SurveysNav";
 
 export const metadata: Metadata = {
@@ -60,6 +61,7 @@ export default function Surveys() {
           </p>
         </figure>
       </section>
+      <Photo slot="surveys" wide />
 
       <section className="stack">
         <div className="section-head">

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHead, Ticks } from "@/components/site/blocks";
+import { Photo } from "@/components/site/Photo";
 import { legalLine } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -27,6 +28,7 @@ export default function About() {
         Afrimetrica is a Ghana-based centre for research methods and analytics. We work with universities, public
         bodies, NGOs and businesses across Africa and beyond.
       </PageHead>
+      <Photo slot="about" wide />
       <div className="split">
         <section className="card">
           <h2>Our mission</h2>

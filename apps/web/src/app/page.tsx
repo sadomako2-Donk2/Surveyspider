@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CourseCard } from "@/components/academy/CourseCard";
 import { Band, Ticks } from "@/components/site/blocks";
+import { Photo } from "@/components/site/Photo";
 import { GUIDES, UNITS } from "@/content/pages";
 import { SITE } from "@/lib/site";
 import { getDb } from "@/lib/db";
@@ -54,6 +55,10 @@ export default async function Home() {
             Afrimetrica helps researchers, organisations and students design better studies, collect reliable data and
             turn it into evidence. We train, build survey tools, analyse data and advise, all in one place.
           </p>
+          <p className="muted">
+            From raw data to clear decisions: research, data analytics and market intelligence for organisations working
+            across African markets.
+          </p>
           <div className="ctas">
             <Link className="btn gold big" href="/training">
               Explore courses
@@ -81,6 +86,7 @@ export default async function Home() {
           </Link>
         </nav>
       </section>
+      <Photo slot="home" wide priority />
 
       <section className="stack">
         <div className="section-head">
@@ -136,6 +142,7 @@ export default async function Home() {
           <Link className="btn primary" href="/training">
             See courses and dates
           </Link>
+          <Photo slot="homeAcademy" />
         </div>
         <div className="stack">
           <div className="section-head">
