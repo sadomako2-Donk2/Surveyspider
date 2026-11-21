@@ -14,7 +14,7 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:e2e": "tsx scripts/e2e.ts",
-    "postinstall": "prisma generate",
+    "postinstall": "prisma generate && node scripts/copy-pdf-worker.mjs",
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
@@ -27,7 +27,10 @@
   "dependencies": {
     "@prisma/adapter-pg": "7.10.1",
     "@prisma/client": "7.10.1",
+    "exceljs": "4.4.0",
+    "mammoth": "1.13.0",
     "next": "16.4.6",
+    "pdfjs-dist": "6.5.438",
     "pg": "8.23.1",
     "react": "19.3.1",
     "react-dom": "19.3.1",
@@ -50,6 +53,7 @@
     "vitest": "5.1.1"
   },
   "overrides": {
-    "effect": "3.22.5"
+    "effect": "3.22.5",
+    "uuid": "11.1.1"
   }
 }

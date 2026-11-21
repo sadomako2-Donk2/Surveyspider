@@ -55,4 +55,9 @@
 | 2026-11 | Owners see participants as P001, P002… per survey, never their account or email | Data minimisation; administrators can't see answers at all |
 | 2026-11 | Survey links are `/s/<survey>`; taking a survey needs a free account with a confirmed email | One response per person, consent tied to a person, and rewards need an account; names and emails are never shown to researchers |
 | 2026-11 | "Saved" messages appear only after the page has refreshed with the new data | Avoids showing success while lists on the page are still out of date |
+| 2026-11 | Uploaded questionnaires are read in the browser and never sent to the server | Privacy; only the questions the person chooses to keep are saved |
+| 2026-11 | The upload page creates a draft survey straight away and opens it in the builder | Nothing is lost if the page reloads; no hidden browser storage |
+| 2026-11 | `uuid` pinned to 11.1.1 via npm overrides | Clears a moderate advisory in an ExcelJS dependency |
+| 2026-11 | The pdf.js worker is copied into `public/` on install (not committed) | pdf.js reads PDFs in a separate worker that the site must serve; it stays in step with the installed version |
+| 2026-11 | AI features (drafting, question checker, AI file reading) and Paper Survey quotes are not yet in Phase 2 | Step 7 covers the survey core; they move with the Analyze rebuild (step 8) or as their own step |
 

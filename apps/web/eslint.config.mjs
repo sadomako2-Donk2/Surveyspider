@@ -7,6 +7,7 @@ export default defineConfig([
   ...nextTs,
   globalIgnores([
     "src/generated/**",
+    "public/**",
     ".next/**",
     "out/**",
     "build/**",

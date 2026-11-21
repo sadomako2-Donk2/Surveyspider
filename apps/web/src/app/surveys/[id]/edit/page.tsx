@@ -15,11 +15,12 @@ export default async function EditSurvey({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ saved?: string }>;
+  searchParams: Promise<{ saved?: string; imported?: string }>;
 }) {
   const { id } = await params;
   const { survey } = await ownerPage(id, `/surveys/${id}/edit`);
   if (!survey) notFound();
+  const q = await searchParams;
   const v = ownerView(survey, { responses: await countingResponses(getDb(), id) });
   return (
     <main id="main" className="wrap stack">
@@ -28,8 +29,12 @@ export default async function EditSurvey({
         <span className="eyebrow">Edit survey</span>
         <h1>{v.title || "Untitled survey"}</h1>
       </div>
-      {(await searchParams).saved && (
-        <p className="notice">Draft saved. Keep editing, or publish when you&apos;re ready.</p>
+      {q.saved && <p className="notice">Draft saved. Keep editing, or publish when you&apos;re ready.</p>}
+      {q.imported && (
+        <p className="notice">
+          Imported {q.imported} questions as a draft. Check each question&apos;s type and answer options, set your
+          audience and pay, then publish. The time estimate and reward were set from the number of questions.
+        </p>
       )}
       <SurveyBuilder initial={v} />
     </main>

@@ -5,3 +5,4 @@ playwright-report
 test-results
 package-lock.json
 src/generated
+public/pdf.worker.min.mjs

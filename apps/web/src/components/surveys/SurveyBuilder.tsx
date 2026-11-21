@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { DownloadExcel } from "./importer/DownloadExcel";
 import {
   COUNTRIES,
   DEFAULT_SCALE,
@@ -503,6 +504,19 @@ export function SurveyBuilder({ initial }: { initial: BuilderSurvey }) {
             >
               {busy === "publish" ? "Publishing…" : s.version?.liveNumber ? "Publish changes" : "Publish survey"}
             </button>
+            <DownloadExcel
+              survey={() => ({
+                title: s.title,
+                description: s.description,
+                status: s.status,
+                questions: cleaned,
+                target: s.target,
+                minutes: s.minutes,
+                reward: Number(s.reward || 0),
+                screening: s.screening,
+                attentionCheck: s.attentionCheck,
+              })}
+            />
           </div>
         </section>
       </aside>

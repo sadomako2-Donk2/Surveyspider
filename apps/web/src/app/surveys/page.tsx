@@ -10,8 +10,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/surveys" },
 };
 
-const PHASE1 = "https://surveyspider.onrender.com";
-
 export default function Surveys() {
   return (
     <main id="main" className="wrap stack xl">
@@ -26,9 +24,9 @@ export default function Surveys() {
             <Link className="btn primary big" href="/surveys/new">
               Create a survey
             </Link>
-            <a className="btn big" href={`${PHASE1}/#import`} rel="noopener">
+            <Link className="btn big" href="/surveys/import">
               Upload a questionnaire
-            </a>
+            </Link>
           </div>
           <p className="hint">
             Uploading Word, PDF and Excel questionnaires opens on our current site until it moves across.
