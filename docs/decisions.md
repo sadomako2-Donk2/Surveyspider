@@ -53,4 +53,6 @@
 | 2026-11 | Screening applies only when a survey sets it; open surveys can be answered without a participant profile | Lets surveys be shared by link (e.g. course evaluations) as well as through the panel |
 | 2026-11 | Reward, time, audience and attention check lock once someone has answered; the target can still rise | Keeps pay and eligibility fair for everyone who answers |
 | 2026-11 | Owners see participants as P001, P002… per survey, never their account or email | Data minimisation; administrators can't see answers at all |
+| 2026-11 | Survey links are `/s/<survey>`; taking a survey needs a free account with a confirmed email | One response per person, consent tied to a person, and rewards need an account; names and emails are never shown to researchers |
+| 2026-11 | "Saved" messages appear only after the page has refreshed with the new data | Avoids showing success while lists on the page are still out of date |
 

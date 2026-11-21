@@ -9,6 +9,7 @@ const ACCOUNT_PATHS = ["/account", "/signin", "/signup", "/forgot-password", "/r
 /** Which top-level section a path belongs to (e.g. /resources/guides/x → /resources). */
 export function sectionOf(path: string): string {
   if (ACCOUNT_PATHS.some((p) => path === p || path.startsWith(`${p}/`))) return "/account";
+  if (path.startsWith("/s/")) return "/surveys";
   const first = `/${path.split("/")[1] ?? ""}`;
   return NAV.some((n) => n.href === first) ? first : path === "/" ? "/" : "";
 }

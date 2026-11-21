@@ -84,7 +84,7 @@ function parseSettings(b: Record<string, unknown>) {
 }
 
 /** What the owner's builder needs. */
-function ownerView(s: SurveyFull, counts: { responses: number }) {
+export function ownerView(s: SurveyFull, counts: { responses: number }) {
   const latest = latestVersion(s),
     pub = publishedVersion(s);
   return {

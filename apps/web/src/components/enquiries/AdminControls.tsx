@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useState, useTransition, type FormEvent } from "react";
 import { ENQUIRY_STATUS_LABEL, ENQUIRY_STATUSES, type EnquiryStatusCode } from "@/lib/enquiries";
 import type { ContactSettings } from "@/server/settings";
 
@@ -49,6 +49,7 @@ export function ContactSettingsForm({ initial }: { initial: ContactSettings }) {
   const [error, setError] = useState("");
   const [saved, setSaved] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [refreshing, startRefresh] = useTransition();
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
@@ -68,7 +69,7 @@ export function ContactSettingsForm({ initial }: { initial: ContactSettings }) {
     if (!r.ok)
       return setError(((await r.json().catch(() => ({}))) as { message?: string }).message ?? "Couldn't save.");
     setSaved(true);
-    router.refresh();
+    startRefresh(() => router.refresh());
   }
   const input = (name: keyof ContactSettings, label: string, placeholder: string, type = "text") => (
     <label>
@@ -98,7 +99,7 @@ export function ContactSettingsForm({ initial }: { initial: ContactSettings }) {
           {error}
         </p>
       )}
-      {saved && (
+      {saved && !refreshing && (
         <p className="notice" role="status">
           Contact details saved.
         </p>

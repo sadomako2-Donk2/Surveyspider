@@ -13,6 +13,7 @@ async function signUpAndConfirm(page: Page, name: string, email: string) {
   await expect(page.getByRole("heading", { name: /all set/ })).toBeVisible();
 }
 async function noSeriousA11yIssues(page: Page) {
+  await expect(page).toHaveTitle(/\S/); // pages refreshing after a save briefly have no title; scan the settled page
   const r = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
   expect(
     r.violations

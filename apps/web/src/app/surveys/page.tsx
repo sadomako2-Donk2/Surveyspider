@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageHead, Ticks } from "@/components/site/blocks";
+import { SurveysNav } from "@/components/surveys/SurveysNav";
 
 export const metadata: Metadata = {
   title: "Surveys",
@@ -13,6 +15,7 @@ const PHASE1 = "https://surveyspider.onrender.com";
 export default function Surveys() {
   return (
     <main id="main" className="wrap stack xl">
+      <SurveysNav current="overview" />
       <section className="hero">
         <div>
           <PageHead eyebrow="Afrimetrica Surveys" title="Ask better questions. Get answers you can act on.">
@@ -20,14 +23,16 @@ export default function Surveys() {
             and turn every response into findings and recommendations.
           </PageHead>
           <div className="ctas">
-            <a className="btn primary big" href={`${PHASE1}/#create`} rel="noopener">
+            <Link className="btn primary big" href="/surveys/new">
               Create a survey
-            </a>
+            </Link>
             <a className="btn big" href={`${PHASE1}/#import`} rel="noopener">
               Upload a questionnaire
             </a>
           </div>
-          <p className="hint">The survey tools open on our current site while they move to the new one.</p>
+          <p className="hint">
+            Uploading Word, PDF and Excel questionnaires opens on our current site until it moves across.
+          </p>
         </div>
         <figure className="report-mock" aria-label="Example insight report with sample data">
           <figcaption className="rm-head">

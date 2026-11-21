@@ -3,6 +3,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { linkFromEmail } from "./support/mail";
 
 async function noSeriousA11yIssues(page: Page) {
+  await expect(page).toHaveTitle(/\S/); // pages refreshing after a save briefly have no title; scan the settled page
   const r = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
   expect(
     r.violations
