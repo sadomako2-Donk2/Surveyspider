@@ -10,3 +10,6 @@
 | 2026-11 | No online payments in Phase 1 | Fees invoiced manually until Subscription/Payment is built |
 | 2026-11 | "Certificate of completion" wording only | No accreditation is in place |
 | 2026-11 | Don't set PUBLIC_URL yet | No working custom domain; the redirect would break the site |
+| 2026-11 | Phase 2 lives in `apps/web`, not an npm workspace | Render's Phase 1 build (`npm ci` at the root) stays exactly as it is |
+| 2026-11 | TypeScript 5.9, not 7.0 | Next.js's build uses the TypeScript 5 compiler API; revisit when Next supports 7 |
+| 2026-11 | Phase 2 work on the `phase-2` branch | `main` auto-deploys the live site |

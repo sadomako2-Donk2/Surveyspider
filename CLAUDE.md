@@ -3,7 +3,8 @@
 Afrimetrica (Centre for Research Methods and Analytics, operated by Regelco International Ltd, Ghana) runs training (Academy), survey software (Surveys), data analysis (Analytics), consultancy (Consulting) and a Knowledge Hub.
 
 ## Current phase
-Phase 1: a single Node.js service (`server.mjs`) plus a single-page front end (`public/index.html`), deployed on Render (service name `surveyspider`, auto-deploys from `main`). Phase 2 (Next.js, TypeScript, PostgreSQL, Prisma) is planned in `docs/phase-2-prompts.md`. Do not start Phase 2 unless asked.
+Phase 1 is live: a single Node.js service (`server.mjs`) plus a single-page front end (`public/index.html`), deployed on Render (service name `surveyspider`, auto-deploys from `main`).
+Phase 2 is being built in `apps/web` (Next.js App Router, TypeScript strict) on the `phase-2` branch, following `docs/phase-2-prompts.md` one step at a time. Progress is tracked in that file. Never change Phase 1 behaviour while working on Phase 2.
 
 ## Rules
 - Keep the navy-and-gold design and the existing survey, analysis, auth and Paper Survey features working. Make incremental changes and add tests.
@@ -21,5 +22,11 @@ Phase 1: a single Node.js service (`server.mjs`) plus a single-page front end (`
 - `server.mjs`: JSON store at `DATA_DIR/store.json`; routes under `/api/*`; auth (email+password, Google), Resend emails, rate limits, same-origin checks.
 
 ## Commands
+Phase 1 (repository root):
 - `npm test` — 20 statistics checks + 124 API checks. Must pass before pushing.
 - `npm start` — runs on port 10000.
+
+Phase 2 (`cd apps/web`):
+- `npm run dev` — development server on port 3000.
+- `npm run lint`, `npm run typecheck`, `npm run format:check`, `npm test` (Vitest), `npm run build`, `npm run test:e2e` (Playwright; set `PW_CHROMIUM_PATH` to use an existing Chromium).
+- CI (`.github/workflows/ci.yml`) runs all of these plus the Phase 1 tests on every push to `main` or `phase-2` and on pull requests.

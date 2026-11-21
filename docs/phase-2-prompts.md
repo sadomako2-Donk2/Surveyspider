@@ -2,7 +2,7 @@
 
 Prefix every prompt with: "Read CLAUDE.md and docs/. Keep Phase 1 running until the new app replaces it. Make incremental changes, add tests, never invent data, and explain what you changed."
 
-1. **Scaffold.** Create `apps/web` with Next.js (App Router), TypeScript strict, ESLint, Prettier, Vitest and Playwright. Add a CI workflow that runs lint, type-check and tests. No features yet.
+1. ✅ **Scaffold.** *(done: `apps/web`, Next.js 16, React 19, TypeScript 5.9 strict, ESLint 9, Prettier, Vitest, Playwright 1.63, CI)* Create `apps/web` with Next.js (App Router), TypeScript strict, ESLint, Prettier, Vitest and Playwright. Add a CI workflow that runs lint, type-check and tests. No features yet.
 2. **Database.** Add PostgreSQL and Prisma with the Phase 2 model in `docs/data-model.md`. Write migrations and seed data. Use Render PostgreSQL in production.
 3. **Auth.** Email+password (scrypt or argon2) and Google sign-in, email verification and reset via Resend, Organisation and Membership roles (owner, admin, analyst, member). Port the API tests' auth cases.
 4. **Public site.** Rebuild Home, About, Training, Analytics, Consultancy, Resources and Contact as server-rendered pages with the current navy-and-gold design, metadata and sitemap.
