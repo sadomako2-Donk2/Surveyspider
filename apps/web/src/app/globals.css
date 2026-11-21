@@ -1508,3 +1508,33 @@ th[scope="row"] {
 .quote-table td {
   font-size: 0.86rem;
 }
+
+/* ---------- AI analyst ---------- */
+.msgs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 460px;
+  overflow-y: auto;
+}
+.msg {
+  white-space: pre-wrap;
+  padding: 10px 14px;
+  border-radius: 12px;
+  max-width: 85%;
+  line-height: 1.5;
+}
+.msg.user {
+  align-self: flex-end;
+  background: var(--accent-soft);
+}
+.msg.assistant {
+  align-self: flex-start;
+  background: var(--gold-soft);
+}
+.filter-row input:not([type="checkbox"]) {
+  flex: 1 1 260px;
+}
+.checks-ai {
+  padding-left: 1.2em;
+}

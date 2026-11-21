@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, type DragEvent } from "react";
 import { DEFAULT_CONSENT, MIN_HOURLY_USD, OPEN_SCREENING, QUESTION_TYPE_LABEL } from "@/lib/surveys";
+import { AI_OFF, aiPost } from "@/components/ai/aiFetch";
 import { readPastedText, readQuestionnaireFile, ReadError, type ReadResult } from "./readFile";
 
 type State =
@@ -17,13 +18,35 @@ function estimate(n: number) {
   return { minutes, reward: (Math.ceil(((MIN_HOURLY_USD * 1.25 * minutes) / 60) * 20) / 20).toFixed(2) };
 }
 
-export function Importer() {
+export function Importer({ aiOn = false }: { aiOn?: boolean }) {
   const router = useRouter();
   const [state, setState] = useState<State>({ status: "idle" });
   const [over, setOver] = useState(false);
   const [pasted, setPasted] = useState("");
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState("");
+  const [aiBusy, setAiBusy] = useState(false);
+
+  /** Optional: sends the document's text to Claude, which can understand layouts the automatic reader misses. */
+  async function readWithAi(r: ReadResult) {
+    setAiBusy(true);
+    setError("");
+    const res = await aiPost<Pick<ReadResult, "title" | "description" | "questions">>("/api/ai/read-questionnaire", {
+      text: r.text,
+    });
+    setAiBusy(false);
+    if (!res.ok) return setError(`${res.message} The automatic result is still shown.`);
+    setState({
+      status: "ready",
+      result: {
+        ...r,
+        method: "ai",
+        title: res.data.title || r.title,
+        description: res.data.description,
+        questions: res.data.questions,
+      },
+    });
+  }
 
   async function read(file: File) {
     setState({ status: "reading", file: file.name });
@@ -73,7 +96,11 @@ export function Importer() {
       <section className="card">
         <div>
           <span className="eyebrow">
-            {r.method === "excel" ? "Imported from an Afrimetrica Excel file" : "Read automatically"}
+            {r.method === "excel"
+              ? "Imported from an Afrimetrica Excel file"
+              : r.method === "ai"
+                ? "Read by AI · check every question"
+                : "Read automatically"}
           </span>
           <h2>
             Found {n} question{n === 1 ? "" : "s"} in {r.file}
@@ -136,10 +163,22 @@ export function Importer() {
               {creating ? "Creating…" : "Create survey from these questions"}
             </button>
           )}
+          {r.method === "auto" && r.text && (
+            <button className="btn" type="button" disabled={!aiOn || aiBusy || creating} onClick={() => readWithAi(r)}>
+              {aiBusy ? "Claude is reading…" : "Read it with AI instead"}
+            </button>
+          )}
           <button className="btn ghost" type="button" onClick={() => setState({ status: "idle" })}>
             Upload a different file
           </button>
         </div>
+        {r.method === "auto" && r.text && (
+          <p className="hint">
+            {aiOn
+              ? "If questions are missing or split wrongly, AI reading can help. It sends the file's text to Claude (Anthropic); the file itself stays on your computer."
+              : AI_OFF}
+          </p>
+        )}
       </section>
     );
   }

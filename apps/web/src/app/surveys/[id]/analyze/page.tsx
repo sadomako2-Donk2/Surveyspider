@@ -4,6 +4,8 @@ import { notFound, redirect } from "next/navigation";
 import { Analyze } from "@/components/analyze/Analyze";
 import { SurveysNav } from "@/components/surveys/SurveysNav";
 import { getDb } from "@/lib/db";
+import type { AiReport } from "@/lib/ai";
+import { aiEnabled } from "@/server/ai/claude";
 import { getCurrentUser } from "@/server/current-user";
 import { loadAnalysis } from "@/server/surveys/analysis";
 import { latestVersion } from "@/server/surveys/service";
@@ -37,7 +39,16 @@ export default async function AnalyzePage({ params }: { params: Promise<{ id: st
         </div>
       </div>
       {a.questions.length ? (
-        <Analyze title={title} questions={a.questions} rows={a.rows} totals={a.totals} versions={a.versions} />
+        <Analyze
+          surveyId={id}
+          title={title}
+          questions={a.questions}
+          rows={a.rows}
+          totals={a.totals}
+          versions={a.versions}
+          aiOn={aiEnabled()}
+          report={(a.survey.aiReport as AiReport | null) ?? null}
+        />
       ) : (
         <section className="card">
           <h2>Publish the survey to start collecting answers</h2>

@@ -30,14 +30,19 @@ import {
 } from "@/lib/analysis";
 import { describe as describeStats } from "@/lib/stats";
 import { QUESTION_TYPE_LABEL, scaleOf } from "@/lib/surveys";
+import { AiAnalyst, AiReportPanel } from "@/components/ai/AiAnalysis";
+import type { AiReport } from "@/lib/ai";
 import { Bars } from "./Bars";
 
 interface Props {
+  surveyId: string;
   title: string;
   questions: AQ[];
   rows: ARow[];
   totals: { all: number; flagged: number; rejected: number };
   versions: number[];
+  aiOn: boolean;
+  report: AiReport | null;
 }
 
 const TABS = [
@@ -46,12 +51,14 @@ const TABS = [
   ["drivers", "Key drivers"],
   ["stats", "Statistics"],
   ["quality", "Quality"],
+  ["analyst", "AI analyst"],
+  ["report", "AI report"],
 ] as const;
 type Tab = (typeof TABS)[number][0];
 
 const fmt = (n: number, d = 1) => (Number.isFinite(n) ? n.toLocaleString("en-US", { maximumFractionDigits: d }) : "–");
 
-export function Analyze({ title, questions, rows: allRows, totals, versions }: Props) {
+export function Analyze({ surveyId, title, questions, rows: allRows, totals, versions, aiOn, report }: Props) {
   const [tab, setTab] = useState<Tab>("summary");
   const [includeFlagged, setIncludeFlagged] = useState(false);
   const [filter, setFilter] = useState({ key: "", value: "" });
@@ -168,6 +175,19 @@ export function Analyze({ title, questions, rows: allRows, totals, versions }: P
         <p className="muted">No responses match these filters.</p>
       ) : (
         <div role="tabpanel">
+          {/* Kept mounted so the conversation and report survive switching tabs. */}
+          <div hidden={tab !== "analyst"}>
+            <AiAnalyst surveyId={surveyId} aiOn={aiOn} filter={{ includeFlagged, ...filter }} responses={rows.length} />
+          </div>
+          <div hidden={tab !== "report"}>
+            <AiReportPanel
+              surveyId={surveyId}
+              aiOn={aiOn}
+              filter={{ includeFlagged, ...filter }}
+              responses={rows.length}
+              initial={report}
+            />
+          </div>
           {tab === "summary" && <SummaryTab questions={questions} rows={rows} totals={totals} />}
           {tab === "groups" && <GroupsTab questions={questions} rows={rows} groupKeys={groupKeys} />}
           {tab === "drivers" && <DriversTab questions={questions} rows={rows} />}

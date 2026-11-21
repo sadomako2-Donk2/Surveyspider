@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { SurveyBuilder } from "@/components/surveys/SurveyBuilder";
 import { SurveysNav } from "@/components/surveys/SurveysNav";
 import { getDb } from "@/lib/db";
+import { aiEnabled } from "@/server/ai/claude";
 import { ownerView } from "@/server/surveys/handlers";
 import { ownerPage } from "@/server/surveys/pages";
 import { countingResponses } from "@/server/surveys/service";
@@ -15,7 +16,7 @@ export default async function EditSurvey({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ saved?: string; imported?: string }>;
+  searchParams: Promise<{ saved?: string; imported?: string; drafted?: string }>;
 }) {
   const { id } = await params;
   const { survey } = await ownerPage(id, `/surveys/${id}/edit`);
@@ -36,7 +37,13 @@ export default async function EditSurvey({
           audience and pay, then publish. The time estimate and reward were set from the number of questions.
         </p>
       )}
-      <SurveyBuilder initial={v} />
+      {q.drafted && (
+        <p className="notice">
+          Drafted by AI from your description: {q.drafted} questions. Read every question before you publish, and use
+          the AI question checker for a second opinion. The time estimate and reward were set from the draft.
+        </p>
+      )}
+      <SurveyBuilder initial={v} aiOn={aiEnabled()} />
     </main>
   );
 }

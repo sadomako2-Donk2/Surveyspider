@@ -19,6 +19,7 @@ Nothing here is needed yet. The live site keeps running on Phase 1 until cut-ove
   - `RESEND_API_KEY`, `EMAIL_FROM` (copy from the Phase 1 service)
   - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` (copy from Phase 1; the callback path `/auth/google/callback` is unchanged, but add the new service's address to the authorised redirect URIs in Google Cloud Console if it differs)
   - `ADMIN_EMAILS` (become admin once that email is confirmed)
+  - `ANTHROPIC_API_KEY` (copy from Phase 1; without it the AI features are switched off) and optionally `AI_REQUESTS_PER_HOUR` (default 40 per account)
 
 `npm run db:deploy` (`prisma migrate deploy`) only applies new migrations. It never drops data.
 

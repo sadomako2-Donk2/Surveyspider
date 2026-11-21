@@ -191,6 +191,8 @@ model Survey {
   attentionCheck     Boolean         @default(false)
   libraryHeadline    String?
   libraryPublishedAt DateTime?
+  // Latest AI insight report (owner-only, like the answers it is drawn from). Null until one is written.
+  aiReport           Json?
   launchedAt         DateTime?
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt

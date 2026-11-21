@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AiDraft } from "@/components/ai/AiDraft";
 import { SurveyBuilder } from "@/components/surveys/SurveyBuilder";
 import { SurveysNav } from "@/components/surveys/SurveysNav";
 import { DEFAULT_CONSENT, OPEN_SCREENING, SURVEY_TEMPLATES } from "@/lib/surveys";
+import { aiEnabled } from "@/server/ai/claude";
 import { signedInPage } from "@/server/surveys/pages";
 
 export const metadata: Metadata = { title: "Create a survey", robots: { index: false } };
@@ -20,6 +22,7 @@ export default async function NewSurvey({ searchParams }: { searchParams: Promis
           <span className="eyebrow">New survey</span>
           <h1>How would you like to start?</h1>
         </div>
+        <AiDraft aiOn={aiEnabled()} />
         {(
           [
             ["research", "Research templates"],
@@ -60,6 +63,7 @@ export default async function NewSurvey({ searchParams }: { searchParams: Promis
         <h1>Build your survey</h1>
       </div>
       <SurveyBuilder
+        aiOn={aiEnabled()}
         initial={{
           status: "DRAFT",
           title: t?.title ?? "",

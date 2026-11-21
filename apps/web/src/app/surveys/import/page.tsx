@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Importer } from "@/components/surveys/importer/Importer";
 import { SurveysNav } from "@/components/surveys/SurveysNav";
+import { aiEnabled } from "@/server/ai/claude";
 import { signedInPage } from "@/server/surveys/pages";
 
 export const metadata: Metadata = { title: "Upload a questionnaire", robots: { index: false } };
@@ -20,7 +21,7 @@ export default async function ImportPage() {
         </p>
       </div>
       <div className="builder">
-        <Importer />
+        <Importer aiOn={aiEnabled()} />
         <aside className="stack">
           <section className="card">
             <h2>How it works</h2>

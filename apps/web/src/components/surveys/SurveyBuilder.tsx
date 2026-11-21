@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { AiChecker } from "@/components/ai/AiChecker";
 import { DownloadExcel } from "./importer/DownloadExcel";
 import {
   COUNTRIES,
@@ -56,7 +57,7 @@ const blank = (type: QuestionTypeCode): Q =>
 const usd = (minor: number) =>
   `US$${(minor / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
-export function SurveyBuilder({ initial }: { initial: BuilderSurvey }) {
+export function SurveyBuilder({ initial, aiOn = false }: { initial: BuilderSurvey; aiOn?: boolean }) {
   const router = useRouter();
   const [s, setS] = useState({ ...initial, questions: initial.questions.map(withKey) });
   const [busy, setBusy] = useState<"" | "save" | "publish">("");
@@ -474,6 +475,18 @@ export function SurveyBuilder({ initial }: { initial: BuilderSurvey }) {
             With no limits, anyone with the link can answer. Limits use the participant&apos;s profile.
           </p>
         </section>
+        <AiChecker
+          aiOn={aiOn}
+          title={s.title}
+          description={s.description}
+          questions={s.questions}
+          onApply={(key, text) =>
+            set(
+              "questions",
+              s.questions.map((q) => (q.key === key ? { ...q, text } : q)),
+            )
+          }
+        />
         <section className="card sticky-actions">
           {problems.length > 0 && (
             <ul className="hint problems">

@@ -71,4 +71,7 @@
 | 2026-11 | Email confirmation counts only failed attempts per connection (30 an hour) | Found by tests: a training room or office sharing one internet address would block each other after 30 confirmations; links can't be guessed anyway |
 | 2026-11 | Paper Survey requests are priced again on the server from the project details | Phase 1 stored the total sent by the browser, which could be altered |
 | 2026-11 | Paper Survey quotes need no account | Same as Phase 1; quotes are a sales tool; requests join an account once the email is confirmed |
-
+| 2026-11 | AI prompts are built on the server, one route per feature, instead of Phase 1's general "send any prompt" endpoint | The browser can't use the site's AI key for anything else, and the server decides exactly which survey data Claude sees |
+| 2026-11 | AI analysis gets a text summary built from the owner-only analysis query, not raw responses | Same rules as the Analyze page: no participant codes or ids, groups under 3 not listed, filters can't single anyone out |
+| 2026-11 | The latest AI report is saved on the survey (`Survey.aiReport`) | Same as Phase 1, so step 9 can carry existing reports across |
+| 2026-11 | Tests use a fake Claude server (`tests/support/fake-anthropic.ts`) through `ANTHROPIC_BASE_URL` | The real SDK code (fallback retry, error handling) is tested with no network calls or spend |

@@ -5,8 +5,10 @@ import { htmlToLines, parseQuestionnaire, type ParsedQuestionnaire } from "@/lib
 import { readSurveyWorkbook } from "@/lib/import/excel";
 
 export interface ReadResult extends ParsedQuestionnaire {
-  method: "excel" | "auto";
+  method: "excel" | "auto" | "ai";
   file: string;
+  /** The document's text, kept in the browser so the person can choose to have AI read it instead. */
+  text?: string;
 }
 
 export class ReadError extends Error {}
@@ -72,11 +74,12 @@ export async function readQuestionnaireFile(file: File): Promise<ReadResult> {
       "This file couldn't be read. It may be damaged or password-protected. Try saving it again, or paste the questions instead.",
     );
   }
-  return { method: "auto", file: name, ...parseQuestionnaire(lines, base) };
+  return { method: "auto", file: name, text: lines.join("\n"), ...parseQuestionnaire(lines, base) };
 }
 
 export const readPastedText = (text: string): ReadResult => ({
   method: "auto",
   file: "Pasted text",
+  text,
   ...parseQuestionnaire(text.split(/\r?\n/), "Pasted questionnaire"),
 });
