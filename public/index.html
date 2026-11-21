@@ -487,6 +487,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
 @media (max-width: 560px) { .units, .course-grid, .grid4, .calc-out, .pillars-panel { grid-template-columns: 1fr; } .band-list { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: no-preference) { .btn, .opt, .tpl { transition: border-color .15s, background-color .15s; } }
 /* photos on the public pages (illustrative images) */
+.hero-solo { grid-template-columns: minmax(0, 1fr); max-width: 860px; }
 .photo { margin: 0; display: grid; gap: 6px; }
 .photo-frame { position: relative; aspect-ratio: 21 / 8; border-radius: 18px; overflow: hidden; background: var(--navy-band); border-bottom: 3px solid var(--gold); }
 .photo-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -2700,16 +2701,17 @@ ${richSummary(st, rows)}`;
   const upcoming = (c) => (c.sessions || []).filter((s) => !s.start || s.start >= todayISO()).sort((a, b) => (a.start || "9").localeCompare(b.start || "9"));
   const myEnrol = (cid, sid) => S.enrollments.find((e) => e.userId === S.uid && e.courseId === cid && (sid === undefined || (e.sessionId || "") === sid) && e.status !== "cancelled");
   const sentenceBlocks = (t) => String(t || "").split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean).map((p) => `<p>${esc(p)}</p>`).join("");
-  // Illustrative images (not Afrimetrica staff or projects), so each is captioned as such; alt text names no one.
+  // Illustrative images (not Afrimetrica staff or projects); their alt text describes the scene and names no one.
   const PHOTO = {
     home: ["home.webp", "A team around a laptop discussing research results, with charts and a map of Africa on a screen behind them", "center 30%"],
     training: ["training.webp", "A trainer points to charts and a map of Africa on a screen while participants at a table listen and take notes", "center 35%"],
     academy: ["academy-class.webp", "A trainer speaks to a class seated with laptops, in front of a screen titled Research and Data Analytics Training", "center 30%"],
     surveys: ["surveys.webp", "An interviewer with a tablet talks with a smiling market trader at her stall", "center 35%"],
     about: ["about.webp", "A busy African city street with office towers, traffic and banners reading Innovation for Africa and Data, Research, Analytics, Impact", "center 40%"],
+    consultancy: ["consultancy.webp", "A consultant presents to a group around a meeting table, with a map of Africa and charts on a screen and printed reports on the table", "center 35%"],
     analytics: ["analytics.webp", "Three analysts look at a laptop together, with a dashboard of charts on the wall behind them", "center 8%"],
   };
-  const photo = (k) => { const [f, alt, pos] = PHOTO[k]; return `<figure class="photo"><div class="photo-frame"><img src="/photos/${f}" alt="${esc(alt)}" loading="lazy" decoding="async" style="object-position:${pos}"></div><figcaption>Illustrative image</figcaption></figure>`; };
+  const photo = (k) => { const [f, alt, pos] = PHOTO[k]; return `<figure class="photo"><div class="photo-frame"><img src="/photos/${f}" alt="${esc(alt)}" loading="lazy" decoding="async" style="object-position:${pos}"></div></figure>`; };
   const UNITS = [
     { key: "training", brand: "Afrimetrica Academy", title: "Research methods training", text: "Short courses, institutional workshops and online learning in research design, survey methods, data analysis and evaluation.", points: ["Practical, hands-on sessions", "In-house workshops for your team", "Certificates of completion"], cta: "Explore courses" },
     { key: "surveys", brand: "Afrimetrica Surveys", title: "Survey tools", text: "Build questionnaires, collect responses online or face to face, and analyse them with built-in statistics and AI.", points: ["Word, PDF and Excel upload", "Paid participant panel", "Analysis and Excel reports"], cta: "Start a survey" },
@@ -2797,16 +2799,12 @@ ${richSummary(st, rows)}`;
   function viewHome() {
     const up = S.courses.filter((c) => c.status === "published").map((c) => ({ c, s: upcoming(c)[0] })).sort((a, b) => ((a.s && a.s.start) || "9").localeCompare((b.s && b.s.start) || "9")).slice(0, 3);
     return `
-    <section class="hero2 afri-hero">
+    <section class="hero2 afri-hero hero-solo">
       <div>
         <span class="eyebrow gold">Centre for Research Methods and Analytics · Ghana</span>
         <h1>Advancing research, <span class="gold-text">measurement and evidence.</span></h1>
         <p class="lede">Afrimetrica helps researchers, organisations and students design better studies, collect reliable data and turn it into evidence. We train, build survey tools, analyse data and advise, all in one place.</p>
         <div class="hero-ctas"><a class="btn gold big" href="#training">Explore courses</a><a class="btn primary big" href="#surveys">Start a survey</a><a class="btn big" href="#consultancy">Talk to a consultant</a></div>
-      </div>
-      <div class="pillars-panel" aria-label="Afrimetrica's services">
-        ${UNITS.map((u) => `<a class="pillar" href="#${u.key}"><span class="eyebrow">${esc(u.brand)}</span><b>${esc(u.title)}</b><span>${esc(u.points[0])}</span></a>`).join("")}
-        <a class="pillar wide" href="#resources"><span class="eyebrow">Afrimetrica Knowledge Hub</span><b>Guides, templates and open data</b><span>Free resources for better research</span></a>
       </div>
     </section>
     ${photo("home")}
@@ -2923,6 +2921,7 @@ ${richSummary(st, rows)}`;
   }
   function viewConsult() {
     return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Consulting</span><h1>Research and evaluation consultancy</h1><p class="muted" style="max-width:66ch">From a single questionnaire review to a full multi-site study, we design, run and report research that stands up to scrutiny.</p></div></div>
+      ${photo("consultancy")}
       ${serviceCards([["Research design and methodology", "Study designs, sampling plans, protocols and data collection tools tailored to your questions and budget."], ["Monitoring and evaluation", "Theories of change, results frameworks, baselines, mid-term and final evaluations."], ["Surveys and fieldwork", "Online, telephone and face-to-face data collection with trained field teams and quality checks."], ["Commissioned studies and reports", "End-to-end studies, from inception report to final report and presentation."]])}
       <div class="split">
         ${enquiryForm("consultancy", { title: "Discuss a project", intro: "Tell us about your project. We'll reply within two working days to arrange a call.", services: CONSULT_SERVICES, budget: true, messageLabel: "About your project", placeholder: "Objectives, target population, locations, deadlines and any terms of reference." })}
