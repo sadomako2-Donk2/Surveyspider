@@ -40,4 +40,10 @@
 | 2026-11 | Unknown currencies are rejected (Phase 1 silently used USD) | Avoids publishing a wrong fee |
 | 2026-11 | CSV cells starting with = + - @ are prefixed with ' | Stops spreadsheet formula injection from names or notes typed by the public |
 | 2026-11 | People can cancel their own Registered/Interest places; Confirmed and later statuses only by Afrimetrica | A confirmed place may involve payment or invoicing |
+| 2026-11 | No automatic "we received your enquiry" email to the sender | Public forms with receipts can be used to send unwanted email to any address; senders see a confirmation on screen instead |
+| 2026-11 | Spam protection: hidden "honeypot" field plus 10 enquiries per connection per hour | Stops simple bots without a CAPTCHA that would hurt real visitors |
+| 2026-11 | Enquiries join an account only when the email matches and is confirmed | Nobody can read someone else's enquiries by signing up with their address |
+| 2026-11 | Service, timeline and budget must be one of the offered choices | Keeps the inbox and CSV clean and filterable |
+| 2026-11 | LinkedIn link must be an https link on linkedin.com | Prevents the Contact page linking to an unsafe site |
+| 2026-11 | Paper Survey (fieldwork) requests move with the survey tools in step 7 | They belong to the survey quote flow, not general enquiries |
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { EnquirySlot, PageHead, ServiceCards } from "@/components/site/blocks";
+import { EnquiryForm } from "@/components/enquiries/EnquiryForm";
+import { PageHead, ServiceCards } from "@/components/site/blocks";
 import { ANALYTICS_CARDS } from "@/content/pages";
 
 export const metadata: Metadata = {
@@ -19,10 +20,12 @@ export default function Analytics() {
       </PageHead>
       <ServiceCards cards={ANALYTICS_CARDS} />
       <div className="split">
-        <EnquirySlot
-          phase1Anchor="analytics"
+        <EnquiryForm
+          type="ANALYTICS"
           title="Request an analysis"
           intro="Describe your data and what you need to know. We'll reply with an approach, a timeline and a quote."
+          messageLabel="Your data and questions"
+          placeholder="e.g. 1,200 household survey responses in Excel; we need prevalence estimates by region."
         />
         <section className="card">
           <h2>How we work</h2>

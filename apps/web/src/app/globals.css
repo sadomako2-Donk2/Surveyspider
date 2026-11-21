@@ -1031,3 +1031,32 @@ label.inline select {
     display: none;
   }
 }
+
+/* ---------- enquiries (step 6) ---------- */
+.enquiry-done {
+  border-left: 3px solid var(--gold);
+}
+.enquiry-done h2 {
+  margin: 0;
+}
+.hp {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.enquiry {
+  position: relative;
+}
+.card.narrow {
+  max-width: 760px;
+}
+.add-member {
+  align-items: end;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+.add-member label:first-child {
+  flex: 1 1 260px;
+}

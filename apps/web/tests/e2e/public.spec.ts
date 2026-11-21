@@ -85,17 +85,3 @@ test("the home page describes the organisation for search engines", async ({ pag
     parentOrganization: { name: "Regelco International Ltd" },
   });
 });
-
-test("enquiry forms point to the current site until step 6", async ({ page }) => {
-  await page.goto("/consultancy");
-  await expect(page.getByRole("link", { name: "Open the enquiry form" })).toHaveAttribute(
-    "href",
-    "https://surveyspider.onrender.com/#consultancy",
-  );
-});
-
-test("contact details set by an administrator appear on the Contact page", async ({ page }) => {
-  // No details are set in a fresh database, so the page says how to reach us instead of showing empty fields.
-  await page.goto("/contact");
-  await expect(page.getByText("Use the enquiry form and we'll reply by email.")).toBeVisible();
-});

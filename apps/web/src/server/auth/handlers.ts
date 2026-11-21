@@ -27,6 +27,13 @@ import { hashPassword, passwordProblem, verifyPassword } from "./password";
 import { assertCanManage, grantAdminFromEnv, RoleError, ROLES } from "./roles";
 import { clearSessionCookie, currentUser, endSession, startSession } from "./session";
 import { meResponse, needsVerification, publicUser } from "./users";
+import { linkEnquiriesToConfirmedUser } from "../enquiries/link";
+
+/** Runs whenever someone signs in or confirms their email. */
+async function afterSignIn(db: PrismaClient, user: User) {
+  await grantAdminFromEnv(db, user);
+  await linkEnquiriesToConfirmedUser(db, user);
+}
 
 type Handler = (req: Request, db: PrismaClient) => Promise<Response>;
 
@@ -134,7 +141,7 @@ export const login = handle(async (req, db) => {
     return fail(401, "invalid_credentials", "This email signs in with Google. Use Continue with Google.");
   if (!user || !(await verifyPassword(String(b.password ?? ""), user.passwordHash)))
     return fail(401, "invalid_credentials", "Wrong email or password.");
-  await grantAdminFromEnv(db, user);
+  await afterSignIn(db, user);
   const set = await startSession(db, req, user.id);
   return json(200, { user: publicUser(user), needsVerification: needsVerification(user) }, [set]);
 });
@@ -163,7 +170,7 @@ export const verifyEmail = handle(async (req, db) => {
     db.authToken.deleteMany({ where: { userId: t.userId, purpose: "VERIFY_EMAIL" } }),
     db.user.update({ where: { id: t.userId }, data: { emailVerifiedAt: t.user.emailVerifiedAt ?? new Date() } }),
   ]);
-  await grantAdminFromEnv(db, user);
+  await afterSignIn(db, user);
   return json(200, { ok: true, email: user.email });
 });
 
@@ -244,7 +251,7 @@ export const resetPassword = handle(async (req, db) => {
     entityId: user.id,
     ip: clientIp(req),
   });
-  await grantAdminFromEnv(db, user);
+  await afterSignIn(db, user);
   const set = await startSession(db, req, user.id);
   return json(200, { user: publicUser(user) }, [set]);
 });
@@ -341,7 +348,7 @@ export const googleCallback = handle(async (req, db) => {
           ip: clientIp(req),
         });
     }
-    await grantAdminFromEnv(db, user);
+    await afterSignIn(db, user);
     const set = await startSession(db, req, user.id);
     return redirect(`${safeNext(next)}?signed_in=google`, [clear, set]);
   } catch (e) {

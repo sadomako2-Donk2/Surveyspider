@@ -38,7 +38,8 @@ fakeResend.listen(MAIL_PORT, "127.0.0.1", async () => {
               FAKE_MAIL_URL: `http://127.0.0.1:${MAIL_PORT}/__emails`,
               PUBLIC_URL: "",
               GOOGLE_CLIENT_ID: "",
-              ADMIN_EMAILS: "e2e-admin-desktop@example.com,e2e-admin-mobile@example.com",
+              ADMIN_EMAILS:
+                "e2e-admin-desktop@example.com,e2e-admin-mobile@example.com,e2e-inbox-desktop@example.com,e2e-inbox-mobile@example.com,e2e-boss-desktop@example.com",
             },
           }).on("exit", (code) => resolve(code ?? 1)),
         ),

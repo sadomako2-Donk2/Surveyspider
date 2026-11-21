@@ -29,3 +29,12 @@
 - My Account lists the person's registrations with status; Registered and Interest can be cancelled there.
 - Administrators (`/admin`): create courses from 8 templates or blank, edit, publish, archive or delete (only without registrations); add dates with venue, seats and fee in USD, GHS, GBP or EUR; see and filter registrations, set status, download CSV.
 - Every administrator action is written to the audit log; administrators (and ADMIN_EMAILS) are emailed for each registration.
+
+## Phase 2 enquiries and admin (step 6)
+- Enquiry forms on Training, Analytics, Consultancy and Contact. No account needed. Name, valid email, a message and consent are required; service, timeline and budget are optional choices.
+- Admin area tabs: Courses, Registrations, Enquiries, Contact details, Team, Activity.
+- Enquiries inbox: filter by type and status, change status (New, Contacted, In progress, Won, Closed), download CSV. Site administrators and ADMIN_EMAILS are emailed for each new enquiry.
+- Contact details (email, phone, WhatsApp, address, hours, LinkedIn) appear on the Contact page; blank fields are hidden.
+- Team: owners manage everyone; admins add and change analysts and members.
+- Activity: the latest 200 audit-log entries, read-only.
+- My Account lists the person's enquiries with a plain-language status.

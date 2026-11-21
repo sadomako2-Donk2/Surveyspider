@@ -4,6 +4,7 @@ import Link from "next/link";
 import { CancelRegistration } from "@/components/academy/EnrollmentControls";
 import { ResendVerification, SignOutButton } from "@/components/auth/AccountActions";
 import { ENROLLMENT_LABEL, formatDates } from "@/lib/academy";
+import { ENQUIRY_STATUS_FOR_SENDER, ENQUIRY_TYPE_LABEL } from "@/lib/enquiries";
 import { getDb } from "@/lib/db";
 import { getCurrentUser } from "@/server/current-user";
 import { meResponse } from "@/server/auth/users";
@@ -19,6 +20,11 @@ export default async function Account({ searchParams }: { searchParams: Promise<
   const q = await searchParams;
   const db = getDb();
   const me = await meResponse(db, user);
+  const enquiries = await db.enquiry.findMany({
+    where: { requesterId: user.id },
+    select: { id: true, type: true, status: true, service: true, subject: true, createdAt: true },
+    orderBy: { createdAt: "desc" },
+  });
   const enrollments = await db.enrollment.findMany({
     where: { userId: user.id },
     include: { course: { select: { title: true, slug: true, status: true } }, session: true },
@@ -129,7 +135,48 @@ export default async function Account({ searchParams }: { searchParams: Promise<
           </Link>
         </p>
       )}
-      <p className="hint">Your surveys and enquiries will appear here as those parts of the new site are built.</p>
+      <section className="card">
+        <h2>My enquiries</h2>
+        {enquiries.length ? (
+          <div className="table-wrap">
+            <table className="wide stack-table">
+              <thead>
+                <tr>
+                  <th scope="col">Sent</th>
+                  <th scope="col">About</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {enquiries.map((e) => (
+                  <tr key={e.id}>
+                    <td data-label="Sent" className="n">
+                      {e.createdAt.toLocaleDateString("en-GB", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                        timeZone: "UTC",
+                      })}
+                    </td>
+                    <td data-label="About">
+                      {[ENQUIRY_TYPE_LABEL[e.type], e.service || e.subject].filter(Boolean).join(" · ")}
+                    </td>
+                    <td data-label="Status">
+                      <span className="pill">{ENQUIRY_STATUS_FOR_SENDER[e.status]}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="muted">
+            No enquiries yet. Ask us about <Link href="/consultancy">consultancy</Link>,{" "}
+            <Link href="/analytics">analysis</Link> or <Link href="/training">training</Link>.
+          </p>
+        )}
+      </section>
+      <p className="hint">Your surveys will appear here when the survey tools move to the new site.</p>
     </main>
   );
 }

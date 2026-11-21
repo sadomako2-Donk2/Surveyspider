@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CourseCard } from "@/components/academy/CourseCard";
-import { EnquirySlot, PageHead, Ticks } from "@/components/site/blocks";
+import { EnquiryForm } from "@/components/enquiries/EnquiryForm";
+import { PageHead, Ticks } from "@/components/site/blocks";
 import courseTemplates from "@/content/course-templates.json";
 import { getDb } from "@/lib/db";
 import { listPublishedCourses } from "@/server/academy/service";
@@ -72,10 +73,13 @@ export default async function Training() {
       )}
 
       <div className="split">
-        <EnquirySlot
-          phase1Anchor="training"
+        <EnquiryForm
+          type="TRAINING"
           title="Training for your organisation"
           intro="Tell us what you'd like to learn, how many people would attend and where. We run public courses and tailored in-house workshops."
+          serviceLabel="What are you interested in?"
+          messageLabel="Topics, group size and location"
+          placeholder="e.g. A 2-day questionnaire design workshop for 20 M&E staff in Kumasi"
         />
         <section className="card">
           <h2>What to expect</h2>

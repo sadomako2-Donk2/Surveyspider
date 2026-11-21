@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { EnquirySlot, PageHead, ServiceCards, Ticks } from "@/components/site/blocks";
+import { EnquiryForm } from "@/components/enquiries/EnquiryForm";
+import { PageHead, ServiceCards, Ticks } from "@/components/site/blocks";
 import { CONSULTANCY_CARDS } from "@/content/pages";
 
 export const metadata: Metadata = {
@@ -19,10 +20,12 @@ export default function Consultancy() {
       </PageHead>
       <ServiceCards cards={CONSULTANCY_CARDS} />
       <div className="split">
-        <EnquirySlot
-          phase1Anchor="consultancy"
+        <EnquiryForm
+          type="CONSULTANCY"
           title="Discuss a project"
-          intro="Tell us about your project: objectives, target population, locations, deadlines and any terms of reference. We'll reply within two working days."
+          intro="Tell us about your project. We'll reply within two working days to arrange a call."
+          messageLabel="About your project"
+          placeholder="Objectives, target population, locations, deadlines and any terms of reference."
         />
         <section className="card">
           <h2>Need face-to-face interviews?</h2>

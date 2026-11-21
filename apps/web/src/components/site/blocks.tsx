@@ -46,25 +46,6 @@ export function ServiceCards({ cards }: { cards: ServiceCard[] }) {
   );
 }
 
-/**
- * Where the online enquiry form goes. The forms (with storage, admin inbox and email alerts) are built in
- * Phase 2 step 6; until then this points people to the live site's form. Remove when step 6 lands.
- */
-export function EnquirySlot({ title, intro, phase1Anchor }: { title: string; intro: string; phase1Anchor: string }) {
-  return (
-    <section className="card enquiry-slot" aria-labelledby={`enq-${phase1Anchor}`}>
-      <h2 id={`enq-${phase1Anchor}`}>{title}</h2>
-      <p className="muted">{intro}</p>
-      <p className="hint">
-        The online form is being moved to the new site. Until then, please use the form on our current site.
-      </p>
-      <a className="btn primary" href={`https://surveyspider.onrender.com/#${phase1Anchor}`} rel="noopener">
-        Open the enquiry form
-      </a>
-    </section>
-  );
-}
-
 export function Band({
   eyebrow,
   title,
