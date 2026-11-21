@@ -1,8 +1,8 @@
 {
-  "name": "surveyspider",
-  "version": "1.0.0",
+  "name": "afrimetrica",
+  "version": "1.1.0",
   "private": true,
-  "description": "SurveySpider: AI-powered surveys, participant panel and analytics",
+  "description": "Afrimetrica: research methods training, surveys, analytics and consultancy",
   "type": "module",
   "main": "server.mjs",
   "scripts": {

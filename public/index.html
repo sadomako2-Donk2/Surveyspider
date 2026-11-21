@@ -1,9 +1,9 @@
-<title>SurveySpider</title>
+<title>Afrimetrica</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: SurveySpider navy-and-gold app shell. Sticky top bar (logo + workspaces), one working column (max 1180px); builder, analysis and pricing split into a main column plus a side rail that stacks on phones. */
+/* Layout: Afrimetrica navy-and-gold app shell. Sticky top bar (logo + workspaces), one working column (max 1180px); builder, analysis and pricing split into a main column plus a side rail that stacks on phones. */
 :root {
   --bg: #f5f6f9;
   --surface: #ffffff;
@@ -65,11 +65,10 @@ a { color: var(--accent); }
 @media (min-width: 1500px) { .topbar-inner { max-width: 1440px; } }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); white-space: nowrap; flex: none; }
 .brand svg { display: block; }
-.logo-mark .web { stroke: var(--ink); opacity: 0.9; }
-.logo-mark .ss-plate { fill: var(--surface); }
-.logo-mark .spider { fill: var(--ink); stroke: var(--ink); }
+.logo-mark .af-a { stroke: var(--ink); }
+.logo-mark .af-dot { stroke: var(--surface); stroke-width: 1.4; }
 .brand .wm { display: flex; flex-direction: column; line-height: 1; }
-.brand .wm b { font-family: var(--font-display); font-weight: 800; font-size: 1.22rem; letter-spacing: 0.01em; }
+.brand .wm b { font-family: var(--font-display); font-weight: 800; font-size: 1.22rem; letter-spacing: 0.04em; }
 .brand .wm small { white-space: nowrap; font-family: var(--font-display); font-weight: 600; font-size: 0.56rem; letter-spacing: 0.28em; color: var(--muted); margin-top: 3px; }
 .tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; min-width: 0; }
 .tabs a { padding: 7px 11px; border-radius: 8px; color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
@@ -289,6 +288,7 @@ td.n { font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-
 .band-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .band-item { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 12px; padding: 14px; text-align: left; font: inherit; color: var(--navy-band-ink); cursor: pointer; display: flex; flex-direction: column; gap: 4px; }
 .band-item:hover { border-color: var(--gold-hi); }
+a.band-item { text-decoration: none; }
 .band-item b { font-family: var(--font-display); }
 .band-item span { font-size: 0.82rem; opacity: 0.75; }
 .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; align-items: start; }
@@ -435,35 +435,75 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   .brand .wm small { display: none; }
   .brand .wm b { font-size: 1.05rem; }
 }
+/* Afrimetrica: survey sub-navigation, institution pages, Academy, Knowledge Hub */
+.subnav { background: var(--bg); border-bottom: 1px solid var(--line); }
+.subnav-inner { max-width: 1180px; margin: 0 auto; display: flex; align-items: center; gap: 14px; padding-block: 6px; min-width: 0; }
+.subnav-label { font-family: var(--font-display); font-weight: 700; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); white-space: nowrap; }
+.subnav-links { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; min-width: 0; }
+.subnav-links a { padding: 6px 10px; border-radius: 7px; color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+.subnav-links a:hover { color: var(--ink); background: var(--surface); }
+.subnav-links a[aria-current="page"] { color: var(--ink); background: var(--surface); box-shadow: inset 0 -2px 0 var(--gold); }
+@media (max-width: 640px) { .subnav-label { display: none; } }
+.pillars-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: var(--navy-band); border-radius: 18px; padding: 16px; border: 1px solid rgba(220, 183, 90, 0.35); }
+.pillar { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 12px; padding: 14px; color: var(--navy-band-ink); text-decoration: none; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.pillar:hover { border-color: var(--gold-hi); }
+.pillar .eyebrow { color: var(--gold-hi); font-size: 0.62rem; }
+.pillar b { font-family: var(--font-display); font-size: 1rem; }
+.pillar span:last-child { font-size: 0.82rem; opacity: 0.75; }
+.pillar.wide { grid-column: 1 / -1; }
+.units { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.unit { gap: 10px; }
+.unit h3 { font-size: 1.08rem; }
+.unit p { font-size: 0.9rem; }
+.ticks.small { gap: 8px; }
+.ticks.small span { font-size: 0.86rem; }
+.course-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.course { gap: 10px; }
+.course h3 { font-size: 1.08rem; }
+.course p { font-size: 0.9rem; }
+.course-meta { display: flex; flex-direction: column; gap: 2px; font-size: 0.86rem; border-top: 1px solid var(--line); padding-top: 10px; margin-top: auto; }
+.course-meta span:last-child { color: var(--muted); }
+.guide-link { text-decoration: none; color: var(--ink); gap: 4px; padding: 14px 16px; }
+.guide-link:hover { border-color: var(--gold); }
+.prose p { max-width: 70ch; }
+.prose h2 { font-size: 1.12rem; margin-top: 6px; }
+.lede-sm { font-size: 1.04rem; color: var(--muted); }
+.guide { max-width: 820px; }
+.grid4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.calc-out { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.calc-out div { background: var(--gold-soft); border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; }
+.calc-out b { font-family: var(--font-display); font-size: 1.6rem; font-variant-numeric: tabular-nums; color: var(--ink); }
+.contact-item { display: flex; flex-direction: column; gap: 2px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.sel { user-select: all; }
+.ses-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.ses { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.ses > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.enq-done { border-left: 3px solid var(--gold); }
+.ses-table input, .ses-table select { min-width: 92px; }
+.foot-inner { display: flex; justify-content: space-between; gap: 8px 24px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 16px; }
+.foot-inner > div { max-width: 60ch; }
+@media (max-width: 1100px) { .units { grid-template-columns: repeat(2, minmax(0, 1fr)); } .course-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 960px) { .afri-hero, .split, .band { grid-template-columns: 1fr; } .grid4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .units, .course-grid, .grid4, .calc-out, .pillars-panel { grid-template-columns: 1fr; } .band-list { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: no-preference) { .btn, .opt, .tpl { transition: border-color .15s, background-color .15s; } }
 </style>
 
 <header class="topbar gutter">
   <div class="topbar-inner">
-    <a class="brand" href="#home" aria-label="SurveySpider home">
+    <a class="brand" href="#home" aria-label="Afrimetrica home">
       <svg class="logo-mark" width="40" height="40" viewBox="0 0 48 48" aria-hidden="true">
-        <defs>
-          <linearGradient id="ssGold" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#a87a22"/><stop offset="0.5" stop-color="#f2d27e"/><stop offset="1" stop-color="#b8862b"/></linearGradient>
-          <radialGradient id="ssGlow" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#f6dd96" stop-opacity="0.55"/><stop offset="1" stop-color="#f6dd96" stop-opacity="0"/></radialGradient>
-        </defs>
-        <polygon points="24.00,2.50 39.20,8.80 45.50,24.00 39.20,39.20 24.00,45.50 8.80,39.20 2.50,24.00 8.80,8.80" class="ss-plate"/>
-        <polygon points="24.00,3.57 32.82,15.18 45.07,24.00 31.60,31.60 24.00,41.63 14.57,33.43 4.65,24.00 16.09,16.09" fill="url(#ssGold)" stroke="#8a6418" stroke-opacity="0.35" stroke-width="0.6" stroke-linejoin="round"/>
-        <circle cx="24" cy="25" r="9" fill="url(#ssGlow)"/>
-        <g class="web" fill="none" stroke-linejoin="round" stroke-linecap="round">
-          <polygon points="24.00,2.50 39.20,8.80 45.50,24.00 39.20,39.20 24.00,45.50 8.80,39.20 2.50,24.00 8.80,8.80" stroke-width="2.3"/><polygon points="24.00,9.50 34.25,13.75 38.50,24.00 34.25,34.25 24.00,38.50 13.75,34.25 9.50,24.00 13.75,13.75" stroke-width="1.3"/><polygon points="24.00,16.50 29.30,18.70 31.50,24.00 29.30,29.30 24.00,31.50 18.70,29.30 16.50,24.00 18.70,18.70" stroke-width="1.1"/><path d="M24 24L24.00 2.50M24 24L39.20 8.80M24 24L45.50 24.00M24 24L39.20 39.20M24 24L24.00 45.50M24 24L8.80 39.20M24 24L2.50 24.00M24 24L8.80 8.80" stroke-width="1.1"/>
-        </g>
-        <g class="spider">
-          <path d="M21.8 23 17.6 18.2 16 13.2 M21.2 24.8 15.6 22.6 12 21.6 M21.2 27.2 15.6 28.8 12.2 31.4 M21.9 29.2 17.8 33.2 16.4 37.4 M26.2 23 30.4 18.2 32 13.2 M26.8 24.8 32.4 22.6 36 21.6 M26.8 27.2 32.4 28.8 35.8 31.4 M26.1 29.2 30.2 33.2 31.6 37.4" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-          <ellipse cx="24" cy="28.2" rx="4.1" ry="4.8"/><circle cx="24" cy="22.2" r="2.8"/>
-          <path d="M24 25.6v5.2" stroke="#e9c46a" stroke-width="1.1" stroke-linecap="round" fill="none"/>
-        </g>
+        <defs><linearGradient id="afGold" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#a87a22"/><stop offset="0.55" stop-color="#f2d27e"/><stop offset="1" stop-color="#c4952f"/></linearGradient></defs>
+        <path class="af-a" d="M6 43 21.2 7.6a3 3 0 0 1 5.6 0L42 43" fill="none" stroke-width="6.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M13.5 32.5 21 28.5l5 2.2 9.8-8.6" fill="none" stroke="url(#afGold)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="38.6" cy="19.6" r="3.6" fill="#f2d27e" class="af-dot"/>
       </svg>
-      <span class="wm"><b>Survey<span class="gold-text">Spider</span></b><small>SURVEYS · INSIGHTS · AI</small></span>
+      <span class="wm"><b>AFRI<span class="gold-text">METRICA</span></b><small>RESEARCH METHODS &amp; ANALYTICS</small></span>
     </a>
-    <nav class="tabs" id="tabs" aria-label="Workspaces"></nav>
+    <nav class="tabs" id="tabs" aria-label="Main"></nav>
     <div class="acct" id="acct"></div>
   </div>
 </header>
+<nav class="subnav gutter" id="subnav" aria-label="Afrimetrica Surveys" hidden></nav>
 <div class="gutter"><div class="banner" id="banner" hidden></div></div>
 <main class="gutter" id="main"></main>
 <footer class="gutter" id="foot"></footer>
@@ -500,7 +540,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   }
   const typeLabel = (q) => { if (q.type !== "rating") return QTYPES[q.type] || q.type; const s = scaleOf(q); return `Rating ${s.min}–${s.max}`; };
   const ATTN = { id: "attn", type: "single", text: "To show you are reading carefully, please choose \"Purple\".", options: ["Red", "Green", "Purple", "Blue"], required: true };
-  const TABS = [["home", "Home"], ["pricing", "Pricing"], ["create", "Create Survey"], ["import", "Upload Survey"], ["paper-survey", "Paper Survey"], ["studies", "My Surveys"], ["results", "Analyze"], ["panel", "Take surveys"], ["library", "Library"], ["business", "Business"], ["signin", "Sign in"]];
+  // navigation lives in the Afrimetrica module (TOPNAV, SURVEY_NAV, ROUTES)
 
   const TEMPLATES = {
     cx: { group: "research", name: "Customer satisfaction", blurb: "Measure satisfaction and find what to fix first.", title: "Online shopping satisfaction", description: "A short survey about your experience shopping online. There are no right or wrong answers.", minutes: 5, reward: 1.0, target: 150, occupations: [],
@@ -554,6 +594,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     segQ: null, segKey: "country", driverOut: null, reports: {}, aiBusy: null,
     user: null, authCfg: { google: false }, authMode: "signin", authError: "", returnTo: "",
     fieldwork: [], f2f: { method: "questionnaire", n: 300, groups: 4, perGroup: 8, country: "Ghana", setting: "urban", audience: "general", capture: "tablet", minutes: "", languages: 0, backTranslation: false, record: false, transcription: true, incentive: "", report: "summary", urgency: "standard", sourceId: "", ref: null, requesting: false },
+    courses: [], enrollments: [], enquiries: [], settings: {}, enqSent: {}, courseOpen: null, regFor: null, guideOpen: null, courseEdit: null, admTab: "overview", enqFilter: "",
     actions: [], filter: { key: "", val: "", days: 0 }, studio: { test: "desc", q: null, g: "country", a: "country", b: null, items: null }, chat: {}, actionDraft: null, confirmActDel: null
   };
   let DB = null, DL = null, SAMPLE = null, demo = null, pending = false, API = false;
@@ -584,7 +625,9 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   async function refreshServer() {
     const d = await api("GET", "/api/data");
     S.studies = d.studies || []; S.responses = d.responses || []; S.actions = d.actions || []; S.fieldwork = d.fieldwork || [];
-    if (typeof d.ai === "boolean" && d.ai !== !!SAMPLE) { SAMPLE = d.ai ? serverSample() : null; if (!isTyping()) setTimeout(render, 0); } // AI switched on or off while the page was open S.profile = d.profile || null; S.stale = false;
+    S.courses = d.courses || []; S.enrollments = d.enrollments || []; S.enquiries = d.enquiries || []; S.settings = d.settings || {};
+    if (typeof d.ai === "boolean" && d.ai !== !!SAMPLE) { SAMPLE = d.ai ? serverSample() : null; if (!isTyping()) setTimeout(render, 0); } // AI switched on or off while the page was open
+    S.profile = d.profile || null; S.stale = false;
   }
   function applyMe(me) { S.uid = me.uid; S.user = me.user || null; S.isOwner = !!me.isAdmin; S.authCfg = { google: !!me.google, reset: !!me.emailReset, verify: !!me.emailReset }; if (me.ai && !SAMPLE) SAMPLE = serverSample(); if (!me.ai) SAMPLE = null; }
   async function reloadMe() { applyMe(await api("GET", "/api/me")); await refreshServer(); }
@@ -612,14 +655,15 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   function startDemo(msg) {
     S.mode = "demo"; S.uid = "demo-you"; S.isOwner = true;
     demo = ls.get("cohortly-demo") || { studies: {}, responses: {}, profile: null };
-    demo.actions = demo.actions || {}; demo.fieldwork = demo.fieldwork || {};
+    demo.actions = demo.actions || {}; demo.fieldwork = demo.fieldwork || {}; demo.courses = demo.courses || {}; demo.enrollments = demo.enrollments || {}; demo.enquiries = demo.enquiries || {}; demo.settings = demo.settings || {};
     S.profile = demo.profile; syncDemo();
     if (msg) S.notice = msg;
     render();
   }
-  function syncDemo() { S.studies = Object.values(demo.studies); S.responses = Object.values(demo.responses); S.actions = Object.values(demo.actions || {}); S.fieldwork = Object.values(demo.fieldwork || {}); }
+  function syncDemo() { S.studies = Object.values(demo.studies); S.responses = Object.values(demo.responses); S.actions = Object.values(demo.actions || {}); S.fieldwork = Object.values(demo.fieldwork || {}); S.courses = Object.values(demo.courses || {}); S.enrollments = Object.values(demo.enrollments || {}); S.enquiries = Object.values(demo.enquiries || {}); S.settings = demo.settings || {}; }
   function persistDemo() { ls.set("cohortly-demo", demo); syncDemo(); }
   const sync = (p) => p.then(refreshServer);
+  const PRIV_KEY = { enquiries: "requesterId", enrollments: "userId" };
   const backend = {
     async putStudy(st) { if (API) return sync(api("PUT", "/api/studies/" + encodeURIComponent(st.id), st)); if (DB) return DB.collection("studies").doc(st.id).set(st); demo.studies[st.id] = st; persistDemo(); },
     async delStudy(id) { if (API) return sync(api("DELETE", "/api/studies/" + encodeURIComponent(id))); if (DB) return DB.collection("studies").doc(id).delete(); delete demo.studies[id]; persistDemo(); },
@@ -639,6 +683,22 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
       if (DB) return DB.collection("fieldwork").doc(r.requesterId).set({ requests: S.fieldwork.filter((x) => x.requesterId === r.requesterId).map((x) => strip(x.id === r.id ? { ...x, status } : x)) });
       demo.fieldwork[r.id].status = status; persistDemo();
     },
+    // enquiries and course registrations: on claude.ai each person's items live in one document named after them
+    async putPriv(coll, item) {
+      if (API) return sync(api("PUT", `/api/${coll}/` + encodeURIComponent(item.id), item));
+      const key = PRIV_KEY[coll];
+      if (DB) return DB.collection(coll).doc(S.uid).set({ items: [...S[coll].filter((x) => x[key] === S.uid), item].slice(-100) });
+      demo[coll][item.id] = item; persistDemo();
+    },
+    async patchPriv(coll, item, status) {
+      if (API) return sync(api("PATCH", `/api/${coll}/` + encodeURIComponent(item.id), { status }));
+      const key = PRIV_KEY[coll], who = item[key];
+      if (DB) return DB.collection(coll).doc(who).set({ items: S[coll].filter((x) => x[key] === who).map((x) => (x.id === item.id ? { ...x, status, updatedAt: Date.now() } : x)) });
+      demo[coll][item.id].status = status; persistDemo();
+    },
+    async putCourse(c) { if (API) return sync(api("PUT", "/api/courses/" + encodeURIComponent(c.id), c)); if (DB) return DB.collection("courses").doc(c.id).set(c); demo.courses[c.id] = c; persistDemo(); },
+    async delCourse(id) { if (API) return sync(api("DELETE", "/api/courses/" + encodeURIComponent(id))); if (DB) return DB.collection("courses").doc(id).delete(); delete demo.courses[id]; persistDemo(); },
+    async putSettings(x) { if (API) return sync(api("PUT", "/api/settings", x)); if (DB) return DB.collection("settings").doc("contact").set(x); demo.settings = x; persistDemo(); },
     async putProfile(p) { if (API) return sync(api("PUT", "/api/profile", p)); if (DB) return DB.doc("data/users/" + S.uid + "/profile").set(p); demo.profile = p; persistDemo(); }
   };
   function errMsg(e) {
@@ -678,18 +738,18 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     if (!S.user) { el.innerHTML = S.view === "signin" ? "" : `<a class="btn small primary" href="#signin" data-act="goSignin" data-m="signin">Sign in</a>`; return; }
     const u = S.user, ini = ((u.name || u.email).trim().split(/\s+/).map((w) => w[0]).join("").slice(0, 2) || "?").toUpperCase();
     el.innerHTML = `<details class="acct-menu"><summary aria-label="Account menu"><span class="avatar" aria-hidden="true">${esc(ini)}</span><span class="acct-name">${esc(firstName(u))}</span></summary>
-      <div class="acct-pop"><b>${esc(u.name || "Your account")}</b><span class="hint">${esc(u.email)}</span><span class="hint">${u.google ? "Signed in with Google" : "Email and password"}${S.isOwner ? " · site owner" : ""}</span>${unverified() ? `<span class="hint warn">Email not confirmed yet</span>` : ""}<button class="btn small" data-act="signout">Sign out</button></div></details>`;
+      <div class="acct-pop"><b>${esc(u.name || "Your account")}</b><span class="hint">${esc(u.email)}</span><span class="hint">${u.google ? "Signed in with Google" : "Email and password"}${S.isOwner ? " · site owner" : ""}</span>${unverified() ? `<span class="hint warn">Email not confirmed yet</span>` : ""}<a class="btn small ghost" href="#account">My Account</a>${S.isOwner ? `<a class="btn small ghost" href="#business">Admin area</a>` : ""}<button class="btn small" data-act="signout">Sign out</button></div></details>`;
   }
   const GOOGLE_G = `<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>`;
   function viewSignin() {
-    if (!API) return `<div class="empty"><h2>You're already signed in</h2><p class="muted">On claude.ai, SurveySpider uses your Claude account. Separate sign-in is used on the SurveySpider website.</p></div>`;
+    if (!API) return `<div class="empty"><h2>You're already signed in</h2><p class="muted">On claude.ai, Afrimetrica uses your Claude account. Separate sign-in is used on the Afrimetrica website.</p></div>`;
     if (S.authMode === "forgot") return `<div class="auth-wrap"><section class="card auth-card"><span class="eyebrow gold">Forgot password</span><h1>Reset your password</h1>
       <p class="muted">Enter the email address for your account and we'll send you a link to choose a new password.</p>
       <form id="forgotForm" class="stack" novalidate><label for="fp-email">Email<input id="fp-email" type="email" autocomplete="email" maxlength="160" value="${esc(S.forgotEmail || "")}" required></label><div id="authErr"></div>
       <button class="btn primary big" type="submit" style="align-self:stretch;justify-content:center">Send reset link</button></form>
       <p class="hint"><button type="button" class="linkbtn" data-act="authMode" data-m="signin">Back to sign in</button></p></section></div>`;
     if (S.authMode === "forgotSent") return `<div class="auth-wrap"><section class="card auth-card"><span class="eyebrow gold">Check your email</span><h1>We've sent you a link</h1>
-      <p class="muted">If there's a SurveySpider account for <b>${esc(S.forgotEmail || "that address")}</b>, an email with a reset link is on its way. The link works for 60 minutes and can be used once.</p>
+      <p class="muted">If there's an Afrimetrica account for <b>${esc(S.forgotEmail || "that address")}</b>, an email with a reset link is on its way. The link works for 60 minutes and can be used once.</p>
       <p class="hint">Nothing after a few minutes? Check your spam or junk folder, or <button type="button" class="linkbtn" data-act="authMode" data-m="forgot">send another link</button>.</p>
       <div><button class="btn" data-act="authMode" data-m="signin">Back to sign in</button></div></section></div>`;
     if (S.authMode === "reset") return `<div class="auth-wrap"><section class="card auth-card"><span class="eyebrow gold">New password</span><h1>Choose a new password</h1>
@@ -704,7 +764,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     const up = S.authMode === "signup";
     return `<div class="auth-wrap"><section class="card auth-card">
       <span class="eyebrow gold">${up ? "Free account" : "Welcome back"}</span>
-      <h1>${up ? "Create your account" : "Sign in to SurveySpider"}</h1>
+      <h1>${up ? "Create your account" : "Sign in to Afrimetrica"}</h1>
       <p class="muted">${up ? "Build and launch surveys, take part and get paid, and see your results on any device." : "Pick up where you left off, on any device."}</p>
       ${S.authCfg.google ? `<a class="btn google" href="/auth/google?next=${encodeURIComponent(S.returnTo || "studies")}">${GOOGLE_G}<span>Continue with Google</span></a><div class="or"><span>or with your email</span></div>` : ""}
       ${S.authError ? `<div class="errs">${esc(S.authError)}</div>` : ""}
@@ -717,7 +777,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
         <div id="authErr"></div>
         <button class="btn primary big" type="submit" style="align-self:stretch;justify-content:center">${up ? "Create account" : "Sign in"}</button>
       </form>
-      <p class="hint">${up ? `Already have an account? <button type="button" class="linkbtn" data-act="authMode" data-m="signin">Sign in</button>` : `New to SurveySpider? <button type="button" class="linkbtn" data-act="authMode" data-m="signup">Create a free account</button>`}</p>
+      <p class="hint">${up ? `Already have an account? <button type="button" class="linkbtn" data-act="authMode" data-m="signin">Sign in</button>` : `New to Afrimetrica? <button type="button" class="linkbtn" data-act="authMode" data-m="signup">Create a free account</button>`}</p>
     </section></div>`;
   }
   async function submitAuth() {
@@ -728,7 +788,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     try {
       await api("POST", up ? "/api/auth/signup" : "/api/auth/login", { email, password, name });
       S.authError = ""; S.authMode = "signin"; await reloadMe();
-      toast(up ? (unverified() ? `Account created. Check ${email} for a link to confirm your address.` : "Account created. Welcome to SurveySpider!") : "Signed in.");
+      toast(up ? (unverified() ? `Account created. Check ${email} for a link to confirm your address.` : "Account created. Welcome to Afrimetrica!") : "Signed in.");
       go(S.returnTo || "studies");
     } catch (e) { btn.disabled = false; $("#authErr").innerHTML = `<div class="errs">${esc((e && e.message) || "Couldn't sign in. Please try again.")}</div>`; }
   }
@@ -788,25 +848,33 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   function renderTabs() {
     const avail = S.profile ? openStudies().filter((s) => eligible(s, S.profile)).length : 0;
     renderAcct();
-    $("#tabs").innerHTML = TABS.filter(([k]) => k !== "signin" && (k !== "business" || S.isOwner)).map(([k, v]) =>
-      `<a href="#${k}"${S.view === k ? ' aria-current="page"' : ""}>${v}${k === "panel" && avail ? `<span class="count">${avail}</span>` : ""}</a>`).join("");
+    const inSurveys = SURVEY_NAV.some(([k]) => k === S.view);
+    const top = inSurveys ? "surveys" : S.view === "business" || S.view === "signin" ? "account" : S.view;
+    $("#tabs").innerHTML = TOPNAV.map(([k, v]) => `<a href="#${k}"${top === k ? ' aria-current="page"' : ""}>${v}</a>`).join("");
+    const sub = $("#subnav");
+    sub.hidden = !inSurveys;
+    sub.innerHTML = inSurveys ? `<div class="subnav-inner"><span class="subnav-label">Afrimetrica Surveys</span><div class="subnav-links">${SURVEY_NAV.map(([k, v]) => `<a href="#${k}"${S.view === k ? ' aria-current="page"' : ""}>${v}${k === "panel" && avail ? `<span class="count">${avail}</span>` : ""}</a>`).join("")}</div></div>` : "";
     const b = $("#banner");
     const msg = S.notice || (S.mode === "demo" ? "Demo mode: everything you create is saved in this browser only. Open the published page while signed in to claude.ai to share data with other people." : "") || (S.stale ? "Can't reach the saved data yet. What you see may be out of date." : "");
     b.hidden = !msg; b.textContent = msg;
     if (!msg && unverified()) { b.hidden = false; b.innerHTML = `<b>Confirm your email address.</b> We sent a link to ${esc(S.user.email)}. You can browse and save drafts now; confirm to launch surveys, take paid studies and use AI. <button type="button" class="linkbtn" data-act="resendVerify">Send it again</button>`; }
-    $("#foot").textContent = `SurveySpider prototype · platform fee ${Math.round(FEE * 100)}% of participant rewards · ${S.mode === "live" ? (API ? "Your surveys and answers are stored on SurveySpider's server and only shown to the people they belong to." : "Data is shared with everyone who can open this page.") : S.mode === "demo" ? "Demo data stays in this browser." : "Connecting…"}`;
+    $("#foot").innerHTML = `<div class="foot-inner"><div><b>Afrimetrica</b> · Centre for Research Methods and Analytics<br><span class="hint">Advancing Research, Measurement and Evidence. ${LEGAL}</span></div><div class="hint">Afrimetrica Surveys platform fee ${Math.round(FEE * 100)}% of participant rewards. ${S.mode === "live" ? (API ? "Survey answers are stored on Afrimetrica's server and shown only to the survey's owner." : "Data is shared with everyone who can open this page.") : S.mode === "demo" ? "Demo data stays in this browser." : "Connecting…"}</div></div>`;
   }
   function render() {
     pending = false;
     renderTabs();
-    const v = { signin: viewSignin, home: viewHome, pricing: viewPricing, import: viewImport, "paper-survey": viewF2F, create: viewCreate, studies: viewStudies, panel: viewPanel, results: viewResults, library: viewLibrary, business: viewBusiness }[S.view] || viewHome;
+    const v = { signin: viewSignin, home: viewHome, about: viewAbout, training: viewTraining, surveys: viewSurveys, analytics: viewAnalyticsSvc, consultancy: viewConsult, resources: viewResources, contact: viewContact, account: viewAccount, pricing: viewPricing, import: viewImport, "paper-survey": viewF2F, create: viewCreate, studies: viewStudies, panel: viewPanel, results: viewResults, business: viewBusiness }[S.view] || viewHome;
     $("#main").innerHTML = v();
     if (S.view === "create" && S.draft) updateCost();
   }
   function route() {
     let h = location.hash.replace("#", "");
     if (h === "paper-to-pen") h = "paper-survey"; // old links keep working
-    S.view = TABS.some(([k]) => k === h) ? h : "home";
+    if (h === "library") h = "resources";
+    S.view = ROUTES.has(h) ? h : "home";
+    if (S.view !== "training") { S.courseOpen = null; S.regFor = null; }
+    if (S.view !== "resources") S.guideOpen = null;
+    if (S.view !== "business") S.courseEdit = null;
     if (S.view !== "panel") S.taking = null;
     S.confirmDel = null;
   }
@@ -815,9 +883,8 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   function toast(m) { const t = $("#toast"); t.textContent = m; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => (t.hidden = true), 3600); }
   const loading = () => (S.mode === "loading" ? `<div class="empty"><p class="muted">Loading studies…</p></div>` : "");
 
-  // ---------- HOME ----------
-  // ---------- HOME ----------
-  function viewHome() {
+  // ---------- SURVEYS OVERVIEW (Afrimetrica Surveys home) ----------
+  function viewSurveys() {
     const live = S.studies.filter((s) => s.status === "live").length;
     const people = new Set(S.responses.map((r) => r.participantId)).size;
     const paid = S.responses.filter((r) => r.status === "approved" && !r.test).reduce((a, r) => a + r.reward, 0);
@@ -828,7 +895,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
       <div>
         <span class="eyebrow gold">Surveys · Participants · AI insights</span>
         <h1>Ask better questions. <span class="gold-text">Get answers you can act on.</span></h1>
-        <p class="lede">SurveySpider drafts your survey with AI, finds the right people to answer it, and turns every response into findings and recommendations your team can use.</p>
+        <p class="lede">Afrimetrica Surveys drafts your survey with AI, finds the right people to answer it, and turns every response into findings and recommendations your team can use.</p>
         <form class="ai-box" id="heroForm">
           <label for="heroGoal">What do you want to find out?</label>
           <textarea id="heroGoal" rows="2" maxlength="800" placeholder="e.g. Why are managers not finishing our leadership course, and what would help them?">${esc(S.gen.goal || "")}</textarea>
@@ -863,7 +930,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     <section class="split">
       <div class="stack">
         <div class="section-head"><span class="eyebrow gold">Analytics</span><h2 class="h2xl">From answers to decisions</h2></div>
-        <p class="muted">Most survey tools stop at charts. SurveySpider tells you what the numbers mean and what to do next.</p>
+        <p class="muted">Most survey tools stop at charts. Afrimetrica Surveys tells you what the numbers mean and what to do next.</p>
         <a class="btn primary" href="#results" style="align-self:flex-start">Open Analyze</a>
       </div>
       <ul class="ticks">
@@ -937,7 +1004,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
         </article>`;
       }).join("")}</section>
       <section class="card"><div class="qmeta"><h2>How we compare</h2><span class="hint">Competitor prices from public pricing guides, November 2026</span></div>
-        <div class="table-wrap"><table><thead><tr><th></th><th>SurveySpider</th><th>SurveyMonkey</th><th>SurveyHero</th><th>Qualtrics</th></tr></thead><tbody>
+        <div class="table-wrap"><table><thead><tr><th></th><th>Afrimetrica</th><th>SurveyMonkey</th><th>SurveyHero</th><th>Qualtrics</th></tr></thead><tbody>
         ${COMPARE.map((r) => `<tr><th scope="row" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.86rem;color:var(--ink)">${esc(r[0])}</th><td class="us">${esc(r[1])}</td><td>${esc(r[2])}</td><td>${esc(r[3])}</td><td>${esc(r[4])}</td></tr>`).join("")}
         </tbody></table></div>
         <p class="hint">Competitor figures come from third-party pricing guides, not the vendors' own pages, and can change. Sources: <a href="https://survicate.com/blog/surveymonkey-pricing/" target="_blank" rel="noopener">SurveyMonkey (Survicate)</a>, <a href="https://www.softwareadvice.com/product/450556-SurveyHero/" target="_blank" rel="noopener">SurveyHero (Software Advice)</a>, <a href="https://costbench.com/software/survey-software/qualtrics/" target="_blank" rel="noopener">Qualtrics (Costbench)</a>, <a href="https://www.qualtrics.com/support/survey-platform/managing-your-account/trial-accounts/" target="_blank" rel="noopener">Qualtrics free accounts</a>.</p>
@@ -987,7 +1054,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     S.gen = { status: "busy", goal, aud, n };
     setGenStatus("Writing your survey… this usually takes 20–40 seconds.");
     aiCtl = new AbortController();
-    const prompt = `You are an expert survey designer for SurveySpider, a research platform.
+    const prompt = `You are an expert survey designer for Afrimetrica Surveys, part of Afrimetrica, a centre for research methods and analytics.
 Write an online survey for this goal: ${goal}
 Who will answer: ${aud || "a general adult audience"}
 Write about ${n} questions.
@@ -1195,7 +1262,7 @@ Reply with only a JSON array: [{"q": question number, "issue": "one short senten
     const st = studyById(S.resultsId); if (!st || !SAMPLE || !q.trim()) return;
     const rows = currentRows(st);
     S.ask = { q, a: "", busy: true }; render();
-    const prompt = `You are a senior research analyst at SurveySpider. Answer the client's question using only the survey data below.
+    const prompt = `You are a senior research analyst at Afrimetrica. Answer the client's question using only the survey data below.
 Be specific and quote numbers. If the data cannot answer it, say so and suggest what to ask in a future survey. Plain English, under 220 words, short paragraphs or "-" bullets, no markdown headings.
 
 Question: ${q}
@@ -1265,7 +1332,7 @@ ${dataSummary(st, rows)}`;
     const rows = currentRows(st);
     S.aiBusy = st.id; render();
     aiCtl = new AbortController();
-    const prompt = `You are a senior research analyst at SurveySpider writing for a busy client. Using only the survey data below, write an insight report.
+    const prompt = `You are a senior research analyst at Afrimetrica writing for a busy client. Using only the survey data below, write an insight report.
 Reply with only JSON in this shape:
 {"headline": "one sentence, the single most important finding", "summary": "3-4 sentence executive summary with numbers", "findings": [{"title": "short", "detail": "1-2 sentences with numbers"}], "themes": [{"theme": "short name", "share": "e.g. about 40% of comments", "quote": "a short paraphrase or quote"}], "recommendations": [{"action": "specific action", "why": "the evidence", "priority": "high" | "medium" | "low"}], "caveats": ["limits such as small groups or sample size"]}
 Give 4-6 findings, up to 5 themes (only if there are open-text answers), and 3-5 recommendations. Each recommendation should say how to measure whether it worked. Plain English. Do not invent data. Never describe a group of fewer than ${MIN_GROUP} people.
@@ -1402,7 +1469,7 @@ ${richSummary(st, rows)}`;
     const c = $("#costBox");
     if (c) c.innerHTML = `<h2>Cost to run</h2>
       <div class="cost-row"><span>Participant rewards (${int(d.target)} × ${money(d.reward)})</span><span>${money(pay)}</span></div>
-      <div class="cost-row"><span>SurveySpider fee (${Math.round(FEE * 100)}%)</span><span>${money(fee)}</span></div>
+      <div class="cost-row"><span>Afrimetrica fee (${Math.round(FEE * 100)}%)</span><span>${money(fee)}</span></div>
       <div class="cost-total"><span>Total</span><b>${money(pay + fee)}</b></div>`;
   }
   function problems(d) {
@@ -1675,7 +1742,7 @@ ${richSummary(st, rows)}`;
       </tbody></table></div></section>`;
   }
   function publishCard(st, n) {
-    if (st.library) return `<section class="card"><h2>In the insights library</h2><p class="headline">${esc(st.library.headline)}</p><p class="hint">Published ${fmtDate(st.library.publishedAt)}. Anyone using SurveySpider can see the charts, but not individual responses.</p><button class="btn small ghost" data-act="unpublish">Remove from library</button></section>`;
+    if (st.library) return `<section class="card"><h2>In the insights library</h2><p class="headline">${esc(st.library.headline)}</p><p class="hint">Published ${fmtDate(st.library.publishedAt)}. Anyone using Afrimetrica can see the charts, but not individual responses.</p><button class="btn small ghost" data-act="unpublish">Remove from library</button></section>`;
     return `<section class="card"><h2>Share your findings</h2><p class="hint">Publish the charts for this study to the insights library. Individual text answers stay private.</p>
       <label for="headline">Headline finding<textarea id="headline" rows="2" maxlength="200" placeholder="e.g. 6 in 10 shoppers have had a late delivery this year"></textarea></label>
       <button class="btn" data-act="publish" ${n ? "" : "disabled"}>Publish to library</button>${n ? "" : `<p class="hint">You need at least one approved response first.</p>`}</section>`;
@@ -1693,11 +1760,10 @@ ${richSummary(st, rows)}`;
   }
 
   // ---------- LIBRARY ----------
-  function viewLibrary() {
-    return `<div class="page-head"><div><span class="eyebrow">Data library</span><h1>Insights library</h1><p class="muted" style="max-width:60ch">Findings that researchers on SurveySpider chose to publish, plus links to academic papers and free public datasets.</p></div></div>
-      <div class="lib-grid">
+  function libraryBody() {
+    return `<div class="lib-grid">
         <div class="stack">
-          <label for="libSearch">Search published findings<input id="libSearch" type="search" value="${esc(S.libQuery)}" placeholder="e.g. shopping, students, pricing"></label>
+          <label for="libSearch">Search findings published with Afrimetrica Surveys<input id="libSearch" type="search" value="${esc(S.libQuery)}" placeholder="e.g. shopping, students, pricing"></label>
           <div id="libList" class="stack">${libList()}</div>
         </div>
         <aside class="stack">
@@ -1993,7 +2059,7 @@ ${richSummary(st, rows)}`;
     c.msgs.push({ role: "user", content: q.trim() }); c.busy = true; S.anTab = "analyst"; render();
     const box = () => $("#chatMsgs"), paint = () => { const el = box(); if (el) { el.innerHTML = msgsHtml(c); el.scrollTop = el.scrollHeight; } };
     paint();
-    const intro = `You are the AI Research Analyst inside SurveySpider. You help a client understand their own survey results and decide what to do.
+    const intro = `You are the AI Research Analyst inside Afrimetrica Surveys. You help a client understand their own survey results and decide what to do.
 Rules: use only the survey data below. Quote numbers (counts, percentages, averages). If the data can't answer, say so plainly and suggest a question to add to a future survey. Never invent figures. Warn when a group is small (under 10 people) and never describe a group under ${MIN_GROUP} people. Correlation is not causation. Plain English, under 250 words, "-" bullets allowed, no markdown headings or tables. Do not try to identify individual participants.
 
 Survey data:
@@ -2148,12 +2214,12 @@ ${richSummary(st, rows)}`;
   const colL = (n) => { let s = ""; while (n > 0) { const m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = Math.floor((n - 1) / 26); } return s; };
   const xlStr = (v) => String(v).replace(/"/g, '""').replace(/[~*?]/g, "~$&");
   const sheetName = (t) => String(t).replace(/[\\\/\?\*\[\]:]/g, " ").slice(0, 31);
-  async function xlBook() { await loadScript(EXCELJS); const wb = new window.ExcelJS.Workbook(); wb.creator = "SurveySpider"; wb.created = new Date(); return wb; }
+  async function xlBook() { await loadScript(EXCELJS); const wb = new window.ExcelJS.Workbook(); wb.creator = "Afrimetrica"; wb.created = new Date(); return wb; }
   function xlSheet(wb, name, title, sub) {
     const ws = wb.addWorksheet(sheetName(name), { views: [{ showGridLines: false }], properties: { tabColor: { argb: XL.gold } }, pageSetup: { orientation: "landscape", fitToPage: true, fitToWidth: 1, fitToHeight: 0 } });
     if (title) {
       const r = ws.addRow([title]); r.font = { bold: true, size: 16, color: { argb: XL.navy } }; r.height = 24;
-      const s = ws.addRow([sub || `SurveySpider · exported ${new Date().toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}`]); s.font = { italic: true, size: 9, color: { argb: XL.muted } };
+      const s = ws.addRow([sub || `Afrimetrica Surveys · exported ${new Date().toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}`]); s.font = { italic: true, size: 9, color: { argb: XL.muted } };
       ws.addRow([]);
     }
     return ws;
@@ -2252,7 +2318,7 @@ ${richSummary(st, rows)}`;
       const wb = await xlBook();
       const N = rows.length, last = N + 1;
       // Summary first (filled at the end so it can link to other sheets)
-      const sum = xlSheet(wb, "Summary", st.title, `SurveySpider analysis · ${filterDesc()} · exported ${new Date().toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}`);
+      const sum = xlSheet(wb, "Summary", st.title, `Afrimetrica Surveys analysis · ${filterDesc()} · exported ${new Date().toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}`);
       // Responses
       const rs = wb.addWorksheet("Responses", { views: [{ state: "frozen", ySplit: 1, xSplit: 1 }], properties: { tabColor: { argb: XL.navy } }, pageSetup: { orientation: "landscape", fitToPage: true, fitToWidth: 1, fitToHeight: 0 } });
       const head = ["Response ID", "Submitted", "Status", "Quality score", "Minutes taken", "Age", "Age group", "Gender", "Country", "Occupation"];
@@ -2479,7 +2545,7 @@ ${richSummary(st, rows)}`;
       <div class="table-wrap"><table class="quote-table"><thead><tr><th>Item</th><th>Qty</th><th>Unit</th><th>Amount</th></tr></thead><tbody>
       ${groups.map((g) => `<tr class="qgroup"><td colspan="4">${esc(g)}</td></tr>` + q.lines.filter((l) => l.group === g).map((l) => `<tr><td>${esc(l.label)}</td><td class="n">${int(l.qty)}</td><td class="n">${usd(l.unit)}</td><td class="n">${usd(l.amount)}</td></tr>`).join("")).join("")}
       <tr class="qtotal"><td colspan="3">Total</td><td class="n">${usd(q.total)}</td></tr></tbody></table></div>
-      ${F.method === "questionnaire" ? `<p class="callout">Running the same survey online with the SurveySpider panel would cost about <b>${usd0(online)}</b>. Face-to-face reaches people who aren't online, can't read well, or need an interviewer to explain questions.</p>` : ""}
+      ${F.method === "questionnaire" ? `<p class="callout">Running the same survey online with the Afrimetrica Surveys panel would cost about <b>${usd0(online)}</b>. Face-to-face reaches people who aren't online, can't read well, or need an interviewer to explain questions.</p>` : ""}
       <details><summary>What this price assumes</summary><ul class="steps">
         <li>${q.mins} minutes per ${F.method === "fgd" ? "group" : "interview"}${+F.minutes > 0 ? " (your figure)" : sv ? ` (estimated from ${q.qn} questions)` : ""}.</li>
         <li>${esc(F.country)} fieldwork at ${q.tier === "A" ? "high-cost" : q.tier === "B" ? "middle" : "standard"} market rates, ${esc(SETTING[F.setting][0].toLowerCase())}.</li>
@@ -2555,7 +2621,7 @@ ${richSummary(st, rows)}`;
     const q = f2fQuote(F, sv); xlBusy(true);
     try {
       const wb = await xlBook();
-      const ws = xlSheet(wb, "Quote", `Fieldwork quote ${S.f2f.ref || ""}`, `SurveySpider · ${F2F_METHODS[F.method]} · ${new Date().toLocaleDateString("en-US", { dateStyle: "medium" })} · valid 30 days · US dollars`);
+      const ws = xlSheet(wb, "Quote", `Fieldwork quote ${S.f2f.ref || ""}`, `Afrimetrica · ${F2F_METHODS[F.method]} · ${new Date().toLocaleDateString("en-US", { dateStyle: "medium" })} · valid 30 days · US dollars`);
       xlRows(ws, [["Survey", sv ? sv.title : "Not uploaded"], ["Method", F2F_METHODS[F.method]], ["Country and setting", `${F.country}, ${SETTING[F.setting][0].toLowerCase()}`], ["Audience", AUDIENCE[F.audience][0]], ["Minutes per " + (F.method === "fgd" ? "group" : "interview"), q.mins], ["Estimated timeline", `About ${q.weeks} week${q.weeks > 1 ? "s" : ""} (${q.fieldDays} day${q.fieldDays > 1 ? "s" : ""} of fieldwork)`]], (r) => (r.getCell(1).font = { bold: true, color: { argb: XL.navy } }));
       ws.addRow([]);
       xlHead(ws.addRow(["Item", "Group", "Qty", "Unit price", "Amount"]));
@@ -2582,7 +2648,7 @@ ${richSummary(st, rows)}`;
 
   // ---------- BUSINESS ----------
   function viewBusiness() {
-    if (!S.isOwner) return API ? `<form class="card" id="adminForm" style="max-width:460px"><h2>Owner sign-in</h2><p class="muted">Enter the admin code from your Render dashboard (Environment → ADMIN_CODE).</p><label for="adminCode">Admin code<input id="adminCode" type="password" autocomplete="off"></label><div class="row"><button class="btn primary" type="submit">Open business view</button></div></form>` : `<div class="empty"><h2>Only the site owner can see this page</h2></div>`;
+    if (!S.isOwner) return API ? `<form class="card" id="adminForm" style="max-width:460px"><h2>Owner sign-in</h2><p class="muted">Enter the admin code from your Render dashboard (Environment → ADMIN_CODE), or sign in with an email listed in ADMIN_EMAILS.</p><label for="adminCode">Admin code<input id="adminCode" type="password" autocomplete="off"></label><div class="row"><button class="btn primary" type="submit">Open admin area</button></div></form>` : `<div class="empty"><h2>Only the site owner can see this page</h2></div>`;
     if (S.mode === "loading") return loading();
     const real = S.responses.filter((r) => !r.test);
     const approved = real.filter((r) => r.status === "approved");
@@ -2594,14 +2660,390 @@ ${richSummary(st, rows)}`;
     const avgH = S.studies.filter((s) => s.status !== "draft");
     const meanH = avgH.length ? avgH.reduce((a, s) => a + hourly(s), 0) / avgH.length : 0;
     const kpi = (v, l) => `<div class="stat"><span class="v">${v}</span><span class="l">${l}</span></div>`;
-    return `<div class="page-head"><div><span class="eyebrow">Owner only</span><h1>Business overview</h1></div></div>
+    const ADM = [["overview", "Survey business"], ["courses", "Courses"], ["enrol", `Registrations${S.enrollments.filter((e) => e.status === "registered" || e.status === "interest").length ? ` (${S.enrollments.filter((e) => e.status === "registered" || e.status === "interest").length})` : ""}`], ["enquiries", `Enquiries${S.enquiries.filter((e) => e.status === "new").length ? ` (${S.enquiries.filter((e) => e.status === "new").length})` : ""}`], ["fieldwork", "Paper surveys"], ["settings", "Contact details"]];
+    const head = `<div class="page-head"><div><span class="eyebrow gold">Administrators only</span><h1>Admin area</h1><p class="muted">Administrators see registrations, enquiries and survey totals. Survey answers stay visible only to each survey's owner.</p></div></div>
+      <div class="subtabs" role="tablist" aria-label="Admin sections">${ADM.map(([k, v]) => `<button role="tab" aria-selected="${S.admTab === k}" class="subtab" data-act="admTab" data-k="${k}">${v}</button>`).join("")}</div>`;
+    if (S.admTab === "courses") return head + coursesAdmin();
+    if (S.admTab === "enrol") return head + enrolAdmin();
+    if (S.admTab === "enquiries") return head + enquiriesAdmin();
+    if (S.admTab === "fieldwork") return head + fieldworkAdmin();
+    if (S.admTab === "settings") return head + settingsAdmin();
+    return head + `
       <section class="kpis">${kpi(money(gmv * FEE), "Fee revenue earned")}${kpi(money(gmv), "Paid to participants")}${kpi(money(booked), "Fees on live studies if they fill")}${kpi(int(researchers), "Researchers")}${kpi(int(participants), "Participants")}</section>
       <section class="card"><div class="qmeta"><h2>All studies</h2><span class="hint">Average pay ${money(meanH)}/hour · test responses excluded</span></div>
         ${S.studies.length ? `<div class="table-wrap"><table><thead><tr><th>Study</th><th>Status</th><th>Responses</th><th>Reward</th><th>Per hour</th><th>Fee earned</th></tr></thead><tbody>
         ${[...S.studies].sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0)).map((s) => { const ap = approved.filter((r) => r.studyId === s.id); return `<tr><td>${esc(s.title || "Untitled")}</td><td><span class="pill${s.status === "live" ? " live" : ""}">${s.status}</span></td><td class="n">${int(usedSlots(s.id))} / ${int(s.target)}</td><td class="n">${money(s.reward)}</td><td class="n${hourly(s) < MIN_HOURLY ? " warn" : ""}">${money(hourly(s))}</td><td class="n">${money(ap.reduce((a, r) => a + r.reward, 0) * FEE)}</td></tr>`; }).join("")}
         </tbody></table></div>` : `<p class="muted">No studies yet.</p>`}
-      </section>
-      ${fieldworkAdmin()}`;
+      </section>`;
+  }
+
+  // ================= AFRIMETRICA: institution pages, Academy, enquiries, account, admin =================
+  const TOPNAV = [["home", "Home"], ["about", "About"], ["training", "Training"], ["surveys", "Surveys"], ["analytics", "Analytics"], ["consultancy", "Consultancy"], ["resources", "Resources"], ["contact", "Contact"], ["account", "My Account"]];
+  const SURVEY_NAV = [["surveys", "Overview"], ["create", "Create"], ["import", "Upload"], ["paper-survey", "Paper surveys"], ["studies", "My surveys"], ["results", "Analyze"], ["panel", "Take surveys"], ["pricing", "Plans"]];
+  const ROUTES = new Set([...TOPNAV.map(([k]) => k), ...SURVEY_NAV.map(([k]) => k), "signin", "business"]);
+  const LEGAL = "Afrimetrica is operated by Regelco International Ltd, a company registered in Ghana.";
+  const CUR = { USD: "US$", GHS: "GH₵", GBP: "£", EUR: "€" };
+  const fee = (x, c) => (+x > 0 ? (CUR[c] || "") + (+x).toLocaleString("en-US", { maximumFractionDigits: 2 }) : "Free");
+  const fmtDay = (d) => (d ? new Date(d + "T12:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : "Date to be confirmed");
+  const courseById = (id) => S.courses.find((c) => c.id === id);
+  const sessTaken = (s) => (typeof s.taken === "number" ? s.taken : S.enrollments.filter((e) => e.sessionId === s.id && e.status !== "cancelled").length);
+  const seatsLeft = (s) => (s.seats > 0 ? Math.max(0, s.seats - sessTaken(s)) : null);
+  const upcoming = (c) => (c.sessions || []).filter((s) => !s.start || s.start >= todayISO()).sort((a, b) => (a.start || "9").localeCompare(b.start || "9"));
+  const myEnrol = (cid, sid) => S.enrollments.find((e) => e.userId === S.uid && e.courseId === cid && (sid === undefined || (e.sessionId || "") === sid) && e.status !== "cancelled");
+  const sentenceBlocks = (t) => String(t || "").split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean).map((p) => `<p>${esc(p)}</p>`).join("");
+  const UNITS = [
+    { key: "training", brand: "Afrimetrica Academy", title: "Research methods training", text: "Short courses, institutional workshops and online learning in research design, survey methods, data analysis and evaluation.", points: ["Practical, hands-on sessions", "In-house workshops for your team", "Certificates of completion"], cta: "Explore courses" },
+    { key: "surveys", brand: "Afrimetrica Surveys", title: "Survey tools", text: "Build questionnaires, collect responses online or face to face, and analyse them with built-in statistics and AI.", points: ["Word, PDF and Excel upload", "Paid participant panel", "Analysis and Excel reports"], cta: "Start a survey" },
+    { key: "analytics", brand: "Afrimetrica Analytics", title: "Data analysis", text: "Statistical analysis, dashboards and data management carried out by experienced analysts.", points: ["Descriptive to multivariate analysis", "Dashboards and reports", "Data cleaning and management"], cta: "Request analysis" },
+    { key: "consultancy", brand: "Afrimetrica Consulting", title: "Research consultancy", text: "Research design, monitoring and evaluation, surveys and commissioned studies, from proposal to final report.", points: ["Study design and protocols", "Monitoring and evaluation", "Fieldwork and reporting"], cta: "Discuss a project" }
+  ];
+  const TIMELINES = ["As soon as possible", "Within a month", "1–3 months", "3–6 months", "Not sure yet"];
+  const BUDGETS = ["Under US$1,000", "US$1,000–5,000", "US$5,000–20,000", "Over US$20,000", "Not sure yet"];
+  const ANALYTICS_SERVICES = ["Statistical analysis", "Dashboards and reporting", "Data management and cleaning", "Survey data analysis", "Monitoring and evaluation data", "Something else"];
+  const CONSULT_SERVICES = ["Research design and methodology", "Monitoring and evaluation", "Surveys and fieldwork", "Questionnaire review", "Commissioned study or report", "Something else"];
+  const TRAINING_SERVICES = ["A public short course", "An in-house workshop for my organisation", "Online learning", "Something else"];
+  const COURSE_TPL = [
+    { title: "Research Design Fundamentals", level: "Introductory", format: "In person", duration: "2 days", summary: "Plan a sound study, from a clear research question to a workable analysis plan.", description: "This course takes participants through the decisions that shape a credible study: framing research questions, choosing a design, defining variables, planning sampling and data collection, and writing an analysis plan before any data is collected.\n\nSessions combine short explanations with group work on participants' own projects.", outcomes: ["Write focused research questions and objectives", "Choose an appropriate study design", "Plan sampling, data collection and analysis", "Recognise common threats to validity"], audience: "Postgraduate students, early-career researchers and programme staff starting a study." },
+    { title: "Questionnaire Design and Survey Methods", level: "Introductory", format: "Hybrid", duration: "2 days", summary: "Write questions people can answer accurately and run a survey that produces usable data.", description: "Participants learn how to turn objectives into measurable questions, write clear and neutral wording, choose answer formats and scales, structure a questionnaire, and pilot it. The course also covers sampling basics, online and face-to-face collection, and data quality checks.\n\nParticipants build and test a questionnaire in Afrimetrica Surveys during the course.", outcomes: ["Translate objectives into measurable questions", "Avoid leading, double-barrelled and vague questions", "Choose suitable scales, including Likert scales", "Pilot a questionnaire and check data quality"], audience: "Anyone who designs or commissions surveys." },
+    { title: "Sampling and Sample Size", level: "Intermediate", format: "Online", duration: "1 day", summary: "Choose a sampling approach and calculate how many responses you really need.", description: "The course covers probability and non-probability sampling, stratification and clustering, sampling frames, margin of error and confidence, sample size for subgroups, and adjusting for response rates and design effects.", outcomes: ["Choose an appropriate sampling strategy", "Calculate sample sizes for common designs", "Account for non-response and design effects", "Explain sampling limitations honestly in reports"], audience: "Researchers, evaluators and analysts planning surveys." },
+    { title: "Quantitative Data Analysis with SPSS, Stata or R", level: "Intermediate", format: "In person", duration: "3 days", summary: "Clean, analyse and interpret survey and research data with a statistical package.", description: "Hands-on sessions cover data cleaning, descriptive statistics, cross-tabulation and chi-square tests, t-tests and ANOVA, correlation and linear regression, and an introduction to logistic regression. Participants work with real datasets and learn to report results clearly.", outcomes: ["Prepare and clean a dataset for analysis", "Choose and run appropriate statistical tests", "Interpret and report results correctly", "Produce tables and charts for reports"], audience: "Researchers and analysts with basic statistics knowledge." },
+    { title: "Qualitative Research and Thematic Analysis", level: "Intermediate", format: "In person", duration: "2 days", summary: "Plan interviews and focus groups and analyse what people say rigorously.", description: "The course covers qualitative designs, interview and focus group guides, facilitation, transcription, coding and thematic analysis, and how to report qualitative findings credibly.", outcomes: ["Design interview and focus group guides", "Facilitate discussions that produce rich data", "Code transcripts and develop themes", "Report qualitative findings with appropriate evidence"], audience: "Researchers, evaluators and students using qualitative methods." },
+    { title: "Monitoring and Evaluation for Programmes", level: "Intermediate", format: "Hybrid", duration: "3 days", summary: "Build a practical M&E framework, indicators and data system for a programme.", description: "Participants develop a theory of change and results framework, define indicators, plan baselines and data collection, and design reporting and learning processes. The course also introduces common evaluation designs and how to commission an evaluation.", outcomes: ["Develop a theory of change and results framework", "Write measurable indicators with targets", "Plan baseline, monitoring and evaluation data", "Use M&E findings for decisions and learning"], audience: "Programme managers, M&E officers and NGO staff." },
+    { title: "Research Ethics and Data Protection", level: "Introductory", format: "Online", duration: "1 day", summary: "Protect participants and their data from consent to archiving.", description: "The course covers informed consent, confidentiality and anonymisation, working with vulnerable groups, ethics review, and handling personal data responsibly, including the principles of Ghana's Data Protection Act and good practice for storing and sharing research data.", outcomes: ["Design informed consent processes", "Anonymise and protect personal data", "Prepare for ethics review", "Plan secure storage, retention and sharing"], audience: "Researchers, students and data collection teams." },
+    { title: "Data Visualisation and Research Reporting", level: "Introductory", format: "Online", duration: "1 day", summary: "Turn results into clear charts, summaries and reports that decision-makers use.", description: "Participants learn to choose the right chart, design clean tables, write findings and recommendations in plain language, and structure reports and briefs for different audiences.", outcomes: ["Choose effective charts for different data", "Write clear findings and recommendations", "Structure reports and policy briefs", "Present results to non-specialists"], audience: "Researchers, analysts and communications staff." }
+  ];
+  const GUIDES = [
+    { id: "questions", title: "Writing clear survey questions", minutes: 4, summary: "Five habits that make answers more accurate and easier to analyse.", sections: [
+      ["Ask about one thing at a time", "“How satisfied are you with the price and quality?” mixes two ideas, so people who like one and dislike the other can't answer honestly. Split it into two questions."],
+      ["Keep the wording neutral", "Avoid phrases that suggest the ‘right’ answer, such as “Don't you agree that…” or “How much did you enjoy…”. Ask “How would you rate…” instead."],
+      ["Make answer options complete and distinct", "Options should not overlap (18–25 and 25–35 both include 25) and should cover every likely answer. Add “Other” or “Not sure” where people may not fit."],
+      ["Use words your respondents use", "Replace jargon and acronyms with everyday language, and define any term that must stay technical. Translate and back-translate for each language you use."],
+      ["Pilot before you launch", "Ask five to ten people from your target group to answer the questionnaire and tell you what was unclear. Afrimetrica Surveys' AI question checker can also flag problem wording."]] },
+    { id: "sample", title: "How many responses do you need?", minutes: 5, summary: "Margin of error in plain language, with common sample sizes.", sections: [
+      ["Start with the precision you need", "A margin of error of ±5% means a result of 60% could really be anywhere from 55% to 65%. Smaller margins need many more responses."],
+      ["Common sample sizes (95% confidence, large population)", "__SAMPLE_TABLE__"],
+      ["Plan for the groups you will compare", "If you want to compare men and women, or regions, each group needs enough responses on its own. Precision for a subgroup of 100 is about ±10%, whatever the total sample."],
+      ["Allow for people who won't respond", "If you expect 40% of invited people to respond and need 400 completed surveys, invite about 1,000."],
+      ["Small populations need fewer", "When your whole population is small (for example 300 staff), the finite population correction reduces the number needed. Use the calculator on this page."]] },
+    { id: "scales", title: "Likert or rating scale?", minutes: 3, summary: "Choosing scales, points and labels, and how to analyse them.", sections: [
+      ["Use a labelled Likert scale for agreement, satisfaction and frequency", "Labels such as “Strongly disagree … Strongly agree” or “Never … Always” are easy to interpret and translate well."],
+      ["Use a numbered rating for intensity and recommendation", "0–10 likelihood-to-recommend and 1–10 confidence ratings give finer detail. Label both ends so the meaning is clear."],
+      ["Five or seven points?", "Five points work well for most audiences and on paper. Seven points add sensitivity for experienced respondents. Keep a neutral middle unless you have a reason to force a choice."],
+      ["Keep the direction consistent", "Run every scale in the same direction across the questionnaire to avoid mistakes."],
+      ["Analyse in more than one way", "Report the percentage choosing the top two points (‘top-2 box’) alongside averages, and look at the full distribution when opinions are split."]] },
+    { id: "me", title: "Planning monitoring and evaluation", minutes: 5, summary: "From theory of change to indicators, baselines and learning.", sections: [
+      ["Begin with a theory of change", "Set out how your activities are expected to lead to outputs, outcomes and impact, and the assumptions that must hold."],
+      ["Choose a small set of good indicators", "Each indicator should be specific, measurable, attainable, relevant and time-bound, with a clear definition, data source and frequency."],
+      ["Measure a baseline", "Collect the starting value of each indicator before activities begin, otherwise change cannot be shown."],
+      ["Match methods to questions", "Routine monitoring tracks progress; evaluations ask whether and why change happened. Combine surveys, records and qualitative methods where useful."],
+      ["Build in learning", "Agree when results will be reviewed, who will act on them and how decisions will be recorded."]] }
+  ];
+  const sampleN = (z, e, N, p = 0.5) => { const n0 = (z * z * p * (1 - p)) / (e * e); return Math.ceil(N > 0 ? n0 / (1 + (n0 - 1) / N) : n0); };
+
+  // ---------- shared enquiry form ----------
+  function enquiryForm(type, o = {}) {
+    if (S.enqSent[type]) return `<section class="card enq-done"><span class="eyebrow gold">Message sent</span><h2>Thank you. We'll be in touch.</h2><p class="muted">We aim to reply within two working days${S.settings.email ? `. You can also email us at ${esc(S.settings.email)}` : ""}.</p><div><button class="btn" data-act="enqAgain" data-t="${type}">Send another message</button></div></section>`;
+    const u = S.user || {}, f = (k) => `eq-${type}-${k}`;
+    const sel = (k, label, list) => `<label for="${f(k)}">${label}<select id="${f(k)}"><option value="">Choose…</option>${list.map((x) => `<option>${esc(x)}</option>`).join("")}</select></label>`;
+    return `<form class="card enq" data-enq="${type}" novalidate><div><h2>${esc(o.title || "Send an enquiry")}</h2>${o.intro ? `<p class="muted" style="margin-top:6px">${esc(o.intro)}</p>` : ""}</div>
+      <div class="grid2">
+        <label for="${f("name")}">Your name<input id="${f("name")}" maxlength="80" autocomplete="name" value="${esc(u.name || "")}"></label>
+        <label for="${f("email")}">Email<input id="${f("email")}" type="email" maxlength="160" autocomplete="email" value="${esc(u.email || "")}"></label>
+        <label for="${f("phone")}">Phone (optional)<input id="${f("phone")}" type="tel" maxlength="40" autocomplete="tel"></label>
+        <label for="${f("org")}">Organisation (optional)<input id="${f("org")}" maxlength="120" autocomplete="organization"></label>
+        ${o.services ? sel("service", o.serviceLabel || "What do you need?", o.services) : ""}
+        ${o.budget ? sel("timeline", "Timeline", TIMELINES) + sel("budget", "Approximate budget", BUDGETS) : ""}
+      </div>
+      ${o.subject ? `<label for="${f("subject")}">Subject<input id="${f("subject")}" maxlength="160"></label>` : ""}
+      <label for="${f("msg")}">${esc(o.messageLabel || "Tell us about your project")}<textarea id="${f("msg")}" rows="5" maxlength="4000" placeholder="${esc(o.placeholder || "")}"></textarea></label>
+      <label class="inline" for="${f("ok")}"><input type="checkbox" id="${f("ok")}">You can contact me about this enquiry.</label>
+      <div id="${f("err")}"></div><div><button class="btn primary" type="submit">Send enquiry</button></div></form>`;
+  }
+  async function submitEnquiry(type) {
+    const v = (k) => { const el = $(`#eq-${type}-${k}`); return el ? (el.value || "").trim() : ""; };
+    const errs = [];
+    if (!v("name")) errs.push("Enter your name.");
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v("email"))) errs.push("Enter a valid email address.");
+    if (v("msg").length < 5) errs.push("Tell us a little about what you need.");
+    if (!$(`#eq-${type}-ok`).checked) errs.push("Tick the box so we can contact you.");
+    if (errs.length) { $(`#eq-${type}-err`).innerHTML = `<div class="errs">${errs.map(esc).join("<br>")}</div>`; return; }
+    const item = { id: newId("eq"), type, requesterId: S.uid, status: "new", createdAt: Date.now(),
+      contact: { name: v("name"), email: v("email").toLowerCase(), phone: v("phone"), organisation: v("org") },
+      subject: v("subject"), message: v("msg"), details: { service: v("service"), timeline: v("timeline"), budget: v("budget") } };
+    const ok = await save(() => backend.putPriv("enquiries", item), "Thank you. Your enquiry has been sent.");
+    if (ok) { S.enqSent[type] = true; render(); }
+  }
+
+  // ---------- pages ----------
+  function viewHome() {
+    const up = S.courses.filter((c) => c.status === "published").map((c) => ({ c, s: upcoming(c)[0] })).sort((a, b) => ((a.s && a.s.start) || "9").localeCompare((b.s && b.s.start) || "9")).slice(0, 3);
+    return `
+    <section class="hero2 afri-hero">
+      <div>
+        <span class="eyebrow gold">Centre for Research Methods and Analytics · Ghana</span>
+        <h1>Advancing research, <span class="gold-text">measurement and evidence.</span></h1>
+        <p class="lede">Afrimetrica helps researchers, organisations and students design better studies, collect reliable data and turn it into evidence. We train, build survey tools, analyse data and advise, all in one place.</p>
+        <div class="hero-ctas"><a class="btn gold big" href="#training">Explore courses</a><a class="btn primary big" href="#surveys">Start a survey</a><a class="btn big" href="#consultancy">Talk to a consultant</a></div>
+      </div>
+      <div class="pillars-panel" aria-label="Afrimetrica's services">
+        ${UNITS.map((u) => `<a class="pillar" href="#${u.key}"><span class="eyebrow">${esc(u.brand)}</span><b>${esc(u.title)}</b><span>${esc(u.points[0])}</span></a>`).join("")}
+        <a class="pillar wide" href="#resources"><span class="eyebrow">Afrimetrica Knowledge Hub</span><b>Guides, templates and open data</b><span>Free resources for better research</span></a>
+      </div>
+    </section>
+    <section class="stack">
+      <div class="section-head"><span class="eyebrow gold">What we do</span><h2 class="h2xl">One centre, four ways to strengthen your research</h2></div>
+      <div class="units">${UNITS.map((u) => `<article class="card unit"><span class="eyebrow gold">${esc(u.brand)}</span><h3>${esc(u.title)}</h3><p class="muted">${esc(u.text)}</p><ul class="ticks small">${u.points.map((x) => `<li><div><span>${esc(x)}</span></div></li>`).join("")}</ul><a class="btn" href="#${u.key}" style="align-self:flex-start">${esc(u.cta)}</a></article>`).join("")}</div>
+    </section>
+    <section class="stack">
+      <div class="row wrap" style="justify-content:space-between;align-items:flex-end"><div class="section-head"><span class="eyebrow gold">Afrimetrica Academy</span><h2 class="h2xl">Upcoming courses</h2></div><a class="btn" href="#training">All courses</a></div>
+      ${up.length ? `<div class="course-grid">${up.map(({ c, s }) => courseCard(c, s)).join("")}</div>` : `<div class="empty"><h2>New course dates are being finalised</h2><p class="muted">Tell us what you'd like to learn and we'll let you know when registration opens.</p><a class="btn primary" href="#training">Register your interest</a></div>`}
+    </section>
+    <section class="split">
+      <div class="stack"><div class="section-head"><span class="eyebrow gold">Knowledge Hub</span><h2 class="h2xl">Free guides for better research</h2></div><p class="muted">Practical advice on questionnaire design, sample size, scales and monitoring and evaluation, plus ready-made survey templates.</p><a class="btn primary" href="#resources" style="align-self:flex-start">Browse resources</a></div>
+      <div class="stack" style="gap:10px">${GUIDES.slice(0, 3).map((g) => `<a class="card guide-link" href="#resources" data-act="openGuide" data-id="${g.id}"><b>${esc(g.title)}</b><span class="hint">${esc(g.summary)} · ${g.minutes} min read</span></a>`).join("")}</div>
+    </section>
+    <section class="band">
+      <div class="stack" style="gap:10px"><span class="eyebrow">Afrimetrica Consulting</span><h2>Planning a study or evaluation?</h2><p>Tell us what you need to find out. We can help with design, fieldwork, analysis or the whole project.</p></div>
+      <div class="band-list"><a class="band-item" href="#consultancy"><b>Discuss a project</b><span>Research design, M&amp;E and commissioned studies</span></a><a class="band-item" href="#paper-survey"><b>Get a fieldwork quote</b><span>Face-to-face interviews, priced instantly</span></a><a class="band-item" href="#analytics"><b>Request data analysis</b><span>Statistics, dashboards and reports</span></a><a class="band-item" href="#training"><b>Train your team</b><span>In-house workshops on research methods</span></a></div>
+    </section>`;
+  }
+  function viewAbout() {
+    const rows = [["Organisation", "Afrimetrica — Centre for Research Methods and Analytics"], ["Training", "Afrimetrica Academy"], ["Survey software", "Afrimetrica Surveys"], ["Analytics", "Afrimetrica Analytics"], ["Consultancy", "Afrimetrica Consulting"], ["Research resources", "Afrimetrica Knowledge Hub"], ["Legal operator", "Regelco International Ltd (Ghana)"]];
+    return `<div class="page-head"><div><span class="eyebrow gold">About Afrimetrica</span><h1>A research centre built around good evidence</h1><p class="muted" style="max-width:66ch">Afrimetrica is a Ghana-based centre for research methods and analytics. We work with universities, public bodies, NGOs and businesses across Africa and beyond.</p></div></div>
+      <div class="split">
+        <section class="card"><h2>Our mission</h2><p>To strengthen the quality and use of research by teaching sound methods, providing reliable tools for collecting data, and turning data into evidence people can act on.</p><h3>What we stand for</h3>
+          <ul class="ticks small"><li><div><b>Rigour</b><span>Methods that are appropriate, transparent and honestly reported.</span></div></li><li><div><b>Practicality</b><span>Approaches that work in real field conditions and budgets.</span></div></li><li><div><b>Ethics and data protection</b><span>Respect for participants, informed consent and careful handling of personal data.</span></div></li><li><div><b>Building capacity</b><span>Leaving teams more skilled than we found them.</span></div></li></ul></section>
+        <section class="card"><h2>How we're organised</h2><div class="table-wrap"><table><tbody>${rows.map(([a, b]) => `<tr><th scope="row" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.88rem;color:var(--muted);font-weight:500">${a}</th><td>${b}</td></tr>`).join("")}</tbody></table></div><p class="hint">${LEGAL}</p></section>
+      </div>
+      <section class="card"><h2>Our team</h2><p class="muted">Profiles of our faculty, analysts and consultants will be published here. To work with us or join our associate network, <a href="#contact">get in touch</a>.</p></section>
+      <section class="card"><h2>About our certificates</h2><p class="muted">Afrimetrica Academy issues certificates of completion. They confirm that a participant attended and completed a course; they are not accredited academic qualifications.</p></section>`;
+  }
+  function courseCard(c, s) {
+    s = s || upcoming(c)[0];
+    const left = s ? seatsLeft(s) : null, mine = myEnrol(c.id);
+    return `<article class="card course"><div class="row wrap" style="gap:6px">${c.level ? `<span class="pill">${esc(c.level)}</span>` : ""}${c.format ? `<span class="pill">${esc(c.format)}</span>` : ""}${c.duration ? `<span class="pill">${esc(c.duration)}</span>` : ""}</div>
+      <h3>${esc(c.title)}</h3><p class="muted">${esc(c.summary)}</p>
+      <div class="course-meta">${s ? `<span><b>${esc(fmtDay(s.start))}</b>${s.location ? " · " + esc(s.location) : ""}</span><span>${fee(s.fee, s.currency)}${left !== null ? ` · ${left ? left + (left === 1 ? " seat left" : " seats left") : "Full"}` : ""}</span>` : `<span>Dates to be announced</span>`}</div>
+      ${mine ? `<span class="pill live" style="align-self:flex-start">${mine.status === "interest" ? "Interest registered" : "You're registered"}</span>` : ""}
+      <div><button class="btn primary" data-act="openCourse" data-id="${esc(c.id)}">${s ? "Details and registration" : "Details"}</button></div></article>`;
+  }
+  function viewTraining() {
+    if (S.courseOpen) { const c = courseById(S.courseOpen); if (c) return courseDetail(c); S.courseOpen = null; }
+    const pub = S.courses.filter((c) => c.status === "published").sort((a, b) => ((upcoming(a)[0] || {}).start || "9").localeCompare((upcoming(b)[0] || {}).start || "9"));
+    return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Academy</span><h1>Research methods training</h1><p class="muted" style="max-width:66ch">Practical courses in research design, surveys, data analysis, qualitative methods and monitoring and evaluation. Public short courses, online learning and in-house workshops for your organisation.</p></div></div>
+      ${pub.length ? `<div class="course-grid">${pub.map((c) => courseCard(c)).join("")}</div>` : `<div class="empty"><h2>Our course schedule is being finalised</h2><p class="muted">Send us your details below and tell us which topics interest you. We'll contact you as soon as registration opens.</p></div>`}
+      <div class="split">
+        ${enquiryForm("training", { title: pub.length ? "Training for your organisation" : "Register your interest", intro: "Tell us what you'd like to learn, how many people would attend and where. We run public courses and tailored in-house workshops.", services: TRAINING_SERVICES, serviceLabel: "What are you interested in?", messageLabel: "Topics, group size and location", placeholder: "e.g. A 2-day questionnaire design workshop for 20 M&E staff in Kumasi" })}
+        <section class="card"><h2>What to expect</h2><ul class="ticks small"><li><div><b>Hands-on learning</b><span>Short explanations followed by practice on real or your own data.</span></div></li><li><div><b>Small groups</b><span>Enough time for questions and feedback.</span></div></li><li><div><b>Course materials</b><span>Slides, templates and exercises to keep.</span></div></li><li><div><b>Certificate of completion</b><span>For participants who attend and complete the course. Not an accredited qualification.</span></div></li></ul></section>
+      </div>`;
+  }
+  function courseDetail(c) {
+    const sess = (c.sessions || []).slice().sort((a, b) => (a.start || "9").localeCompare(b.start || "9"));
+    const today = todayISO();
+    const rf = S.regFor && S.regFor.courseId === c.id ? S.regFor : null;
+    const sessionRow = (s) => { const left = seatsLeft(s), past = s.start && s.start < today, mine = myEnrol(c.id, s.id);
+      return `<li class="ses"><div><b>${esc(fmtDay(s.start))}${s.end && s.end !== s.start ? ` – ${esc(fmtDay(s.end))}` : ""}</b><span class="hint">${esc(s.location || c.format || "")} · ${fee(s.fee, s.currency)} · ${left === null ? "Places available" : left ? `${left} seat${left === 1 ? "" : "s"} left` : "Full"}</span></div>
+        ${mine ? `<span class="pill live">Registered</span>` : past ? `<span class="hint">Finished</span>` : left === 0 ? `<span class="hint">Full</span>` : `<button class="btn small primary" data-act="regStart" data-c="${esc(c.id)}" data-s="${esc(s.id)}">Register</button>`}</li>`; };
+    return `<div><button class="btn small ghost" data-act="closeCourse">← All courses</button></div>
+      <div class="page-head"><div><span class="eyebrow gold">Afrimetrica Academy</span><h1>${esc(c.title)}</h1><div class="row wrap" style="gap:6px">${[c.level, c.format, c.duration].filter(Boolean).map((x) => `<span class="pill">${esc(x)}</span>`).join("")}</div></div></div>
+      <div class="results-grid">
+        <div class="stack">
+          <section class="card prose"><p class="lede-sm">${esc(c.summary)}</p>${sentenceBlocks(c.description)}</section>
+          ${c.outcomes && c.outcomes.length ? `<section class="card"><h2>You will be able to</h2><ul class="ticks small">${c.outcomes.map((o) => `<li><div><span>${esc(o)}</span></div></li>`).join("")}</ul></section>` : ""}
+          ${c.audience ? `<section class="card"><h2>Who it's for</h2><p class="muted">${esc(c.audience)}</p></section>` : ""}
+        </div>
+        <aside class="stack">
+          <section class="card"><h2>Dates and registration</h2>
+            ${sess.length ? `<ul class="ses-list">${sess.map(sessionRow).join("")}</ul>` : `<p class="muted">Dates haven't been announced yet.</p>`}
+            ${!myEnrol(c.id, "") ? `<button class="btn small" data-act="regStart" data-c="${esc(c.id)}" data-s="">${sess.length ? "None of these dates work? Register interest" : "Register your interest"}</button>` : `<span class="pill live" style="align-self:flex-start">Interest registered</span>`}
+            ${c.certificate ? `<p class="hint">Includes a certificate of completion (not an accredited qualification).</p>` : ""}
+          </section>
+          ${rf ? registrationForm(c, rf.sessionId ? sess.find((x) => x.id === rf.sessionId) : null) : ""}
+        </aside>
+      </div>`;
+  }
+  function registrationForm(c, s) {
+    const u = S.user || {};
+    return `<form class="card" id="regForm" novalidate><h2>${s ? "Register for this course" : "Register your interest"}</h2>
+      <p class="muted">${s ? `${esc(fmtDay(s.start))}${s.location ? " · " + esc(s.location) : ""} · ${fee(s.fee, s.currency)}` : "We'll contact you when new dates are announced."}</p>
+      ${API ? `<p class="hint">Registering as <b>${esc(u.name || u.email || "")}</b> (${esc(u.email || "")}).</p>` : `<div class="grid2"><label for="rg-name">Your name<input id="rg-name" maxlength="80"></label><label for="rg-email">Email<input id="rg-email" type="email" maxlength="160"></label></div>`}
+      <div class="grid2"><label for="rg-phone">Phone<input id="rg-phone" type="tel" maxlength="40" autocomplete="tel"></label><label for="rg-org">Organisation (optional)<input id="rg-org" maxlength="120" autocomplete="organization"></label></div>
+      <label for="rg-notes">Anything we should know? (optional)<textarea id="rg-notes" rows="3" maxlength="1000" placeholder="Accessibility needs, invoicing details, questions…"></textarea></label>
+      ${s && +s.fee > 0 ? `<p class="hint">We'll email payment details to confirm your place. No payment is taken now.</p>` : ""}
+      <div id="rg-err"></div><div class="row wrap"><button class="btn primary" type="submit">${s ? "Register" : "Register interest"}</button><button class="btn ghost" type="button" data-act="regCancel">Cancel</button></div></form>`;
+  }
+  async function submitRegistration() {
+    const rf = S.regFor, c = rf && courseById(rf.courseId); if (!c) return;
+    const s = rf.sessionId ? (c.sessions || []).find((x) => x.id === rf.sessionId) : null;
+    const v = (id) => { const el = $(id); return el ? (el.value || "").trim() : ""; };
+    const name = API ? (S.user && S.user.name) || "" : v("#rg-name"), email = API ? (S.user && S.user.email) || "" : v("#rg-email").toLowerCase();
+    const errs = [];
+    if (!API && !name) errs.push("Enter your name.");
+    if (!API && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) errs.push("Enter a valid email address.");
+    if (s && !v("#rg-phone")) errs.push("Add a phone number so we can confirm your place.");
+    if (s && seatsLeft(s) === 0) errs.push("Sorry, this session is full.");
+    if (myEnrol(c.id, s ? s.id : "")) errs.push("You're already registered for this.");
+    if (errs.length) { $("#rg-err").innerHTML = `<div class="errs">${errs.map(esc).join("<br>")}</div>`; return; }
+    const e = { id: newId("en"), userId: S.uid, courseId: c.id, sessionId: s ? s.id : "", status: s ? "registered" : "interest", name, email, phone: v("#rg-phone"), organisation: v("#rg-org"), notes: v("#rg-notes"), createdAt: Date.now() };
+    const ok = await save(() => backend.putPriv("enrollments", e), s ? "You're registered. We'll email you to confirm your place." : "Thanks. We'll let you know when dates are announced.");
+    if (ok) { S.regFor = null; render(); }
+  }
+  function serviceCards(list) { return `<div class="units">${list.map(([t, d]) => `<article class="card unit"><h3>${esc(t)}</h3><p class="muted">${esc(d)}</p></article>`).join("")}</div>`; }
+  function viewAnalyticsSvc() {
+    return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Analytics</span><h1>Data analysis you can rely on</h1><p class="muted" style="max-width:66ch">Send us your data and your questions. Our analysts clean it, analyse it with the right methods and give you results you can explain and defend.</p></div></div>
+      ${serviceCards([["Statistical analysis", "Descriptive statistics, hypothesis tests, regression and multivariate methods, with clear write-ups of what the results mean."], ["Dashboards and reporting", "Interactive dashboards and polished reports that keep decision-makers up to date."], ["Data management and cleaning", "Data entry, cleaning, coding, merging and documentation so your dataset is analysis-ready."], ["Survey and M&E data", "Weighting, indicator calculation and trend analysis for surveys and monitoring systems."]])}
+      <div class="split">
+        ${enquiryForm("analytics", { title: "Request an analysis", intro: "Describe your data and what you need to know. We'll reply with an approach, a timeline and a quote.", services: ANALYTICS_SERVICES, budget: true, messageLabel: "Your data and questions", placeholder: "e.g. 1,200 household survey responses in Excel; we need prevalence estimates by region and a regression on food security." })}
+        <section class="card"><h2>Collecting data with Afrimetrica Surveys?</h2><p class="muted">Every survey you run on Afrimetrica Surveys comes with built-in analysis: charts, group comparisons, key drivers, statistical tests, AI insight reports and Excel exports.</p><a class="btn primary" href="#results" style="align-self:flex-start">Open Analyze</a>
+          <h3>How we work</h3><ol class="steps"><li>You share your data securely and tell us your questions.</li><li>We agree an analysis plan, timeline and price.</li><li>We clean and analyse the data and check the results.</li><li>You receive tables, charts and a plain-language summary, and we walk you through them.</li></ol></section>
+      </div>`;
+  }
+  function viewConsult() {
+    return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Consulting</span><h1>Research and evaluation consultancy</h1><p class="muted" style="max-width:66ch">From a single questionnaire review to a full multi-site study, we design, run and report research that stands up to scrutiny.</p></div></div>
+      ${serviceCards([["Research design and methodology", "Study designs, sampling plans, protocols and data collection tools tailored to your questions and budget."], ["Monitoring and evaluation", "Theories of change, results frameworks, baselines, mid-term and final evaluations."], ["Surveys and fieldwork", "Online, telephone and face-to-face data collection with trained field teams and quality checks."], ["Commissioned studies and reports", "End-to-end studies, from inception report to final report and presentation."]])}
+      <div class="split">
+        ${enquiryForm("consultancy", { title: "Discuss a project", intro: "Tell us about your project. We'll reply within two working days to arrange a call.", services: CONSULT_SERVICES, budget: true, messageLabel: "About your project", placeholder: "Objectives, target population, locations, deadlines and any terms of reference." })}
+        <section class="card"><h2>Need face-to-face interviews?</h2><p class="muted">Upload your questionnaire and get an itemised fieldwork quote in US dollars straight away.</p><a class="btn gold" href="#paper-survey" style="align-self:flex-start">Get a fieldwork quote</a>
+          <h3>Who we work with</h3><ul class="ticks small"><li><div><span>Universities and research institutes</span></div></li><li><div><span>Government agencies and public bodies</span></div></li><li><div><span>NGOs and development partners</span></div></li><li><div><span>Businesses and market research buyers</span></div></li></ul></section>
+      </div>`;
+  }
+  function viewResources() {
+    if (S.guideOpen) { const g = GUIDES.find((x) => x.id === S.guideOpen); if (g) return guideView(g); S.guideOpen = null; }
+    const tpl = Object.entries(TEMPLATES);
+    return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Knowledge Hub</span><h1>Resources for better research</h1><p class="muted" style="max-width:66ch">Free guides, a sample size calculator, ready-made survey templates, published findings and links to open data.</p></div></div>
+      <section class="stack"><h2>Guides</h2><div class="course-grid">${GUIDES.map((g) => `<button class="card tpl" data-act="openGuide" data-id="${g.id}"><h3>${esc(g.title)}</h3><p class="muted">${esc(g.summary)}</p><span class="hint">${g.minutes} min read</span></button>`).join("")}</div></section>
+      <section class="card" id="sampleCalc"><div><h2>Sample size calculator</h2><p class="muted">How many completed responses you need for a given margin of error.</p></div>
+        <div class="grid4"><label for="sc-conf">Confidence<select id="sc-conf"><option value="1.645">90%</option><option value="1.96" selected>95%</option><option value="2.576">99%</option></select></label>
+        <label for="sc-moe">Margin of error (±%)<input id="sc-moe" type="number" min="1" max="20" step="0.5" value="5"></label>
+        <label for="sc-pop">Population (blank = large)<input id="sc-pop" type="number" min="1" step="1" placeholder="e.g. 3000"></label>
+        <label for="sc-rr">Expected response rate (%)<input id="sc-rr" type="number" min="1" max="100" step="1" value="100"></label></div>
+        <div class="calc-out" id="sc-out" aria-live="polite">${calcSample()}</div></section>
+      <section class="stack"><h2>Survey templates</h2><p class="muted">Download as Excel to adapt offline, or open directly in Afrimetrica Surveys.</p>
+        <div class="course-grid">${tpl.map(([k, t]) => `<article class="card"><h3>${esc(t.name)}</h3><p class="muted">${esc(t.blurb)}</p><span class="hint">${t.questions.length} questions</span><div class="row wrap"><button class="btn small" data-act="tplXl" data-key="${k}">Download Excel</button><button class="btn small ghost" data-act="tpl" data-key="${k}">Use in Afrimetrica Surveys</button></div></article>`).join("")}</div></section>
+      <section class="stack"><h2>Published findings and open data</h2>${libraryBody()}</section>`;
+  }
+  function calcSample() {
+    const g = (id, d) => { const el = $(id); return el ? el.value : d; };
+    const z = +g("#sc-conf", 1.96), e = (+g("#sc-moe", 5) || 5) / 100, N = Math.floor(+g("#sc-pop", 0) || 0), rr = Math.min(100, Math.max(1, +g("#sc-rr", 100) || 100)) / 100;
+    const n = sampleN(z, e, N);
+    return `<div><span class="hint">Completed responses needed</span><b>${int(n)}</b></div><div><span class="hint">People to invite at a ${Math.round(rr * 100)}% response rate</span><b>${int(Math.ceil(n / rr))}</b></div>`;
+  }
+  function guideView(g) {
+    const table = `<div class="table-wrap"><table><thead><tr><th>Margin of error</th><th>Responses needed</th></tr></thead><tbody>${[10, 5, 3, 2].map((m) => `<tr><td>±${m}%</td><td class="n">${int(sampleN(1.96, m / 100, 0))}</td></tr>`).join("")}</tbody></table></div>`;
+    return `<div><button class="btn small ghost" data-act="closeGuide">← All resources</button></div>
+      <article class="card prose guide"><span class="eyebrow gold">Afrimetrica Knowledge Hub · ${g.minutes} min read</span><h1>${esc(g.title)}</h1><p class="lede-sm">${esc(g.summary)}</p>
+        ${g.sections.map(([h, p]) => `<h2>${esc(h)}</h2>${p === "__SAMPLE_TABLE__" ? table + `<p class="hint">For a yes/no style result, assuming a 50% split, which gives the largest (safest) number.</p>` : `<p>${esc(p)}</p>`}`).join("")}
+        <div class="row wrap" style="margin-top:8px"><a class="btn primary" href="#create">Build a survey</a><a class="btn" href="#training">See our courses</a></div></article>`;
+  }
+  function viewContact() {
+    const st = S.settings || {}, wa = String(st.whatsapp || "").replace(/[^\d]/g, "");
+    const item = (label, val) => `<div class="contact-item"><span class="hint">${label}</span>${val}</div>`;
+    const details = [st.email ? item("Email", `<span class="row wrap" style="gap:8px"><b class="sel">${esc(st.email)}</b><button class="btn small ghost" data-act="copyText" data-v="${esc(st.email)}">Copy</button></span>`) : "", st.phone ? item("Phone", `<b class="sel">${esc(st.phone)}</b>`) : "", wa ? item("WhatsApp", `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Message us on WhatsApp</a>`) : "", st.address ? item("Office", `<span class="sel" style="white-space:pre-line">${esc(st.address)}</span>`) : "", st.hours ? item("Hours", esc(st.hours)) : "", st.linkedin ? item("LinkedIn", `<a href="${esc(st.linkedin)}" target="_blank" rel="noopener">Follow Afrimetrica</a>`) : ""].join("");
+    return `<div class="page-head"><div><span class="eyebrow gold">Contact</span><h1>Get in touch</h1><p class="muted" style="max-width:66ch">Questions about courses, surveys, analysis or a project? Send us a message and we'll reply within two working days.</p></div></div>
+      <div class="split">
+        ${enquiryForm("contact", { title: "Send us a message", subject: true, messageLabel: "Your message" })}
+        <section class="card"><h2>Contact details</h2>${details || `<p class="muted">Use the form and we'll reply by email.</p>`}<p class="hint">${LEGAL}</p>
+          <h3>Looking for something specific?</h3><ul class="links"><li><a href="#training">Course registration and in-house training</a></li><li><a href="#consultancy">Research and evaluation projects</a></li><li><a href="#analytics">Data analysis requests</a></li><li><a href="#paper-survey">Face-to-face fieldwork quotes</a></li></ul></section>
+      </div>`;
+  }
+  function viewAccount() {
+    if (!API && S.mode !== "demo" && S.mode !== "live") return loading();
+    if (API && !S.user) return `<div class="page-head"><div><span class="eyebrow gold">My Account</span><h1>Your Afrimetrica account</h1></div></div>` + signInPrompt("Sign in to see your account", "One account for courses, surveys and enquiries. It's free.");
+    const u = S.user || { name: "", email: "" };
+    const st = { registered: "Registered", interest: "Interest registered", confirmed: "Confirmed", attended: "Attended", completed: "Completed", cancelled: "Cancelled", new: "Received", contacted: "We've been in touch", in_progress: "In progress", won: "Agreed", closed: "Closed" };
+    const enr = S.enrollments.filter((e) => e.userId === S.uid).sort((a, b) => b.createdAt - a.createdAt);
+    const enq = S.enquiries.filter((e) => e.requesterId === S.uid).sort((a, b) => b.createdAt - a.createdAt);
+    const fw = S.fieldwork.filter((f) => f.requesterId === S.uid);
+    const mine = myStudies();
+    return `<div class="page-head"><div><span class="eyebrow gold">My Account</span><h1>${API ? `Hello${firstName(u) ? ", " + esc(firstName(u)) : ""}` : "Your account"}</h1></div>${S.isOwner ? `<a class="btn gold" href="#business">Open admin area</a>` : ""}</div>
+      <div class="results-grid">
+        <div class="stack">
+          <section class="card"><div class="qmeta"><h2>My courses</h2><a class="btn small" href="#training">Browse courses</a></div>
+            ${enr.length ? `<div class="table-wrap"><table><thead><tr><th>Course</th><th>Dates</th><th>Status</th><th></th></tr></thead><tbody>${enr.map((e) => { const c = courseById(e.courseId), s = c && (c.sessions || []).find((x) => x.id === e.sessionId); return `<tr><td>${esc(c ? c.title : "Course no longer listed")}</td><td>${e.sessionId ? esc(s ? fmtDay(s.start) : "—") : "Dates to be announced"}</td><td><span class="pill${e.status === "confirmed" || e.status === "completed" ? " live" : ""}">${st[e.status] || e.status}</span></td><td>${["registered", "interest"].includes(e.status) ? `<button class="btn small ghost danger" data-act="enrCancel" data-id="${esc(e.id)}">Cancel</button>` : ""}</td></tr>`; }).join("")}</tbody></table></div>` : `<p class="muted">You haven't registered for a course yet.</p>`}</section>
+          <section class="card"><div class="qmeta"><h2>My surveys</h2><a class="btn small" href="#studies">Open My surveys</a></div><p class="muted">${mine.length ? `${mine.length} survey${mine.length === 1 ? "" : "s"}: ${mine.filter((x) => x.status === "live").length} live, ${mine.filter((x) => x.status === "draft").length} draft.` : "You haven't created a survey yet."}</p><div class="row wrap"><a class="btn small primary" href="#create">Create a survey</a><a class="btn small" href="#panel">Take paid surveys</a></div></section>
+          <section class="card"><h2>My enquiries</h2>${enq.length || fw.length ? `<div class="table-wrap"><table><thead><tr><th>Date</th><th>About</th><th>Status</th></tr></thead><tbody>${enq.map((e) => `<tr><td class="n">${fmtDate(e.createdAt)}</td><td>${esc({ analytics: "Data analysis", consultancy: "Consultancy", contact: "General", training: "Training" }[e.type] || e.type)}${e.details && e.details.service ? ` · ${esc(e.details.service)}` : ""}</td><td><span class="pill">${st[e.status] || e.status}</span></td></tr>`).join("")}${fw.map((f) => `<tr><td class="n">${fmtDate(f.createdAt)}</td><td>Paper survey fieldwork · ${esc(f.ref || "")}</td><td><span class="pill">${esc({ new: "Received", contacted: "We've been in touch", quoted: "Final quote sent", won: "Agreed", lost: "Closed" }[f.status] || f.status)}</span></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No enquiries yet. Ask us about <a href="#consultancy">consultancy</a>, <a href="#analytics">analysis</a> or <a href="#training">training</a>.</p>`}</section>
+        </div>
+        <aside class="stack">
+          <section class="card"><h2>Profile</h2>${API ? `<dl class="kv"><dt>Name</dt><dd>${esc(u.name || "—")}</dd><dt>Email</dt><dd>${esc(u.email)}</dd><dt>Sign-in</dt><dd>${u.google ? "Google" : "Email and password"}</dd><dt>Email</dt><dd>${unverified() ? `<span class="warn">Not confirmed</span> <button class="linkbtn" data-act="resendVerifyAcct">Send link again</button>` : "Confirmed"}</dd></dl><div><button class="btn small ghost" data-act="signout">Sign out</button></div>` : `<p class="muted">On claude.ai, Afrimetrica uses your Claude account.</p>`}</section>
+          <section class="card"><h2>Participant profile</h2><p class="muted">${S.profile ? `${esc(S.profile.age)} · ${esc(S.profile.gender)} · ${esc(S.profile.country)} · ${esc(S.profile.occupation)}` : "Set up a short profile to take paid surveys."}</p><a class="btn small" href="#panel" style="align-self:flex-start">${S.profile ? "Studies and earnings" : "Set up profile"}</a></section>
+        </aside>
+      </div>`;
+  }
+
+  // ---------- admin: courses, registrations, enquiries, contact details ----------
+  function blankCourse() { return { id: newId("c"), title: "", status: "draft", level: "Introductory", format: "In person", duration: "", summary: "", description: "", outcomesText: "", audience: "", certificate: true, sessions: [] }; }
+  function coursesAdmin() {
+    if (S.courseEdit) return courseEditor(S.courseEdit);
+    const list = [...S.courses].sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+    const regs = (c) => S.enrollments.filter((e) => e.courseId === c.id && e.status !== "cancelled").length;
+    return `<section class="card"><div class="qmeta"><h2>Courses</h2><div class="row wrap"><label for="ce-tpl" class="inline" style="gap:6px">Start from<select id="ce-tpl" style="width:auto"><option value="">A blank course</option>${COURSE_TPL.map((t, i) => `<option value="${i}">${esc(t.title)}</option>`).join("")}</select></label><button class="btn primary" data-act="courseNew">New course</button></div></div>
+      <p class="hint">Templates fill in a description and learning outcomes. Add your own dates, venues and fees, then publish.</p>
+      ${list.length ? `<div class="table-wrap"><table><thead><tr><th>Course</th><th>Status</th><th>Next date</th><th>Registrations</th><th></th></tr></thead><tbody>${list.map((c) => `<tr><td><b>${esc(c.title)}</b><br><span class="hint">${esc([c.level, c.format, c.duration].filter(Boolean).join(" · "))}</span></td><td><span class="pill${c.status === "published" ? " live" : " flag"}">${c.status === "published" ? "Published" : "Draft"}</span></td><td>${esc(upcoming(c)[0] ? fmtDay(upcoming(c)[0].start) : "—")}</td><td class="n">${regs(c)}</td><td><div class="row wrap">${S.confirmDel === c.id ? `<button class="btn small danger" data-act="courseDel" data-id="${esc(c.id)}">Confirm delete</button><button class="btn small ghost" data-act="canceldel">Keep</button>` : `<button class="btn small" data-act="courseEdit" data-id="${esc(c.id)}">Edit</button><button class="btn small ghost danger" data-act="askdel" data-id="${esc(c.id)}">Delete</button>`}</div></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No courses yet. Create one from a template to get started.</p>`}</section>`;
+  }
+  function courseEditor(c) {
+    const sel = (k, label, opts) => `<label for="ce-${k}">${label}<select id="ce-${k}" data-ce="${k}">${opts.map((o) => `<option${c[k] === o ? " selected" : ""}>${esc(o)}</option>`).join("")}</select></label>`;
+    const inp = (k, label, attrs = "") => `<label for="ce-${k}">${label}<input id="ce-${k}" data-ce="${k}" value="${esc(c[k] || "")}" ${attrs}></label>`;
+    return `<form class="stack" id="courseForm" novalidate>
+      <section class="card"><div class="qmeta"><h2>${S.courses.some((x) => x.id === c.id) ? "Edit course" : "New course"}</h2><label for="ce-status" class="inline" style="gap:6px">Status<select id="ce-status" data-ce="status" style="width:auto"><option value="draft"${c.status !== "published" ? " selected" : ""}>Draft (hidden)</option><option value="published"${c.status === "published" ? " selected" : ""}>Published</option></select></label></div>
+        ${inp("title", "Course title", 'maxlength="150"')}
+        <div class="grid4">${sel("level", "Level", ["Introductory", "Intermediate", "Advanced"])}${sel("format", "Format", ["In person", "Online", "Hybrid"])}${inp("duration", "Duration", 'maxlength="80" placeholder="e.g. 2 days"')}<label class="inline" for="ce-certificate" style="align-self:end"><input type="checkbox" id="ce-certificate" data-ce="certificate" ${c.certificate ? "checked" : ""}>Certificate of completion</label></div>
+        <label for="ce-summary">One-line summary<input id="ce-summary" data-ce="summary" maxlength="400" value="${esc(c.summary || "")}"></label>
+        <label for="ce-description">Description (leave a blank line between paragraphs)<textarea id="ce-description" data-ce="description" rows="6" maxlength="6000">${esc(c.description || "")}</textarea></label>
+        <label for="ce-outcomesText">Learning outcomes, one per line<textarea id="ce-outcomesText" data-ce="outcomesText" rows="4">${esc(c.outcomesText || "")}</textarea></label>
+        <label for="ce-audience">Who it's for<input id="ce-audience" data-ce="audience" maxlength="400" value="${esc(c.audience || "")}"></label></section>
+      <section class="card"><div class="qmeta"><h2>Dates and fees</h2><button type="button" class="btn small" data-act="sesAdd">+ Add a date</button></div>
+        ${c.sessions.length ? `<div class="table-wrap"><table class="ses-table"><thead><tr><th>Start</th><th>End</th><th>Venue or link</th><th>Seats (0 = no limit)</th><th>Fee</th><th>Currency</th><th></th></tr></thead><tbody>${c.sessions.map((s, i) => `<tr>
+          <td><input type="date" id="se-${i}-start" data-si="${i}" data-sk="start" value="${esc(s.start || "")}" aria-label="Start date"></td><td><input type="date" id="se-${i}-end" data-si="${i}" data-sk="end" value="${esc(s.end || "")}" aria-label="End date"></td>
+          <td><input id="se-${i}-location" data-si="${i}" data-sk="location" value="${esc(s.location || "")}" maxlength="120" placeholder="e.g. Accra / Zoom" aria-label="Venue"></td>
+          <td><input type="number" id="se-${i}-seats" data-si="${i}" data-sk="seats" value="${esc(s.seats || 0)}" min="0" aria-label="Seats"></td>
+          <td><input type="number" id="se-${i}-fee" data-si="${i}" data-sk="fee" value="${esc(s.fee || 0)}" min="0" step="0.01" aria-label="Fee"></td>
+          <td><select id="se-${i}-currency" data-si="${i}" data-sk="currency" aria-label="Currency">${["USD", "GHS", "GBP", "EUR"].map((x) => `<option${(s.currency || "USD") === x ? " selected" : ""}>${x}</option>`).join("")}</select></td>
+          <td><button type="button" class="btn small ghost danger" data-act="sesDel" data-i="${i}">Remove</button></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No dates yet. Without dates, visitors can still register their interest.</p>`}</section>
+      <div id="ce-err"></div><div class="row wrap"><button class="btn primary" type="submit">Save course</button><button type="button" class="btn ghost" data-act="courseCancel">Cancel</button></div></form>`;
+  }
+  async function saveCourse() {
+    const c = S.courseEdit; if (!c) return;
+    if (!String(c.title || "").trim()) { $("#ce-err").innerHTML = `<div class="errs">Give the course a title.</div>`; return; }
+    const { outcomesText, ...rest } = c;
+    const course = { ...rest, title: c.title.trim(), outcomes: String(outcomesText || "").split("\n").map((x) => x.trim()).filter(Boolean), sessions: c.sessions.map((s) => ({ ...s, seats: Math.max(0, Math.floor(+s.seats || 0)), fee: Math.max(0, +s.fee || 0) })), createdAt: c.createdAt || Date.now(), updatedAt: Date.now() };
+    const ok = await save(() => backend.putCourse(course), course.status === "published" ? "Course saved and published." : "Course saved as a draft.");
+    if (ok) { S.courseEdit = null; render(); }
+  }
+  function csvDownload(name, header, rows) {
+    const q = (v) => { const s = v == null ? "" : String(v); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+    const data = [header, ...rows].map((r) => r.map(q).join(",")).join("\n");
+    if (!DL) { toast("Downloads aren't available in this view."); return; }
+    DL.save({ filename: name, data }).then(() => toast("CSV saved.")).catch((e) => { if (e && e.code !== "declined") toast("The file couldn't be saved here."); });
+  }
+  const ENROL_LABEL = { registered: "Registered", interest: "Interest", confirmed: "Confirmed", attended: "Attended", completed: "Completed", cancelled: "Cancelled" };
+  const ENQ_LABEL = { new: "New", contacted: "Contacted", in_progress: "In progress", won: "Won", closed: "Closed" };
+  function enrolAdmin() {
+    const list = [...S.enrollments].sort((a, b) => b.createdAt - a.createdAt);
+    const cs = (e) => { const c = courseById(e.courseId), s = c && (c.sessions || []).find((x) => x.id === e.sessionId); return [c ? c.title : "(deleted course)", e.sessionId ? (s ? fmtDay(s.start) + (s.location ? ", " + s.location : "") : "(removed date)") : "Interest only"]; };
+    return `<section class="card"><div class="qmeta"><h2>Course registrations</h2>${list.length ? `<button class="btn small" data-act="enrCsv">Download CSV</button>` : ""}</div>
+      ${list.length ? `<div class="table-wrap"><table><thead><tr><th>Date</th><th>Person</th><th>Course and date</th><th>Notes</th><th>Status</th></tr></thead><tbody>${list.map((e) => { const [ct, sd] = cs(e); return `<tr><td class="n">${fmtDate(e.createdAt)}</td><td><b>${esc(e.name || "—")}</b><br><span class="hint">${esc(e.email || "")}${e.phone ? " · " + esc(e.phone) : ""}${e.organisation ? "<br>" + esc(e.organisation) : ""}</span></td><td>${esc(ct)}<br><span class="hint">${esc(sd)}</span></td><td class="hint">${esc(short(e.notes || "", 120))}</td><td><select data-enr="${esc(e.id)}" aria-label="Status">${Object.entries(ENROL_LABEL).map(([k, v]) => `<option value="${k}"${e.status === k ? " selected" : ""}>${v}</option>`).join("")}</select></td></tr>`; }).join("")}</tbody></table></div>` : `<p class="muted">No registrations yet.</p>`}</section>`;
+  }
+  function enquiriesAdmin() {
+    const f = S.enqFilter || "";
+    const list = S.enquiries.filter((e) => !f || e.type === f).sort((a, b) => b.createdAt - a.createdAt);
+    return `<section class="card"><div class="qmeta"><h2>Enquiries</h2><div class="row wrap"><label for="enqFilter" class="inline" style="gap:6px">Show<select id="enqFilter" style="width:auto"><option value="">All</option>${["analytics", "consultancy", "training", "contact"].map((t) => `<option value="${t}"${f === t ? " selected" : ""}>${t[0].toUpperCase() + t.slice(1)}</option>`).join("")}</select></label>${list.length ? `<button class="btn small" data-act="enqCsv">Download CSV</button>` : ""}</div></div>
+      ${list.length ? `<div class="table-wrap"><table><thead><tr><th>Date</th><th>From</th><th>Enquiry</th><th>Status</th></tr></thead><tbody>${list.map((e) => `<tr><td class="n">${fmtDate(e.createdAt)}<br><span class="pill">${esc(e.type)}</span></td><td><b>${esc(e.contact.name)}</b><br><span class="hint">${esc(e.contact.email)}${e.contact.phone ? " · " + esc(e.contact.phone) : ""}${e.contact.organisation ? "<br>" + esc(e.contact.organisation) : ""}</span></td><td>${e.subject ? `<b>${esc(e.subject)}</b><br>` : ""}${e.details && e.details.service ? `<span class="hint">${esc(e.details.service)}${e.details.timeline ? " · " + esc(e.details.timeline) : ""}${e.details.budget ? " · " + esc(e.details.budget) : ""}</span><br>` : ""}<span style="white-space:pre-line">${esc(short(e.message, 400))}</span></td><td><select data-eqs="${esc(e.id)}" aria-label="Status">${Object.entries(ENQ_LABEL).map(([k, v]) => `<option value="${k}"${e.status === k ? " selected" : ""}>${v}</option>`).join("")}</select></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No enquiries${f ? " of this type" : ""} yet.</p>`}</section>`;
+  }
+  function settingsAdmin() {
+    const st = S.settings || {};
+    const inp = (k, label, ph, type = "text") => `<label for="st-${k}">${label}<input id="st-${k}" type="${type}" value="${esc(st[k] || "")}" placeholder="${esc(ph)}" maxlength="300"></label>`;
+    return `<form class="card" id="settingsForm" novalidate style="max-width:760px"><h2>Contact details</h2><p class="muted">Shown on the Contact page and in enquiry confirmations. Leave a field blank to hide it.</p>
+      <div class="grid2">${inp("email", "Public email", "info@yourdomain.com", "email")}${inp("phone", "Phone", "+233 …", "tel")}${inp("whatsapp", "WhatsApp number", "+233 …", "tel")}${inp("hours", "Office hours", "Mon–Fri, 9:00–17:00 GMT")}</div>
+      <label for="st-address">Office address<textarea id="st-address" rows="3" maxlength="400">${esc(st.address || "")}</textarea></label>
+      ${inp("linkedin", "LinkedIn page (https://…)", "https://www.linkedin.com/company/…", "url")}
+      <div id="st-err"></div><div><button class="btn primary" type="submit">Save contact details</button></div></form>`;
+  }
+  async function saveSettings() {
+    const v = (k) => ($("#st-" + k).value || "").trim();
+    const x = { email: v("email"), phone: v("phone"), whatsapp: v("whatsapp"), address: v("address"), hours: v("hours"), linkedin: v("linkedin"), updatedAt: Date.now() };
+    if (x.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(x.email)) { $("#st-err").innerHTML = `<div class="errs">That email address doesn't look right.</div>`; return; }
+    if (x.linkedin && !/^https:\/\//.test(x.linkedin)) { $("#st-err").innerHTML = `<div class="errs">The LinkedIn link must start with https://</div>`; return; }
+    await save(() => backend.putSettings(x), "Contact details saved.");
   }
 
   // ---------- events ----------
@@ -2650,6 +3092,12 @@ ${richSummary(st, rows)}`;
     if (t.dataset && t.dataset.f2f) { const k = t.dataset.f2f; S.f2f[k] = t.type === "checkbox" ? t.checked : t.value; if (k === "method") render(); else updateQuote(); return; }
     if (t.id === "f2fPick") { S.f2f.sourceId = t.value; render(); return; }
     if (t.dataset && t.dataset.fw) { const r = S.fieldwork.find((x) => x.id === t.dataset.fw); if (r) save(() => backend.setFieldStatus(r, t.value), "Request status updated."); return; }
+    if (t.dataset && t.dataset.ce !== undefined && S.courseEdit) { S.courseEdit[t.dataset.ce] = t.type === "checkbox" ? t.checked : t.value; return; }
+    if (t.dataset && t.dataset.si !== undefined && S.courseEdit) { const ss = S.courseEdit.sessions[+t.dataset.si]; if (ss) ss[t.dataset.sk] = t.value; return; }
+    if (t.dataset && t.dataset.enr) { const x = S.enrollments.find((e) => e.id === t.dataset.enr); if (x) save(() => backend.patchPriv("enrollments", x, t.value), "Registration updated."); return; }
+    if (t.dataset && t.dataset.eqs) { const x = S.enquiries.find((e) => e.id === t.dataset.eqs); if (x) save(() => backend.patchPriv("enquiries", x, t.value), "Enquiry updated."); return; }
+    if (t.id === "enqFilter") { S.enqFilter = t.value; render(); return; }
+    if (/^sc-/.test(t.id || "")) { const o = $("#sc-out"); if (o) o.innerHTML = calcSample(); return; }
     if (t.id === "impFile") { if (t.files && t.files[0]) readFile(t.files[0]); t.value = ""; return; }
     if (t.id === "libSearch") { S.libQuery = t.value; $("#libList").innerHTML = libList(); }
     if (t.id === "libScholar") { const v = t.value.trim(); $("#scholarLink").href = v ? "https://scholar.google.com/scholar?q=" + encodeURIComponent(v) : "https://scholar.google.com/"; }
@@ -2671,7 +3119,7 @@ ${richSummary(st, rows)}`;
     if (t.id === "genAud") S.gen.aud = t.value;
     if (t.id === "excl") { S.excludeFlagged = t.checked; render(); }
   }
-  const textLike = (t) => t.tagName === "TEXTAREA" || (t.tagName === "INPUT" && /^(text|number|search|)$/.test(t.type));
+  const textLike = (t) => t.tagName === "TEXTAREA" || (t.tagName === "INPUT" && /^(text|number|search|email|tel|url|)$/.test(t.type));
   const main = $("#main");
   main.addEventListener("input", (e) => { if (textLike(e.target)) onField(e.target); });
   main.addEventListener("change", (e) => { if (!textLike(e.target)) onField(e.target); });
@@ -2684,6 +3132,10 @@ ${richSummary(st, rows)}`;
     if (e.target.id === "chatForm") { const q = ($("#chatQ").value || "").trim(); if (q) runChat(q); return; }
     if (e.target.id === "actionForm") { saveAction(); return; }
     if (e.target.id === "f2fForm") { sendF2FRequest(); return; }
+    if (e.target.dataset && e.target.dataset.enq) { submitEnquiry(e.target.dataset.enq); return; }
+    if (e.target.id === "regForm") { submitRegistration(); return; }
+    if (e.target.id === "courseForm") { saveCourse(); return; }
+    if (e.target.id === "settingsForm") { saveSettings(); return; }
     if (e.target.id === "authForm") { submitAuth(); return; }
     if (e.target.id === "forgotForm") { submitForgot(); return; }
     if (e.target.id === "resetForm") { submitReset(); return; }
@@ -2765,6 +3217,29 @@ ${richSummary(st, rows)}`;
         break;
       }
       case "unpublish": { const s2 = clone(studyById(S.resultsId)); delete s2.library; s2.updatedAt = Date.now(); await save(() => backend.putStudy(s2), "Removed from the library."); break; }
+      case "enqAgain": S.enqSent[b.dataset.t] = false; render(); break;
+      case "openGuide": S.guideOpen = id; if (S.view === "resources") { render(); window.scrollTo(0, 0); } break;
+      case "closeGuide": S.guideOpen = null; render(); window.scrollTo(0, 0); break;
+      case "openCourse": S.courseOpen = id; S.regFor = null; if (S.view !== "training") go("training"); else { render(); window.scrollTo(0, 0); } break;
+      case "closeCourse": S.courseOpen = null; S.regFor = null; render(); window.scrollTo(0, 0); break;
+      case "regStart":
+        if (API && !S.user) { requireSignIn("Sign in or create a free account to register for a course."); break; }
+        if (unverified()) { toast(`Confirm your email first. We sent a link to ${S.user.email}.`); break; }
+        S.regFor = { courseId: b.dataset.c, sessionId: b.dataset.s || "" }; render(); { const f = $("#regForm"); if (f) { f.scrollIntoView({ block: "start" }); const x = f.querySelector("input"); if (x) x.focus(); } } break;
+      case "regCancel": S.regFor = null; render(); break;
+      case "enrCancel": { const x = S.enrollments.find((e2) => e2.id === id); if (x) await save(() => backend.patchPriv("enrollments", x, "cancelled"), "Registration cancelled."); break; }
+      case "tplXl": exportSurveyXlsx(draftFromTemplate(b.dataset.key)); break;
+      case "copyText": try { await navigator.clipboard.writeText(b.dataset.v); toast("Copied."); } catch (_) { toast("Couldn't copy. Select the text instead."); } break;
+      case "resendVerifyAcct": resendVerify(b); break;
+      case "admTab": S.admTab = b.dataset.k; S.courseEdit = null; S.confirmDel = null; render(); break;
+      case "courseNew": { const k = ($("#ce-tpl") || {}).value, c = blankCourse(); if (k !== "" && k !== undefined && COURSE_TPL[+k]) { const t = COURSE_TPL[+k]; Object.assign(c, t, { outcomesText: t.outcomes.join("\n") }); delete c.outcomes; } S.courseEdit = c; render(); window.scrollTo(0, 0); break; }
+      case "courseEdit": { const c = clone(courseById(id)); c.outcomesText = (c.outcomes || []).join("\n"); delete c.outcomes; c.sessions = (c.sessions || []).map(({ taken, ...x }) => x); S.courseEdit = c; render(); window.scrollTo(0, 0); break; }
+      case "courseCancel": S.courseEdit = null; render(); break;
+      case "courseDel": S.confirmDel = null; await save(() => backend.delCourse(id), "Course deleted."); break;
+      case "sesAdd": S.courseEdit.sessions.push({ id: newId("cs"), start: "", end: "", location: "", seats: 20, fee: 0, currency: "USD" }); render(); break;
+      case "sesDel": S.courseEdit.sessions.splice(+b.dataset.i, 1); render(); break;
+      case "enrCsv": csvDownload("afrimetrica-registrations.csv", ["Registered", "Name", "Email", "Phone", "Organisation", "Course", "Session start", "Venue", "Status", "Notes"], [...S.enrollments].sort((a, c) => a.createdAt - c.createdAt).map((x) => { const c = courseById(x.courseId), ss = c && (c.sessions || []).find((y) => y.id === x.sessionId); return [new Date(x.createdAt).toISOString().slice(0, 10), x.name, x.email, x.phone, x.organisation, c ? c.title : "", ss ? ss.start : x.sessionId ? "" : "interest only", ss ? ss.location : "", x.status, x.notes]; })); break;
+      case "enqCsv": csvDownload("afrimetrica-enquiries.csv", ["Received", "Type", "Name", "Email", "Phone", "Organisation", "Service", "Timeline", "Budget", "Subject", "Message", "Status"], [...S.enquiries].sort((a, c) => a.createdAt - c.createdAt).map((x) => [new Date(x.createdAt).toISOString().slice(0, 10), x.type, x.contact.name, x.contact.email, x.contact.phone, x.contact.organisation, (x.details || {}).service, (x.details || {}).timeline, (x.details || {}).budget, x.subject, x.message, x.status])); break;
       case "libtoggle": S.libOpen = S.libOpen === id ? null : id; $("#libList").innerHTML = libList(); break;
     }
   });
@@ -2798,8 +3273,8 @@ ${richSummary(st, rows)}`;
 
   function viewImport() {
     const im = S.imp;
-    const tips = `<section class="card"><h2>How it works</h2><ol class="steps"><li>Upload your questionnaire, or paste the text.</li><li>SurveySpider finds each question, its answer options and the question type.</li><li>Check the preview, then open it in the study builder to set pay and audience.</li></ol>
-      <h3>For the best result</h3><ul class="steps"><li>Number your questions (1. 2. 3.) or end them with a question mark.</li><li>Put each answer option on its own line, or as a bullet or a), b), c).</li><li>Write "select all that apply" for checkbox questions.</li><li>Excel: one question per row. A file downloaded from SurveySpider (the Questions sheet) comes back exactly, with types and options.</li><li>Scanned PDFs (photos of paper) have no text to read. Use the Word file instead.</li></ul></section>`;
+    const tips = `<section class="card"><h2>How it works</h2><ol class="steps"><li>Upload your questionnaire, or paste the text.</li><li>Afrimetrica Surveys finds each question, its answer options and the question type.</li><li>Check the preview, then open it in the study builder to set pay and audience.</li></ol>
+      <h3>For the best result</h3><ul class="steps"><li>Number your questions (1. 2. 3.) or end them with a question mark.</li><li>Put each answer option on its own line, or as a bullet or a), b), c).</li><li>Write "select all that apply" for checkbox questions.</li><li>Excel: one question per row. A file downloaded from Afrimetrica (the Questions sheet) comes back exactly, with types and options.</li><li>Scanned PDFs (photos of paper) have no text to read. Use the Word file instead.</li></ul></section>`;
     let body = "";
     if (im.status === "reading") body = `<div class="status"><span class="spin" aria-hidden="true"></span><span>Reading ${esc(im.file)}…</span></div>`;
     else if (im.status === "ai") body = `<div class="status"><span class="spin" aria-hidden="true"></span><span>Claude is reading ${esc(im.file)}. This can take up to a minute.</span><button class="btn small" data-act="impStop">Stop</button></div>`;
@@ -2815,12 +3290,12 @@ ${richSummary(st, rows)}`;
       <details><summary>Or paste the questions as text</summary>
         <div class="stack" style="margin-top:10px"><textarea id="impText" rows="8" placeholder="1. How often do you shop online?&#10;a) Daily&#10;b) Weekly&#10;c) Monthly&#10;&#10;2. What would make you shop online more?"></textarea><div><button class="btn" data-act="impPaste">Read pasted text</button></div></div>
       </details>`;
-    return `<div class="page-head"><div><span class="eyebrow">Upload survey</span><h1>Turn a Word, PDF or Excel file into a live survey</h1><p class="muted" style="max-width:62ch">No retyping. Upload the questionnaire you already have and SurveySpider builds the survey for you. Your file is read in your browser and is not stored.</p></div></div>
+    return `<div class="page-head"><div><span class="eyebrow">Upload survey</span><h1>Turn a Word, PDF or Excel file into a live survey</h1><p class="muted" style="max-width:62ch">No retyping. Upload the questionnaire you already have and Afrimetrica Surveys builds the survey for you. Your file is read in your browser and is not stored.</p></div></div>
       <div class="import-grid"><div class="stack">${im.status === "ready" ? body : upload + body}</div><aside class="stack">${tips}</aside></div>`;
   }
   function importPreview(im) {
     const n = im.questions.length;
-    const head = `<div class="qmeta"><div><span class="eyebrow">${im.method === "ai" ? "Read by Claude" : im.method === "excel" ? "Imported from a SurveySpider Excel file" : "Read automatically"}</span><h2>Found ${n} question${n === 1 ? "" : "s"} in ${esc(im.file)}</h2></div></div>`;
+    const head = `<div class="qmeta"><div><span class="eyebrow">${im.method === "ai" ? "Read by Claude" : im.method === "excel" ? "Imported from an Afrimetrica Excel file" : "Read automatically"}</span><h2>Found ${n} question${n === 1 ? "" : "s"} in ${esc(im.file)}</h2></div></div>`;
     const actions = `<div class="row wrap">${n ? `<button class="btn primary" data-act="impOpen">Open in study builder</button>` : ""}${SAMPLE && im.method !== "ai" ? `<button class="btn" data-act="impAI">Read again with AI</button>` : ""}<button class="btn ghost" data-act="impReset">Upload a different file</button></div>`;
     if (!n) return `<section class="card">${head}<p class="muted">No questions were recognised. Check that the questions are numbered or end with a question mark${SAMPLE ? ", or let Claude read the file" : ""}.</p>${actions}</section>`;
     return `<section class="card">${head}
@@ -3044,7 +3519,7 @@ ${im.text.slice(0, 60000)}
     }
     let db = null, user = null;
     try { [db, user, DL, SAMPLE] = await Promise.all([c.use("db"), c.use("user"), c.use("downloads"), c.use("sample")]); } catch (e) {}
-    if (S.view === "import" || S.view === "home" || S.view === "create" || S.view === "results") render();
+    if (S.view === "import" || S.view === "home" || S.view === "surveys" || S.view === "create" || S.view === "results") render();
     const uid = user ? await user.id() : null;
     if (!db || !uid) { startDemo(); return; }
     DB = db; S.uid = uid; S.isOwner = await user.isOwner();
@@ -3054,6 +3529,9 @@ ${im.text.slice(0, 60000)}
     const fail = (what) => (err) => { clearTimeout(timer); S.mode = "live"; S.notice = `Couldn't load ${what} (${err.code}). Reload the page to try again.`; softRender(); };
     DB.collection("studies").onSnapshot((snap) => { S.studies = snap.docs.map((d) => ({ ...d.data(), id: d.id })); gotStudies = true; if (gotResp) S.mode = "live"; settle(snap); softRender(); }, fail("studies"));
     DB.collection("fieldwork").limit(1000).onSnapshot((snap) => { S.fieldwork = snap.docs.flatMap((d) => (((d.data() || {}).requests) || []).map((r) => ({ ...r, requesterId: d.id }))); softRender(); }, () => {});
+    DB.collection("courses").limit(500).onSnapshot((snap) => { S.courses = snap.docs.map((d) => ({ ...d.data(), id: d.id })); softRender(); }, () => {});
+    DB.collection("settings").doc("contact").onSnapshot((d) => { S.settings = d.exists ? d.data() || {} : {}; softRender(); }, () => {});
+    for (const coll of ["enquiries", "enrollments"]) DB.collection(coll).limit(1000).onSnapshot((snap) => { S[coll] = snap.docs.flatMap((d) => (((d.data() || {}).items) || []).map((x) => ({ ...x, [PRIV_KEY[coll]]: d.id }))); softRender(); }, () => {});
     DB.collection("actions").limit(1000).onSnapshot((snap) => { S.actions = snap.docs.map((d) => ({ ...d.data(), id: d.id })); softRender(); }, () => {});
     DB.collection("responses").limit(1000).onSnapshot((snap) => { S.responses = snap.docs.map((d) => ({ ...d.data(), id: d.id })); gotResp = true; if (gotStudies) S.mode = "live"; settle(snap); softRender(); }, fail("responses"));
     try { const p = await DB.doc("data/users/" + uid + "/profile").get(); if (p.exists) S.profile = p.data(); } catch (e) {}

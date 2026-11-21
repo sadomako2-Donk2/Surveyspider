@@ -1,17 +1,33 @@
-# SurveySpider
+# Afrimetrica — Centre for Research Methods and Analytics
 
-AI-powered surveys, a paid participant panel and decision-intelligence analytics, in one web app.
+*Advancing Research, Measurement and Evidence.* Operated by Regelco International Ltd (Ghana).
 
-- `public/index.html`: the whole front end (survey builder, Word/PDF/Excel upload, participant panel, Analyze workspace, Excel exports).
-- `server.mjs`: a small Node.js server. It serves the page, stores shared data in `DATA_DIR/store.json`, enforces permissions, and calls Claude for the AI features.
-- `render.yaml`: one-click deployment on Render.
+This repository is the **Phase 1** website: one Node.js service that serves the public site and the survey software.
+
+| Section | What it does |
+| --- | --- |
+| Home, About | Who Afrimetrica is; the four service lines; upcoming courses |
+| Training (Afrimetrica Academy) | Course catalogue, course pages with dates, fees and seats, registration and "register interest" |
+| Surveys (Afrimetrica Surveys) | The survey tools: create, upload Word/PDF/Excel, Paper Survey fieldwork quotes, My surveys, Analyze, paid participant panel, plans |
+| Analytics, Consultancy | Service pages with enquiry forms |
+| Resources (Knowledge Hub) | Guides, sample size calculator, survey templates (Excel), published findings, open data links |
+| Contact | Contact details set by the site owner, and a contact form |
+| My Account | Profile, course registrations, surveys, enquiries; admin area link for owners |
+| Admin area (`#business`) | Courses editor (with 8 course templates), registrations, enquiries, Paper Survey requests, survey business totals, contact details. CSV downloads. |
+
+- `public/index.html`: the whole front end.
+- `server.mjs`: serves the page, stores data in `DATA_DIR/store.json`, enforces permissions, sends emails, calls Claude for AI features.
+- `brand/`: Afrimetrica logo and icon (SVG and PNG). The brand name is **not yet legally cleared**; check trademark and company registration before printing materials.
+- `docs/`: requirements, architecture, data model, security, decisions and the Phase 2 rebuild prompts. Read `CLAUDE.md` first.
+
+> **Before collecting real respondent data**, complete a privacy review (Ghana Data Protection Act, 2012 (Act 843); registration with the Data Protection Commission) and an independent security assessment. See `docs/security.md`.
 
 ## Deploy on Render
 
 1. In Render, choose **New + → Blueprint** and connect this GitHub repository.
 2. Render reads `render.yaml`. When asked, paste your **Anthropic API key** (from console.anthropic.com) into `ANTHROPIC_API_KEY`. Leave it empty to run without AI.
-3. Click **Apply**. The first deploy takes a few minutes. Your site appears at `https://surveyspider-XXXX.onrender.com` (you can add your own domain under **Settings → Custom Domains**).
-4. To open the owner-only **Business** page, copy `ADMIN_CODE` from the service's **Environment** tab and enter it on the Business page.
+3. Click **Apply**. The first deploy takes a few minutes. Your site appears at `https://surveyspider.onrender.com` (the Render service keeps its original name) (you can add your own domain under **Settings → Custom Domains**).
+4. To open the **Admin area**, add your email to `ADMIN_EMAILS` in the service's **Environment** tab and sign up with that email (or enter `ADMIN_CODE` at `/#business`). Owners also get an email for every new registration, enquiry and Paper Survey request once Resend is set up.
 
 ### Plans and costs
 
@@ -34,11 +50,11 @@ Then open http://localhost:10000.
 npm test
 ```
 
-Checks the statistics library against SciPy reference values and the server's permission rules.
+Checks the statistics library against SciPy reference values (20 checks) and the server's permission rules, accounts, emails, courses, registrations, enquiries and privacy rules (124 checks).
 
 ## Accounts and sign-in
 
-People sign in with **email and password** or **Continue with Google**. Signing in is needed to save surveys, take paid surveys, review responses, add actions, save a profile and use AI. Browsing, pricing and Paper Survey quotes work without an account. Anything a visitor made before signing in moves into their new account.
+People sign in with **email and password** or **Continue with Google**. Signing in is needed to save surveys, take paid surveys, review responses, add actions, save a profile and use AI. Browsing, pricing, Paper Survey quotes and enquiry forms work without an account. Course registration needs an account with a confirmed email. Anything a visitor made before signing in moves into their new account.
 
 - Passwords are hashed with scrypt; sessions use an HttpOnly, SameSite cookie that lasts 30 days.
 - Repeated wrong passwords are rate-limited. Cross-site requests are refused.
@@ -47,7 +63,7 @@ People sign in with **email and password** or **Continue with Google**. Signing 
 ### Turn on Google sign-in
 
 1. Go to https://console.cloud.google.com and create (or pick) a project.
-2. **APIs & Services → OAuth consent screen**: choose **External**, fill in the app name (SurveySpider), support email and your domain, then publish the app.
+2. **APIs & Services → OAuth consent screen**: choose **External**, fill in the app name (Afrimetrica), support email and your domain, then publish the app.
 3. **APIs & Services → Credentials → Create credentials → OAuth client ID**, type **Web application**.
    - Authorised JavaScript origin: `https://surveyspider.onrender.com`
    - Authorised redirect URI: `https://surveyspider.onrender.com/auth/google/callback`
@@ -64,7 +80,7 @@ The Google button appears on the sign-in page as soon as both values are set.
 3. **API Keys → Create API Key** with "Sending access". Copy it (starts with `re_`).
 4. In Render → your service → **Environment**, add:
    - `RESEND_API_KEY` = the key
-   - `EMAIL_FROM` = `SurveySpider <noreply@yourdomain.com>` (an address on your verified domain)
+   - `EMAIL_FROM` = `Afrimetrica <noreply@yourdomain.com>` (an address on your verified domain)
    - then **Save, rebuild, and deploy**.
 
 The "Forgot password?" link appears on the sign-in page once `RESEND_API_KEY` is set. Reset links work once, expire after 60 minutes, always point at the site's real address (`RENDER_EXTERNAL_URL`, or `PUBLIC_URL` if you set one for your own domain), and sign the person out on every other device. The form gives the same answer whether or not an account exists, and allows at most 3 emails per address per hour.

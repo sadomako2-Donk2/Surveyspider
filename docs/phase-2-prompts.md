@@ -1,0 +1,15 @@
+# Phase 2 rebuild: prompts to give Claude, in order
+
+Prefix every prompt with: "Read CLAUDE.md and docs/. Keep Phase 1 running until the new app replaces it. Make incremental changes, add tests, never invent data, and explain what you changed."
+
+1. **Scaffold.** Create `apps/web` with Next.js (App Router), TypeScript strict, ESLint, Prettier, Vitest and Playwright. Add a CI workflow that runs lint, type-check and tests. No features yet.
+2. **Database.** Add PostgreSQL and Prisma with the Phase 2 model in `docs/data-model.md`. Write migrations and seed data. Use Render PostgreSQL in production.
+3. **Auth.** Email+password (scrypt or argon2) and Google sign-in, email verification and reset via Resend, Organisation and Membership roles (owner, admin, analyst, member). Port the API tests' auth cases.
+4. **Public site.** Rebuild Home, About, Training, Analytics, Consultancy, Resources and Contact as server-rendered pages with the current navy-and-gold design, metadata and sitemap.
+5. **Academy.** Courses, sessions, enrollments with seat limits, admin management and CSV export. Port the Phase 1 course tests.
+6. **Enquiries and admin.** Enquiry forms, admin inbox with statuses, owner notification emails, site settings, AuditEvent written for every admin action.
+7. **Surveys core.** Survey, immutable SurveyVersion on publish, Question types and scales from Phase 1, ConsentRecord, Response and Answer linked to a version. Port the builder and Word/PDF/Excel import.
+8. **Analysis.** Move the STAT library into a shared package with the SciPy tests; rebuild Analyze; enforce the 3-person minimum group and the admin-cannot-read-answers rule in queries.
+9. **Data migration.** Script that imports Phase 1 `store.json` into PostgreSQL, with a dry-run report. Test on a copy.
+10. **Cut-over.** Deploy, run the migration, switch the Render domain, keep the Phase 1 disk as a read-only backup for 90 days.
+11. **Later.** Subscription and Payment (Paystack or Flutterwave for GHS, Stripe for cards), certificates as PDFs, learning materials.

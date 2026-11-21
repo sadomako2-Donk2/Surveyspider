@@ -1,4 +1,4 @@
-// SurveySpider server for Render (or any Node 20+ host).
+// Afrimetrica server for Render (or any Node 20+ host). Operated by Regelco International Ltd.
 // Serves the single-page app, stores shared data in a JSON file, enforces who may change what,
 // and calls Claude for the AI features with the server's own ANTHROPIC_API_KEY.
 import http from "node:http";
@@ -30,7 +30,7 @@ const SESSION_DAYS = 30;
 // Password-reset emails through Resend (https://resend.com). Off until RESEND_API_KEY is set.
 const RESEND_KEY = process.env.RESEND_API_KEY || "";
 const RESEND_URL = process.env.RESEND_API_URL || "https://api.resend.com/emails";
-const EMAIL_FROM = process.env.EMAIL_FROM || "SurveySpider <onboarding@resend.dev>";
+const EMAIL_FROM = process.env.EMAIL_FROM || "Afrimetrica <onboarding@resend.dev>";
 const RESET_MINUTES = 60;
 
 // ---------- page ----------
@@ -41,7 +41,7 @@ const ICON = readFileSync(path.join(here, "public", "icon.svg"));
 // ---------- storage ----------
 mkdirSync(DATA_DIR, { recursive: true });
 const FILE = path.join(DATA_DIR, "store.json");
-let db = { studies: {}, responses: {}, actions: {}, profiles: {}, fieldwork: {}, users: {}, sessions: {}, resets: {}, verifies: {} };
+let db = { studies: {}, responses: {}, actions: {}, profiles: {}, fieldwork: {}, users: {}, sessions: {}, resets: {}, verifies: {}, courses: {}, enrollments: {}, enquiries: {}, settings: {} };
 if (existsSync(FILE)) { try { db = { ...db, ...JSON.parse(readFileSync(FILE, "utf8")) }; } catch (e) { console.error("Could not read store.json; starting empty.", e); } }
 let saveTimer = null;
 function flush() { const tmp = FILE + ".tmp"; writeFileSync(tmp, JSON.stringify(db)); renameSync(tmp, FILE); }
@@ -95,6 +95,7 @@ function claim(anon, uid) {
   for (const x of Object.values(db.responses)) { if (x.participantId === anon) { x.participantId = uid; n++; } if (x.ownerId === anon) x.ownerId = uid; }
   for (const x of Object.values(db.actions)) if (x.ownerId === anon) { x.ownerId = uid; n++; }
   for (const x of Object.values(db.fieldwork)) if (x.requesterId === anon) { x.requesterId = uid; n++; }
+  for (const x of Object.values(db.enquiries)) if (x.requesterId === anon) { x.requesterId = uid; n++; }
   if (db.profiles[anon]) { if (!db.profiles[uid]) db.profiles[uid] = db.profiles[anon]; delete db.profiles[anon]; n++; }
   if (n) persist();
   return n;
@@ -153,14 +154,14 @@ async function sendEmail(to, subject, html, text) {
   const r = await fetch(RESEND_URL, { method: "POST", headers: { Authorization: `Bearer ${RESEND_KEY}`, "Content-Type": "application/json" }, body: JSON.stringify({ from: EMAIL_FROM, to: [to], subject, html, text }) });
   if (!r.ok) throw new Error(`Resend ${r.status}: ${(await r.text()).slice(0, 300)}`);
 }
-// One branded layout for every SurveySpider email (HTML plus a plain-text version).
+// One branded layout for every Afrimetrica email (HTML plus a plain-text version).
 function brandEmail(user, { paragraphs, button, link, footer }) {
   const first = user.name ? user.name.trim().split(/\s+/)[0] : "";
   const L = escHtml(link), hi = first ? "Hi " + first + "," : "Hi,";
   const html = `<!doctype html><html><body style="margin:0;background:#f5f6f9;font-family:Arial,Helvetica,sans-serif;color:#0e1d3a">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f6f9;padding:32px 12px"><tr><td align="center">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#ffffff;border:1px solid #dde2ec;border-radius:12px">
-<tr><td style="padding:28px 32px 0;font-size:22px;font-weight:800"><span style="color:#0e1d3a">Survey</span><span style="color:#b88a2c">Spider</span></td></tr>
+<tr><td style="padding:28px 32px 0;font-size:22px;font-weight:800"><span style="color:#0e1d3a;letter-spacing:1px">AFRI</span><span style="color:#b88a2c;letter-spacing:1px">METRICA</span></td></tr>
 <tr><td style="padding:20px 32px 6px;font-size:15px;line-height:1.6">
 <p style="margin:0 0 14px">${escHtml(hi)}</p>
 ${paragraphs.map((x) => `<p style="margin:0 0 14px">${escHtml(x)}</p>`).join("")}</td></tr>
@@ -173,11 +174,11 @@ ${paragraphs.map((x) => `<p style="margin:0 0 14px">${escHtml(x)}</p>`).join("")
   return { html, text };
 }
 const resetEmail = (user, link) => brandEmail(user, {
-  paragraphs: [`We received a request to reset the password for your SurveySpider account (${user.email}). Click the button to choose a new one. The link works for ${RESET_MINUTES} minutes and can be used once.`],
+  paragraphs: [`We received a request to reset the password for your Afrimetrica account (${user.email}). Click the button to choose a new one. The link works for ${RESET_MINUTES} minutes and can be used once.`],
   button: "Choose a new password", link, footer: "If you didn't ask for this, you can ignore this email. Your password won't change." });
 const verifyEmailMsg = (user, link) => brandEmail(user, {
-  paragraphs: [`Welcome to SurveySpider! Please confirm that ${user.email} is your email address.`, `Once it's confirmed you can launch surveys, take paid studies and use the AI features. The link works for ${VERIFY_HOURS} hours.`],
-  button: "Confirm my email", link, footer: "If you didn't create a SurveySpider account, you can ignore this email." });
+  paragraphs: [`Welcome to Afrimetrica! Please confirm that ${user.email} is your email address.`, `Once it's confirmed you can launch surveys, take paid studies and use the AI features. The link works for ${VERIFY_HOURS} hours.`],
+  button: "Confirm my email", link, footer: "If you didn't create an Afrimetrica account, you can ignore this email." });
 // Create a confirmation link and email it in the background. Returns false if no email can be sent.
 function queueVerification(req, user) {
   const base = trustedBase(req);
@@ -187,7 +188,7 @@ function queueVerification(req, user) {
   db.verifies[sha(tok)] = { userId: user.id, createdAt: Date.now(), expires: Date.now() + VERIFY_HOURS * 3600e3 };
   persist();
   const m = verifyEmailMsg(user, `${base}/?verify=${tok}#studies`);
-  sendEmail(user.email, "Confirm your email for SurveySpider", m.html, m.text).catch((e) => console.error("Verification email failed:", e.message));
+  sendEmail(user.email, "Confirm your email for Afrimetrica", m.html, m.text).catch((e) => console.error("Verification email failed:", e.message));
   return true;
 }
 const needsVerify = (u) => !!u && u.emailVerified === false && !!RESEND_KEY;
@@ -224,7 +225,7 @@ async function forgotPassword(req, res, ip) {
     db.resets[sha(tok)] = { userId: user.id, createdAt: Date.now(), expires: Date.now() + RESET_MINUTES * 60e3 };
     persist();
     const m = resetEmail(user, `${base}/?reset=${tok}#signin`);
-    sendEmail(user.email, "Reset your SurveySpider password", m.html, m.text).catch((e) => console.error("Password reset email failed:", e.message));
+    sendEmail(user.email, "Reset your Afrimetrica password", m.html, m.text).catch((e) => console.error("Password reset email failed:", e.message));
   }
   return send(res, 200, { ok: true });
 }
@@ -299,6 +300,32 @@ const isObj = (v) => v && typeof v === "object" && !Array.isArray(v);
 const okId = (s) => typeof s === "string" && /^[A-Za-z0-9_.~:@+-]{1,120}$/.test(s);
 const usedSlots = (sid) => Object.values(db.responses).filter((r) => r.studyId === sid && r.status !== "rejected").length;
 const stub = (r) => ({ id: "h" + sha(r.id).slice(0, 16), studyId: r.studyId, status: r.status });
+// What a site administrator sees of other people's responses: counts, rewards and dates for the business view,
+// never the answers, demographics or the participant's account id.
+const adminStub = (r) => ({ ...stub(r), reward: r.reward, test: !!r.test, createdAt: r.createdAt, participantId: "p_" + sha(String(r.participantId)).slice(0, 12) });
+const clip = (v, n) => String(v == null ? "" : v).slice(0, n);
+const ENQUIRY_TYPES = ["analytics", "consultancy", "contact", "training"];
+const ENQUIRY_STATUS = ["new", "contacted", "in_progress", "won", "closed"];
+const ENROL_STATUS = ["registered", "interest", "confirmed", "attended", "completed", "cancelled"];
+// Email the site owners (ADMIN_EMAILS) about new enquiries and registrations, when Resend is configured.
+function notifyAdmins(req, subject, paragraphs) {
+  const base = trustedBase(req);
+  if (!RESEND_KEY || !ADMIN_EMAILS.length || !base) return;
+  const m = brandEmail({ name: "" }, { paragraphs, button: "Open the admin area", link: `${base}/#business`, footer: "You're getting this because your address is listed in ADMIN_EMAILS." });
+  for (const to of ADMIN_EMAILS) sendEmail(to, subject, m.html, m.text).catch((e) => console.error("Admin notification failed:", e.message));
+}
+function cleanCourse(b, id, cur) {
+  const sessions = (Array.isArray(b.sessions) ? b.sessions : []).slice(0, 50).map((x) => ({
+    id: okId(x && x.id) ? x.id : "ss" + randomBytes(5).toString("hex"),
+    start: /^\d{4}-\d{2}-\d{2}$/.test((x && x.start) || "") ? x.start : "", end: /^\d{4}-\d{2}-\d{2}$/.test((x && x.end) || "") ? x.end : "",
+    location: clip(x && x.location, 120), seats: Math.max(0, Math.min(10000, Math.floor(+(x && x.seats) || 0))),
+    fee: Math.max(0, Math.min(1e7, +(x && x.fee) || 0)), currency: ["USD", "GHS", "GBP", "EUR"].includes(x && x.currency) ? x.currency : "USD",
+  }));
+  return { id, title: clip(b.title, 150), status: b.status === "published" ? "published" : "draft", level: clip(b.level, 40), format: clip(b.format, 40),
+    duration: clip(b.duration, 80), summary: clip(b.summary, 400), description: clip(b.description, 6000), audience: clip(b.audience, 400),
+    outcomes: (Array.isArray(b.outcomes) ? b.outcomes : []).slice(0, 20).map((o) => clip(o, 200)).filter(Boolean), certificate: !!b.certificate,
+    sessions, createdAt: cur ? cur.createdAt : Date.now(), updatedAt: Date.now() };
+}
 
 // ---------- AI ----------
 const hits = new Map();
@@ -351,7 +378,7 @@ async function handleAI(req, res, me) {
     const msg = await runClaude({
       model: MODEL, max_tokens: 32000,
       output_config: { effort },
-      system: "You are the AI assistant inside SurveySpider, a survey and research platform. Follow the instructions in the user's message exactly." + (json ? " Reply with only valid JSON and no other text." : ""),
+      system: "You are the AI assistant inside Afrimetrica, a research methods, surveys and analytics platform. Follow the instructions in the user's message exactly." + (json ? " Reply with only valid JSON and no other text." : ""),
       messages,
     }, ctl.signal);
     if (msg.stop_reason === "refusal") return fail(res, 422, "refused", "Claude declined this request.");
@@ -385,10 +412,15 @@ async function handleApi(req, res, url) {
   if (kind === "data" && m === "GET") {
     const studies = Object.values(db.studies).filter((s) => s.status !== "draft" || s.ownerId === uid || me.isAdmin);
     const mine = new Set(Object.values(db.studies).filter((s) => s.ownerId === uid).map((s) => s.id));
-    const responses = Object.values(db.responses).map((r) => (me.isAdmin || mine.has(r.studyId) || r.participantId === uid ? r : stub(r)));
+    const responses = Object.values(db.responses).map((r) => (mine.has(r.studyId) || r.participantId === uid ? r : me.isAdmin ? adminStub(r) : stub(r)));
     const actions = Object.values(db.actions).filter((a) => me.isAdmin || a.ownerId === uid);
     const fieldwork = Object.values(db.fieldwork).filter((f) => me.isAdmin || f.requesterId === uid);
-    return send(res, 200, { studies, responses, actions, fieldwork, profile: db.profiles[uid] || null, ai: !!client });
+    const live = Object.values(db.enrollments).filter((e) => e.status !== "cancelled");
+    const courses = Object.values(db.courses).filter((c) => c.status === "published" || me.isAdmin)
+      .map((c) => ({ ...c, sessions: (c.sessions || []).map((s) => ({ ...s, taken: live.filter((e) => e.courseId === c.id && e.sessionId === s.id).length })) }));
+    const enrollments = Object.values(db.enrollments).filter((x) => me.isAdmin || x.userId === uid);
+    const enquiries = Object.values(db.enquiries).filter((x) => me.isAdmin || x.requesterId === uid);
+    return send(res, 200, { studies, responses, actions, fieldwork, courses, enrollments, enquiries, settings: db.settings || {}, profile: db.profiles[uid] || null, ai: !!client });
   }
 
   if (kind === "studies" && okId(id)) {
@@ -454,7 +486,9 @@ async function handleApi(req, res, url) {
       db.fieldwork[id] = { id, ref: clip(b.ref, 20), requesterId: uid, status: "new", createdAt: Date.now(),
         contact: { name: clip(c.name, 80), org: clip(c.org, 120), email: clip(c.email, 160), phone: clip(c.phone, 40), start: clip(c.start, 10), notes: clip(c.notes, 1200) },
         inputs: b.inputs, survey: isObj(b.survey) ? b.survey : null, quote: b.quote };
-      persist(); return send(res, 200, { ok: true });
+      persist();
+      notifyAdmins(req, `New paper survey request from ${db.fieldwork[id].contact.name}`, [`${db.fieldwork[id].contact.name} (${db.fieldwork[id].contact.email}) requested fieldwork. Quote ${db.fieldwork[id].ref}: US$${Math.round(+(b.quote && b.quote.total) || 0).toLocaleString("en-US")}.`]);
+      return send(res, 200, { ok: true });
     }
     if (m === "PATCH") {
       if (!me.isAdmin) return fail(res, 403, "invalid_argument", "Only the site owner can update requests.");
@@ -463,6 +497,80 @@ async function handleApi(req, res, url) {
       if (!isObj(b) || !["new", "contacted", "quoted", "won", "lost"].includes(b.status)) return fail(res, 400, "invalid_argument", "Unknown status.");
       cur.status = b.status; persist(); return send(res, 200, { ok: true });
     }
+  }
+
+  // ---- Afrimetrica Academy: courses (site owners manage) and registrations ----
+  if (kind === "courses" && okId(id)) {
+    if (!me.isAdmin) return fail(res, 403, "invalid_argument", "Only site administrators can manage courses.");
+    if (m === "DELETE") { delete db.courses[id]; persist(); return send(res, 204); }
+    if (m === "PUT") {
+      const b = await readBody(req, 100_000);
+      if (!isObj(b) || !String(b.title || "").trim()) return fail(res, 400, "invalid_argument", "Give the course a title.");
+      db.courses[id] = cleanCourse(b, id, db.courses[id]); persist(); return send(res, 200, { ok: true });
+    }
+  }
+  if (kind === "enrollments" && okId(id)) {
+    const cur = db.enrollments[id];
+    if (m === "PUT") {
+      if (!me.user) return needUser();
+      if (needsVerify(me.user)) return fail(res, 403, "verify_required", `Confirm your email address before registering. We sent a link to ${me.user.email}.`);
+      if (cur) return fail(res, 409, "invalid_argument", "This registration already exists.");
+      const b = await readBody(req, 20_000), course = isObj(b) ? db.courses[b.courseId] : null;
+      if (!course || course.status !== "published") return fail(res, 400, "invalid_argument", "That course isn't open for registration.");
+      const session = b.sessionId ? course.sessions.find((x) => x.id === b.sessionId) : null;
+      if (b.sessionId && !session) return fail(res, 400, "invalid_argument", "That session no longer exists.");
+      if (Object.values(db.enrollments).some((x) => x.userId === uid && x.courseId === course.id && (x.sessionId || "") === (b.sessionId || "") && x.status !== "cancelled")) return fail(res, 409, "invalid_argument", "You're already registered for this.");
+      if (session && session.seats > 0 && Object.values(db.enrollments).filter((x) => x.sessionId === session.id && x.status !== "cancelled").length >= session.seats) return fail(res, 409, "invalid_argument", "Sorry, this session is full.");
+      db.enrollments[id] = { id, userId: uid, courseId: course.id, sessionId: session ? session.id : "", status: session ? "registered" : "interest",
+        name: clip(b.name || me.user.name, 80), email: me.user.email, phone: clip(b.phone, 40), organisation: clip(b.organisation, 120), notes: clip(b.notes, 1000), createdAt: Date.now() };
+      persist();
+      notifyAdmins(req, `New ${session ? "course registration" : "course interest"}: ${course.title}`, [`${db.enrollments[id].name || me.user.email} (${me.user.email}) ${session ? `registered for ${course.title}, session starting ${session.start || "date to be confirmed"}` : `registered interest in ${course.title}`}.`]);
+      return send(res, 200, { ok: true });
+    }
+    if (m === "PATCH") {
+      if (!cur) return fail(res, 404, "invalid_argument", "Registration not found.");
+      const b = await readBody(req, 5_000), st = isObj(b) ? b.status : "";
+      if (!ENROL_STATUS.includes(st)) return fail(res, 400, "invalid_argument", "Unknown status.");
+      if (!me.isAdmin && !(cur.userId === uid && st === "cancelled")) return fail(res, 403, "invalid_argument", "You can only cancel your own registration.");
+      cur.status = st; cur.updatedAt = Date.now(); persist(); return send(res, 200, { ok: true });
+    }
+  }
+  // ---- Analytics, consultancy, training and general enquiries (no account needed) ----
+  if (kind === "enquiries" && okId(id)) {
+    const cur = db.enquiries[id];
+    if (m === "PUT") {
+      if (cur) return fail(res, 409, "invalid_argument", "This enquiry was already sent.");
+      const ip = String(req.headers["x-forwarded-for"] || req.socket.remoteAddress || "").split(",")[0].trim();
+      if (tooMany("enquiry-ip|" + ip, 10, 3600e3)) return fail(res, 429, "rate_limited", "Too many enquiries from this connection. Please try again later.");
+      const b = await readBody(req, 50_000), c = isObj(b) ? b.contact : null;
+      if (!isObj(c) || !String(c.name || "").trim() || !EMAIL_RX.test(String(c.email || "").trim())) return fail(res, 400, "invalid_argument", "Add your name and a valid email address.");
+      if (!ENQUIRY_TYPES.includes(b.type) || String(b.message || "").trim().length < 5) return fail(res, 400, "invalid_argument", "Tell us a little about what you need.");
+      const d = isObj(b.details) ? b.details : {};
+      db.enquiries[id] = { id, type: b.type, requesterId: uid, status: "new", createdAt: Date.now(),
+        contact: { name: clip(c.name, 80), email: clip(String(c.email).trim().toLowerCase(), 160), phone: clip(c.phone, 40), organisation: clip(c.organisation, 120) },
+        subject: clip(b.subject, 160), message: clip(b.message, 4000), details: { service: clip(d.service, 120), timeline: clip(d.timeline, 80), budget: clip(d.budget, 80) } };
+      persist();
+      const q = db.enquiries[id];
+      notifyAdmins(req, `New ${q.type} enquiry from ${q.contact.name}`, [`${q.contact.name} (${q.contact.email}${q.contact.organisation ? ", " + q.contact.organisation : ""}) sent a ${q.type} enquiry${q.details.service ? " about " + q.details.service : ""}.`, q.message.slice(0, 600)]);
+      return send(res, 200, { ok: true });
+    }
+    if (m === "PATCH") {
+      if (!me.isAdmin) return fail(res, 403, "invalid_argument", "Only site administrators can update enquiries.");
+      if (!cur) return fail(res, 404, "invalid_argument", "Enquiry not found.");
+      const b = await readBody(req, 5_000);
+      if (!isObj(b) || !ENQUIRY_STATUS.includes(b.status)) return fail(res, 400, "invalid_argument", "Unknown status.");
+      cur.status = b.status; persist(); return send(res, 200, { ok: true });
+    }
+  }
+  // ---- Site settings shown on the Contact page ----
+  if (kind === "settings" && m === "PUT") {
+    if (!me.isAdmin) return fail(res, 403, "invalid_argument", "Only site administrators can change settings.");
+    const b = await readBody(req, 10_000);
+    if (!isObj(b)) return fail(res, 400, "invalid_argument", "Invalid settings.");
+    const web = String(b.linkedin || "").trim();
+    db.settings = { email: clip(b.email, 160), phone: clip(b.phone, 40), whatsapp: clip(b.whatsapp, 40), address: clip(b.address, 400), hours: clip(b.hours, 160),
+      linkedin: /^https:\/\/[^\s]+$/.test(web) ? clip(web, 300) : "", updatedAt: Date.now() };
+    persist(); return send(res, 200, { ok: true });
   }
 
   if (kind === "profile" && m === "PUT") {
@@ -503,5 +611,5 @@ export const server = http.createServer(async (req, res) => {
   }
 });
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  server.listen(PORT, () => console.log(`SurveySpider running on port ${PORT}. AI ${client ? "on (" + MODEL + ")" : "off: set ANTHROPIC_API_KEY"}. Google sign-in ${GOOGLE_ID && GOOGLE_SECRET ? "on" : "off"}. Reset emails ${RESEND_KEY ? "on (from " + EMAIL_FROM + ")" : "off: set RESEND_API_KEY"}. Data in ${DATA_DIR}.`));
+  server.listen(PORT, () => console.log(`Afrimetrica running on port ${PORT}. AI ${client ? "on (" + MODEL + ")" : "off: set ANTHROPIC_API_KEY"}. Google sign-in ${GOOGLE_ID && GOOGLE_SECRET ? "on" : "off"}. Reset emails ${RESEND_KEY ? "on (from " + EMAIL_FROM + ")" : "off: set RESEND_API_KEY"}. Data in ${DATA_DIR}.`));
 }

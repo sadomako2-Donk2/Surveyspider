@@ -35,7 +35,7 @@ process.env.GOOGLE_TOKEN_URL = `http://127.0.0.1:${fakeGoogle.address().port}/to
 delete process.env.ANTHROPIC_API_KEY;
 process.env.RESEND_API_KEY = "test-resend-key";
 process.env.RESEND_API_URL = `http://127.0.0.1:${fakeResend.address().port}/emails`;
-process.env.EMAIL_FROM = "SurveySpider <hello@surveyspider.test>";
+process.env.EMAIL_FROM = "Afrimetrica <hello@afrimetrica.test>";
 process.env.PUBLIC_URL = "https://surveyspider.test";
 const { server } = await import("../server.mjs");
 await new Promise((r) => server.listen(0, r));
@@ -61,7 +61,7 @@ async function confirmLatest(addr) { await wait(150); return (await browser("z")
 const study = { id: "s1", title: "Test survey", status: "live", target: 2, reward: 1, minutes: 5, questions: [{ id: "q1", type: "single", text: "Pick", options: ["A", "B"], required: true }], screen: { minAge: 18, maxAge: 99, countries: [], occupations: [] } };
 
 const A = browser("a"), B = browser("b"), C = browser("c");
-const page = await fetch(base + "/"); check("home page is served", page.status === 200 && (await page.text()).includes("SurveySpider"));
+const page = await fetch(base + "/"); check("home page is served", page.status === 200 && (await page.text()).includes("Afrimetrica"));
 check("health check responds", (await A.call("GET", "/healthz")).status === 200);
 const anonA = (await A.call("GET", "/api/me")).json;
 check("visitors start signed out", anonA.user === null && /^c_/.test(anonA.uid));
@@ -140,6 +140,75 @@ check("admin code unlocks the business view", (await C.call("GET", "/api/me", un
 const Boss = browser("d"); await Boss.call("POST", "/api/auth/signup", { email: "boss@example.com", password: "owner password" }); await confirmLatest("boss@example.com");
 check("emails in ADMIN_EMAILS are owners automatically", (await Boss.call("GET", "/api/me")).json.isAdmin === true && (await Boss.call("PATCH", "/api/fieldwork/fw1", { status: "won" })).status === 200);
 
+// --- Afrimetrica Academy: courses and registrations ---
+const course = { id: "c1", title: "Questionnaire Design", status: "draft", level: "Introductory", format: "Online", duration: "2 days", summary: "Write better questions.", description: "Long text.", outcomes: ["One", "Two"], audience: "Everyone", certificate: true,
+  sessions: [{ id: "cs1", start: "2099-03-01", end: "2099-03-02", location: "Accra", seats: 1, fee: 150, currency: "GHS" }, { id: "cs2", start: "2099-04-01", location: "Zoom", seats: 0, fee: 0, currency: "USD" }] };
+check("only administrators can create courses", (await A.call("PUT", "/api/courses/c1", course)).status === 403);
+check("administrators can create courses", (await Boss.call("PUT", "/api/courses/c1", course)).status === 200);
+check("draft courses are hidden from visitors", !(await C.call("GET", "/api/data")).json.courses.some((c) => c.id === "c1") && (await Boss.call("GET", "/api/data")).json.courses.some((c) => c.id === "c1"));
+check("registration needs a published course", (await A.call("PUT", "/api/enrollments/e1", { courseId: "c1", sessionId: "cs1" })).status === 400);
+await Boss.call("PUT", "/api/courses/c1", { ...course, status: "published", currency: "XXX", sessions: [...course.sessions, { id: "cs3", start: "2099-05-01", seats: 5, fee: 10, currency: "BTC" }] });
+const pubC = (await C.call("GET", "/api/data")).json.courses.find((c) => c.id === "c1");
+check("published courses are visible to everyone", !!pubC && pubC.sessions.length === 3);
+check("unknown currencies fall back to USD", pubC.sessions.find((x) => x.id === "cs3").currency === "USD");
+check("registration needs an account", (await C.call("PUT", "/api/enrollments/e0", { courseId: "c1", sessionId: "cs1" })).json.code === "auth_required");
+const Un = browser("4"); await Un.call("POST", "/api/auth/signup", { email: "unconf@example.com", password: "unconfirmed 1" });
+check("registration needs a confirmed email", (await Un.call("PUT", "/api/enrollments/e0", { courseId: "c1", sessionId: "cs1" })).json.code === "verify_required");
+const reg = await A.call("PUT", "/api/enrollments/e1", { courseId: "c1", sessionId: "cs1", phone: "+233 20 000 0000", email: "spoof@evil.example", userId: "u_someone_else", status: "completed" });
+check("signed-in users can register", reg.status === 200);
+const e1 = (await A.call("GET", "/api/data")).json.enrollments.find((e) => e.id === "e1");
+check("registrations use the account's own email, owner and status", e1 && e1.email === "a@example.com" && e1.userId === meA.uid && e1.status === "registered");
+check("seat counts are shared with visitors", (await C.call("GET", "/api/data")).json.courses.find((c) => c.id === "c1").sessions.find((x) => x.id === "cs1").taken === 1);
+check("you can't register twice for the same date", (await A.call("PUT", "/api/enrollments/e2", { courseId: "c1", sessionId: "cs1" })).status === 409);
+check("full sessions refuse new registrations", (await B.call("PUT", "/api/enrollments/e3", { courseId: "c1", sessionId: "cs1" })).json.message.includes("full"));
+check("sessions with no seat limit accept registrations", (await B.call("PUT", "/api/enrollments/e4", { courseId: "c1", sessionId: "cs2" })).status === 200);
+check("interest without a date is recorded", (await B.call("PUT", "/api/enrollments/e5", { courseId: "c1" })).status === 200 && (await B.call("GET", "/api/data")).json.enrollments.find((e) => e.id === "e5").status === "interest");
+check("people see only their own registrations", (await B.call("GET", "/api/data")).json.enrollments.every((e) => e.userId !== meA.uid) && (await A.call("GET", "/api/data")).json.enrollments.length === 1);
+check("administrators see every registration", (await Boss.call("GET", "/api/data")).json.enrollments.length === 3);
+check("people can't change another person's registration", (await B.call("PATCH", "/api/enrollments/e1", { status: "cancelled" })).status === 403);
+check("people can't confirm their own place", (await A.call("PATCH", "/api/enrollments/e1", { status: "confirmed" })).status === 403);
+check("administrators can confirm places", (await Boss.call("PATCH", "/api/enrollments/e1", { status: "confirmed" })).status === 200);
+check("people can cancel their own registration", (await B.call("PATCH", "/api/enrollments/e4", { status: "cancelled" })).status === 200);
+check("unknown statuses are refused", (await Boss.call("PATCH", "/api/enrollments/e1", { status: "paid" })).status === 400);
+await wait(150);
+check("administrators are emailed about registrations", emails.some((m) => m.to[0] === "boss@example.com" && /course registration: Questionnaire Design/.test(m.subject)));
+check("only administrators can delete courses", (await A.call("DELETE", "/api/courses/c1")).status === 403);
+
+// --- enquiries ---
+const enq = { type: "consultancy", contact: { name: "Kofi", email: "kofi@example.com", organisation: "NGO" }, message: "We need an evaluation.", details: { service: "Monitoring and evaluation", budget: "Not sure yet" } };
+const Anon = browser("1");
+const q1r = await Anon.call("PUT", "/api/enquiries/q1", { ...enq, status: "won", requesterId: "u_x" });
+check("enquiries work without an account", q1r.status === 200);
+check("enquiries need a valid email", (await Anon.call("PUT", "/api/enquiries/q2", { ...enq, contact: { name: "K", email: "nope" } })).status === 400);
+check("enquiries need a known type", (await Anon.call("PUT", "/api/enquiries/q3", { ...enq, type: "spam" })).status === 400);
+check("enquiries need a message", (await Anon.call("PUT", "/api/enquiries/q4", { ...enq, message: "hi" })).status === 400);
+check("an enquiry can't be overwritten", (await Anon.call("PUT", "/api/enquiries/q1", enq)).status === 409);
+const myQ = (await Anon.call("GET", "/api/data")).json.enquiries;
+check("senders see their own enquiry, always starting as new", myQ.length === 1 && myQ[0].status === "new");
+check("other people can't see the enquiry", (await B.call("GET", "/api/data")).json.enquiries.length === 0);
+check("administrators see enquiries", (await Boss.call("GET", "/api/data")).json.enquiries.some((e) => e.id === "q1"));
+check("only administrators can update enquiries", (await Anon.call("PATCH", "/api/enquiries/q1", { status: "won" })).status === 403 && (await Boss.call("PATCH", "/api/enquiries/q1", { status: "contacted" })).status === 200);
+await wait(150);
+check("administrators are emailed about enquiries", emails.some((m) => m.to[0] === "boss@example.com" && /consultancy enquiry from Kofi/.test(m.subject)));
+await Anon.call("POST", "/api/auth/signup", { email: "kofi@example.com", password: "kofi password 1" });
+check("an enquiry sent before signing up moves into the new account", (await Anon.call("GET", "/api/data")).json.enquiries.some((e) => e.id === "q1"));
+let enqLimited = false; const Spam = browser("6");
+for (let i = 0; i < 12; i++) if ((await Spam.call("PUT", "/api/enquiries/sp" + i, enq, { "X-Forwarded-For": "203.0.113.9" })).status === 429) enqLimited = true;
+check("enquiries are rate limited per connection", enqLimited);
+
+// --- site settings ---
+check("only administrators can change contact details", (await A.call("PUT", "/api/settings", { email: "x@example.com" })).status === 403);
+check("administrators can set contact details", (await Boss.call("PUT", "/api/settings", { email: "info@afrimetrica.test", phone: "+233 30 000 0000", linkedin: "javascript:alert(1)" })).status === 200);
+const st1 = (await C.call("GET", "/api/data")).json.settings;
+check("contact details are public and unsafe links are dropped", st1.email === "info@afrimetrica.test" && !st1.linkedin);
+
+// --- privacy: administrators don't read other people's survey answers ---
+const bossData = (await Boss.call("GET", "/api/data")).json;
+const others = bossData.responses.filter((r) => r.studyId === "s1");
+check("administrators get response totals but no answers", others.length > 0 && others.every((r) => r.answers === undefined));
+check("administrators don't see participants' account ids", others.every((r) => /^p_/.test(r.participantId)));
+check("the survey's owner still sees the answers", (await A.call("GET", "/api/data")).json.responses.filter((r) => r.studyId === "s1").every((r) => r.answers !== undefined));
+
 // --- Google sign-in ---
 const G = browser("e");
 const start = await G.call("GET", "/auth/google?next=create");
@@ -169,7 +238,7 @@ await wait(200);
 const mail = emails[emails.length - 1];
 const link = mail && (mail.text.match(/https:\/\/\S+/) || [])[0];
 const token = link && new URL(link).searchParams.get("reset");
-check("reset email goes to the account, from the configured sender", mail && mail.to[0] === "rita@example.com" && mail.from === "SurveySpider <hello@surveyspider.test>" && /Reset your SurveySpider password/.test(mail.subject));
+check("reset email goes to the account, from the configured sender", mail && mail.to[0] === "rita@example.com" && mail.from === "Afrimetrica <hello@afrimetrica.test>" && /Reset your Afrimetrica password/.test(mail.subject));
 check("reset link points at the real site, never the request's Host", link && link.startsWith("https://surveyspider.test/?reset=") && /#signin$/.test(link) && mail.html.includes("Hi Rita"));
 check("forged Host headers can't redirect the link", (await C.call("POST", "/api/auth/forgot", { email: "rita@example.com" }, { "X-Forwarded-Host": "evil.example" })).status === 200 && (await wait(200), emails[emails.length - 1].text.includes("https://surveyspider.test/")));
 const fresh = new URL(emails[emails.length - 1].text.match(/https:\/\/\S+/)[0]).searchParams.get("reset");
