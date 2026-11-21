@@ -46,4 +46,11 @@
 | 2026-11 | Service, timeline and budget must be one of the offered choices | Keeps the inbox and CSV clean and filterable |
 | 2026-11 | LinkedIn link must be an https link on linkedin.com | Prevents the Contact page linking to an unsafe site |
 | 2026-11 | Paper Survey (fieldwork) requests move with the survey tools in step 7 | They belong to the survey quote flow, not general enquiries |
+| 2026-11 | Editing a published survey creates the next draft version; responses keep pointing at the version answered | Blueprint: published survey versions are immutable |
+| 2026-11 | Every survey needs a consent statement to publish; each response stores the exact wording agreed to | Research ethics and data protection |
+| 2026-11 | Answers and the attention check are validated on the server | Phase 1 trusted the browser's attention-check result |
+| 2026-11 | Completion time comes from the browser | Faking a longer time gains nothing that waiting wouldn't; faking a shorter one only gets a response flagged |
+| 2026-11 | Screening applies only when a survey sets it; open surveys can be answered without a participant profile | Lets surveys be shared by link (e.g. course evaluations) as well as through the panel |
+| 2026-11 | Reward, time, audience and attention check lock once someone has answered; the target can still rise | Keeps pay and eligibility fair for everyone who answers |
+| 2026-11 | Owners see participants as P001, P002… per survey, never their account or email | Data minimisation; administrators can't see answers at all |
 

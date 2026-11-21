@@ -1,0 +1,489 @@
+{
+  "likert": {
+    "agree5": {
+      "label": "Agreement · 5 points",
+      "options": ["Strongly disagree", "Disagree", "Neither agree nor disagree", "Agree", "Strongly agree"]
+    },
+    "agree7": {
+      "label": "Agreement · 7 points",
+      "options": [
+        "Strongly disagree",
+        "Disagree",
+        "Somewhat disagree",
+        "Neither agree nor disagree",
+        "Somewhat agree",
+        "Agree",
+        "Strongly agree"
+      ]
+    },
+    "sat5": {
+      "label": "Satisfaction · 5 points",
+      "options": ["Very dissatisfied", "Dissatisfied", "Neutral", "Satisfied", "Very satisfied"]
+    },
+    "sat7": {
+      "label": "Satisfaction · 7 points",
+      "options": [
+        "Very dissatisfied",
+        "Dissatisfied",
+        "Somewhat dissatisfied",
+        "Neutral",
+        "Somewhat satisfied",
+        "Satisfied",
+        "Very satisfied"
+      ]
+    },
+    "freq5": {
+      "label": "Frequency · 5 points",
+      "options": ["Never", "Rarely", "Sometimes", "Often", "Always"]
+    },
+    "freq7": {
+      "label": "Frequency · 7 points",
+      "options": ["Never", "Very rarely", "Rarely", "Sometimes", "Often", "Very often", "Always"]
+    },
+    "likely5": {
+      "label": "Likelihood · 5 points",
+      "options": ["Very unlikely", "Unlikely", "Neither likely nor unlikely", "Likely", "Very likely"]
+    },
+    "imp5": {
+      "label": "Importance · 5 points",
+      "options": [
+        "Not at all important",
+        "Slightly important",
+        "Moderately important",
+        "Very important",
+        "Extremely important"
+      ]
+    },
+    "qual5": {
+      "label": "Quality · 5 points",
+      "options": ["Very poor", "Poor", "Fair", "Good", "Excellent"]
+    },
+    "easy5": {
+      "label": "Ease · 5 points",
+      "options": ["Very difficult", "Difficult", "Neither easy nor difficult", "Easy", "Very easy"]
+    }
+  },
+  "templates": [
+    {
+      "key": "cx",
+      "group": "research",
+      "name": "Customer satisfaction",
+      "blurb": "Measure satisfaction and find what to fix first.",
+      "title": "Online shopping satisfaction",
+      "description": "A short survey about your experience shopping online. There are no right or wrong answers.",
+      "minutes": 5,
+      "reward": 1,
+      "target": 150,
+      "occupations": [],
+      "questions": [
+        {
+          "type": "SINGLE",
+          "text": "How often do you shop online?",
+          "options": ["Daily", "Weekly", "Monthly", "A few times a year", "Never"]
+        },
+        {
+          "type": "LIKERT",
+          "text": "Overall, how satisfied are you with online shopping?",
+          "options": ["Very dissatisfied", "Dissatisfied", "Neutral", "Satisfied", "Very satisfied"]
+        },
+        {
+          "type": "MULTI",
+          "text": "Which problems have you had in the last 6 months?",
+          "options": ["Late delivery", "Wrong item", "Difficult returns", "Hidden fees", "None of these"]
+        },
+        {
+          "type": "RATING",
+          "text": "How likely are you to recommend online shopping to a friend?",
+          "options": [],
+          "scale": {
+            "min": 0,
+            "max": 10,
+            "minLabel": "Not at all likely",
+            "maxLabel": "Extremely likely"
+          }
+        },
+        {
+          "type": "TEXT",
+          "text": "What one change would make you shop online more?",
+          "options": []
+        }
+      ]
+    },
+    {
+      "key": "concept",
+      "group": "research",
+      "name": "Product concept test",
+      "blurb": "Test appeal and price before you build.",
+      "title": "Weekly meal-kit concept",
+      "description": "We are testing an idea for a weekly meal kit made with local ingredients. Tell us what you think.",
+      "minutes": 6,
+      "reward": 1.2,
+      "target": 200,
+      "occupations": [],
+      "questions": [
+        {
+          "type": "RATING",
+          "text": "How appealing is a weekly meal kit made with local ingredients?",
+          "options": []
+        },
+        {
+          "type": "SINGLE",
+          "text": "How likely would you be to subscribe at $45 per week?",
+          "options": ["Very likely", "Somewhat likely", "Not sure", "Unlikely", "Very unlikely"]
+        },
+        {
+          "type": "NUMBER",
+          "text": "What is the most you would pay per week, in US dollars?",
+          "options": []
+        },
+        {
+          "type": "TEXT",
+          "text": "What would stop you from subscribing?",
+          "options": []
+        }
+      ]
+    },
+    {
+      "key": "academic",
+      "group": "research",
+      "name": "Academic questionnaire",
+      "blurb": "A student study with screening and an attention check.",
+      "title": "Study habits and wellbeing",
+      "description": "A university research study about how students study and how they feel. Your answers are anonymous and you can stop at any time.",
+      "minutes": 8,
+      "reward": 1.6,
+      "target": 200,
+      "occupations": ["Student"],
+      "questions": [
+        {
+          "type": "NUMBER",
+          "text": "On a typical weekday, how many hours do you study?",
+          "options": []
+        },
+        {
+          "type": "SINGLE",
+          "text": "Where do you study most often?",
+          "options": ["At home", "Library", "Café", "Elsewhere on campus", "Other"]
+        },
+        {
+          "type": "LIKERT",
+          "text": "In the past two weeks, how often have you felt stressed?",
+          "options": ["Never", "Rarely", "Sometimes", "Often", "Always"]
+        },
+        {
+          "type": "LIKERT",
+          "text": "I feel confident about my exams this term.",
+          "options": [
+            "Strongly disagree",
+            "Disagree",
+            "Somewhat disagree",
+            "Neither agree nor disagree",
+            "Somewhat agree",
+            "Agree",
+            "Strongly agree"
+          ]
+        },
+        {
+          "type": "RATING",
+          "text": "How would you rate your overall wellbeing right now?",
+          "options": [],
+          "scale": {
+            "min": 1,
+            "max": 10,
+            "minLabel": "Very poor",
+            "maxLabel": "Excellent"
+          }
+        },
+        {
+          "type": "MULTI",
+          "text": "Which tools do you use to plan your study time?",
+          "options": ["Paper planner", "Calendar app", "To-do app", "None"]
+        },
+        {
+          "type": "TEXT",
+          "text": "Describe one habit that helps you study well.",
+          "options": []
+        }
+      ]
+    },
+    {
+      "key": "tna",
+      "group": "train",
+      "name": "Training needs analysis",
+      "blurb": "Find the skill gaps to train for before you plan a programme.",
+      "title": "Training needs survey",
+      "description": "Help us plan training that fits your work. This survey takes about 6 minutes and your answers are anonymous.",
+      "minutes": 6,
+      "reward": 1.2,
+      "target": 150,
+      "occupations": [],
+      "questions": [
+        {
+          "type": "SINGLE",
+          "text": "Which best describes your role?",
+          "options": ["Individual contributor", "Team leader", "Manager", "Senior leader", "Executive"]
+        },
+        {
+          "type": "LIKERT",
+          "text": "I have the skills I need to do my job well.",
+          "options": ["Strongly disagree", "Disagree", "Neither agree nor disagree", "Agree", "Strongly agree"]
+        },
+        {
+          "type": "MULTI",
+          "text": "Which areas would you most like training in? (select all that apply)",
+          "options": [
+            "Leadership",
+            "Communication",
+            "Project management",
+            "Data and digital skills",
+            "Customer service",
+            "Finance for non-finance managers",
+            "Time management"
+          ]
+        },
+        {
+          "type": "SINGLE",
+          "text": "How do you prefer to learn?",
+          "options": [
+            "In-person workshop",
+            "Live online session",
+            "Self-paced e-learning",
+            "Coaching or mentoring",
+            "A mix of these"
+          ]
+        },
+        {
+          "type": "LIKERT",
+          "text": "How often does your manager discuss your development with you?",
+          "options": ["Never", "Rarely", "Sometimes", "Often", "Always"]
+        },
+        {
+          "type": "NUMBER",
+          "text": "How many hours a month could you give to training?",
+          "options": []
+        },
+        {
+          "type": "TEXT",
+          "text": "What is the biggest skill gap in your team right now?",
+          "options": []
+        }
+      ]
+    },
+    {
+      "key": "posttrain",
+      "group": "train",
+      "name": "Post-training evaluation",
+      "blurb": "Measure reaction, learning and intent to apply after a course.",
+      "title": "Course evaluation",
+      "description": "Tell us how the course went so we can improve it. This takes about 5 minutes and your answers are anonymous.",
+      "minutes": 5,
+      "reward": 1,
+      "target": 100,
+      "occupations": [],
+      "questions": [
+        {
+          "type": "LIKERT",
+          "text": "Overall, how satisfied were you with the course?",
+          "options": ["Very dissatisfied", "Dissatisfied", "Neutral", "Satisfied", "Very satisfied"]
+        },
+        {
+          "type": "LIKERT",
+          "text": "The course objectives were clear.",
+          "options": ["Strongly disagree", "Disagree", "Neither agree nor disagree", "Agree", "Strongly agree"]
+        },
+        {
+          "type": "LIKERT",
+          "text": "The facilitator explained ideas clearly.",
+          "options": ["Strongly disagree", "Disagree", "Neither agree nor disagree", "Agree", "Strongly agree"]
+        },
+        {
+          "type": "LIKERT",
+          "text": "I can apply what I learned in my job.",
+          "options": ["Strongly disagree", "Disagree", "Neither agree nor disagree", "Agree", "Strongly agree"]
+        },
+        {
+          "type": "RATING",
+          "text": "How confident are you in this skill now?",
+          "options": [],
+          "scale": {
+            "min": 1,
+            "max": 10,
+            "minLabel": "Not at all confident",
+            "maxLabel": "Fully confident"
+          }
+        },
+        {
+          "type": "RATING",
+          "text": "How likely are you to recommend this course to a colleague?",
+          "options": [],
+          "scale": {
+            "min": 0,
+            "max": 10,
+            "minLabel": "Not at all likely",
+            "maxLabel": "Extremely likely"
+          }
+        },
+        {
+          "type": "TEXT",
+          "text": "What will you do differently at work after this course?",
+          "options": []
+        }
+      ]
+    },
+    {
+      "key": "leader360",
+      "group": "train",
+      "name": "360° leadership feedback",
+      "blurb": "Anonymous feedback on a leader from managers, peers and reports.",
+      "title": "360° feedback for a leader",
+      "description": "Your feedback helps a colleague grow as a leader. Answers are anonymous and only shared as group results.",
+      "minutes": 7,
+      "reward": 1.4,
+      "target": 12,
+      "occupations": [],
+      "questions": [
+        {
+          "type": "SINGLE",
+          "text": "What is your working relationship with this leader?",
+          "options": ["Their manager", "Peer", "Direct report", "Other colleague"]
+        },
+        {
+          "type": "LIKERT",
+          "text": "This leader communicates a clear direction.",
+          "options": [
+            "Strongly disagree",
+            "Disagree",
+            "Somewhat disagree",
+            "Neither agree nor disagree",
+            "Somewhat agree",
+            "Agree",
+            "Strongly agree"
+          ]
+        },
+        {
+          "type": "LIKERT",
+          "text": "This leader listens to different points of view.",
+          "options": [
+            "Strongly disagree",
+            "Disagree",
+            "Somewhat disagree",
+            "Neither agree nor disagree",
+            "Somewhat agree",
+            "Agree",
+            "Strongly agree"
+          ]
+        },
+        {
+          "type": "LIKERT",
+          "text": "This leader gives useful feedback.",
+          "options": [
+            "Strongly disagree",
+            "Disagree",
+            "Somewhat disagree",
+            "Neither agree nor disagree",
+            "Somewhat agree",
+            "Agree",
+            "Strongly agree"
+          ]
+        },
+        {
+          "type": "LIKERT",
+          "text": "This leader develops the people around them.",
+          "options": [
+            "Strongly disagree",
+            "Disagree",
+            "Somewhat disagree",
+            "Neither agree nor disagree",
+            "Somewhat agree",
+            "Agree",
+            "Strongly agree"
+          ]
+        },
+        {
+          "type": "LIKERT",
+          "text": "This leader makes decisions in good time.",
+          "options": [
+            "Strongly disagree",
+            "Disagree",
+            "Somewhat disagree",
+            "Neither agree nor disagree",
+            "Somewhat agree",
+            "Agree",
+            "Strongly agree"
+          ]
+        },
+        {
+          "type": "RATING",
+          "text": "Overall, how effective is this leader?",
+          "options": [],
+          "scale": {
+            "min": 1,
+            "max": 10,
+            "minLabel": "Not effective",
+            "maxLabel": "Highly effective"
+          }
+        },
+        {
+          "type": "TEXT",
+          "text": "What should this leader keep doing?",
+          "options": []
+        },
+        {
+          "type": "TEXT",
+          "text": "What should this leader start or stop doing?",
+          "options": []
+        }
+      ]
+    },
+    {
+      "key": "engage",
+      "group": "train",
+      "name": "Employee engagement pulse",
+      "blurb": "A short, regular check on how people feel about work.",
+      "title": "Engagement pulse",
+      "description": "A quick check on how work is going for you. It takes about 3 minutes and your answers are anonymous.",
+      "minutes": 3,
+      "reward": 0.6,
+      "target": 200,
+      "occupations": [],
+      "questions": [
+        {
+          "type": "RATING",
+          "text": "How likely are you to recommend this organisation as a place to work?",
+          "options": [],
+          "scale": {
+            "min": 0,
+            "max": 10,
+            "minLabel": "Not at all likely",
+            "maxLabel": "Extremely likely"
+          }
+        },
+        {
+          "type": "LIKERT",
+          "text": "I know what is expected of me at work.",
+          "options": ["Strongly disagree", "Disagree", "Neither agree nor disagree", "Agree", "Strongly agree"]
+        },
+        {
+          "type": "LIKERT",
+          "text": "I have the tools and resources to do my job well.",
+          "options": ["Strongly disagree", "Disagree", "Neither agree nor disagree", "Agree", "Strongly agree"]
+        },
+        {
+          "type": "LIKERT",
+          "text": "My work is recognised.",
+          "options": ["Strongly disagree", "Disagree", "Neither agree nor disagree", "Agree", "Strongly agree"]
+        },
+        {
+          "type": "LIKERT",
+          "text": "I see a future for myself here.",
+          "options": ["Strongly disagree", "Disagree", "Neither agree nor disagree", "Agree", "Strongly agree"]
+        },
+        {
+          "type": "TEXT",
+          "text": "What one change would most improve your work life?",
+          "options": []
+        }
+      ]
+    }
+  ]
+}

@@ -279,6 +279,7 @@ model Response {
   passedAttention Boolean?
   speeder         Boolean        @default(false)
   durationSeconds Int?
+  demographics    Json? // snapshot of the participant profile when they answered (age, gender, country, occupation)
   submittedAt     DateTime       @default(now())
   survey          Survey         @relation(fields: [surveyId], references: [id], onDelete: Cascade)
   surveyVersion   SurveyVersion  @relation(fields: [surveyVersionId], references: [id], onDelete: Restrict)
