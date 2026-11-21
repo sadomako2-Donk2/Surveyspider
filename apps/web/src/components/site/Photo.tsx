@@ -28,6 +28,7 @@ export function Photo({ slot, wide, priority }: { slot: PhotoKey; wide?: boolean
           alt={p.alt}
           fill
           priority={priority}
+          unoptimized={p.file.endsWith(".svg")}
           sizes={wide ? "(max-width: 1200px) 100vw, 1200px" : "(max-width: 900px) 100vw, 560px"}
         />
       </div>

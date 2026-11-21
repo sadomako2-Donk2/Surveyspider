@@ -2,6 +2,7 @@
 // until then the slot shows nothing on the live site (and a placeholder in development).
 // `alt` must describe what the photo actually shows (it's read aloud to blind visitors) and is
 // required for every photo that is present: tests/unit/photos.test.ts checks this.
+// The .svg files are AI-made illustrations (not photos) and are described as illustrations.
 // Only use photos Afrimetrica owns or has permission to use, of people who agreed to appear.
 
 export interface PhotoSlot {
@@ -17,14 +18,14 @@ export interface PhotoSlot {
 
 export const PHOTOS = {
   home: {
-    file: "home.jpg",
-    alt: "",
+    file: "insights.svg",
+    alt: "Illustration of a data dashboard: a rising trend line, a donut chart and a highlighted insight",
     where: "Home page, wide photo under the opening section",
     suggest: "A training session, fieldwork team or workshop in progress",
   },
   homeAcademy: {
-    file: "home-academy.jpg",
-    alt: "",
+    file: "training.svg",
+    alt: "Illustration of a research methods class: a trainer beside a board with a bar chart and the sample size formula, and participants at desks",
     where: "Home page, next to “Practical training in research methods”",
     suggest: "Participants working together in an Academy course",
   },
@@ -32,23 +33,24 @@ export const PHOTOS = {
     file: "about.jpg",
     alt: "",
     where: "About page, under the heading",
-    suggest: "The team, or the office in Ghana",
+    // Kept for a real photo: an invented picture of the CEO or team would mislead visitors.
+    suggest: "A real photo of the CEO or team, or the office in Ghana",
   },
   training: {
-    file: "training.jpg",
-    alt: "",
+    file: "training.svg",
+    alt: "Illustration of a research methods class: a trainer beside a board with a bar chart and the sample size formula, and participants at desks",
     where: "Training page, under the heading",
     suggest: "A trainer teaching a class",
   },
   surveys: {
-    file: "surveys.jpg",
-    alt: "",
+    file: "surveys.svg",
+    alt: "Illustration of a survey on a tablet, with rating and multiple-choice questions, and results on a phone",
     where: "Surveys page, under the opening section",
     suggest: "An enumerator interviewing someone with a tablet",
   },
   analytics: {
-    file: "analytics.jpg",
-    alt: "",
+    file: "analytics.svg",
+    alt: "Illustration of statistical analysis: a scatter plot with a regression line, a histogram with a normal curve and a results table",
     where: "Analytics page, under the heading",
     suggest: "An analyst at work, or a printed report with charts",
   },

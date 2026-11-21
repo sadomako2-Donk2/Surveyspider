@@ -13,7 +13,7 @@ describe("website photos", () => {
 
   it("every image in public/photos belongs to a slot, so nothing is uploaded by mistake", () => {
     const files = new Set(Object.values(PHOTOS).map((p) => p.file));
-    const images = readdirSync(dir).filter((f) => /\.(jpe?g|png|webp|avif)$/i.test(f));
+    const images = readdirSync(dir).filter((f) => /\.(jpe?g|png|webp|avif|svg)$/i.test(f));
     expect(images.filter((f) => !files.has(f))).toEqual([]);
   });
 });
