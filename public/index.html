@@ -572,6 +572,17 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
 @media (max-width: 860px) { .finder-grid { grid-template-columns: 1fr 1fr; } .course-line { grid-template-columns: 1fr; } .course-line-meta { justify-content: flex-start; } }
 @media (max-width: 560px) { .finder-grid { grid-template-columns: 1fr; } }
 .cta-badge { background: var(--gold); color: #0e1d3a; text-transform: none; letter-spacing: 0; font-size: .8rem; padding: 3px 10px; }
+/* printable catalogues */
+.printable { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 24px; display: grid; gap: 18px; }
+.print-group h2 { border-bottom: 2px solid var(--gold-soft); padding-bottom: 6px; }
+.print-table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.print-table th, .print-table td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+@media print {
+  .topbar, #subnav, #foot, #banner, #toast, .no-print, .crumbs, .skip { display: none !important; }
+  body, .printable { background: #fff !important; color: #000 !important; }
+  .printable { border: 0; padding: 0; }
+  .print-group { break-inside: auto; } .print-table tr { break-inside: avoid; }
+}
 </style>
 
 <header class="topbar gutter">
@@ -674,7 +685,7 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
     studies: [], responses: [], profile: null,
     view: "home", draft: ls.get("cohortly-draft"), taking: null, takeStart: 0, justDone: null,
     editProfile: false, resultsId: null, excludeFlagged: true, libQuery: "", libOpen: null,
-    catFilter: { q: "", group: "", sub: "", venue: "", format: "", days: "" }, catPage: 1, catEnquiry: "", tr: "", an: "", co: "", trMenu: null,
+    catFilter: { q: "", group: "", sub: "", venue: "", format: "", days: "" }, catPage: 1, catEnquiry: "", tr: "", an: "", co: "", res: "", ct: "", trMenu: null,
     confirmDel: null, stale: false, notice: "",
     imp: { status: "idle" }, importNote: null,
     gen: { status: "idle" }, billing: "annual", anTab: "summary", aiCheck: null, ask: { q: "", a: "", busy: false },
@@ -939,7 +950,8 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
     const top = inSurveys ? "surveys" : S.view === "business" || S.view === "signin" ? "account" : S.view;
     $("#tabs").innerHTML = TOPNAV.map(([k, v]) => `<a href="#${k}"${top === k ? ' aria-current="page"' : ""}>${v}</a>`).join("");
     const sub = $("#subnav");
-    if (S.view === "training" || S.view === "analytics" || S.view === "consultancy") { sub.hidden = false; sub.innerHTML = S.view === "training" ? trNav() : S.view === "analytics" ? anNav() : coNav(); }
+    const sectionNav = { training: trNav, analytics: anNav, consultancy: coNav, resources: resNav, contact: ctNav }[S.view];
+    if (sectionNav) { sub.hidden = false; sub.innerHTML = sectionNav(); }
     else {
     sub.hidden = !inSurveys;
     sub.innerHTML = inSurveys ? `<div class="subnav-inner"><span class="subnav-label">Afrimetrica Surveys</span><div class="subnav-links">${SURVEY_NAV.map(([k, v]) => `<a href="#${k}"${S.view === k ? ' aria-current="page"' : ""}>${v}${k === "panel" && avail ? `<span class="count">${avail}</span>` : ""}</a>`).join("")}</div></div>` : "";
@@ -971,6 +983,11 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
     const coPart = h.startsWith("consultancy/") ? h.slice(12) : "";
     if (coPart) h = "consultancy";
     S.co = h === "consultancy" ? coPart : "";
+    // and Resources and Contact: #resources/<part>, #contact/<part>
+    const resPart = h.startsWith("resources/") ? h.slice(10) : "", ctPart = h.startsWith("contact/") ? h.slice(8) : "";
+    if (resPart) h = "resources";
+    if (ctPart) h = "contact";
+    S.res = h === "resources" ? resPart : ""; S.ct = h === "contact" ? ctPart : "";
     if ((S.tr || "").startsWith("course/") && S.tr !== trPart) S.catEnquiry = "";
     S.tr = h === "training" ? trPart : ""; S.trMenu = null;
     if (h === "library") h = "resources";
@@ -2928,7 +2945,7 @@ ${richSummary(st, rows)}`;
     </section>
     <section class="split">
       <div class="stack"><div class="section-head"><span class="eyebrow gold">Knowledge Hub</span><h2 class="h2xl">Free guides for better research</h2></div><p class="muted">Practical advice on questionnaire design, sample size, scales and monitoring and evaluation, plus ready-made survey templates.</p><a class="btn primary" href="#resources" style="align-self:flex-start">Browse resources</a></div>
-      <div class="stack" style="gap:10px">${GUIDES.slice(0, 3).map((g) => `<a class="card guide-link" href="#resources" data-act="openGuide" data-id="${g.id}"><b>${esc(g.title)}</b><span class="hint">${esc(g.summary)} · ${g.minutes} min read</span></a>`).join("")}</div>
+      <div class="stack" style="gap:10px">${GUIDES.slice(0, 3).map((g) => `<a class="card guide-link" href="#resources/articles/${g.id}"><b>${esc(g.title)}</b><span class="hint">${esc(g.summary)} · ${g.minutes} min read</span></a>`).join("")}</div>
     </section>
     <section class="band">
       <div class="stack" style="gap:10px"><span class="eyebrow">Afrimetrica Consulting</span><h2>Planning a study or evaluation?</h2><p>Tell us what you need to find out. We can help with design, fieldwork, analysis or the whole project.</p></div>
@@ -3872,11 +3889,82 @@ ${richSummary(st, rows)}`;
     if (part === "request") return coRequest();
     return coLanding();
   }
+  // ---- Resources (#resources/<part>) and Contact (#contact/<part>) sections, with their own menus ----
+  const subLinks = (base, items, cur) => items.map(([k, label]) => `<a href="#${base}${k ? "/" + k : ""}"${cur === k || (k && cur.startsWith(k + "/")) ? ' aria-current="page"' : ""}>${label}</a>`).join("");
+  const RES_MENU = [["", "Overview"], ["articles", "Articles and guides"], ["case-studies", "Case studies"], ["testimonials", "Testimonials"], ["press", "Press releases"], ["videos", "Videos"], ["catalogues", "Catalogues and brochures"]];
+  const CONTACT_MENU = [["", "Contact us"], ["hotel", "Hotel reservation"], ["careers", "Careers"], ["mailing-list", "Mailing list"]];
+  const resNav = () => `<div class="subnav-inner"><span class="subnav-label">Knowledge Hub</span><div class="subnav-links">${subLinks("resources", RES_MENU, S.res || "")}</div></div>`;
+  const ctNav = () => `<div class="subnav-inner"><span class="subnav-label">Contact</span><div class="subnav-links">${subLinks("contact", CONTACT_MENU, S.ct || "")}<a href="#training/finder">Find training</a></div></div>`;
+  const resCrumbs = (label) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#resources">Resources</a> › <span>${esc(label)}</span></nav>`;
+  const ctCrumbs = (label) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#contact">Contact</a> › <span>${esc(label)}</span></nav>`;
+  const guideCards = () => `<div class="course-grid">${GUIDES.map((g) => `<a class="card tpl" href="#resources/articles/${g.id}"><h3>${esc(g.title)}</h3><p class="muted">${esc(g.summary)}</p><span class="hint">${g.minutes} min read</span></a>`).join("")}</div>`;
+  const pageHead = (eyebrow, title, intro) => `<div class="page-head"><div><span class="eyebrow gold">${esc(eyebrow)}</span><h1>${esc(title)}</h1>${intro ? `<p class="muted" style="max-width:70ch">${intro}</p>` : ""}</div></div>`;
+  function resArticles() {
+    return `${resCrumbs("Articles and guides")}${pageHead("Knowledge Hub", "Articles and guides", "Practical, free guides on research methods, surveys and evaluation, written by our team.")}${guideCards()}`;
+  }
+  function resCaseStudies() {
+    return `${resCrumbs("Case studies")}${pageHead("Case studies", "Case studies", "Short accounts of projects we have delivered: the question, what we did, and what changed.")}
+      <section class="card"><h2>Coming soon</h2><p class="muted">We publish a case study only when the work is complete and the client has agreed to it being shared. The first ones will appear here.</p><p class="muted">Each case study will cover the client's challenge, the methods we used, what we delivered and the difference it made.</p>
+        <div class="row wrap"><a class="btn primary" href="#consultancy">Our consultancy services</a><a class="btn" href="#analytics">Our analytics services</a></div></section>`;
+  }
+  function resTestimonials() {
+    return `${resCrumbs("Testimonials")}${pageHead("Testimonials", "What participants and clients say", "")}
+      <div class="split"><section class="card"><h2>Genuine feedback only</h2><p class="muted">We publish only real comments from course participants and clients, with their permission. Testimonials will appear here as courses and projects are completed.</p><p class="muted">Attended a course or worked with us? We'd value your feedback, whether or not you'd like it published.</p></section>
+        ${enquiryForm("contact", { title: "Share your feedback", messageLabel: "Your feedback", message: "Course or project: \nYour feedback: \nMay we publish this with your name and organisation? (yes / no / first name only): " })}</div>`;
+  }
+  function resPress() {
+    return `${resCrumbs("Press releases")}${pageHead("Press releases", "Press releases and news", "Announcements about Afrimetrica, new programmes and published research.")}
+      <div class="split"><section class="card"><h2>No press releases yet</h2><p class="muted">Our announcements will be published here.</p></section>
+        ${enquiryForm("contact", { title: "Media enquiries", subject: true, messageLabel: "Your enquiry", message: "Media enquiry\nPublication or outlet: \nDeadline: \nQuestion: " })}</div>`;
+  }
+  function resVideos() {
+    return `${resCrumbs("Videos")}${pageHead("Videos", "Videos", "Short tutorials on research methods and data analysis, and previews of our courses.")}
+      <section class="card"><h2>Coming soon</h2><p class="muted">Our first videos will be published here. In the meantime, our written guides cover the same ground.</p><a class="btn primary" href="#resources/articles" style="align-self:flex-start">Read the guides</a></section>`;
+  }
+  function resCatalogues() {
+    return `${resCrumbs("Catalogues and brochures")}${pageHead("Catalogues and brochures", "Catalogues and brochures", "Print or save as PDF to share with colleagues and decision-makers.")}
+      <div class="area-grid">
+        <a class="card area-card" href="#resources/catalogues/training"><b>Training course catalogue</b><span class="hint">All ${CATALOGUE.length} courses by subject area, with length and level</span></a>
+        <a class="card area-card" href="#resources/catalogues/services"><b>Analytics and consultancy services</b><span class="hint">Our ${AN_SERVICES.length} analytics and ${CO_SERVICES.length} consultancy services in brief</span></a>
+      </div>`;
+  }
+  const printBar = (back) => `<div class="row wrap no-print"><a class="btn small ghost" href="${back}">← Catalogues and brochures</a><button class="btn small primary" data-act="printPage">Print or save as PDF</button></div>`;
+  function resTrainingCatalogue() {
+    return `${printBar("#resources/catalogues")}<article class="printable"><header class="print-head"><span class="eyebrow gold">Afrimetrica Academy</span><h1>Training course catalogue</h1><p class="muted">Data, research and executive training. Every course runs in the classroom in our venues across English-speaking Africa, live online or in-house. Ask us for dates and fees. Participants receive a certificate of completion (not an accredited qualification).</p></header>
+      ${GROUPS.map(([g, name, subs]) => { const list = CATALOGUE.filter((c) => subs.includes(c.cat)); return `<section class="print-group"><h2>${esc(name)}</h2><div class="table-wrap"><table class="print-table"><thead><tr><th>Course</th><th>Subject</th><th>Days</th><th>Level</th></tr></thead><tbody>${list.map((c) => `<tr><td>${esc(c.title)}</td><td>${esc(catName(c.cat))}</td><td class="n">${c.days}</td><td>${esc(c.level)}</td></tr>`).join("")}</tbody></table></div></section>`; }).join("")}
+      <p class="hint">Venues: ${esc(VENUES.map(([country, cities]) => `${country} (${cities.join(", ")})`).join("; "))}.</p></article>`;
+  }
+  function resServicesBrochure() {
+    return `${printBar("#resources/catalogues")}<article class="printable"><header class="print-head"><span class="eyebrow gold">Afrimetrica</span><h1>Analytics and consultancy services</h1><p class="muted">Data, research and executive training, analysis and advice for organisations, governments and NGOs across Africa.</p></header>
+      <section class="print-group"><h2>Analytics</h2>${AN_SERVICES.map((x) => `<h3>${esc(x.name)}</h3><p>${esc(x.summary)}</p>`).join("")}</section>
+      <section class="print-group"><h2>Consultancy</h2>${CO_SERVICES.map((x) => `<h3>${esc(x.name)}</h3><p>${esc(x.summary)}</p>`).join("")}</section></article>`;
+  }
+  function ctHotel() {
+    return `${ctCrumbs("Hotel reservation")}${pageHead("Hotel reservation", "Accommodation for your course", "Travelling for a classroom course? Tell us your venue, dates and budget, and we'll reply with accommodation options near the venue and help you book.")}
+      <div class="split">${enquiryForm("contact", { title: "Request accommodation help", messageLabel: "Your stay", message: "Hotel reservation request\nCourse: \nVenue city: \nCheck-in and check-out dates: \nNumber of rooms and guests: \nBudget per night: " })}
+        <section class="card"><h2>Good to know</h2><ul class="ticks small"><li><div><span>Ask as early as you can: hotels near popular venues fill up.</span></div></li><li><div><span>Tell us about any accessibility or dietary needs.</span></div></li><li><div><span>For in-house courses, the training takes place at your premises.</span></div></li></ul><a class="btn" href="#training/venues" style="align-self:flex-start">See training venues</a></section></div>`;
+  }
+  function ctCareers() {
+    return `${ctCrumbs("Careers")}${pageHead("Careers", "Careers at Afrimetrica", "We're building a team of researchers, analysts, trainers and field staff across English-speaking Africa.")}
+      <div class="split"><section class="card"><h2>Current vacancies</h2><p class="muted">There are no advertised vacancies at the moment. When there are, they will be listed here.</p></section>
+        <section class="card"><h2>Work with us as an associate</h2><p class="muted">We regularly work with independent consultants, trainers, data analysts, enumerators and field supervisors. Join our associate network and we'll contact you when a suitable assignment comes up.</p><a class="btn primary" href="#consultancy/work-with-us" style="align-self:flex-start">Join the associate network</a></section></div>`;
+  }
+  function ctMailing() {
+    return `${ctCrumbs("Mailing list")}${pageHead("Mailing list", "Join our mailing list", "Hear about new courses, course dates, free guides and events. We'll only email you about Afrimetrica, and you can ask to be removed at any time.")}
+      <div class="split">${enquiryForm("contact", { title: "Sign up", messageLabel: "Your interests", message: "Please add me to the Afrimetrica mailing list.\nInterests (training, analytics, consultancy, research guides): \nCountry: " })}
+        <section class="card"><h2>What you'll receive</h2><ul class="ticks small"><li><div><span>New courses and dates in your region</span></div></li><li><div><span>New guides and resources</span></div></li><li><div><span>Occasional news about our work</span></div></li></ul></section></div>`;
+  }
   function viewResources() {
-    if (S.guideOpen) { const g = GUIDES.find((x) => x.id === S.guideOpen); if (g) return guideView(g); S.guideOpen = null; }
+    const [part, arg] = (S.res || "").split("/");
+    if (part === "articles") { const g = GUIDES.find((x) => x.id === arg); return g ? guideView(g) : resArticles(); }
+    if (part === "case-studies") return resCaseStudies();
+    if (part === "testimonials") return resTestimonials();
+    if (part === "press") return resPress();
+    if (part === "videos") return resVideos();
+    if (part === "catalogues") return arg === "training" ? resTrainingCatalogue() : arg === "services" ? resServicesBrochure() : resCatalogues();
     const tpl = Object.entries(TEMPLATES);
     return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Knowledge Hub</span><h1>Resources for better research</h1><p class="muted" style="max-width:66ch">Free guides, a sample size calculator, ready-made survey templates, published findings and links to open data.</p></div></div>
-      <section class="stack"><h2>Guides</h2><div class="course-grid">${GUIDES.map((g) => `<button class="card tpl" data-act="openGuide" data-id="${g.id}"><h3>${esc(g.title)}</h3><p class="muted">${esc(g.summary)}</p><span class="hint">${g.minutes} min read</span></button>`).join("")}</div></section>
+      <section class="stack"><h2>Guides</h2>${guideCards()}</section>
       <section class="card" id="sampleCalc"><div><h2>Sample size calculator</h2><p class="muted">How many completed responses you need for a given margin of error.</p></div>
         <div class="grid4"><label for="sc-conf">Confidence<select id="sc-conf"><option value="1.645">90%</option><option value="1.96" selected>95%</option><option value="2.576">99%</option></select></label>
         <label for="sc-moe">Margin of error (±%)<input id="sc-moe" type="number" min="1" max="20" step="0.5" value="5"></label>
@@ -3895,12 +3983,16 @@ ${richSummary(st, rows)}`;
   }
   function guideView(g) {
     const table = `<div class="table-wrap"><table><thead><tr><th>Margin of error</th><th>Responses needed</th></tr></thead><tbody>${[10, 5, 3, 2].map((m) => `<tr><td>±${m}%</td><td class="n">${int(sampleN(1.96, m / 100, 0))}</td></tr>`).join("")}</tbody></table></div>`;
-    return `<div><button class="btn small ghost" data-act="closeGuide">← All resources</button></div>
+    return `<div><a class="btn small ghost" href="#resources/articles">← Articles and guides</a></div>
       <article class="card prose guide"><span class="eyebrow gold">Afrimetrica Knowledge Hub · ${g.minutes} min read</span><h1>${esc(g.title)}</h1><p class="lede-sm">${esc(g.summary)}</p>
         ${g.sections.map(([h, p]) => `<h2>${esc(h)}</h2>${p === "__SAMPLE_TABLE__" ? table + `<p class="hint">For a yes/no style result, assuming a 50% split, which gives the largest (safest) number.</p>` : `<p>${esc(p)}</p>`}`).join("")}
         <div class="row wrap" style="margin-top:8px"><a class="btn primary" href="#create">Build a survey</a><a class="btn" href="#training">See our courses</a></div></article>`;
   }
   function viewContact() {
+    const part = (S.ct || "").split("/")[0];
+    if (part === "hotel") return ctHotel();
+    if (part === "careers") return ctCareers();
+    if (part === "mailing-list") return ctMailing();
     const st = S.settings || {}, wa = String(st.whatsapp || "").replace(/[^\d]/g, "");
     const item = (label, val) => `<div class="contact-item"><span class="hint">${label}</span>${val}</div>`;
     const details = [st.email ? item("Email", `<span class="row wrap" style="gap:8px"><b class="sel">${esc(st.email)}</b><button class="btn small ghost" data-act="copyText" data-v="${esc(st.email)}">Copy</button></span>`) : "", st.phone ? item("Phone", `<b class="sel">${esc(st.phone)}</b>`) : "", wa ? item("WhatsApp", `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Message us on WhatsApp</a>`) : "", st.address ? item("Office", `<span class="sel" style="white-space:pre-line">${esc(st.address)}</span>`) : "", st.hours ? item("Hours", esc(st.hours)) : "", st.linkedin ? item("LinkedIn", `<a href="${esc(st.linkedin)}" target="_blank" rel="noopener">Follow Afrimetrica</a>`) : ""].join("");
@@ -4194,7 +4286,8 @@ ${richSummary(st, rows)}`;
       }
       case "unpublish": { const s2 = clone(studyById(S.resultsId)); delete s2.library; s2.updatedAt = Date.now(); await save(() => backend.putStudy(s2), "Removed from the library."); break; }
       case "enqAgain": S.enqSent[b.dataset.t] = false; render(); break;
-      case "openGuide": S.guideOpen = id; if (S.view === "resources") { render(); window.scrollTo(0, 0); } break;
+      case "openGuide": location.hash = "resources/articles/" + id; break;
+      case "printPage": window.print(); break;
       case "closeGuide": S.guideOpen = null; render(); window.scrollTo(0, 0); break;
       case "openCourse": S.courseOpen = id; S.regFor = null; if (S.view !== "training") go("training"); else { render(); window.scrollTo(0, 0); } break;
       case "closeCourse": S.courseOpen = null; S.regFor = null; render(); window.scrollTo(0, 0); break;
