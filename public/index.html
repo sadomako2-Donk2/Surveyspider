@@ -592,6 +592,11 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
 .nav-drop a { display: block; padding: 6px 8px; border-radius: 7px; color: var(--ink); text-decoration: none; font-size: .9rem; }
 .nav-drop a:hover, .nav-drop a:focus-visible { background: var(--bg); color: var(--accent); }
 @media (hover: none) { .nav-drop { display: none !important; } }
+.legal { max-width: 860px; }
+.legal-toc ol { columns: 2; column-gap: 24px; padding-left: 1.2em; }
+.legal-toc a { color: var(--accent); }
+.notice-warn { border-left: 4px solid var(--signal); background: var(--signal-soft); margin-bottom: 16px; }
+@media (max-width: 560px) { .legal-toc ol { columns: 1; } }
 </style>
 
 <header class="topbar gutter">
@@ -737,7 +742,7 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
     if (typeof d.ai === "boolean" && d.ai !== !!SAMPLE) { SAMPLE = d.ai ? serverSample() : null; if (!isTyping()) setTimeout(render, 0); } // AI switched on or off while the page was open
     S.profile = d.profile || null; S.stale = false;
   }
-  function applyMe(me) { S.uid = me.uid; S.user = me.user || null; S.isOwner = !!me.isAdmin; S.authCfg = { google: !!me.google, reset: !!me.emailReset, verify: !!me.emailReset }; if (me.ai && !SAMPLE) SAMPLE = serverSample(); if (!me.ai) SAMPLE = null; }
+  function applyMe(me) { S.uid = me.uid; S.user = me.user || null; S.isOwner = !!me.isAdmin; S.authCfg = { google: !!me.google, reset: !!me.emailReset, verify: !!me.emailReset }; S.notifyOk = me.notify; if (me.ai && !SAMPLE) SAMPLE = serverSample(); if (!me.ai) SAMPLE = null; }
   async function reloadMe() { applyMe(await api("GET", "/api/me")); await refreshServer(); }
   async function startServer(me) {
     API = true; S.mode = "live"; DL = browserDL; applyMe(me);
@@ -881,7 +886,7 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
         <label for="au-email">Email<input id="au-email" type="email" autocomplete="email" maxlength="160" required></label>
         <label for="au-pass">Password<input id="au-pass" type="password" autocomplete="${up ? "new-password" : "current-password"}" minlength="8" maxlength="200" required></label>
         ${!up && S.authCfg.reset ? `<div style="margin-top:-8px;text-align:right"><button type="button" class="linkbtn" data-act="authMode" data-m="forgot">Forgot password?</button></div>` : ""}
-        ${up ? `<p class="hint">At least 8 characters.</p>` : ""}
+        ${up ? `<p class="hint">At least 8 characters.</p><p class="hint">By creating an account you agree to our <a href="#terms">terms of use</a>. Our <a href="#privacy">privacy notice</a> explains how we use your data.</p>` : ""}
         <div id="authErr"></div>
         <button class="btn primary big" type="submit" style="align-self:stretch;justify-content:center">${up ? "Create account" : "Sign in"}</button>
       </form>
@@ -1002,14 +1007,26 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
     const msg = S.notice || (S.mode === "demo" ? "Demo mode: everything you create is saved in this browser only. Open the published page while signed in to claude.ai to share data with other people." : "") || (S.stale ? "Can't reach the saved data yet. What you see may be out of date." : "");
     b.hidden = !msg; b.textContent = msg;
     if (!msg && unverified()) { b.hidden = false; b.innerHTML = `<b>Confirm your email address.</b> We sent a link to ${esc(S.user.email)}. You can browse and save drafts now; confirm to launch surveys, take paid studies and use AI. <button type="button" class="linkbtn" data-act="resendVerify">Send it again</button>`; }
-    $("#foot").innerHTML = `<div class="foot-inner"><div><b>Afrimetrica</b> · Data, Research and Executive Training<br><span class="hint">Plan. Analyse. Lead. Training, data and advice for organisations, governments and NGOs across Africa.</span></div><div class="hint">Afrimetrica Surveys platform fee ${Math.round(FEE * 100)}% of participant rewards. ${S.mode === "live" ? (API ? "Survey answers are stored on Afrimetrica's server and shown only to the survey's owner." : "Data is shared with everyone who can open this page.") : S.mode === "demo" ? "Demo data stays in this browser." : "Connecting…"}</div></div>`;
+    $("#foot").innerHTML = `<div class="foot-inner"><div><b>Afrimetrica</b> · Data, Research and Executive Training<br><span class="hint">Plan. Analyse. Lead. Training, data and advice for organisations, governments and NGOs across Africa.</span><br><span class="hint"><a href="#privacy">Privacy notice</a> · <a href="#terms">Terms of use</a></span></div><div class="hint">Afrimetrica Surveys platform fee ${Math.round(FEE * 100)}% of participant rewards. ${S.mode === "live" ? (API ? "Survey answers are stored on Afrimetrica's server and shown only to the survey's owner." : "Data is shared with everyone who can open this page.") : S.mode === "demo" ? "Demo data stays in this browser." : "Connecting…"}</div></div>`;
+  }
+  // Each page gets its own browser-tab title and description (used when people bookmark or share it).
+  const SITE_TITLE = "Afrimetrica — Data, Research and Executive Training";
+  const SITE_DESC = "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.";
+  function setPageMeta() {
+    const h1 = $("#main h1"), lead = $("#main .page-head p, #main .lede, #main .lede-sm");
+    const heading = h1 ? h1.textContent.replace(/\s+/g, " ").trim() : "";
+    document.title = S.view === "home" || !heading ? SITE_TITLE : `${heading} | Afrimetrica`;
+    let m = document.querySelector('meta[name="description"]');
+    if (!m) { m = document.createElement("meta"); m.name = "description"; document.head.appendChild(m); }
+    m.content = (lead && lead.textContent.replace(/\s+/g, " ").trim().slice(0, 300)) || SITE_DESC;
   }
   function render() {
     pending = false;
     renderTabs();
-    const v = { signin: viewSignin, home: viewHome, about: viewAbout, training: viewTraining, surveys: viewSurveys, analytics: viewAnalyticsSvc, consultancy: viewConsult, resources: viewResources, contact: viewContact, account: viewAccount, pricing: viewPricing, import: viewImport, "paper-survey": viewF2F, create: viewCreate, studies: viewStudies, panel: viewPanel, results: viewResults, business: viewBusiness }[S.view] || viewHome;
+    const v = { privacy: viewPrivacy, terms: viewTerms, signin: viewSignin, home: viewHome, about: viewAbout, training: viewTraining, surveys: viewSurveys, analytics: viewAnalyticsSvc, consultancy: viewConsult, resources: viewResources, contact: viewContact, account: viewAccount, pricing: viewPricing, import: viewImport, "paper-survey": viewF2F, create: viewCreate, studies: viewStudies, panel: viewPanel, results: viewResults, business: viewBusiness }[S.view] || viewHome;
     $("#main").innerHTML = v();
     if (S.view === "create" && S.draft) updateCost();
+    setPageMeta();
   }
   function route() {
     let h = location.hash.replace("#", "");
@@ -2770,7 +2787,7 @@ ${richSummary(st, rows)}`;
       <label for="fw-email">Email<input id="fw-email" type="email" maxlength="160" autocomplete="email"></label><label for="fw-phone">Phone (optional)<input id="fw-phone" type="tel" maxlength="40" autocomplete="tel"></label>
       <label for="fw-start" class="span2">Preferred start date<input id="fw-start" type="date" min="${todayISO()}"></label></div>
       <label for="fw-notes">Anything else we should know?<textarea id="fw-notes" rows="3" maxlength="1200" placeholder="Regions, languages, sampling quotas, deadlines…"></textarea></label>
-      <label class="inline" for="fw-ok"><input type="checkbox" id="fw-ok">You can contact me about this quote.</label>
+      <label class="inline" for="fw-ok"><input type="checkbox" id="fw-ok">You can contact me about this quote.</label><p class="hint">How we use your details: see our <a href="#privacy">privacy notice</a>.</p>
       <div id="fw-err"></div><div class="row"><button class="btn primary" type="submit">Send request</button><button class="btn ghost" type="button" data-act="f2fCancel">Cancel</button></div></form>`;
   }
   async function sendF2FRequest() {
@@ -2820,6 +2837,10 @@ ${richSummary(st, rows)}`;
   function viewBusiness() {
     if (!S.isOwner) return API ? `<form class="card" id="adminForm" style="max-width:460px"><h2>Owner sign-in</h2><p class="muted">Enter the admin code from your Render dashboard (Environment → ADMIN_CODE), or sign in with an email listed in ADMIN_EMAILS.</p><label for="adminCode">Admin code<input id="adminCode" type="password" autocomplete="off"></label><div class="row"><button class="btn primary" type="submit">Open admin area</button></div></form>` : `<div class="empty"><h2>Only the site owner can see this page</h2></div>`;
     if (S.mode === "loading") return loading();
+    if (S.notifyOk === false) return `<div class="notice-warn card"><b>Email notifications are off.</b> New enquiries, registrations and requests are saved here, but nobody is emailed about them. In Render → surveyspider → Environment, set <code>RESEND_API_KEY</code> and list the addresses to notify in <code>ADMIN_EMAILS</code>.</div>` + viewBusinessMain();
+    return viewBusinessMain();
+  }
+  function viewBusinessMain() {
     const real = S.responses.filter((r) => !r.test);
     const approved = real.filter((r) => r.status === "approved");
     const gmv = approved.reduce((a, r) => a + r.reward, 0);
@@ -2850,7 +2871,7 @@ ${richSummary(st, rows)}`;
   // ================= AFRIMETRICA: institution pages, Academy, enquiries, account, admin =================
   const TOPNAV = [["home", "Home"], ["about", "About"], ["training", "Training"], ["surveys", "Surveys"], ["analytics", "Analytics"], ["consultancy", "Consultancy"], ["resources", "Resources"], ["contact", "Contact"], ["account", "My Account"]];
   const SURVEY_NAV = [["surveys", "Overview"], ["create", "Create"], ["import", "Upload"], ["paper-survey", "Paper surveys"], ["studies", "My surveys"], ["results", "Analyze"], ["panel", "Take surveys"], ["pricing", "Plans"]];
-  const ROUTES = new Set([...TOPNAV.map(([k]) => k), ...SURVEY_NAV.map(([k]) => k), "signin", "business"]);
+  const ROUTES = new Set([...TOPNAV.map(([k]) => k), ...SURVEY_NAV.map(([k]) => k), "signin", "business", "privacy", "terms"]);
   const CUR = { USD: "US$", GHS: "GH₵", GBP: "£", EUR: "€" };
   const fee = (x, c) => (+x > 0 ? (CUR[c] || "") + (+x).toLocaleString("en-US", { maximumFractionDigits: 2 }) : "Free");
   const fmtDay = (d) => (d ? new Date(d + "T12:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : "Date to be confirmed");
@@ -2954,6 +2975,7 @@ ${richSummary(st, rows)}`;
       ${o.subject ? `<label for="${f("subject")}">Subject<input id="${f("subject")}" maxlength="160"></label>` : ""}
       <label for="${f("msg")}">${esc(o.messageLabel || "Tell us about your project")}<textarea id="${f("msg")}" rows="5" maxlength="4000" placeholder="${esc(o.placeholder || "")}">${esc(o.message || "")}</textarea></label>
       <label class="inline" for="${f("ok")}"><input type="checkbox" id="${f("ok")}">You can contact me about this enquiry.</label>
+      <p class="hint">How we use your details: see our <a href="#privacy">privacy notice</a>.</p>
       <div id="${f("err")}"></div><div><button class="btn primary" type="submit">Send enquiry</button></div></form>`;
   }
   async function submitEnquiry(type) {
@@ -4042,6 +4064,57 @@ ${richSummary(st, rows)}`;
       <div class="split">${enquiryForm("contact", { title: "Sign up", messageLabel: "Your interests", message: "Please add me to the Afrimetrica mailing list.\nInterests (training, analytics, consultancy, research guides): \nCountry: " })}
         <section class="card"><h2>What you'll receive</h2><ul class="ticks small"><li><div><span>New courses and dates in your region</span></div></li><li><div><span>New guides and resources</span></div></li><li><div><span>Occasional news about our work</span></div></li></ul></section></div>`;
   }
+  // ---- Privacy notice and terms of use (#privacy, #terms). Drafted for legal review: keep them accurate
+  // to what the site actually does, and update "Last updated" whenever they change. ----
+  const LEGAL_UPDATED = "22 November 2026";
+  const legalPage = (eyebrow, title, intro, sections) => `<article class="card prose legal"><span class="eyebrow gold">${esc(eyebrow)} · Last updated ${LEGAL_UPDATED}</span><h1>${esc(title)}</h1><p class="lede-sm">${intro}</p>
+      <nav class="legal-toc" aria-label="Contents"><ol>${sections.map(([h], i) => `<li><a href="#${S.view}" data-act="legalJump" data-i="${i}">${esc(h)}</a></li>`).join("")}</ol></nav>
+      ${sections.map(([h, body], i) => `<section id="legal-${i}"><h2>${esc(h)}</h2>${body}</section>`).join("")}</article>`;
+  const ul = (items) => `<ul>${items.map((x) => `<li>${x}</li>`).join("")}</ul>`;
+  function viewPrivacy() {
+    return legalPage("Privacy notice", "How we use your personal data", "This notice explains what personal data Afrimetrica collects through this website, why, who we share it with and your rights. Afrimetrica is operated by Regelco International Ltd, a company registered in Ghana, which is responsible for your data (the data controller).", [
+      ["What we collect", ul([
+        "<b>Your account:</b> name, email address, a protected (hashed) version of your password, or your Google account identifier if you sign in with Google.",
+        "<b>Enquiries and requests:</b> what you send us through our forms, such as your name, email, phone number, organisation and message, including course, analysis, consultancy, fieldwork, hotel and mailing-list requests.",
+        "<b>Course registrations:</b> the course and date you register for and the details you give us.",
+        "<b>Surveys:</b> if you create surveys, their questions and settings; if you answer surveys, your answers and your participant profile (age, gender, country and occupation), and the time you took.",
+        "<b>Technical data:</b> a sign-in cookie, and information your browser stores on your own device (such as a survey draft). We don't use advertising or tracking cookies.",
+      ])],
+      ["Why we use it", ul([
+        "To provide the services you ask for: your account, courses, surveys, analysis and consultancy.",
+        "To reply to your enquiries and keep you informed about them.",
+        "To send account emails, such as confirming your email address or resetting your password.",
+        "To send you news about courses and resources, only if you joined our mailing list. You can ask us to stop at any time.",
+        "To keep the website secure and prevent misuse.",
+        "To meet our legal obligations.",
+      ]) + `<p>We rely on your consent (for example, the box you tick on our forms), on the need to provide a service you asked for, and on our legitimate interest in running and protecting our services.</p>`],
+      ["Survey answers", `<p>Answers to a survey are visible only to the person who created it and to the participant who gave them. Our administrators see counts, not answers. Results are shown in summary; groups of fewer than 3 people are never shown on their own.</p><p>If a survey's owner uses our AI features (such as the AI analyst or AI report), a summary of that survey's results, which can include written answers, is sent to our AI provider to produce the result. Participants are never identified to it.</p>`],
+      ["Who we share it with", `<p>We don't sell your personal data. We share it only with service providers who help us run the website, under their own data protection terms:</p>` + ul([
+        "<b>Render</b>, which hosts the website and its data.",
+        "<b>Resend</b>, which sends our emails.",
+        "<b>Google</b>, only if you choose to sign in with Google.",
+        "<b>Anthropic</b> (Claude), which provides our AI features, only when they are used.",
+      ]) + `<p>Some of these providers store or process data outside Ghana. We may also disclose data where the law requires it.</p>`],
+      ["How long we keep it", `<p>We keep personal data only as long as we need it for the purposes above or as the law requires. You can ask us to delete your account and data at any time; some records, such as invoices, may need to be kept for legal reasons.</p>`],
+      ["How we protect it", `<p>Passwords are stored only in protected (hashed) form, connections to the website are encrypted, and access to personal data is limited to people who need it to provide our services.</p>`],
+      ["Your rights", `<p>Under Ghana's Data Protection Act, 2012 (Act 843), and other laws that may apply to you, you can ask us to:</p>` + ul(["tell you what personal data we hold about you and give you a copy", "correct data that is wrong", "delete your data", "stop using your data for a purpose you object to, such as our mailing list"]) + `<p>To make a request, <a href="#contact">contact us</a>. If you are not satisfied with our answer, you can complain to Ghana's Data Protection Commission.</p>`],
+      ["Children", `<p>Our services are for adults. You must be 18 or over to create a participant profile or take paid surveys.</p>`],
+      ["Changes and contact", `<p>We will update this notice when our practices change and show the date at the top. Questions? <a href="#contact">Contact us</a>.</p>`],
+    ]);
+  }
+  function viewTerms() {
+    return legalPage("Terms of use", "Terms of use", "These terms apply when you use the Afrimetrica website and its services. Afrimetrica is operated by Regelco International Ltd, a company registered in Ghana. By using the website or creating an account, you agree to them.", [
+      ["Your account", ul(["Give accurate information and keep your password safe.", "You are responsible for what happens under your account.", "We may suspend accounts that misuse the website or break these terms."])],
+      ["Training courses", ul(["Course details, dates, fees and payment terms are confirmed in writing when you book. Fees shown or quoted are not final until we confirm them.", "Participants who attend and complete a course receive a certificate of completion. It confirms attendance and completion; it is not an accredited academic or professional qualification.", "We may change or cancel a course date. If we do, we will offer another date or a refund of fees paid for that date."])],
+      ["Analytics and consultancy", `<p>Analysis and consultancy work is carried out under a written proposal or agreement, which sets out the scope, timeline, price and how your data will be handled. That agreement takes priority over these terms.</p>`],
+      ["Afrimetrica Surveys", ul(["If you create a survey, you are responsible for its content, for having a lawful reason to collect the answers, and for telling participants how their answers will be used.", "Don't ask for more personal data than you need, and never use surveys to collect passwords, payment details or data about children without proper safeguards.", "Participant rewards and the platform fee are shown before you publish a survey.", "If you take surveys, answer honestly; responses that fail quality checks may be rejected."])],
+      ["AI features", `<p>Some features use artificial intelligence to draft questions, read questionnaires or summarise results. AI output can be incomplete or wrong. Check it before you rely on it, and don't treat it as professional advice.</p>`],
+      ["Acceptable use", ul(["Don't use the website for anything unlawful, harmful or misleading.", "Don't try to access accounts or data that aren't yours, or to disrupt the website.", "Don't upload content you don't have the right to use."])],
+      ["Our content", `<p>The website's text, guides, course outlines and design belong to Afrimetrica or its licensors. You may use our free guides and templates for your own work; please credit Afrimetrica when you share them.</p>`],
+      ["Liability", `<p>We provide the website with reasonable care and skill, but we can't promise it will always be available or error-free. To the extent the law allows, we are not liable for indirect losses, or for decisions made on the basis of information on the website. Nothing in these terms limits liability that cannot be limited by law.</p>`],
+      ["Changes and law", `<p>We may update these terms and will show the date at the top. These terms are governed by the laws of Ghana. Questions? <a href="#contact">Contact us</a>.</p>`],
+    ]);
+  }
   function viewResources() {
     const [part, arg] = (S.res || "").split("/");
     if (part === "articles") { const g = GUIDES.find((x) => x.id === arg); return g ? guideView(g) : resArticles(); }
@@ -4381,6 +4454,7 @@ ${richSummary(st, rows)}`;
       case "enqAgain": S.enqSent[b.dataset.t] = false; render(); break;
       case "openGuide": location.hash = "resources/articles/" + id; break;
       case "printPage": window.print(); break;
+      case "legalJump": e.preventDefault(); { const t = $("#legal-" + b.dataset.i); if (t) t.scrollIntoView({ behavior: "smooth", block: "start" }); } break;
       case "closeGuide": S.guideOpen = null; render(); window.scrollTo(0, 0); break;
       case "openCourse": S.courseOpen = id; S.regFor = null; if (S.view !== "training") go("training"); else { render(); window.scrollTo(0, 0); } break;
       case "closeCourse": S.courseOpen = null; S.regFor = null; render(); window.scrollTo(0, 0); break;

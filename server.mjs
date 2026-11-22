@@ -34,7 +34,7 @@ const EMAIL_FROM = process.env.EMAIL_FROM || "Afrimetrica <onboarding@resend.dev
 const RESET_MINUTES = 60;
 
 // ---------- page ----------
-const SHELL_HEAD = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="icon" type="image/svg+xml" href="/icon.svg"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>`;
+const SHELL_HEAD = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa."><link rel="icon" type="image/svg+xml" href="/icon.svg"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>`;
 const PAGE = SHELL_HEAD + readFileSync(path.join(here, "public", "index.html"), "utf8") + "</body></html>";
 const ICON = readFileSync(path.join(here, "public", "icon.svg"));
 // Photos for the public pages: every .webp in public/photos, read once at start. Only these exact names are served.
@@ -410,7 +410,7 @@ async function handleApi(req, res, url) {
   const needUser = () => fail(res, 401, "auth_required", "Sign in or create a free account to continue.");
   const uid = me.uid;
 
-  if (kind === "me" && m === "GET") return send(res, 200, { uid, user: publicUser(me.user), isAdmin: me.isAdmin, ai: !!client, google: !!(GOOGLE_ID && GOOGLE_SECRET), emailReset: !!RESEND_KEY });
+  if (kind === "me" && m === "GET") return send(res, 200, { uid, user: publicUser(me.user), isAdmin: me.isAdmin, ai: !!client, google: !!(GOOGLE_ID && GOOGLE_SECRET), emailReset: !!RESEND_KEY, notify: me.isAdmin ? !!(RESEND_KEY && ADMIN_EMAILS.length) : undefined });
 
   if (kind === "data" && m === "GET") {
     const studies = Object.values(db.studies).filter((s) => s.status !== "draft" || s.ownerId === uid || me.isAdmin);

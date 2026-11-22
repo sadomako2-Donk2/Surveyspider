@@ -141,6 +141,8 @@ check("cross-site requests are refused", (await A.call("PUT", "/api/studies/s9",
 // --- admin access ---
 check("admin code unlocks the business view", (await C.call("GET", "/api/me", undefined, { "X-Admin-Code": "test-admin-code" })).json.isAdmin === true && (await C.call("GET", "/api/me", undefined, { "X-Admin-Code": "wrong" })).json.isAdmin === false);
 const Boss = browser("d"); await Boss.call("POST", "/api/auth/signup", { email: "boss@example.com", password: "owner password" }); await confirmLatest("boss@example.com");
+check("administrators can see that enquiry emails are switched on", (await Boss.call("GET", "/api/me")).json.notify === true);
+check("other people don't see the email notification setting", (await A.call("GET", "/api/me")).json.notify === undefined);
 check("emails in ADMIN_EMAILS are owners automatically", (await Boss.call("GET", "/api/me")).json.isAdmin === true && (await Boss.call("PATCH", "/api/fieldwork/fw1", { status: "won" })).status === 200);
 
 // --- Afrimetrica Academy: courses and registrations ---
