@@ -584,6 +584,7 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
   .printable { border: 0; padding: 0; }
   .print-group { break-inside: auto; } .print-table tr { break-inside: avoid; }
 }
+.statement p { font-family: var(--font-display); font-size: clamp(1.15rem, 2.4vw, 1.45rem); line-height: 1.45; font-weight: 600; margin: 0; border-left: 4px solid var(--gold); padding-left: 16px; }
 </style>
 
 <header class="topbar gutter">
@@ -686,7 +687,7 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
     studies: [], responses: [], profile: null,
     view: "home", draft: ls.get("cohortly-draft"), taking: null, takeStart: 0, justDone: null,
     editProfile: false, resultsId: null, excludeFlagged: true, libQuery: "", libOpen: null,
-    catFilter: { q: "", group: "", sub: "", venue: "", format: "", days: "" }, catPage: 1, catEnquiry: "", tr: "", an: "", co: "", res: "", ct: "", trMenu: null,
+    catFilter: { q: "", group: "", sub: "", venue: "", format: "", days: "" }, catPage: 1, catEnquiry: "", tr: "", an: "", co: "", res: "", ct: "", ab: "", trMenu: null,
     confirmDel: null, stale: false, notice: "",
     imp: { status: "idle" }, importNote: null,
     gen: { status: "idle" }, billing: "annual", anTab: "summary", aiCheck: null, ask: { q: "", a: "", busy: false },
@@ -951,7 +952,7 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
     const top = inSurveys ? "surveys" : S.view === "business" || S.view === "signin" ? "account" : S.view;
     $("#tabs").innerHTML = TOPNAV.map(([k, v]) => `<a href="#${k}"${top === k ? ' aria-current="page"' : ""}>${v}</a>`).join("");
     const sub = $("#subnav");
-    const sectionNav = { training: trNav, analytics: anNav, consultancy: coNav, resources: resNav, contact: ctNav }[S.view];
+    const sectionNav = { about: abNav, training: trNav, analytics: anNav, consultancy: coNav, resources: resNav, contact: ctNav }[S.view];
     if (sectionNav) { sub.hidden = false; sub.innerHTML = sectionNav(); }
     else {
     sub.hidden = !inSurveys;
@@ -989,6 +990,9 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
     if (resPart) h = "resources";
     if (ctPart) h = "contact";
     S.res = h === "resources" ? resPart : ""; S.ct = h === "contact" ? ctPart : "";
+    const abPart = h.startsWith("about/") ? h.slice(6) : "";
+    if (abPart) h = "about";
+    S.ab = h === "about" ? abPart : "";
     if ((S.tr || "").startsWith("course/") && S.tr !== trPart) S.catEnquiry = "";
     S.tr = h === "training" ? trPart : ""; S.trMenu = null;
     if (h === "library") h = "resources";
@@ -2953,17 +2957,55 @@ ${richSummary(st, rows)}`;
       <div class="band-list"><a class="band-item" href="#consultancy"><b>Discuss a project</b><span>Research design, M&amp;E and commissioned studies</span></a><a class="band-item" href="#paper-survey"><b>Get a fieldwork quote</b><span>Face-to-face interviews, priced instantly</span></a><a class="band-item" href="#analytics"><b>Request data analysis</b><span>Statistics, dashboards and reports</span></a><a class="band-item" href="#training"><b>Train your team</b><span>In-house workshops on research methods</span></a></div>
     </section>`;
   }
-  function viewAbout() {
-    const rows = [["Organisation", "Afrimetrica — Data, Research and Executive Training"], ["Training", "Afrimetrica Academy (data, research and executive training)"], ["Survey software", "Afrimetrica Surveys"], ["Analytics", "Afrimetrica Analytics"], ["Consultancy", "Afrimetrica Consulting"], ["Research resources", "Afrimetrica Knowledge Hub"]];
+  // ---- About section: its own menu and pages (#about/<part>) ----
+  const ABOUT_MENU = [["", "Overview"], ["mission", "Our mission"], ["vision", "Our vision"], ["team", "Our team"], ["organisation", "How we're organised"], ["certificates", "About our certificates"]];
+  const abNav = () => `<div class="subnav-inner"><span class="subnav-label">About Afrimetrica</span><div class="subnav-links">${subLinks("about", ABOUT_MENU, S.ab || "")}</div></div>`;
+  const abCrumbs = (label) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#about">About</a> › <span>${esc(label)}</span></nav>`;
+  const AB_MISSION = "To help organisations, governments and NGOs make better decisions and deliver results, by building their people's skills in data, research and leadership, and by providing reliable data and independent analysis.";
+  const AB_VISION = "An Africa where every organisation, government and NGO has the data, evidence and skilled people it needs to make good decisions and deliver results.";
+  const AB_VALUES = [["Rigour", "Methods and advice that are sound, transparent and honestly reported."], ["Practicality", "Training and solutions that work in real organisations, field conditions and budgets."], ["Evidence-led leadership", "Helping leaders use data and evidence to set priorities and make decisions."], ["Ethics and data protection", "Respect for participants, informed consent and careful handling of personal data."], ["Building capacity", "Leaving people and organisations more skilled, and more independent, than we found them."]];
+  const AB_UNITS = [["Organisation", "Afrimetrica — Data, Research and Executive Training", ""], ["Training", "Afrimetrica Academy (data, research and executive training)", "#training"], ["Survey software", "Afrimetrica Surveys", "#surveys"], ["Analytics", "Afrimetrica Analytics", "#analytics"], ["Consultancy", "Afrimetrica Consulting", "#consultancy"], ["Research resources", "Afrimetrica Knowledge Hub", "#resources"]];
+  const abValues = () => `<ul class="ticks small">${AB_VALUES.map(([t, d]) => `<li><div><b>${esc(t)}</b><span>${esc(d)}</span></div></li>`).join("")}</ul>`;
+  function abOverview() {
     return `<div class="page-head"><div><span class="eyebrow gold">About Afrimetrica</span><h1>Data, research and executive training for better decisions</h1><p class="muted" style="max-width:66ch">Afrimetrica trains leaders and teams, collects and analyses data, and advises organisations, governments and NGOs across Africa. Our courses range from research methods and statistics to strategy, leadership and governance. Every course is practical, grounded in evidence and built around the decisions participants make at work.</p></div></div>
       ${slideshow("about")}
+      <div class="area-grid">${ABOUT_MENU.slice(1).map(([k, label]) => `<a class="card area-card" href="#about/${k}"><b>${esc(label)}</b><span class="hint">${esc({ mission: "Why we exist and what we stand for", vision: "The future we are working towards", team: "The people behind Afrimetrica", organisation: "Our training, survey, analytics, consultancy and resources units", certificates: "What our certificates of completion mean" }[k])}</span></a>`).join("")}</div>`;
+  }
+  function abMission() {
+    return `${abCrumbs("Our mission")}<div class="page-head"><div><span class="eyebrow gold">Our mission</span><h1>Why we exist</h1></div></div>
+      <section class="card statement"><p>${esc(AB_MISSION)}</p></section>
+      <section class="card"><h2>What we stand for</h2>${abValues()}</section>`;
+  }
+  function abVision() {
+    return `${abCrumbs("Our vision")}<div class="page-head"><div><span class="eyebrow gold">Our vision</span><h1>The future we are working towards</h1></div></div>
+      <section class="card statement"><p>${esc(AB_VISION)}</p></section>
+      <section class="card"><h2>How we get there</h2><ul class="ticks small"><li><div><b>Skills</b><span>Training leaders and teams in data, research and management through Afrimetrica Academy.</span></div></li><li><div><b>Data</b><span>Reliable surveys and data collection through Afrimetrica Surveys and our field teams.</span></div></li><li><div><b>Evidence</b><span>Independent analysis and research through Afrimetrica Analytics and Afrimetrica Consulting.</span></div></li><li><div><b>Knowledge</b><span>Free guides and tools for everyone through the Afrimetrica Knowledge Hub.</span></div></li></ul></section>`;
+  }
+  function abTeam() {
+    return `${abCrumbs("Our team")}<div class="page-head"><div><span class="eyebrow gold">Our team</span><h1>The people behind Afrimetrica</h1><p class="muted" style="max-width:66ch">A core team of trainers, researchers, analysts and consultants, supported by an associate network of specialists and field staff across English-speaking Africa.</p></div></div>
+      <section class="card"><h2>Leadership and faculty</h2><p class="muted">Profiles of our leadership, faculty, analysts and consultants will be published here soon.</p></section>
+      <section class="card"><h2>Join us</h2><p class="muted">We work with independent consultants, trainers, analysts, enumerators and field supervisors.</p><div class="row wrap"><a class="btn primary" href="#consultancy/work-with-us">Join the associate network</a><a class="btn" href="#contact/careers">Careers</a></div></section>`;
+  }
+  function abOrganisation() {
+    return `${abCrumbs("How we're organised")}<div class="page-head"><div><span class="eyebrow gold">How we're organised</span><h1>One organisation, five units</h1><p class="muted" style="max-width:66ch">Each part of Afrimetrica focuses on one way of helping organisations make better decisions, and they work together on larger assignments.</p></div></div>
+      <section class="card"><div class="table-wrap"><table><tbody>${AB_UNITS.map(([a, b2, href]) => `<tr><th scope="row" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.88rem;color:var(--muted);font-weight:500">${a}</th><td>${href ? `<a href="${href}">${esc(b2)}</a>` : esc(b2)}</td></tr>`).join("")}</tbody></table></div></section>`;
+  }
+  function abCertificates() {
+    return `${abCrumbs("About our certificates")}<div class="page-head"><div><span class="eyebrow gold">About our certificates</span><h1>Certificates of completion</h1></div></div>
       <div class="split">
-        <section class="card"><h2>Our mission</h2><p>To help organisations, governments and NGOs make better decisions and deliver results, by building their people's skills in data, research and leadership, and by providing reliable data and independent analysis.</p><h3>What we stand for</h3>
-          <ul class="ticks small"><li><div><b>Rigour</b><span>Methods and advice that are sound, transparent and honestly reported.</span></div></li><li><div><b>Practicality</b><span>Training and solutions that work in real organisations, field conditions and budgets.</span></div></li><li><div><b>Evidence-led leadership</b><span>Helping leaders use data and evidence to set priorities and make decisions.</span></div></li><li><div><b>Ethics and data protection</b><span>Respect for participants, informed consent and careful handling of personal data.</span></div></li><li><div><b>Building capacity</b><span>Leaving people and organisations more skilled, and more independent, than we found them.</span></div></li></ul></section>
-        <section class="card"><h2>How we're organised</h2><div class="table-wrap"><table><tbody>${rows.map(([a, b]) => `<tr><th scope="row" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.88rem;color:var(--muted);font-weight:500">${a}</th><td>${b}</td></tr>`).join("")}</tbody></table></div></section>
+        <section class="card"><h2>What they confirm</h2><p class="muted">Afrimetrica Academy issues certificates of completion. They confirm that a participant attended and completed a course, and show the course title, its length, the dates and the venue (or "live online").</p></section>
+        <section class="card"><h2>What they are not</h2><p class="muted">They are not accredited academic or professional qualifications, and we don't claim endorsement by any professional body. If your professional body asks you to log training hours, you can usually record an Afrimetrica course as CPD yourself; check your body's own rules.</p></section>
       </div>
-      <section class="card"><h2>Our team</h2><p class="muted">Profiles of our faculty, analysts and consultants will be published here. To work with us or join our associate network, <a href="#contact">get in touch</a>.</p></section>
-      <section class="card"><h2>About our certificates</h2><p class="muted">Afrimetrica Academy issues certificates of completion. They confirm that a participant attended and completed a course; they are not accredited academic qualifications.</p></section>`;
+      <p><a class="btn primary" href="#training/finder">Find a course</a></p>`;
+  }
+  function viewAbout() {
+    const part = (S.ab || "").split("/")[0];
+    if (part === "mission") return abMission();
+    if (part === "vision") return abVision();
+    if (part === "team") return abTeam();
+    if (part === "organisation") return abOrganisation();
+    if (part === "certificates") return abCertificates();
+    return abOverview();
   }
   function courseCard(c, s) {
     s = s || upcoming(c)[0];
