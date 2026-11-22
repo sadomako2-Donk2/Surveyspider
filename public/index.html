@@ -512,10 +512,6 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
 @media (max-width: 700px) { .photo-frame { aspect-ratio: 4 / 3; } .photo-pair { grid-template-columns: 1fr; } }
 /* training catalogue */
 .cat-search .grid4 { align-items: end; }
-.cat-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
-.cat-tile { text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; display: grid; gap: 4px; cursor: pointer; font: inherit; color: var(--ink); }
-.cat-tile span { color: var(--muted); font-size: .85rem; }
-.cat-tile:hover, .cat-tile.on { border-color: var(--gold); box-shadow: inset 0 0 0 1px var(--gold); }
 .cat-row { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: center; }
 .cat-row h3 { margin: 4px 0; font-size: 1.05rem; }
 .cat-row p { margin: 0; }
@@ -530,6 +526,13 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
 .outline { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
 .outline li { display: grid; gap: 2px; padding-left: 12px; border-left: 3px solid var(--gold-soft); }
 @media (max-width: 860px) { .cat-row { grid-template-columns: 1fr; } .cat-meta { justify-content: flex-start; max-width: none; } .cat-detail { grid-template-columns: 1fr; } }
+.group-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; align-items: start; }
+.group h3 { font-size: 1rem; margin: 0 0 8px; padding-bottom: 8px; border-bottom: 2px solid var(--gold-soft); }
+.group ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.group li { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.group .cat-link { color: var(--ink); }
+.group .cat-link.on { color: var(--accent); font-weight: 700; text-decoration: underline; }
+.cat-chip { display: flex; gap: 8px; align-items: center; margin: 0; }
 </style>
 
 <header class="topbar gutter">
@@ -632,7 +635,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     studies: [], responses: [], profile: null,
     view: "home", draft: ls.get("cohortly-draft"), taking: null, takeStart: 0, justDone: null,
     editProfile: false, resultsId: null, excludeFlagged: true, libQuery: "", libOpen: null,
-    catFilter: { q: "", cat: "", venue: "", format: "" }, catOpen: null, catEnquiry: "",
+    catFilter: { q: "", group: "", sub: "", venue: "", format: "" }, catOpen: null, catEnquiry: "",
     confirmDel: null, stale: false, notice: "",
     imp: { status: "idle" }, importNote: null,
     gen: { status: "idle" }, billing: "annual", anTab: "summary", aiCheck: null, ask: { q: "", a: "", busy: false },
@@ -2901,17 +2904,47 @@ ${richSummary(st, rows)}`;
   // ---- Afrimetrica Academy course catalogue (public courses, live online and in-house) ----
   // Dates and fees are not listed here: they are set per venue and quoted on request, or published by an
   // administrator as dated courses (S.courses), which appear on the Training page with registration.
-  const CAT_CATEGORIES = [
-    ["design", "Research Design and Methods"],
-    ["survey", "Survey and Questionnaire Design"],
-    ["field", "Sampling, Fieldwork and Data Collection"],
-    ["stats", "Statistics and Data Analysis"],
-    ["qual", "Qualitative Research"],
-    ["mel", "Monitoring, Evaluation and Learning"],
-    ["viz", "Data Management, Visualisation and Dashboards"],
-    ["market", "Market Research and Business Intelligence"],
-    ["writing", "Research Ethics, Writing and Publishing"],
-    ["ai", "AI and Digital Tools for Research"],
+  // Subjects, grouped into subject areas (a subject can sit in more than one area, as on most course sites).
+  const SUBJECTS = {
+    design: "Research Design and Methods", survey: "Survey and Questionnaire Design", field: "Sampling, Fieldwork and Data Collection",
+    stats: "Statistics and Data Analysis", qual: "Qualitative Research", mel: "Monitoring, Evaluation and Learning",
+    market: "Market Research and Business Intelligence", writing: "Research Ethics, Writing and Publishing",
+    strategy: "Strategy and Strategic Planning", leadership: "Management and Leadership", governance: "Governance, Compliance and Risk",
+    negotiation: "Negotiation and Influencing Skills", executive: "Executive Development", stakeholder: "Stakeholder Relations",
+    personal: "Personal Effectiveness", sustainability: "Sustainability and CSR", creativity: "Creativity and Innovation",
+    ai: "Artificial Intelligence (AI)", viz: "Data Management and Analytics", cyber: "Cybersecurity", digital: "Digital Transformation",
+    future: "Future Skills", fintech: "Fintech and Blockchain", aiapps: "AI Applications",
+    finance: "Finance and Budgeting", treasury: "Treasury and Investment", fraud: "Fraud and Financial Audit",
+    banking: "Banking and Financial Regulation", tax: "Tax and Revenue", refinance: "Real Estate Investment and Finance", jv: "Joint Ventures",
+    project: "Project Management", procurement: "Purchasing and Supply Chain", contracts: "Contracts Management",
+    construction: "Construction Management", ppp: "Public-Private Partnerships", legal: "Legal",
+    hr: "HR Management", lnd: "Learning and Development", behavioural: "Behavioural Skills", admin: "Office Administration",
+    opex: "Operational Excellence", bpm: "Business Process Management", quality: "Quality and Audit", rca: "Root Cause Analysis",
+    sales: "Sales and Marketing", customer: "Customer Service", comms: "Corporate Communication", pr: "Public Relations",
+    hospitality: "Hospitality and Tourism",
+    oilgas: "Oil and Gas", maintenance: "Maintenance Engineering", electrical: "Electrical Engineering",
+    instrumentation: "Instrumentation and Process Control", mechanical: "Mechanical Engineering", facilities: "Facilities Management",
+    chemical: "Chemical and Petrochemical", power: "Power and Utilities", energy: "Energy", hydrogen: "Hydrogen",
+    mining: "Mining Engineering", corrosion: "Corrosion, Metallurgy and Inspection", manufacturing: "Manufacturing",
+    hse: "Health, Safety and Environment", emergency: "Emergency and Crisis Management", security: "Security Management",
+    waste: "Waste Management",
+    realestate: "Real Estate", refining: "Refining", urban: "Urban Planning and Development",
+    public: "Public Sector and Public Affairs", health: "Healthcare Management", pensions: "Social Insurance and Retirement",
+    policing: "Police and Law Enforcement", traffic: "Traffic Management", defence: "Defence and National Security",
+    ports: "Ships and Port Management", agri: "Agribusiness Development",
+  };
+  const GROUPS = [
+    ["research", "Research, Monitoring and Evaluation", ["design", "survey", "field", "stats", "qual", "mel", "market", "writing"]],
+    ["leadership", "Leadership, Strategy and Governance", ["strategy", "leadership", "governance", "negotiation", "executive", "stakeholder", "personal", "sustainability", "creativity"]],
+    ["tech", "AI, Data and Emerging Technologies", ["ai", "viz", "cyber", "digital", "future", "fintech", "creativity", "aiapps"]],
+    ["finance", "Finance, Investment and Banking", ["finance", "treasury", "fraud", "banking", "fintech", "tax", "refinance", "jv"]],
+    ["project", "Project, Procurement and Contracts", ["project", "procurement", "contracts", "construction", "ppp", "legal", "negotiation", "future"]],
+    ["people", "People, HR and Talent Management", ["hr", "lnd", "personal", "behavioural", "admin"]],
+    ["operations", "Operations, Quality and Auditing", ["creativity", "opex", "bpm", "quality", "rca"]],
+    ["sales", "PR, Sales and Customer Service", ["sales", "customer", "negotiation", "comms", "pr", "hospitality"]],
+    ["engineering", "Engineering, Maintenance, Oil and Gas", ["oilgas", "maintenance", "electrical", "instrumentation", "mechanical", "construction", "facilities", "rca", "chemical", "power", "energy", "hydrogen", "mining", "corrosion", "manufacturing", "quality"]],
+    ["hse", "HSE, Emergency and Security", ["hse", "emergency", "security", "waste", "sustainability", "cyber"]],
+    ["sector", "Sector-Specific Courses", ["realestate", "future", "oilgas", "refining", "chemical", "energy", "power", "hydrogen", "manufacturing", "legal", "urban", "public", "health", "hospitality", "pensions", "policing", "traffic", "defence", "ports", "agri"]],
   ];
   const CAT_FORMATS = ["Classroom", "Live online", "In-house"];
   const VENUES = [
@@ -3048,20 +3081,305 @@ ${richSummary(st, rows)}`;
       ["Frame problems for machine learning", "Prepare features and split data", "Train and evaluate classification and regression models", "Explain models and avoid common pitfalls"],
       "Analysts and researchers with Python or R experience.",
       [["Foundations", "Supervised and unsupervised learning; workflow"], ["Data preparation", "Features; encoding; train and test splits"], ["Models", "Decision trees; random forests; regularised regression"], ["Evaluation", "Accuracy; precision and recall; cross-validation"], ["Responsible ML", "Explainability; fairness; deployment basics"]]],
+    // ---- Leadership, Strategy & Governance ----
+    ["ls-strategy", "strategy", "Strategic Planning and Execution", 5, "Intermediate", "Set direction, choose priorities and turn strategy into plans, budgets and measurable results.",
+      ["Analyse the external and internal environment", "Set vision, goals and strategic priorities", "Translate strategy into plans, KPIs and budgets", "Monitor execution and adjust course"],
+      "Senior managers, strategy and planning staff, and board members.",
+      [["Strategic thinking", "Purpose; strategy versus planning; strategic questions"], ["Analysis", "PESTLE; SWOT; competitor and stakeholder analysis"], ["Choosing priorities", "Options; criteria; trade-offs; scenarios"], ["From strategy to plans", "Objectives; KPIs; balanced scorecard; budgets"], ["Execution", "Governance; reviews; managing change"]]],
+    ["ls-leadership", "leadership", "Leadership and People Management", 5, "Intermediate", "Lead teams with clarity: set expectations, coach performance and build a culture that delivers.",
+      ["Adapt leadership style to people and situations", "Set goals and give useful feedback", "Coach and develop team members", "Lead teams through change"],
+      "Team leaders, managers and supervisors.",
+      [["Leadership foundations", "Styles; self-awareness; credibility"], ["Direction and goals", "Expectations; delegation; accountability"], ["Feedback and coaching", "Feedback models; coaching conversations"], ["Teams", "Motivation; conflict; trust; remote teams"], ["Leading change", "Resistance; communication; sustaining change"]]],
+    ["ls-governance", "governance", "Corporate Governance, Compliance and Risk", 5, "Intermediate", "Strengthen boards, controls and compliance, and manage risk across the organisation.",
+      ["Explain governance roles of boards and management", "Build a risk register and risk appetite", "Design internal controls and compliance programmes", "Report governance and risk to boards"],
+      "Board members, company secretaries, risk, audit and compliance staff.",
+      [["Governance principles", "Boards; committees; accountability; ethics"], ["Enterprise risk", "Risk identification; assessment; appetite"], ["Controls", "Internal control frameworks; three lines model"], ["Compliance", "Regulation; policies; monitoring; whistleblowing"], ["Reporting", "Board reporting; dashboards; assurance"]]],
+    ["ls-negotiation", "negotiation", "Negotiation and Influencing Skills", 3, "Foundation", "Prepare for and conduct negotiations that reach durable agreements and protect relationships.",
+      ["Prepare interests, options and walk-away points", "Use principled negotiation techniques", "Influence stakeholders without authority", "Handle difficult tactics and deadlock"],
+      "Managers, procurement and sales staff, and anyone who negotiates.",
+      [["Preparation", "Interests; BATNA; options; planning"], ["At the table", "Opening; trading concessions; principled negotiation"], ["Influence", "Persuasion; difficult tactics; closing and follow-up"]]],
+    ["ls-executive", "executive", "Executive Development Programme", 5, "Advanced", "Strengthen the strategic, financial and people skills senior leaders need to run organisations.",
+      ["Think strategically about the organisation's future", "Read financial statements for decisions", "Lead culture and high-performing teams", "Make and communicate difficult decisions"],
+      "Senior managers and executives, and those preparing for executive roles.",
+      [["Strategic leadership", "Vision; strategy; leading in uncertainty"], ["Finance for executives", "Statements; ratios; value; investment decisions"], ["People and culture", "Culture; talent; executive presence"], ["Decision-making", "Evidence; risk; ethics; biases"], ["Leading change", "Transformation; stakeholders; personal action plan"]]],
+    ["ls-stakeholder", "stakeholder", "Stakeholder Engagement and Relations", 3, "Intermediate", "Identify, prioritise and engage the people who can make or break your plans.",
+      ["Map and prioritise stakeholders", "Design an engagement plan", "Run consultations and handle conflict", "Track engagement and trust"],
+      "Project managers, public affairs, community relations and programme staff.",
+      [["Mapping stakeholders", "Interests; influence; power-interest grids"], ["Engagement planning", "Methods; consultation; communities"], ["Managing relationships", "Conflict; grievances; measuring trust"]]],
+    ["ls-personal", "personal", "Personal Effectiveness and Productivity", 3, "Foundation", "Manage time, priorities and energy, and work well with others under pressure.",
+      ["Prioritise work and plan effectively", "Manage time, meetings and email", "Communicate assertively", "Build resilience and manage stress"],
+      "Professionals at all levels.",
+      [["Priorities and planning", "Goals; prioritisation; planning tools"], ["Time and focus", "Meetings; email; deep work; delegation"], ["Working with others", "Assertiveness; resilience; wellbeing"]]],
+    ["ls-sustainability", "sustainability", "Sustainability, ESG and CSR", 3, "Intermediate", "Build an ESG and sustainability strategy and report credible results.",
+      ["Explain ESG, CSR and sustainability frameworks", "Identify material issues for your organisation", "Set targets and track indicators", "Report sustainability performance credibly"],
+      "Sustainability, CSR, strategy, investor relations and reporting staff.",
+      [["Foundations", "ESG; CSR; SDGs; materiality"], ["Strategy and targets", "Material issues; targets; indicators; data"], ["Reporting", "Frameworks; assurance; avoiding greenwashing"]]],
+    ["ls-creativity", "creativity", "Creativity, Innovation and Design Thinking", 3, "Foundation", "Generate and test new ideas that solve real problems for customers and organisations.",
+      ["Apply design thinking to problems", "Run idea-generation sessions", "Prototype and test ideas quickly", "Build a culture that supports innovation"],
+      "Managers, team leaders, product, service and innovation staff.",
+      [["Understanding users", "Empathy; problem framing; insight"], ["Generating ideas", "Ideation techniques; selecting ideas"], ["Testing and scaling", "Prototypes; experiments; innovation culture"]]],
+    // ---- AI, Data & Emerging Technologies ----
+    ["ai-cyber", "cyber", "Cybersecurity Essentials for Organisations", 5, "Intermediate", "Understand cyber threats and put practical controls, policies and response plans in place.",
+      ["Identify common threats and attack methods", "Apply basic security controls and policies", "Plan incident response", "Build a security-aware culture"],
+      "IT staff, managers, risk and compliance officers.",
+      [["Threat landscape", "Phishing; ransomware; insider threats"], ["Controls", "Access; patching; backups; encryption"], ["Policies and standards", "Frameworks; data protection; risk assessment"], ["Incident response", "Detection; response plans; exercises"], ["People and culture", "Awareness; reporting; measuring security"]]],
+    ["ai-digital", "digital", "Leading Digital Transformation", 5, "Intermediate", "Plan and lead digital change that improves services and operations, not just technology.",
+      ["Assess digital maturity", "Build a digital transformation roadmap", "Redesign processes and services around users", "Manage the people side of digital change"],
+      "Managers, transformation, IT and operations leads.",
+      [["Why transform", "Digital trends; maturity; vision"], ["Roadmap", "Priorities; business cases; sequencing"], ["Processes and services", "User journeys; automation; data"], ["Technology choices", "Cloud; platforms; vendors"], ["People and change", "Skills; adoption; measuring benefits"]]],
+    ["ai-future", "future", "Future Skills for the Digital Workplace", 3, "Foundation", "Build the digital, analytical and collaboration skills modern workplaces need.",
+      ["Use digital collaboration tools effectively", "Work confidently with data and AI tools", "Think critically and solve problems", "Plan your own skills development"],
+      "Professionals at all levels.",
+      [["Digital working", "Collaboration tools; remote work; digital etiquette"], ["Data and AI basics", "Data literacy; AI assistants; checking outputs"], ["Thinking skills", "Critical thinking; problem solving; learning plans"]]],
+    ["ai-fintech", "fintech", "Fintech, Digital Payments and Blockchain", 3, "Intermediate", "Understand fintech, mobile money and blockchain, and what they mean for finance in Africa.",
+      ["Explain fintech business models and mobile money", "Understand blockchain and digital assets", "Assess regulatory and risk issues", "Identify opportunities for your organisation"],
+      "Banking, finance, regulatory and strategy staff.",
+      [["Fintech landscape", "Mobile money; digital lending; payments"], ["Blockchain", "How it works; digital assets; use cases"], ["Risk and regulation", "Consumer protection; AML; sandboxes"]]],
+    ["ai-apps", "aiapps", "Applying AI in Your Sector", 3, "Intermediate", "Find practical, responsible uses of AI in operations, services and decision-making.",
+      ["Identify AI use cases with clear value", "Assess data readiness and risks", "Run a small AI pilot", "Set governance for responsible AI"],
+      "Managers and specialists in any sector exploring AI.",
+      [["AI opportunities", "Use cases by sector; value and feasibility"], ["Data and risk", "Data readiness; bias; privacy; security"], ["Pilots and governance", "Pilot design; measuring results; AI policies"]]],
+    // ---- Finance, Investment & Banking ----
+    ["fi-budgeting", "finance", "Financial Management and Budgeting", 5, "Foundation", "Plan, control and report finances: budgets, cash flow, costs and financial statements.",
+      ["Read and interpret financial statements", "Prepare and monitor budgets", "Manage cash flow and working capital", "Analyse costs and variances"],
+      "Managers, budget holders and finance staff.",
+      [["Financial statements", "Income statement; balance sheet; cash flow"], ["Budgeting", "Budget methods; forecasts; zero-based budgets"], ["Cash and working capital", "Cash flow forecasts; receivables; payables"], ["Costs", "Cost behaviour; break-even; variance analysis"], ["Reporting", "Management accounts; KPIs; dashboards"]]],
+    ["fi-treasury", "treasury", "Treasury and Investment Management", 5, "Advanced", "Manage liquidity, funding, investments and financial risk.",
+      ["Manage liquidity and cash positions", "Evaluate investment options", "Measure and hedge interest rate and currency risk", "Set treasury policies and controls"],
+      "Treasury, finance and investment staff.",
+      [["Treasury role", "Objectives; organisation; policies"], ["Liquidity", "Cash management; forecasting; funding"], ["Investments", "Instruments; valuation; portfolios"], ["Financial risk", "Interest rate and FX risk; hedging"], ["Controls", "Limits; reporting; governance"]]],
+    ["fi-fraud", "fraud", "Fraud Prevention, Detection and Investigation", 5, "Intermediate", "Prevent, detect and investigate fraud using controls, data analysis and sound procedure.",
+      ["Identify fraud risks and red flags", "Design anti-fraud controls", "Use data analysis to detect anomalies", "Plan and document investigations"],
+      "Auditors, finance, compliance and risk staff.",
+      [["Understanding fraud", "Fraud triangle; schemes; red flags"], ["Prevention", "Controls; culture; whistleblowing"], ["Detection", "Data analytics; Benford's law; exception reports"], ["Investigation", "Planning; evidence; interviews"], ["Reporting", "Reports; legal considerations; lessons learned"]]],
+    ["fi-banking", "banking", "Banking Regulation and Risk", 5, "Advanced", "Understand capital, liquidity and conduct regulation and how banks manage risk.",
+      ["Explain the Basel framework and capital requirements", "Measure credit, market and operational risk", "Apply liquidity regulation", "Meet AML and conduct requirements"],
+      "Bank risk, compliance, finance and regulatory staff.",
+      [["Regulatory framework", "Basel principles; supervisors; local regulation"], ["Capital", "Risk-weighted assets; capital adequacy"], ["Risk management", "Credit; market; operational risk"], ["Liquidity", "Liquidity ratios; stress testing"], ["Conduct and AML", "KYC; AML; consumer protection"]]],
+    ["fi-tax", "tax", "Tax and Revenue Management", 3, "Intermediate", "Understand tax principles, compliance and revenue administration.",
+      ["Explain direct and indirect taxes", "Plan for compliance and avoid penalties", "Apply transfer pricing basics", "Use data to improve revenue collection"],
+      "Finance, tax and revenue authority staff.",
+      [["Tax principles", "Direct and indirect taxes; residence; withholding"], ["Compliance", "Filing; audits; disputes; penalties"], ["Revenue administration", "Risk-based audits; data; taxpayer services"]]],
+    ["fi-realestate", "refinance", "Real Estate Investment and Finance", 3, "Intermediate", "Analyse, finance and manage property investments.",
+      ["Value property using common methods", "Build a property investment appraisal", "Compare financing options", "Assess market and development risk"],
+      "Investors, developers, bankers and property managers.",
+      [["Property markets", "Market analysis; demand; supply"], ["Valuation and appraisal", "Comparables; income method; cash-flow appraisal"], ["Finance and risk", "Debt and equity; risk; portfolio management"]]],
+    ["fi-jv", "jv", "Joint Ventures and Strategic Partnerships", 3, "Advanced", "Structure, negotiate and manage joint ventures and partnerships that work.",
+      ["Assess when a joint venture fits", "Choose a structure and governance", "Negotiate key terms", "Manage performance and exits"],
+      "Business development, legal, finance and senior management staff.",
+      [["Why partner", "Strategic fit; partner selection; due diligence"], ["Structuring", "Legal forms; governance; key terms"], ["Managing", "Performance; disputes; exits"]]],
+    // ---- Project, Procurement & Contract ----
+    ["pp-project", "project", "Project Management Essentials", 5, "Foundation", "Plan, run and close projects on time, on budget and to the agreed quality.",
+      ["Define scope, deliverables and success criteria", "Build schedules and budgets", "Manage risks, issues and changes", "Monitor progress and close projects"],
+      "Project managers, team leaders and project staff.",
+      [["Starting projects", "Life cycle; charter; stakeholders"], ["Scope and schedule", "Work breakdown; critical path; Gantt charts"], ["Cost and quality", "Budgets; earned value; quality plans"], ["Risk and change", "Risk registers; issues; change control"], ["Delivery and closure", "Reporting; teams; lessons learned"]]],
+    ["pp-procurement", "procurement", "Procurement and Supply Chain Management", 5, "Intermediate", "Buy well and run reliable supply chains: sourcing, tendering, suppliers and logistics.",
+      ["Plan procurement and sourcing strategies", "Run transparent tenders and evaluations", "Manage supplier performance", "Improve inventory and logistics"],
+      "Procurement, supply chain, logistics and finance staff.",
+      [["Procurement strategy", "Spend analysis; category management"], ["Tendering", "Specifications; evaluation; integrity"], ["Suppliers", "Relationships; performance; risk"], ["Inventory and logistics", "Stock control; warehousing; transport"], ["Improvement", "KPIs; savings; sustainable procurement"]]],
+    ["pp-contracts", "contracts", "Contract Management", 5, "Intermediate", "Draft, manage and close contracts that deliver value and limit disputes.",
+      ["Understand key contract terms and risks", "Plan contract management", "Handle variations, claims and disputes", "Measure contractor performance"],
+      "Contract managers, procurement, project and legal staff.",
+      [["Contract basics", "Formation; key clauses; types of contract"], ["Planning", "Roles; obligations; risk allocation"], ["Managing performance", "KPIs; reviews; payment"], ["Variations and claims", "Change; claims; dispute resolution"], ["Closing out", "Acceptance; final accounts; lessons"]]],
+    ["pp-construction", "construction", "Construction Project Management", 5, "Intermediate", "Manage construction projects from design to handover: cost, time, quality and safety.",
+      ["Plan construction projects and schedules", "Control cost and cash flow", "Manage contractors and site quality", "Handle claims and handover"],
+      "Construction managers, engineers, quantity surveyors and client representatives.",
+      [["Project set-up", "Procurement routes; design management"], ["Planning", "Schedules; resources; site logistics"], ["Cost control", "Estimates; valuations; cash flow"], ["Quality and safety", "Inspections; site safety; defects"], ["Claims and handover", "Variations; claims; commissioning"]]],
+    ["pp-ppp", "ppp", "Public-Private Partnerships", 5, "Advanced", "Prepare, procure and manage PPP projects that deliver public value.",
+      ["Assess when a PPP gives value for money", "Structure risk allocation and payment", "Run PPP procurement", "Manage PPP contracts over their life"],
+      "Government officials, infrastructure, finance and legal staff.",
+      [["PPP basics", "Models; value for money; fiscal risk"], ["Preparation", "Feasibility; business cases; market sounding"], ["Structuring", "Risk allocation; payment mechanisms; finance"], ["Procurement", "Bids; evaluation; negotiation"], ["Contract management", "Monitoring; renegotiation; handback"]]],
+    ["pp-legal", "legal", "Legal Essentials for Managers", 3, "Foundation", "Understand the legal issues managers meet in contracts, employment, data and disputes.",
+      ["Recognise legal risks in daily decisions", "Understand contract and employment basics", "Meet data protection duties", "Know when and how to involve lawyers"],
+      "Managers and non-lawyers who handle legal matters.",
+      [["Legal foundations", "Legal systems; liability; corporate duties"], ["Contracts and employment", "Contracts; employment rules; disputes"], ["Compliance", "Data protection; intellectual property; working with counsel"]]],
+    // ---- People, HR & Talent Management ----
+    ["hr-management", "hr", "Strategic Human Resource Management", 5, "Intermediate", "Align HR with strategy: workforce planning, talent, performance and reward.",
+      ["Link HR strategy to organisational goals", "Plan the workforce and recruit well", "Design performance and reward systems", "Use HR data to inform decisions"],
+      "HR professionals and line managers with people responsibilities.",
+      [["HR strategy", "Role of HR; strategy; policies"], ["Workforce and talent", "Planning; recruitment; selection"], ["Performance", "Goals; appraisal; managing performance"], ["Reward and relations", "Pay; benefits; employee relations"], ["HR analytics", "Metrics; turnover; engagement surveys"]]],
+    ["hr-ld", "lnd", "Learning and Development: Design and Evaluation", 5, "Intermediate", "Identify training needs, design effective learning and evaluate its impact.",
+      ["Run a training needs analysis", "Design engaging learning programmes", "Deliver and facilitate learning", "Evaluate learning impact"],
+      "L&D, HR and training staff.",
+      [["Needs analysis", "Competencies; gaps; priorities"], ["Learning design", "Objectives; methods; blended learning"], ["Delivery", "Facilitation; adult learning; online learning"], ["Evaluation", "Kirkpatrick levels; surveys; return on training"], ["L&D strategy", "Learning culture; budgets; partners"]]],
+    ["hr-behavioural", "behavioural", "Emotional Intelligence and Interpersonal Skills", 3, "Foundation", "Understand yourself and others to communicate, collaborate and handle conflict better.",
+      ["Recognise and manage your own emotions", "Read and respond to others' emotions", "Handle difficult conversations", "Build productive working relationships"],
+      "Professionals at all levels.",
+      [["Emotional intelligence", "Self-awareness; self-management"], ["Understanding others", "Empathy; listening; communication styles"], ["Relationships", "Conflict; difficult conversations; trust"]]],
+    ["hr-admin", "admin", "Office Administration and Executive Support", 3, "Foundation", "Run an efficient office: organisation, communication, records and support to executives.",
+      ["Organise diaries, meetings and travel", "Manage records and documents", "Write clear business correspondence", "Use digital office tools well"],
+      "Administrators, executive assistants and office managers.",
+      [["The modern office", "Roles; priorities; working with executives"], ["Organisation", "Diaries; meetings; minutes; records"], ["Communication and tools", "Business writing; digital tools; customer care"]]],
+    // ---- Operations, Quality & Auditing ----
+    ["op-excellence", "opex", "Operational Excellence and Lean", 5, "Intermediate", "Improve efficiency and quality using lean thinking and continuous improvement.",
+      ["Map value streams and spot waste", "Apply lean tools such as 5S and standard work", "Run improvement projects", "Sustain a continuous improvement culture"],
+      "Operations, quality and service managers.",
+      [["Lean principles", "Value; waste; flow"], ["Mapping", "Value stream maps; process data"], ["Tools", "5S; standard work; visual management"], ["Improvement projects", "PDCA; Kaizen; measuring results"], ["Sustaining", "Leadership; culture; daily management"]]],
+    ["op-bpm", "bpm", "Business Process Management", 3, "Intermediate", "Document, analyse and redesign processes to work faster and better.",
+      ["Model processes with BPMN", "Analyse process performance", "Redesign and automate processes", "Govern processes over time"],
+      "Process owners, analysts and operations staff.",
+      [["Process modelling", "BPMN; process maps"], ["Analysis", "Bottlenecks; process metrics; root causes"], ["Redesign", "Simplification; automation; governance"]]],
+    ["op-quality", "quality", "Quality Management and Internal Auditing", 5, "Intermediate", "Build a quality management system and audit it to drive improvement.",
+      ["Explain quality management principles and ISO 9001 requirements", "Document processes and controls", "Plan and conduct internal audits", "Manage corrective and preventive actions"],
+      "Quality, audit and operations staff.",
+      [["Quality principles", "Customer focus; process approach; standards"], ["Quality systems", "Documentation; controls; risk-based thinking"], ["Audit planning", "Audit programmes; checklists"], ["Conducting audits", "Evidence; findings; reports"], ["Improvement", "Corrective action; management review"]]],
+    ["op-rca", "rca", "Root Cause Analysis and Problem Solving", 3, "Foundation", "Find the real causes of problems and fix them so they don't come back.",
+      ["Define problems precisely", "Use 5 Whys, fishbone and fault tree tools", "Verify causes with data", "Choose and track corrective actions"],
+      "Engineers, quality, operations, safety and maintenance staff.",
+      [["Defining problems", "Problem statements; data collection"], ["Finding causes", "5 Whys; fishbone; fault trees"], ["Solving and preventing", "Verification; actions; follow-up"]]],
+    // ---- PR, Sales & Customer Service ----
+    ["sc-sales", "sales", "Sales and Marketing Strategy", 5, "Intermediate", "Win and keep customers with focused marketing and effective selling.",
+      ["Segment markets and choose target customers", "Build a marketing plan and mix", "Manage a sales pipeline", "Measure marketing and sales performance"],
+      "Sales, marketing and business development staff.",
+      [["Market and customers", "Segmentation; targeting; positioning"], ["Marketing plan", "Product; price; place; promotion; digital"], ["Selling", "Pipelines; consultative selling; key accounts"], ["Customers", "Retention; loyalty; CRM"], ["Measurement", "KPIs; marketing analytics"]]],
+    ["sc-customer", "customer", "Customer Service Excellence", 3, "Foundation", "Deliver service that keeps customers coming back, and handle complaints well.",
+      ["Understand customer expectations", "Communicate professionally in person, by phone and online", "Handle complaints and difficult customers", "Measure satisfaction and improve service"],
+      "Front-line staff, supervisors and service managers.",
+      [["Service foundations", "Expectations; moments of truth"], ["Communication", "Listening; tone; written service"], ["Complaints and improvement", "Complaints; recovery; satisfaction surveys and NPS"]]],
+    ["sc-comms", "comms", "Corporate Communication", 3, "Intermediate", "Plan communication that builds understanding and support inside and outside the organisation.",
+      ["Write a communication strategy", "Craft clear key messages", "Choose channels for each audience", "Evaluate communication results"],
+      "Communication, PR, HR and management staff.",
+      [["Strategy", "Audiences; objectives; key messages"], ["Channels", "Internal communication; digital; events"], ["Evaluation", "Metrics; surveys; reporting"]]],
+    ["sc-pr", "pr", "Public Relations and Media Management", 3, "Intermediate", "Manage reputation, work with the media and communicate in a crisis.",
+      ["Plan PR campaigns", "Write press releases and media statements", "Handle interviews", "Communicate during a crisis"],
+      "PR, communication and senior management staff.",
+      [["Reputation and PR", "Planning; audiences; campaigns"], ["Media", "Press releases; interviews; social media"], ["Crisis communication", "Preparation; holding statements; recovery"]]],
+    ["sc-hospitality", "hospitality", "Hospitality and Tourism Management", 5, "Intermediate", "Run hospitality and tourism businesses that delight guests and perform financially.",
+      ["Design guest experiences", "Manage revenue and pricing", "Lead hospitality teams", "Market destinations and services"],
+      "Hotel, tourism and hospitality managers.",
+      [["Guest experience", "Service design; standards"], ["Operations", "Rooms; food and beverage; quality"], ["Revenue", "Pricing; occupancy; distribution"], ["People", "Recruitment; training; motivation"], ["Marketing", "Destination marketing; online reviews"]]],
+    // ---- Engineering, Maintenance, Oil & Gas ----
+    ["en-oilgas", "oilgas", "Oil and Gas Industry Fundamentals", 5, "Foundation", "Understand the oil and gas value chain from exploration to market.",
+      ["Explain upstream, midstream and downstream activities", "Understand reserves, production and economics", "Recognise key contracts and regulation", "Follow local content and sustainability issues"],
+      "New entrants and non-technical staff in the oil and gas sector.",
+      [["Value chain", "Exploration; production; processing; marketing"], ["Upstream", "Reserves; drilling; production"], ["Midstream and downstream", "Transport; refining; distribution"], ["Economics and contracts", "Fiscal regimes; production sharing"], ["Policy", "Regulation; local content; energy transition"]]],
+    ["en-maintenance", "maintenance", "Maintenance Planning and Reliability", 5, "Intermediate", "Plan maintenance that keeps assets reliable and costs under control.",
+      ["Choose preventive, predictive and corrective strategies", "Plan and schedule maintenance work", "Use reliability tools such as FMEA", "Track maintenance KPIs"],
+      "Maintenance planners, engineers and supervisors.",
+      [["Maintenance strategy", "Strategies; criticality"], ["Planning and scheduling", "Work orders; backlog; shutdowns"], ["Reliability", "FMEA; failure data; RCM"], ["Spares and costs", "Inventory; budgets"], ["Performance", "KPIs; CMMS; improvement"]]],
+    ["en-electrical", "electrical", "Electrical Systems: Operation and Safety", 5, "Intermediate", "Operate and maintain electrical systems safely and reliably.",
+      ["Read single-line diagrams", "Understand protection systems", "Plan electrical maintenance", "Apply electrical safety procedures"],
+      "Electrical engineers, technicians and supervisors.",
+      [["Power systems", "Generation; distribution; single-line diagrams"], ["Equipment", "Transformers; switchgear; motors"], ["Protection", "Relays; coordination; earthing"], ["Maintenance", "Testing; condition monitoring"], ["Safety", "Isolation; permits; arc flash"]]],
+    ["en-instrumentation", "instrumentation", "Instrumentation and Process Control", 5, "Intermediate", "Understand measurement, control loops and control systems in process plants.",
+      ["Explain common instruments and measurements", "Tune control loops", "Understand PLC, DCS and SCADA systems", "Maintain and calibrate instruments"],
+      "Instrument technicians, process and control engineers.",
+      [["Measurement", "Pressure; flow; level; temperature"], ["Control loops", "PID control; tuning"], ["Control systems", "PLC; DCS; SCADA"], ["Calibration", "Procedures; records; uncertainty"], ["Safety systems", "Alarms; safety instrumented systems"]]],
+    ["en-mechanical", "mechanical", "Mechanical Equipment: Pumps, Compressors and Valves", 5, "Intermediate", "Operate, maintain and troubleshoot rotating and static mechanical equipment.",
+      ["Explain how pumps, compressors and valves work", "Diagnose common failures", "Apply alignment, lubrication and vibration basics", "Plan equipment maintenance"],
+      "Mechanical engineers, technicians and maintenance staff.",
+      [["Pumps", "Types; performance curves; cavitation"], ["Compressors", "Types; operation; surge"], ["Valves and seals", "Valve types; seals; leaks"], ["Condition monitoring", "Vibration; alignment; lubrication"], ["Troubleshooting", "Failure analysis; case studies"]]],
+    ["en-facilities", "facilities", "Facilities Management", 3, "Intermediate", "Manage buildings, services and workplaces safely and cost-effectively.",
+      ["Plan facilities services and budgets", "Manage maintenance contracts", "Meet safety and compliance duties", "Improve space use and sustainability"],
+      "Facilities, estates and administration managers.",
+      [["Facilities strategy", "Services; budgets; outsourcing"], ["Operations", "Maintenance; contracts; helpdesks"], ["Compliance and sustainability", "Safety; energy; space"]]],
+    ["en-chemical", "chemical", "Chemical and Petrochemical Process Operations", 5, "Intermediate", "Understand and operate chemical and petrochemical processes safely and efficiently.",
+      ["Explain key unit operations", "Read process flow diagrams", "Optimise process performance", "Apply process safety management"],
+      "Process engineers, operators and supervisors.",
+      [["Process basics", "Mass and energy balances; flow diagrams"], ["Unit operations", "Reactors; distillation; heat exchange"], ["Optimisation", "Yields; energy; troubleshooting"], ["Process safety", "Hazards; HAZOP; management of change"], ["Environment", "Emissions; effluents; compliance"]]],
+    ["en-power", "power", "Power Generation and Utilities Management", 5, "Intermediate", "Plan, operate and manage power and utility services reliably and sustainably.",
+      ["Compare generation technologies", "Understand grids, tariffs and losses", "Plan utility asset management", "Improve customer service and revenue collection"],
+      "Utility managers, engineers and regulators.",
+      [["Generation", "Thermal; hydro; solar; wind"], ["Networks", "Transmission; distribution; losses"], ["Regulation and tariffs", "Tariff design; regulation"], ["Asset management", "Planning; maintenance; investment"], ["Customers", "Metering; billing; collection"]]],
+    ["en-energy", "energy", "Energy Transition and Renewable Energy", 3, "Intermediate", "Understand the energy transition and plan renewable and efficiency projects.",
+      ["Explain energy transition trends for Africa", "Compare renewable technologies and costs", "Assess project feasibility", "Plan energy efficiency measures"],
+      "Energy, policy, investment and project staff.",
+      [["The transition", "Trends; policy; climate goals"], ["Renewables", "Solar; wind; storage; mini-grids"], ["Projects", "Feasibility; finance; efficiency"]]],
+    ["en-hydrogen", "hydrogen", "Hydrogen Economy Fundamentals", 3, "Intermediate", "Understand hydrogen production, uses, costs and the opportunities for Africa.",
+      ["Explain hydrogen production routes", "Understand storage, transport and safety", "Assess costs and markets", "Identify opportunities and risks"],
+      "Energy, policy, engineering and investment staff.",
+      [["Production", "Grey, blue and green hydrogen; electrolysis"], ["Infrastructure", "Storage; transport; safety"], ["Markets", "Costs; demand; projects in Africa"]]],
+    ["en-mining", "mining", "Mining Operations and Management", 5, "Intermediate", "Plan and manage mining operations safely, efficiently and responsibly.",
+      ["Explain the mining value chain", "Plan mine production", "Manage mining safety and environment", "Engage communities and meet regulation"],
+      "Mining engineers, managers and regulators.",
+      [["Mining value chain", "Exploration; development; production; closure"], ["Planning", "Mine design; scheduling; costs"], ["Operations", "Equipment; processing; productivity"], ["Safety and environment", "Hazards; rehabilitation"], ["Communities", "Licence to operate; regulation; reporting"]]],
+    ["en-corrosion", "corrosion", "Corrosion Control and Inspection", 5, "Intermediate", "Prevent and detect corrosion to keep plant and pipelines safe.",
+      ["Explain corrosion mechanisms", "Select protection methods", "Plan inspections and testing", "Assess integrity and remaining life"],
+      "Inspection, integrity, maintenance and materials engineers.",
+      [["Corrosion mechanisms", "Types; environments"], ["Protection", "Coatings; cathodic protection; inhibitors"], ["Inspection", "NDT methods; inspection plans"], ["Integrity", "Risk-based inspection; fitness for service"], ["Management", "Data; reporting; programmes"]]],
+    ["en-manufacturing", "manufacturing", "Manufacturing Operations Management", 5, "Intermediate", "Run productive, high-quality manufacturing operations.",
+      ["Plan production and capacity", "Control quality and costs", "Apply lean and maintenance practices", "Measure performance with OEE"],
+      "Production, operations and plant managers.",
+      [["Production planning", "Forecasts; capacity; scheduling"], ["Quality", "Process control; inspections"], ["Efficiency", "Lean; OEE; downtime"], ["Supply", "Materials; inventory"], ["Performance", "KPIs; improvement plans"]]],
+    // ---- HSE, Emergency & Security ----
+    ["hs-hse", "hse", "Health, Safety and Environment Management", 5, "Intermediate", "Build a safety management system that prevents harm and meets legal duties.",
+      ["Identify hazards and assess risks", "Design safe systems of work", "Investigate incidents", "Measure and improve HSE performance"],
+      "HSE officers, supervisors and managers.",
+      [["HSE management", "Leadership; policy; legal duties"], ["Risk assessment", "Hazards; controls; permits"], ["Environment", "Impacts; waste; compliance"], ["Incidents", "Reporting; investigation; learning"], ["Performance", "Indicators; audits; culture"]]],
+    ["hs-emergency", "emergency", "Emergency and Crisis Management", 5, "Intermediate", "Prepare for, respond to and recover from emergencies and crises.",
+      ["Assess emergency risks", "Write emergency and crisis plans", "Run exercises and drills", "Lead response and recovery"],
+      "Managers, HSE, security and business continuity staff.",
+      [["Risk and preparedness", "Scenarios; plans; resources"], ["Response", "Command structures; communication"], ["Crisis leadership", "Decisions; stakeholders; media"], ["Business continuity", "Impact analysis; continuity plans"], ["Exercises and recovery", "Drills; reviews; recovery"]]],
+    ["hs-security", "security", "Security Management", 5, "Intermediate", "Protect people, assets and information with risk-based security management.",
+      ["Assess security risks", "Design physical and procedural controls", "Manage security teams and contractors", "Respond to and investigate incidents"],
+      "Security managers, officers and facility managers.",
+      [["Security risk", "Threats; vulnerabilities; assessments"], ["Protection", "Physical security; access control"], ["People and procedures", "Teams; contractors; training"], ["Incidents", "Response; investigation; reporting"], ["Integration", "Information security; continuity"]]],
+    ["hs-waste", "waste", "Waste Management and Circular Economy", 3, "Intermediate", "Reduce, manage and dispose of waste responsibly, and find value in it.",
+      ["Classify waste and legal duties", "Plan waste minimisation", "Manage collection, treatment and disposal", "Apply circular economy ideas"],
+      "Environmental, facilities, municipal and operations staff.",
+      [["Waste basics", "Types; hierarchy; regulation"], ["Operations", "Collection; treatment; disposal"], ["Circular economy", "Recycling; reuse; business models"]]],
+    // ---- Sector specific ----
+    ["sx-realestate", "realestate", "Real Estate Development and Property Management", 3, "Intermediate", "Plan developments and manage property portfolios for value and occupancy.",
+      ["Assess development feasibility", "Manage leases and tenants", "Plan property maintenance", "Report portfolio performance"],
+      "Developers, property managers and asset managers.",
+      [["Development", "Feasibility; planning; approvals"], ["Property management", "Leases; tenants; collections"], ["Asset performance", "Maintenance; reporting; value"]]],
+    ["sx-refining", "refining", "Petroleum Refining Processes", 5, "Intermediate", "Understand refinery processes, economics and operations.",
+      ["Explain crude properties and refinery configuration", "Understand key conversion processes", "Assess refinery margins", "Apply refinery safety and environmental practice"],
+      "Refinery engineers, operators and planners.",
+      [["Crude and products", "Crude assays; product specifications"], ["Separation", "Distillation; treating"], ["Conversion", "Cracking; reforming; blending"], ["Economics", "Margins; planning"], ["Safety and environment", "Process safety; emissions"]]],
+    ["sx-urban", "urban", "Urban Planning and Development", 5, "Intermediate", "Plan inclusive, liveable cities using data, policy and community engagement.",
+      ["Analyse urban growth and land use", "Prepare development plans", "Plan infrastructure and services", "Engage communities in planning"],
+      "Urban planners, municipal officials and development practitioners.",
+      [["Urbanisation in Africa", "Trends; informality; data"], ["Land use", "Zoning; land administration"], ["Infrastructure", "Transport; water; housing"], ["Finance", "Municipal finance; investment"], ["Participation", "Community engagement; monitoring"]]],
+    ["sx-public", "public", "Public Sector Management and Policy", 5, "Intermediate", "Design, deliver and evaluate public policies and services that work.",
+      ["Analyse policy problems and options", "Plan and budget public programmes", "Improve public service delivery", "Use evidence and evaluation in policy"],
+      "Civil servants, public managers and policy analysts.",
+      [["Policy making", "Problem analysis; options; consultation"], ["Planning and budgets", "Programme budgets; results"], ["Service delivery", "Citizens; performance; digital services"], ["Evidence", "Data; evaluation; using research"], ["Accountability", "Transparency; audit; reporting"]]],
+    ["sx-health", "health", "Healthcare Management", 5, "Intermediate", "Manage health services for quality, access and efficiency.",
+      ["Plan health services and resources", "Improve quality and patient safety", "Manage health finances", "Use health information for decisions"],
+      "Hospital and clinic managers, health programme staff.",
+      [["Health systems", "Building blocks; financing"], ["Operations", "Patient flow; staffing; supplies"], ["Quality and safety", "Standards; audits; patient safety"], ["Finance", "Budgets; insurance; costs"], ["Health information", "HMIS; indicators; data use"]]],
+    ["sx-pensions", "pensions", "Social Insurance and Pensions Management", 3, "Intermediate", "Design, administer and finance social insurance and pension schemes.",
+      ["Explain social insurance and pension models", "Manage contributions and benefits", "Understand actuarial basics and sustainability", "Improve member services"],
+      "Pension and social security staff and regulators.",
+      [["Scheme design", "Models; coverage; benefits"], ["Administration", "Contributions; records; payments"], ["Sustainability", "Actuarial basics; investment; governance"]]],
+    ["sx-policing", "policing", "Data and Evidence for Law Enforcement", 5, "Intermediate", "Use data, analysis and evaluation to plan policing and community safety.",
+      ["Collect and analyse crime and incident data", "Map hotspots and trends", "Evaluate crime prevention programmes", "Work with communities using evidence"],
+      "Police analysts, commanders and community safety staff.",
+      [["Data for policing", "Data sources; quality; ethics"], ["Analysis", "Trends; hotspots; problem analysis"], ["Prevention", "Problem-oriented policing; partnerships"], ["Evaluation", "Measuring what works"], ["Communities", "Surveys; trust; reporting"]]],
+    ["sx-traffic", "traffic", "Traffic Management and Road Safety", 3, "Intermediate", "Plan traffic systems and road safety measures using data.",
+      ["Analyse traffic and crash data", "Plan traffic management measures", "Design road safety programmes", "Evaluate interventions"],
+      "Traffic engineers, transport planners and road safety officials.",
+      [["Traffic data", "Counts; speeds; crash data"], ["Management", "Junctions; signals; public transport"], ["Road safety", "Safe system approach; evaluation"]]],
+    ["sx-defence", "defence", "Strategic Analysis and Risk for National Security", 5, "Advanced", "Apply structured analysis to security risks, policy options and resource planning.",
+      ["Apply structured analytic techniques", "Assess risks and scenarios", "Support policy and resource decisions", "Communicate analysis to decision-makers"],
+      "Policy, planning and analysis staff in security institutions.",
+      [["Analysis", "Structured analytic techniques; biases"], ["Risk", "Risk assessment; horizon scanning"], ["Scenarios", "Scenario planning; indicators"], ["Planning", "Resources; capability planning"], ["Briefing", "Writing and briefing for decision-makers"]]],
+    ["sx-ports", "ports", "Port and Shipping Management", 5, "Intermediate", "Run efficient, safe and competitive ports and shipping operations.",
+      ["Understand port operations and governance", "Improve terminal productivity", "Manage port safety and security", "Plan port development"],
+      "Port, shipping and logistics managers.",
+      [["Ports and shipping", "Governance; trade; shipping markets"], ["Operations", "Terminals; berths; cargo handling"], ["Performance", "KPIs; dwell time; productivity"], ["Safety and security", "Port safety; security codes"], ["Development", "Planning; investment; partnerships"]]],
+    ["sx-agri", "agri", "Agribusiness Development", 5, "Intermediate", "Build profitable, resilient agribusinesses and value chains.",
+      ["Analyse agricultural value chains", "Plan agribusiness finance and investment", "Improve market access and quality", "Manage climate and market risk"],
+      "Agribusiness owners, development practitioners and lenders.",
+      [["Value chains", "Mapping; actors; margins"], ["Business planning", "Costs; finance; investment"], ["Markets", "Standards; contracts; exports"], ["Risk", "Climate; prices; insurance"], ["Growth", "Cooperatives; partnerships; impact measurement"]]],
   ].map(([id, cat, title, days, level, summary, objectives, audience, outline]) => ({ id, cat, title, days, level, summary, objectives, audience, outline }));
-  const catName = (k) => (CAT_CATEGORIES.find(([x]) => x === k) || [k, k])[1];
+  const catName = (k) => SUBJECTS[k] || k;
+  const groupName = (g) => (GROUPS.find(([x]) => x === g) || [g, g])[1];
   const catCourse = (id) => CATALOGUE.find((c) => c.id === id);
-  const CAT_DEFAULT = { q: "", cat: "", venue: "", format: "" };
   const catMatches = (c, f) => {
     const q = f.q.trim().toLowerCase();
-    return (!f.cat || c.cat === f.cat) && (!q || [c.title, c.summary, catName(c.cat), ...c.objectives].join(" ").toLowerCase().includes(q));
+    const inGroup = !f.group || (GROUPS.find(([g]) => g === f.group) || [0, 0, []])[2].includes(c.cat);
+    return inGroup && (!f.sub || c.cat === f.sub) && (!q || [c.title, c.summary, catName(c.cat), ...c.objectives].join(" ").toLowerCase().includes(q));
   };
+  const subCount = (k) => CATALOGUE.filter((c) => c.cat === k).length;
   const catRow = (c) => `<article class="cat-row"><div><span class="eyebrow gold">${esc(catName(c.cat))}</span><h3><button class="cat-link" data-act="catOpen" data-id="${c.id}">${esc(c.title)}</button></h3><p class="muted">${esc(c.summary)}</p></div>
     <div class="cat-meta"><span class="pill">${c.days} days</span><span class="pill">${esc(c.level)}</span><span class="hint">${CAT_FORMATS.join(" · ")}</span><button class="btn small primary" data-act="catOpen" data-id="${c.id}">Course details</button></div></article>`;
   function catList() {
     const f = S.catFilter, list = CATALOGUE.filter((c) => catMatches(c, f));
     const where = f.venue ? ` in ${esc(f.venue)}` : "", how = f.format ? ` · ${esc(f.format)}` : "";
-    return `<p class="hint" role="status">${list.length} course${list.length === 1 ? "" : "s"}${where}${how}</p>${list.length ? list.map(catRow).join("") : `<div class="empty"><h2>No courses match</h2><p class="muted">Try another word or clear the filters. We also design courses on request.</p></div>`}`;
+    const sub = f.sub ? `<p class="cat-chip">Subject: <b>${esc(catName(f.sub))}</b> <button class="btn small ghost" data-act="catPick" data-k="${f.sub}">Clear</button></p>` : "";
+    return `${sub}<p class="hint" role="status">${list.length} course${list.length === 1 ? "" : "s"}${where}${how}</p>${list.length ? list.map(catRow).join("") : `<div class="empty"><h2>No courses match</h2><p class="muted">Try another word or clear the filters. We also design courses on request.</p></div>`}`;
   }
   function viewTraining() {
     if (S.courseOpen) { const c = courseById(S.courseOpen); if (c) return courseDetail(c); S.courseOpen = null; }
@@ -3073,14 +3391,14 @@ ${richSummary(st, rows)}`;
       <section class="card cat-search" aria-label="Find a course">
         <div class="grid4">
           <label for="catQ">Search courses<input id="catQ" type="search" value="${esc(f.q)}" placeholder="e.g. SPSS, sampling, Power BI"></label>
-          <label for="catCat">Category<select id="catCat"><option value="">All categories</option>${CAT_CATEGORIES.map(([k, n]) => `<option value="${k}"${k === f.cat ? " selected" : ""}>${esc(n)}</option>`).join("")}</select></label>
+          <label for="catGroup">Subject area<select id="catGroup"><option value="">All subject areas</option>${GROUPS.map(([k, n]) => `<option value="${k}"${k === f.group ? " selected" : ""}>${esc(n)}</option>`).join("")}</select></label>
           <label for="catVenue">Venue<select id="catVenue"><option value="">All venues</option>${opt(VENUE_CITIES, f.venue)}</select></label>
           <label for="catFmt">Format<select id="catFmt"><option value="">All formats</option>${opt(CAT_FORMATS, f.format)}</select></label>
         </div>
       </section>
       <section class="stack" aria-labelledby="catCatsH">
-        <div class="section-head"><span class="eyebrow gold">Course categories</span><h2 id="catCatsH" class="h2xl">Browse by subject</h2></div>
-        <div class="cat-tiles">${CAT_CATEGORIES.map(([k, n]) => `<button class="cat-tile${k === f.cat ? " on" : ""}" data-act="catPick" data-k="${k}" aria-pressed="${k === f.cat}"><b>${esc(n)}</b><span>${CATALOGUE.filter((c) => c.cat === k).length} courses</span></button>`).join("")}</div>
+        <div class="section-head"><span class="eyebrow gold">Training subjects</span><h2 id="catCatsH" class="h2xl">Start with a subject area</h2><p class="muted">${CATALOGUE.length} courses in ${Object.keys(SUBJECTS).length} subjects. Choose a subject to see its courses.</p></div>
+        <div class="group-grid">${GROUPS.map(([g, name, subs]) => `<section class="card group"><h3>${esc(name)}</h3><ul>${subs.map((k) => `<li><button class="cat-link${k === f.sub ? " on" : ""}" data-act="catPick" data-k="${k}" aria-pressed="${k === f.sub}">${esc(catName(k))}</button> <span class="hint">${subCount(k)}</span></li>`).join("")}</ul></section>`).join("")}</div>
       </section>
       ${pub.length ? `<section class="stack"><div class="section-head"><span class="eyebrow gold">Scheduled dates</span><h2 class="h2xl">Courses open for registration</h2></div><div class="course-grid">${pub.map((c) => courseCard(c)).join("")}</div></section>` : ""}
       <section class="stack" aria-labelledby="catListH">
@@ -3337,10 +3655,11 @@ ${richSummary(st, rows)}`;
   // ---------- events ----------
   function setPath(o, path, v) { const k = path.split("."); let t = o; while (k.length > 1) t = t[k.shift()]; t[k[0]] = v; }
   function onField(t) {
-    if (t.id === "catQ" || t.id === "catCat" || t.id === "catVenue" || t.id === "catFmt") {
-      const k = { catQ: "q", catCat: "cat", catVenue: "venue", catFmt: "format" }[t.id];
-      S.catFilter[k] = t.value; const box = $("#catList"); if (box) box.innerHTML = catList();
-      if (k === "cat") document.querySelectorAll(".cat-tile").forEach((x) => { const on = x.dataset.k === t.value; x.classList.toggle("on", on); x.setAttribute("aria-pressed", String(on)); });
+    if (t.id === "catQ" || t.id === "catGroup" || t.id === "catVenue" || t.id === "catFmt") {
+      const k = { catQ: "q", catGroup: "group", catVenue: "venue", catFmt: "format" }[t.id];
+      S.catFilter[k] = t.value; if (k === "group") S.catFilter.sub = "";
+      const box = $("#catList"); if (box) box.innerHTML = catList();
+      if (k === "group") document.querySelectorAll(".group .cat-link.on").forEach((x) => { x.classList.remove("on"); x.setAttribute("aria-pressed", "false"); });
       return;
     }
     if (S.view === "create" && S.draft) {
@@ -3520,7 +3839,7 @@ ${richSummary(st, rows)}`;
       case "closeCourse": S.courseOpen = null; S.regFor = null; render(); window.scrollTo(0, 0); break;
       case "catOpen": S.catOpen = id; S.catEnquiry = ""; S.courseOpen = null; if (S.view !== "training") go("training"); else { render(); window.scrollTo(0, 0); } break;
       case "catClose": S.catOpen = null; S.catEnquiry = ""; render(); window.scrollTo(0, 0); break;
-      case "catPick": S.catFilter.cat = S.catFilter.cat === b.dataset.k ? "" : b.dataset.k; render(); $("#catListH").scrollIntoView({ behavior: "smooth", block: "start" }); break;
+      case "catPick": S.catFilter.sub = S.catFilter.sub === b.dataset.k ? "" : b.dataset.k; if (S.catFilter.sub) S.catFilter.group = ""; render(); $("#catListH").scrollIntoView({ behavior: "smooth", block: "start" }); break;
       case "catVenue": S.catFilter.venue = b.dataset.v; render(); $("#catListH").scrollIntoView({ behavior: "smooth", block: "start" }); break;
       case "catRequest": case "catInhouse": {
         const c = catCourse(id), v = ($("#catReqVenue") || {}).value || "";
