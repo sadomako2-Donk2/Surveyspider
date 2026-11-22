@@ -4,7 +4,7 @@ import { CourseCard } from "@/components/academy/CourseCard";
 import { Band, Ticks } from "@/components/site/blocks";
 import { Photo } from "@/components/site/Photo";
 import { Slideshow } from "@/components/site/Slideshow";
-import { PHOTOS, SLIDESHOW } from "@/content/photos";
+import { slidesStartingWith } from "@/content/photos";
 import { GUIDES, UNITS } from "@/content/pages";
 import { SITE } from "@/lib/site";
 import { getDb } from "@/lib/db";
@@ -13,7 +13,7 @@ import { listPublishedCourses } from "@/server/academy/service";
 import { courseCardView } from "@/server/academy/view";
 
 export const metadata: Metadata = {
-  title: { absolute: `${SITE.name} — Centre for Research Methods and Analytics` },
+  title: { absolute: `${SITE.name} — Research Methods and Analytics` },
   description:
     "Afrimetrica helps researchers, organisations and students design better studies, collect reliable data and turn it into evidence: research methods training, survey tools, data analysis and consultancy.",
   alternates: { canonical: "/" },
@@ -42,14 +42,12 @@ export default async function Home() {
     alternateName: SITE.longName,
     slogan: SITE.tagline,
     url: siteUrl(),
-    parentOrganization: { "@type": "Organization", name: SITE.operator },
   };
   return (
     <main id="main" className="wrap stack xl">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(org) }} />
       <section className="hero solo">
         <div>
-          <span className="eyebrow">Centre for Research Methods and Analytics · Ghana</span>
           <h1 className="display">
             Advancing research, <span className="gold-text">measurement and evidence.</span>
           </h1>
@@ -74,17 +72,12 @@ export default async function Home() {
           </div>
         </div>
       </section>
-      <Slideshow
-        slides={SLIDESHOW.map((k) => {
-          const p: { file: string; alt: string; position?: string } = PHOTOS[k];
-          return { file: p.file, alt: p.alt, position: p.position };
-        })}
-      />
+      <Slideshow slides={slidesStartingWith("home")} />
 
       <section className="stack">
         <div className="section-head">
           <span className="eyebrow">What we do</span>
-          <h2 className="h2xl">One centre, four ways to strengthen your research</h2>
+          <h2 className="h2xl">Four ways to strengthen your research</h2>
         </div>
         <div className="units">
           {UNITS.map((u) => (

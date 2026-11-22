@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { SiteHeader } from "@/components/SiteHeader";
-import { SITE, legalLine } from "@/lib/site";
+import { SITE } from "@/lib/site";
 import { siteUrl } from "@/lib/url";
 import "./globals.css";
 
@@ -24,11 +24,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <SiteHeader />
         {children}
         <footer className="wrap foot">
-          <b>{SITE.name}</b> · Centre for Research Methods and Analytics
+          <b>{SITE.name}</b> · Research Methods and Analytics
           <br />
-          <span className="hint">
-            {SITE.tagline}. {legalLine()}
-          </span>
+          <span className="hint">{SITE.tagline}.</span>
         </footer>
       </body>
     </html>

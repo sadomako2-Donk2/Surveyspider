@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { EnquiryForm } from "@/components/enquiries/EnquiryForm";
 import { PageHead } from "@/components/site/blocks";
-import { legalLine } from "@/lib/site";
 import { getContactSettings } from "@/server/settings";
 
 export const metadata: Metadata = {
@@ -59,7 +58,6 @@ export default async function Contact() {
           ) : (
             <p className="muted">Use the form and we&apos;ll reply by email.</p>
           )}
-          <p className="hint">{legalLine()}</p>
           <h3>Looking for something specific?</h3>
           <ul className="links">
             <li>

@@ -32,7 +32,7 @@ function client() {
 }
 
 const SYSTEM =
-  "You are the AI assistant inside Afrimetrica, a centre for research methods and analytics. " +
+  "You are the AI assistant inside Afrimetrica, a research methods and analytics organisation. " +
   "Follow the instructions in the user's message exactly. Never invent data, figures or quotes.";
 
 /** Sends one request and returns the text. Throws AiError with a message that can be shown to people. */

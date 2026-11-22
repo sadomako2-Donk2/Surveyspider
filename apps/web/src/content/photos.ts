@@ -84,3 +84,11 @@ export const SLIDESHOW: PhotoKey[] = [
   "consultancy",
   "about",
 ];
+
+/** A page's slideshow: its own photo(s) first, then the rest in SLIDESHOW order. */
+export function slidesStartingWith(...first: PhotoKey[]) {
+  return [...first, ...SLIDESHOW.filter((k) => !first.includes(k))].map((k) => {
+    const p: PhotoSlot = PHOTOS[k];
+    return { file: p.file, alt: p.alt, position: p.position };
+  });
+}

@@ -1,8 +1,9 @@
 // Brand facts shared by every page. Keep in sync with docs/requirements.md.
 export const SITE = {
   name: "Afrimetrica",
-  longName: "Afrimetrica — Centre for Research Methods and Analytics",
+  longName: "Afrimetrica — Research Methods and Analytics",
   tagline: "Advancing Research, Measurement and Evidence",
+  // The legal operator. Kept for documents and invoices; by the owner's choice it isn't shown on the website.
   operator: "Regelco International Ltd",
   operatorCountry: "Ghana",
 } as const;
@@ -18,7 +19,3 @@ export const NAV = [
   { href: "/contact", label: "Contact" },
   { href: "/account", label: "My Account" },
 ] as const;
-
-export function legalLine(): string {
-  return `${SITE.name} is operated by ${SITE.operator}, a company registered in ${SITE.operatorCountry}.`;
-}

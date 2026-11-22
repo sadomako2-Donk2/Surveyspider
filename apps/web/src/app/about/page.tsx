@@ -1,34 +1,32 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHead, Ticks } from "@/components/site/blocks";
-import { Photo } from "@/components/site/Photo";
-import { legalLine } from "@/lib/site";
+import { Slideshow } from "@/components/site/Slideshow";
+import { slidesStartingWith } from "@/content/photos";
 
 export const metadata: Metadata = {
   title: "About",
-  description:
-    "Afrimetrica is a Ghana-based centre for research methods and analytics, operated by Regelco International Ltd.",
+  description: "Afrimetrica provides research methods training, survey tools, data analytics and consultancy.",
   alternates: { canonical: "/about" },
 };
 
 const ORG = [
-  ["Organisation", "Afrimetrica — Centre for Research Methods and Analytics"],
+  ["Organisation", "Afrimetrica — Research Methods and Analytics"],
   ["Training", "Afrimetrica Academy"],
   ["Survey software", "Afrimetrica Surveys"],
   ["Analytics", "Afrimetrica Analytics"],
   ["Consultancy", "Afrimetrica Consulting"],
   ["Research resources", "Afrimetrica Knowledge Hub"],
-  ["Legal operator", "Regelco International Ltd (Ghana)"],
 ];
 
 export default function About() {
   return (
     <main id="main" className="wrap stack xl">
-      <PageHead eyebrow="About Afrimetrica" title="A research centre built around good evidence">
-        Afrimetrica is a Ghana-based centre for research methods and analytics. We work with universities, public
-        bodies, NGOs and businesses across Africa and beyond.
+      <PageHead eyebrow="About Afrimetrica" title="Research built around good evidence">
+        Afrimetrica provides research methods training, survey tools, data analytics and consultancy. We work with
+        universities, public bodies, NGOs and businesses across Africa and beyond.
       </PageHead>
-      <Photo slot="about" wide />
+      <Slideshow slides={slidesStartingWith("about")} />
       <div className="split">
         <section className="card">
           <h2>Our mission</h2>
@@ -60,7 +58,6 @@ export default function About() {
               </div>
             ))}
           </dl>
-          <p className="hint">{legalLine()}</p>
         </section>
       </div>
       <section className="card">

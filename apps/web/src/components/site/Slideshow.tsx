@@ -52,6 +52,7 @@ export function Slideshow({ slides, interval = 5000 }: { slides: Slide[]; interv
               alt={s.alt}
               fill
               priority={j === 0}
+              loading={j === 0 ? undefined : "eager"} // ready before it slides in
               sizes="(max-width: 1200px) 100vw, 1200px"
               style={s.position ? { objectPosition: s.position } : undefined}
             />

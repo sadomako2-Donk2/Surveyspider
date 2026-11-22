@@ -67,7 +67,7 @@ export function normaliseAiQuestions(list: unknown, max = 60): QuestionInput[] {
 export const DRAFT_LENGTHS = [6, 10, 15] as const;
 
 export function draftPrompt(goal: string, audience: string, n: number) {
-  return `You are an expert survey designer for Afrimetrica Surveys, part of Afrimetrica, a centre for research methods and analytics.
+  return `You are an expert survey designer for Afrimetrica Surveys, part of Afrimetrica, a research methods and analytics organisation.
 Write an online survey for this goal: ${goal}
 Who will answer: ${audience || "a general adult audience"}
 Write about ${n} questions.

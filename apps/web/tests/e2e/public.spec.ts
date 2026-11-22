@@ -82,6 +82,6 @@ test("the home page describes the organisation for search engines", async ({ pag
   expect(ld).toMatchObject({
     "@type": "Organization",
     name: "Afrimetrica",
-    parentOrganization: { name: "Regelco International Ltd" },
   });
+  expect(JSON.stringify(ld)).not.toMatch(/Regelco|centre/i); // not shown on the site, by the owner's choice
 });

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { NAV, SITE, legalLine } from "@/lib/site";
+import { NAV, SITE } from "@/lib/site";
 
 describe("site constants", () => {
   it("keeps the nine public sections in the agreed order", () => {
@@ -15,8 +15,7 @@ describe("site constants", () => {
       "My Account",
     ]);
   });
-  it("names the legal operator", () => {
-    expect(legalLine()).toBe("Afrimetrica is operated by Regelco International Ltd, a company registered in Ghana.");
-    expect(SITE.tagline).toBe("Advancing Research, Measurement and Evidence");
+  it("doesn't describe Afrimetrica as a centre", () => {
+    expect(`${SITE.longName} ${SITE.tagline}`).not.toMatch(/centre/i);
   });
 });

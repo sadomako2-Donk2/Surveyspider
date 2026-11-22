@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { CourseCard } from "@/components/academy/CourseCard";
 import { EnquiryForm } from "@/components/enquiries/EnquiryForm";
 import { PageHead, Ticks } from "@/components/site/blocks";
-import { Photo } from "@/components/site/Photo";
+import { Slideshow } from "@/components/site/Slideshow";
+import { slidesStartingWith } from "@/content/photos";
 import courseTemplates from "@/content/course-templates.json";
 import { getDb } from "@/lib/db";
 import { listPublishedCourses } from "@/server/academy/service";
@@ -33,7 +34,7 @@ export default async function Training() {
         Practical courses in research design, survey methods, data analysis, qualitative methods and monitoring and
         evaluation. Public short courses, online learning and in-house workshops for your organisation.
       </PageHead>
-      <Photo slot="training" wide />
+      <Slideshow slides={slidesStartingWith("training", "homeAcademy")} />
 
       {list && list.length ? (
         <section className="stack" aria-labelledby="courses-h">
