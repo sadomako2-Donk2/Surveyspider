@@ -585,6 +585,13 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
   .print-group { break-inside: auto; } .print-table tr { break-inside: avoid; }
 }
 .statement p { font-family: var(--font-display); font-size: clamp(1.15rem, 2.4vw, 1.45rem); line-height: 1.45; font-weight: 600; margin: 0; border-left: 4px solid var(--gold); padding-left: 16px; }
+/* main menu dropdowns (hover or keyboard focus; touch screens just follow the link) */
+.nav-drop { position: absolute; top: 100%; z-index: 40; background: var(--surface); border: 1px solid var(--line); border-top: 3px solid var(--gold); border-radius: 0 0 14px 14px; box-shadow: 0 16px 32px rgba(14, 29, 58, .16); padding: 14px 18px 16px; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(180px, 260px); gap: 8px 28px; max-width: calc(100vw - 24px); max-height: 75vh; overflow-y: auto; }
+.nav-drop h3 { font-family: var(--font-display); font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: var(--gold-ink); margin: 2px 0 6px; }
+.nav-drop ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; }
+.nav-drop a { display: block; padding: 6px 8px; border-radius: 7px; color: var(--ink); text-decoration: none; font-size: .9rem; }
+.nav-drop a:hover, .nav-drop a:focus-visible { background: var(--bg); color: var(--accent); }
+@media (hover: none) { .nav-drop { display: none !important; } }
 </style>
 
 <header class="topbar gutter">
@@ -601,6 +608,7 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
     <nav class="tabs" id="tabs" aria-label="Main"></nav>
     <div class="acct" id="acct"></div>
   </div>
+  <div id="navDrop" class="nav-drop" hidden></div>
 </header>
 <nav class="subnav gutter" id="subnav" aria-label="Afrimetrica Surveys" hidden></nav>
 <div class="gutter"><div class="banner" id="banner" hidden></div></div>
@@ -945,12 +953,43 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
     if (isTyping()) { pending = true; renderTabs(); return; }
     render();
   }
+  // Pages listed under each main menu item when the pointer rests on it (or it gets keyboard focus).
+  function navDropGroups(k) {
+    const L = (href, label) => [href, label];
+    if (k === "about") return [["About Afrimetrica", ABOUT_MENU.map(([x, l]) => L(`#about${x ? "/" + x : ""}`, l))]];
+    if (k === "training") return [["Explore", [L("#training", "Training home"), L("#training/new", "New courses"), L("#training/finder", "Course finder"), L("#training/venues", "Training venues"), L("#training/sectors", "Training sectors"), L("#training/certificates", "Certificates")]], ["Subject areas", GROUPS.filter(([g]) => g !== "sector").map(([g, n]) => L(`#training/area/${g}`, n))]];
+    if (k === "surveys") return [["Afrimetrica Surveys", SURVEY_NAV.map(([x, l]) => L(`#${x}`, l))]];
+    if (k === "analytics") return [["Services", AN_SERVICES.map((x) => L(`#analytics/service/${x.id}`, x.name))], ["Sectors", AN_SECTORS.map((x) => L(`#analytics/sector/${x.id}`, x.name))], ["More", [L("#analytics", "Overview"), L("#analytics/tools", "Tools we use"), L("#analytics/how-we-work", "How we work"), L("#analytics/data-security", "Data security"), L("#analytics/request", "Request analysis")]]];
+    if (k === "consultancy") return [["Services", CO_SERVICES.map((x) => L(`#consultancy/service/${x.id}`, x.name))], ["Sectors", CO_SECTORS.map((x) => L(`#consultancy/sector/${x.id}`, x.name))], ["More", [L("#consultancy", "Overview"), L("#consultancy/approach", "Our approach"), L("#paper-survey", "Fieldwork quote"), L("#consultancy/work-with-us", "Work with us"), L("#consultancy/request", "Request a proposal")]]];
+    if (k === "resources") return [["Knowledge Hub", RES_MENU.map(([x, l]) => L(`#resources${x ? "/" + x : ""}`, l))]];
+    if (k === "contact") return [["Contact", [...CONTACT_MENU.map(([x, l]) => L(`#contact${x ? "/" + x : ""}`, l)), L("#training/finder", "Find training")]]];
+    return null;
+  }
+  let navDropKey = null, navDropTimer = null;
+  function openNavDrop(k, link) {
+    clearTimeout(navDropTimer);
+    const box = $("#navDrop"), groups = navDropGroups(k);
+    if (!groups) return closeNavDrop(true);
+    if (navDropKey !== k) {
+      navDropKey = k;
+      box.innerHTML = groups.map(([title, links]) => `<div><h3>${esc(title)}</h3><ul>${links.map(([href, label]) => `<li><a href="${href}">${esc(label)}</a></li>`).join("")}</ul></div>`).join("");
+      box.setAttribute("aria-label", `${link.textContent.trim()} pages`);
+    }
+    box.hidden = false;
+    const head = box.parentElement.getBoundingClientRect(), r = link.getBoundingClientRect();
+    box.style.left = Math.max(8, Math.min(r.left - head.left, head.width - box.offsetWidth - 8)) + "px";
+  }
+  function closeNavDrop(now) {
+    clearTimeout(navDropTimer);
+    const shut = () => { const box = $("#navDrop"); if (box) box.hidden = true; navDropKey = null; };
+    if (now) shut(); else navDropTimer = setTimeout(shut, 220);
+  }
   function renderTabs() {
     const avail = S.profile ? openStudies().filter((s) => eligible(s, S.profile)).length : 0;
     renderAcct();
     const inSurveys = SURVEY_NAV.some(([k]) => k === S.view);
     const top = inSurveys ? "surveys" : S.view === "business" || S.view === "signin" ? "account" : S.view;
-    $("#tabs").innerHTML = TOPNAV.map(([k, v]) => `<a href="#${k}"${top === k ? ' aria-current="page"' : ""}>${v}</a>`).join("");
+    $("#tabs").innerHTML = TOPNAV.map(([k, v]) => `<a href="#${k}"${top === k ? ' aria-current="page"' : ""}${navDropGroups(k) ? ` data-drop="${k}"` : ""}>${v}</a>`).join("");
     const sub = $("#subnav");
     const sectionNav = { about: abNav, training: trNav, analytics: anNav, consultancy: coNav, resources: resNav, contact: ctNav }[S.view];
     if (sectionNav) { sub.hidden = false; sub.innerHTML = sectionNav(); }
@@ -4372,15 +4411,33 @@ ${richSummary(st, rows)}`;
     if (b.dataset.act === "goSignin") { e.preventDefault(); const h = location.hash.replace("#", ""); if (h && h !== "signin") S.returnTo = h; S.authMode = "signin"; S.authError = ""; go("signin"); }
   });
   document.addEventListener("click", (e) => { const d = $(".acct-menu[open]"); if (d && !d.contains(e.target)) d.open = false; });
+  // Main menu dropdowns: open when the pointer rests on a menu item or it gets keyboard focus.
+  const canHover = !!(window.matchMedia && matchMedia("(hover: hover)").matches);
+  if (canHover) {
+    $("#tabs").addEventListener("mouseover", (e) => { const a = e.target.closest("a[data-drop]"); if (a) openNavDrop(a.dataset.drop, a); else if (e.target.closest("#tabs a")) closeNavDrop(true); });
+    $("#tabs").addEventListener("mouseleave", () => closeNavDrop());
+    $("#navDrop").addEventListener("mouseenter", () => clearTimeout(navDropTimer));
+    $("#navDrop").addEventListener("mouseleave", () => closeNavDrop());
+  }
+  $("#tabs").addEventListener("focusin", (e) => { const a = e.target.closest("a[data-drop]"); if (a && canHover) openNavDrop(a.dataset.drop, a); else closeNavDrop(true); });
+  $("#navDrop").addEventListener("click", (e) => { if (e.target.closest("a")) closeNavDrop(true); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && navDropKey) closeNavDrop(true); });
+  document.addEventListener("focusin", (e) => { if (navDropKey && !e.target.closest("#tabs, #navDrop")) closeNavDrop(true); });
+  // Section menus: the ▾ buttons also open on hover.
+  let subHoverTimer = null;
+  if (canHover) {
+    $("#subnav").addEventListener("mouseover", (e) => { clearTimeout(subHoverTimer); const b = e.target.closest('[data-act="trMenu"]'); if (b && S.trMenu !== b.dataset.k) { S.trMenu = b.dataset.k; renderTabs(); } });
+    $("#subnav").addEventListener("mouseleave", () => { clearTimeout(subHoverTimer); subHoverTimer = setTimeout(() => { if (S.trMenu) { S.trMenu = null; renderTabs(); } }, 260); });
+  }
   // Training menu: the Courses, Training venues and Training sectors buttons open a panel under the menu bar.
   $("#subnav").addEventListener("click", (e) => {
     const b = e.target.closest('[data-act="trMenu"]'); if (!b) return;
-    S.trMenu = S.trMenu === b.dataset.k ? null : b.dataset.k; renderTabs();
+    S.trMenu = canHover ? b.dataset.k : S.trMenu === b.dataset.k ? null : b.dataset.k; renderTabs();
     const p = $("#trPanel a"); if (p && S.trMenu) p.focus({ preventScroll: true });
   });
   document.addEventListener("click", (e) => { if (S.trMenu && !e.composedPath().some((n) => n.id === "subnav")) { S.trMenu = null; renderTabs(); } });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && S.trMenu) { const k = S.trMenu; S.trMenu = null; renderTabs(); const b = $(`[data-act="trMenu"][data-k="${k}"]`); if (b) b.focus(); } });
-  window.addEventListener("hashchange", () => { route(); render(); window.scrollTo(0, 0); if (API) refreshServer().then(softRender).catch(() => {}); });
+  window.addEventListener("hashchange", () => { closeNavDrop(true); route(); render(); window.scrollTo(0, 0); if (API) refreshServer().then(softRender).catch(() => {}); });
   const refreshSoon = () => { if (API && document.visibilityState === "visible") refreshServer().then(softRender).catch(() => {}); };
   document.addEventListener("visibilitychange", refreshSoon);
   window.addEventListener("focus", refreshSoon);
