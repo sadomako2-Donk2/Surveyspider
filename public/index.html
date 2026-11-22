@@ -573,7 +573,8 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
 @media (max-width: 560px) { .finder-grid { grid-template-columns: 1fr; } }
 .cta-badge { background: var(--gold); color: #0e1d3a; text-transform: none; letter-spacing: 0; font-size: .8rem; padding: 3px 10px; }
 /* printable catalogues */
-.printable { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 24px; display: grid; gap: 18px; }
+.printable { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 24px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; }
+.printable > * { min-width: 0; }
 .print-group h2 { border-bottom: 2px solid var(--gold-soft); padding-bottom: 6px; }
 .print-table { width: 100%; border-collapse: collapse; font-size: .92rem; }
 .print-table th, .print-table td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
