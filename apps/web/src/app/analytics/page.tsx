@@ -1,47 +1,65 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { EnquiryForm } from "@/components/enquiries/EnquiryForm";
-import { PageHead, ServiceCards } from "@/components/site/blocks";
+import { AnalyticsAsk, AN_STEPS, Steps } from "@/components/services/asks";
+import { Head, LinkCards } from "@/components/site/sections";
 import { Slideshow } from "@/components/site/Slideshow";
 import { slidesStartingWith } from "@/content/photos";
-import { ANALYTICS_CARDS } from "@/content/pages";
+import { AN_SECTORS, AN_SERVICES } from "@/content/sections";
 
 export const metadata: Metadata = {
-  title: "Analytics",
+  title: "Data analysis",
   description:
-    "Afrimetrica Analytics: statistical analysis, dashboards, data management and survey and M&E data analysis by experienced analysts.",
+    "Afrimetrica Analytics: statistical analysis, survey data, monitoring and evaluation, dashboards, data management, market and predictive analytics for organisations, governments and NGOs.",
   alternates: { canonical: "/analytics" },
 };
 
 export default function Analytics() {
   return (
     <main id="main" className="wrap stack xl">
-      <PageHead eyebrow="Afrimetrica Analytics" title="Data analysis you can rely on">
-        Send us your data and your questions. Our analysts clean it, analyse it with the right methods and give you
-        results you can explain and defend.
-      </PageHead>
+      <Head eyebrow="Afrimetrica Analytics" title="Data analysis you can rely on">
+        Send us your data and your questions. Our analysts clean it, analyse it with the right methods and give
+        organisations, governments and NGOs results they can explain, defend and act on.
+      </Head>
       <Slideshow slides={slidesStartingWith("analytics")} />
-      <ServiceCards cards={ANALYTICS_CARDS} />
-      <div className="split">
-        <EnquiryForm
-          type="ANALYTICS"
-          title="Request an analysis"
-          intro="Describe your data and what you need to know. We'll reply with an approach, a timeline and a quote."
-          messageLabel="Your data and questions"
-          placeholder="e.g. 1,200 household survey responses in Excel; we need prevalence estimates by region."
+      <section className="stack" aria-labelledby="svc-h">
+        <div className="section-head">
+          <span className="eyebrow">Services</span>
+          <h2 id="svc-h" className="h2xl">
+            What we can do with your data
+          </h2>
+        </div>
+        <LinkCards
+          cards={AN_SERVICES.map((x) => ({ href: `/analytics/service/${x.id}`, title: x.name, text: x.summary }))}
         />
+      </section>
+      <section className="stack" aria-labelledby="sec-h">
+        <div className="section-head">
+          <span className="eyebrow">Sectors</span>
+          <h2 id="sec-h" className="h2xl">
+            Analysis for your sector
+          </h2>
+        </div>
+        <nav className="sub-jump" aria-label="Sectors">
+          {AN_SECTORS.map((x) => (
+            <Link key={x.id} href={`/analytics/sector/${x.id}`}>
+              {x.name}
+            </Link>
+          ))}
+        </nav>
+      </section>
+      <div className="split">
+        <AnalyticsAsk title="Request an analysis" />
         <section className="card">
           <h2>How we work</h2>
-          <ol className="steps">
-            <li>You share your data securely and tell us your questions.</li>
-            <li>We agree an analysis plan, timeline and price.</li>
-            <li>We clean and analyse the data and check the results.</li>
-            <li>You receive tables, charts and a plain-language summary, and we walk you through them.</li>
-          </ol>
+          <Steps items={AN_STEPS} />
+          <p>
+            <Link href="/analytics/how-we-work">More about how we work</Link> ·{" "}
+            <Link href="/analytics/data-security">How we protect your data</Link>
+          </p>
           <h3>Collecting data with Afrimetrica Surveys?</h3>
           <p className="muted">
-            Every survey comes with built-in analysis: charts, group comparisons, key drivers, statistical tests, AI
-            insight reports and Excel exports. <Link href="/surveys">See the survey tools</Link>.
+            Every survey you run on Afrimetrica Surveys comes with built-in analysis: charts, group comparisons, key
+            drivers, statistical tests, AI insight reports and Excel exports.
           </p>
         </section>
       </div>

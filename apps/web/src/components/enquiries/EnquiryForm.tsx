@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useId, useState, type FormEvent } from "react";
 import { postJson } from "@/components/auth/api";
 import { ASKS_BUDGET, BUDGETS, SERVICES, TIMELINES, type EnquiryTypeCode } from "@/lib/enquiries";
@@ -11,6 +12,8 @@ interface Props {
   serviceLabel?: string;
   messageLabel?: string;
   placeholder?: string;
+  /** Text already in the message box, e.g. the course and venue the person was looking at. */
+  defaultMessage?: string;
 }
 
 export function EnquiryForm({
@@ -20,6 +23,7 @@ export function EnquiryForm({
   serviceLabel = "What do you need?",
   messageLabel = "Tell us about your project",
   placeholder,
+  defaultMessage,
 }: Props) {
   const id = useId();
   const [sent, setSent] = useState(false);
@@ -146,7 +150,14 @@ export function EnquiryForm({
       )}
       <label>
         {messageLabel}
-        <textarea name="message" rows={5} maxLength={4000} placeholder={placeholder} required />
+        <textarea
+          name="message"
+          rows={5}
+          maxLength={4000}
+          placeholder={placeholder}
+          defaultValue={defaultMessage}
+          required
+        />
       </label>
       {/* Hidden from people; bots fill it in. */}
       <div className="hp" aria-hidden="true">
@@ -160,7 +171,7 @@ export function EnquiryForm({
         You can contact me about this enquiry.
       </label>
       <p className="hint">
-        We use your details only to reply to this enquiry. {/* privacy notice link added with the privacy policy */}
+        How we use your details: see our <Link href="/privacy">privacy notice</Link>.
       </p>
       {error && (
         <p className="errs" role="alert">

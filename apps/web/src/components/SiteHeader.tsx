@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { NavLinks } from "@/components/site/NavLinks";
+import { SectionNav } from "@/components/site/SectionNav";
 
 export function Logo() {
   return (
@@ -43,11 +44,12 @@ export function SiteHeader() {
             <b>
               AFRI<span className="gold-text">METRICA</span>
             </b>
-            <small>RESEARCH METHODS &amp; ANALYTICS</small>
+            <small>DATA · RESEARCH · EXECUTIVE TRAINING</small>
           </span>
         </Link>
         <NavLinks />
       </div>
+      <SectionNav />
     </header>
   );
 }

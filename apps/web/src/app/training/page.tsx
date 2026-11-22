@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
 import { CourseCard } from "@/components/academy/CourseCard";
-import { EnquiryForm } from "@/components/enquiries/EnquiryForm";
-import { PageHead, Ticks } from "@/components/site/blocks";
+import Link from "next/link";
+import { AreaCards, Head } from "@/components/site/sections";
 import { Slideshow } from "@/components/site/Slideshow";
+import { TrainingAsk } from "@/components/training/TrainingAsk";
+import { COURSES } from "@/content/sections";
 import { slidesStartingWith } from "@/content/photos";
-import courseTemplates from "@/content/course-templates.json";
 import { getDb } from "@/lib/db";
 import { listPublishedCourses } from "@/server/academy/service";
 import { courseCardView } from "@/server/academy/view";
 
 export const metadata: Metadata = {
-  title: "Training",
+  title: "Data, research and executive training",
   description:
-    "Afrimetrica Academy: practical courses in research design, surveys, sampling, data analysis, qualitative methods, monitoring and evaluation, and research ethics.",
+    "Afrimetrica Academy: practical data, research and executive training for organisations, governments and NGOs, in the classroom across English-speaking Africa, live online or in-house.",
   alternates: { canonical: "/training" },
 };
 export const dynamic = "force-dynamic"; // dates and seats change as people register
@@ -30,76 +31,78 @@ export default async function Training() {
   const list = await courses();
   return (
     <main id="main" className="wrap stack xl">
-      <PageHead eyebrow="Afrimetrica Academy" title="Research methods training">
-        Practical courses in research design, survey methods, data analysis, qualitative methods and monitoring and
-        evaluation. Public short courses, online learning and in-house workshops for your organisation.
-      </PageHead>
+      <Head eyebrow="Afrimetrica Academy · Plan. Analyse. Lead." title="Data, research and executive training">
+        Practical training that helps organisations, governments and NGOs make better decisions and deliver results.
+      </Head>
+      <p className="muted" style={{ maxWidth: "70ch", marginTop: -12 }}>
+        Build skills in research design, surveys, statistics, monitoring and evaluation, dashboards and market research,
+        alongside executive programmes in strategy and strategic planning, leadership, governance, finance and project
+        management. Join a classroom course in a city near you, learn live online, or bring any course to your
+        organisation, tailored to your sector and your team.
+      </p>
       <Slideshow slides={slidesStartingWith("training", "homeAcademy")} />
-
-      {list && list.length ? (
-        <section className="stack" aria-labelledby="courses-h">
-          <h2 id="courses-h" className="h2xl">
-            Courses
+      <form className="card quick-find" action="/training/finder" role="search">
+        <label>
+          Search {COURSES.length} courses
+          <input name="q" type="search" placeholder="e.g. strategy, Power BI, monitoring and evaluation" />
+        </label>
+        <button className="btn primary" type="submit">
+          Find courses
+        </button>
+      </form>
+      <section className="stack" aria-labelledby="areas-h">
+        <div className="section-head">
+          <span className="eyebrow">Courses</span>
+          <h2 id="areas-h" className="h2xl">
+            Start with a subject area
           </h2>
+        </div>
+        <AreaCards />
+      </section>
+      {list && list.length > 0 && (
+        <section className="stack" aria-labelledby="courses-h">
+          <div className="section-head">
+            <span className="eyebrow">Scheduled dates</span>
+            <h2 id="courses-h" className="h2xl">
+              Courses open for registration
+            </h2>
+          </div>
           <div className="course-grid">
             {list.map((c) => (
               <CourseCard key={c.id} c={c} />
             ))}
           </div>
         </section>
-      ) : (
-        <section className="stack">
-          <div className="section-head">
-            <h2 className="h2xl">Topics we teach</h2>
-            <p className="muted">
-              {list === null
-                ? "Course dates can't be shown right now. Please try again shortly."
-                : "Our course schedule is being finalised. Register your interest and we'll contact you when dates are announced."}
-            </p>
-          </div>
-          <div className="course-grid">
-            {courseTemplates.map((c) => (
-              <article key={c.title} className="card course">
-                <div className="pills">
-                  {[c.level, c.format, c.duration].map((x) => (
-                    <span key={x} className="pill">
-                      {x}
-                    </span>
-                  ))}
-                </div>
-                <h3>{c.title}</h3>
-                <p className="muted">{c.summary}</p>
-              </article>
-            ))}
-          </div>
-        </section>
       )}
-
-      <div className="split">
-        <EnquiryForm
-          type="TRAINING"
-          title="Training for your organisation"
-          intro="Tell us what you'd like to learn, how many people would attend and where. We run public courses and tailored in-house workshops."
-          serviceLabel="What are you interested in?"
-          messageLabel="Topics, group size and location"
-          placeholder="e.g. A 2-day questionnaire design workshop for 20 M&E staff in Kumasi"
-        />
-        <section className="card">
-          <h2>What to expect</h2>
-          <Ticks
-            small
-            items={[
-              { title: "Hands-on learning", text: "Short explanations followed by practice on real or your own data." },
-              { title: "Small groups", text: "Enough time for questions and feedback." },
-              { title: "Course materials", text: "Slides, templates and exercises to keep." },
-              {
-                title: "Certificate of completion",
-                text: "For participants who attend and complete the course. Not an accredited qualification.",
-              },
-            ]}
-          />
-        </section>
-      </div>
+      <section className="units" aria-label="Ways to learn">
+        {[
+          [
+            "Classroom",
+            "Public courses",
+            "Learn alongside professionals from other organisations, in a city near you.",
+          ],
+          [
+            "Live online",
+            "Online with a trainer",
+            "The same course, taught live in short daily sessions you can join from anywhere.",
+          ],
+          [
+            "In-house",
+            "For your organisation",
+            "Any course, adapted to your data, sector and team, at your premises or online.",
+          ],
+          ["Tailored", "Designed for you", "Need something not listed? We build programmes around your goals."],
+        ].map(([e, t, d]) => (
+          <article key={e} className="card unit">
+            <span className="eyebrow">{e}</span>
+            <h3>{t}</h3>
+            <p className="muted">
+              {d} {e === "Classroom" && <Link href="/training/venues">See venues</Link>}
+            </p>
+          </article>
+        ))}
+      </section>
+      <TrainingAsk title="Ask about dates, fees or in-house training" />
     </main>
   );
 }

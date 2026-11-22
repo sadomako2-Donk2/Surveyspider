@@ -1,0 +1,36 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { Crumbs, Head } from "@/components/site/sections";
+import { VENUES, slug } from "@/content/sections";
+
+export const metadata: Metadata = {
+  title: "Training venues",
+  description: "Afrimetrica Academy classroom training venues across English-speaking Africa.",
+  alternates: { canonical: "/training/venues" },
+};
+
+export default function Venues() {
+  return (
+    <main id="main" className="wrap stack">
+      <Crumbs
+        items={[
+          ["/training", "Training"],
+          ["", "Training venues"],
+        ]}
+      />
+      <Head eyebrow="Training venues" title="Where we train">
+        Classroom courses can run in these cities across English-speaking Africa. Dates are set for each venue: ask for
+        the dates and fees for the course and city you want, learn live online, or bring any course to your own
+        premises.
+      </Head>
+      <div className="venue-grid">
+        {VENUES.map((v) => (
+          <Link key={v.country} className="venue" href={`/training/venue/${slug(v.country)}`}>
+            <b>{v.country}</b>
+            <span>{v.cities.join(" · ")}</span>
+          </Link>
+        ))}
+      </div>
+    </main>
+  );
+}

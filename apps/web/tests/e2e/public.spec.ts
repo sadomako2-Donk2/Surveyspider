@@ -2,15 +2,29 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 const PAGES = [
-  { path: "/", nav: "Home", h1: /Advancing research/ },
-  { path: "/about", nav: "About", h1: /built around good evidence/ },
-  { path: "/training", nav: "Training", h1: /Research methods training/ },
+  { path: "/", nav: "Home", h1: /Data, research and executive training/ },
+  { path: "/about", nav: "About", h1: /executive training for better decisions/ },
+  { path: "/training", nav: "Training", h1: /Data, research and executive training/ },
   { path: "/surveys", nav: "Surveys", h1: /Ask better questions/ },
   { path: "/analytics", nav: "Analytics", h1: /Data analysis you can rely on/ },
   { path: "/consultancy", nav: "Consultancy", h1: /Research and evaluation consultancy/ },
   { path: "/resources", nav: "Resources", h1: /Resources for better research/ },
   { path: "/resources/guides/how-many-responses-do-you-need", nav: "Resources", h1: /How many responses/ },
   { path: "/contact", nav: "Contact", h1: /Get in touch/ },
+  // Section pages brought across from the live site
+  { path: "/about/vision", nav: "About", h1: /The future we are working towards/ },
+  { path: "/training/finder", nav: "Training", h1: /Find a course/ },
+  { path: "/training/area/leadership", nav: "Training", h1: /Leadership, Strategy and Governance/ },
+  { path: "/training/subject/strategy", nav: "Training", h1: /Strategy and Strategic Planning training courses/ },
+  { path: "/training/course/ls-strategy", nav: "Training", h1: /Strategic Planning and Execution/ },
+  { path: "/training/venue/ghana", nav: "Training", h1: /Training courses in Ghana/ },
+  { path: "/analytics/service/dashboards", nav: "Analytics", h1: /Dashboards and business intelligence/ },
+  { path: "/analytics/sector/ngos", nav: "Analytics", h1: /Data analysis for NGOs/ },
+  { path: "/consultancy/service/evaluations", nav: "Consultancy", h1: /Baseline, mid-term and final evaluations/ },
+  { path: "/resources/catalogues/training", nav: "Resources", h1: /Training course catalogue/ },
+  { path: "/contact/hotel", nav: "Contact", h1: /Accommodation for your course/ },
+  { path: "/privacy", nav: "", h1: /How we use your personal data/ },
+  { path: "/terms", nav: "", h1: /Terms of use/ },
 ];
 
 for (const p of PAGES) {
@@ -24,10 +38,11 @@ for (const p of PAGES) {
     expect(await page.locator('meta[name="description"]').getAttribute("content")).toBeTruthy();
     const canonical = await page.locator('link[rel="canonical"]').getAttribute("href");
     expect(canonical).toMatch(p.path === "/" ? /^https?:\/\/[^/]+\/?$/ : new RegExp(`${p.path}$`));
-    await expect(page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: p.nav })).toHaveAttribute(
-      "aria-current",
-      "page",
-    );
+    if (p.nav)
+      await expect(page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: p.nav })).toHaveAttribute(
+        "aria-current",
+        "page",
+      );
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
     const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
     const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");

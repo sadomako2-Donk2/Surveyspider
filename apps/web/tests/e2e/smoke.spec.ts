@@ -5,7 +5,7 @@ test("home page renders with the brand and title", async ({ page }) => {
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/");
   await expect(page).toHaveTitle(/Afrimetrica/);
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Advancing research");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Data, research and");
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
   expect(overflow).toBe(false);
   expect(errors).toEqual([]);

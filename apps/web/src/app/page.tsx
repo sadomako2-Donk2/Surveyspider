@@ -13,9 +13,9 @@ import { listPublishedCourses } from "@/server/academy/service";
 import { courseCardView } from "@/server/academy/view";
 
 export const metadata: Metadata = {
-  title: { absolute: `${SITE.name} — Research Methods and Analytics` },
+  title: { absolute: `${SITE.name} — Data, Research and Executive Training` },
   description:
-    "Afrimetrica helps researchers, organisations and students design better studies, collect reliable data and turn it into evidence: research methods training, survey tools, data analysis and consultancy.",
+    "Afrimetrica helps organisations, governments and NGOs make better decisions: data, research and executive training, survey tools, data analysis and consultancy across Africa.",
   alternates: { canonical: "/" },
 };
 
@@ -49,19 +49,16 @@ export default async function Home() {
       <section className="hero solo">
         <div>
           <h1 className="display">
-            Advancing research, <span className="gold-text">measurement and evidence.</span>
+            Data, research and <span className="gold-text">executive training.</span>
           </h1>
           <p className="lede">
-            Afrimetrica helps researchers, organisations and students design better studies, collect reliable data and
-            turn it into evidence. We train, build survey tools, analyse data and advise, all in one place.
-          </p>
-          <p className="muted">
-            From raw data to clear decisions: research, data analytics and market intelligence for organisations working
-            across African markets.
+            Afrimetrica helps organisations, governments and NGOs make better decisions and deliver results. We train
+            leaders and teams in data, research and management, collect and analyse data, and advise on strategy,
+            research and evaluation, across Africa.
           </p>
           <div className="ctas">
             <Link className="btn gold big" href="/training">
-              Explore courses
+              Explore training
             </Link>
             <Link className="btn primary big" href="/surveys">
               Start a survey
@@ -77,7 +74,7 @@ export default async function Home() {
       <section className="stack">
         <div className="section-head">
           <span className="eyebrow">What we do</span>
-          <h2 className="h2xl">Four ways to strengthen your research</h2>
+          <h2 className="h2xl">Four ways we help organisations decide and deliver</h2>
         </div>
         <div className="units">
           {UNITS.map((u) => (

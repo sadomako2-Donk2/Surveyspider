@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata, Viewport } from "next";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SITE } from "@/lib/site";
@@ -6,7 +7,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: { default: SITE.name, template: `%s · ${SITE.name}` },
-  description: `${SITE.longName}. ${SITE.tagline}.`,
+  description:
+    "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.",
   metadataBase: new URL(siteUrl()),
   openGraph: { siteName: SITE.name, type: "website", locale: "en_GB" },
   formatDetection: { telephone: false },
@@ -24,9 +26,15 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <SiteHeader />
         {children}
         <footer className="wrap foot">
-          <b>{SITE.name}</b> · Research Methods and Analytics
+          <b>{SITE.name}</b> · Data, Research and Executive Training
           <br />
-          <span className="hint">{SITE.tagline}.</span>
+          <span className="hint">
+            {SITE.tagline} Training, data and advice for organisations, governments and NGOs across Africa.
+          </span>
+          <br />
+          <span className="hint">
+            <Link href="/privacy">Privacy notice</Link> · <Link href="/terms">Terms of use</Link>
+          </span>
         </footer>
       </body>
     </html>

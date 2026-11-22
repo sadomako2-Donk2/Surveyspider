@@ -15,13 +15,11 @@ Prefix every prompt with: "Read CLAUDE.md and docs/. Keep Phase 1 running until 
 10. **Cut-over.** Deploy, run the migration, switch the Render domain, keep the Phase 1 disk as a read-only backup for 90 days.
 11. **Later.** Subscription and Payment (Paystack or Flutterwave for GHS, Stripe for cards), certificates as PDFs, learning materials.
 
-## Live-site changes still to carry into Phase 2 before cut-over
-- Training section (Nov 2026): 99 courses in 78 subjects in 11 subject areas, with a GLOMACS-style menu (New, Course finder, Courses, Training venues, Certificates, Training sectors) and separate pages (#training/finder, /area, /subject, /venue, /course), search and filters, venues across English-speaking Africa, course pages with day-by-day outlines and a prefilled "Request dates and fees" enquiry. Source: `CATALOGUE`, `VENUES`, `viewTraining` and `catDetail` in `public/index.html` on `main`.
-- Deeper gold (`--gold-ink`) for small gold labels on the live site (Phase 2 already uses it).
-- Positioning as "Data, research and executive training" (Nov 2026): home heading and intro, "What we do", About heading, intro, mission and values, header logo line, footer and page title. Copy the wording from `public/index.html` on `main`.
-- Analytics section (Nov 2026): menu (Overview, Services, Sectors, Tools we use, How we work, Data security, Request analysis) and pages `#analytics/service/<id>`, `/sector/<id>`, `/tools`, `/how-we-work`, `/data-security`, `/request`. Source: `AN_SERVICES`, `AN_SECTORS`, `anNav` and `viewAnalyticsSvc` in `public/index.html` on `main`.
-- Consultancy section (Nov 2026): menu (Overview, Services, Sectors, Our approach, Fieldwork quote, Work with us, Request a proposal) and pages `#consultancy/service/<id>`, `/sector/<id>`, `/approach`, `/work-with-us`, `/request`. Source: `CO_SERVICES`, `CO_SECTORS`, `coNav` and `viewConsult` in `public/index.html` on `main`.
-- Resources and Contact sections (Nov 2026): Resources menu (Overview, Articles and guides, Case studies, Testimonials, Press releases, Videos, Catalogues and brochures, with a printable training catalogue and services brochure) and Contact menu (Contact us, Hotel reservation, Careers, Find training, Mailing list). Source: `resNav`, `ctNav`, `viewResources` and `viewContact` in `public/index.html` on `main`.
-- About section (Nov 2026): menu (Overview, Our mission, Our vision, Our team, How we're organised, About our certificates) and pages `#about/<part>`. Vision statement drafted; owner to confirm.
-- Hover menus (Nov 2026): main menu items show their section pages on hover or keyboard focus; section ▾ menus open on hover. Source: `navDropGroups`, `openNavDrop` in `public/index.html` on `main`.
-- My Account section (Nov 2026): menu (Overview, My courses, My surveys, My enquiries, My profile, Admin area for owners) with hover dropdown and pages `#account/<part>`.
+## Live-site changes carried into Phase 2 (Nov 2026)
+Done on `phase-2`, with real page addresses instead of `#` links:
+- Training section: 99 courses, 78 subjects, 11 subject areas, course finder (filters in the address), venues, sectors, new courses, certificates, a page per course.
+- Analytics and Consultancy sections (services, sectors, approach, request pages), About (mission, vision, team, organisation, certificates), Resources (articles, case studies, testimonials, press, videos, printable catalogues), Contact (hotel, careers, mailing list).
+- Section menu bars, hover dropdowns on the main menu, "Data, research and executive training" positioning, privacy notice, terms of use, privacy links on forms and sign-up, sitemap with every section page.
+- Content comes from the live site through `apps/web/scripts/phase1/extract-content.mjs` → `src/content/sections.json`. Until the live site is retired, change the live site first and re-run the script.
+
+Not carried across yet: My Account sub-pages (the new site's account page is organised differently), the admin warning for email notifications (the new site sends emails through its own settings).

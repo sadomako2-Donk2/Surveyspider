@@ -1,0 +1,2956 @@
+{
+  "subjects": {
+    "design": "Research Design and Methods",
+    "survey": "Survey and Questionnaire Design",
+    "field": "Sampling, Fieldwork and Data Collection",
+    "stats": "Statistics and Data Analysis",
+    "qual": "Qualitative Research",
+    "mel": "Monitoring, Evaluation and Learning",
+    "market": "Market Research and Business Intelligence",
+    "writing": "Research Ethics, Writing and Publishing",
+    "strategy": "Strategy and Strategic Planning",
+    "leadership": "Management and Leadership",
+    "governance": "Governance, Compliance and Risk",
+    "negotiation": "Negotiation and Influencing Skills",
+    "executive": "Executive Development",
+    "stakeholder": "Stakeholder Relations",
+    "personal": "Personal Effectiveness",
+    "sustainability": "Sustainability and CSR",
+    "creativity": "Creativity and Innovation",
+    "ai": "Artificial Intelligence (AI)",
+    "viz": "Data Management and Analytics",
+    "cyber": "Cybersecurity",
+    "digital": "Digital Transformation",
+    "future": "Future Skills",
+    "fintech": "Fintech and Blockchain",
+    "aiapps": "AI Applications",
+    "finance": "Finance and Budgeting",
+    "treasury": "Treasury and Investment",
+    "fraud": "Fraud and Financial Audit",
+    "banking": "Banking and Financial Regulation",
+    "tax": "Tax and Revenue",
+    "refinance": "Real Estate Investment and Finance",
+    "jv": "Joint Ventures",
+    "project": "Project Management",
+    "procurement": "Purchasing and Supply Chain",
+    "contracts": "Contracts Management",
+    "construction": "Construction Management",
+    "ppp": "Public-Private Partnerships",
+    "legal": "Legal",
+    "hr": "HR Management",
+    "lnd": "Learning and Development",
+    "behavioural": "Behavioural Skills",
+    "admin": "Office Administration",
+    "opex": "Operational Excellence",
+    "bpm": "Business Process Management",
+    "quality": "Quality and Audit",
+    "rca": "Root Cause Analysis",
+    "sales": "Sales and Marketing",
+    "customer": "Customer Service",
+    "comms": "Corporate Communication",
+    "pr": "Public Relations",
+    "hospitality": "Hospitality and Tourism",
+    "oilgas": "Oil and Gas",
+    "maintenance": "Maintenance Engineering",
+    "electrical": "Electrical Engineering",
+    "instrumentation": "Instrumentation and Process Control",
+    "mechanical": "Mechanical Engineering",
+    "facilities": "Facilities Management",
+    "chemical": "Chemical and Petrochemical",
+    "power": "Power and Utilities",
+    "energy": "Energy",
+    "hydrogen": "Hydrogen",
+    "mining": "Mining Engineering",
+    "corrosion": "Corrosion, Metallurgy and Inspection",
+    "manufacturing": "Manufacturing",
+    "hse": "Health, Safety and Environment",
+    "emergency": "Emergency and Crisis Management",
+    "security": "Security Management",
+    "waste": "Waste Management",
+    "realestate": "Real Estate",
+    "refining": "Refining",
+    "urban": "Urban Planning and Development",
+    "public": "Public Sector and Public Affairs",
+    "health": "Healthcare Management",
+    "pensions": "Social Insurance and Retirement",
+    "policing": "Police and Law Enforcement",
+    "traffic": "Traffic Management",
+    "defence": "Defence and National Security",
+    "ports": "Ships and Port Management",
+    "agri": "Agribusiness Development"
+  },
+  "subjectIntro": {
+    "strategy": "Envision, plan and lead: practical courses that strengthen executives' skills in strategy and strategic planning, so organisations, governments and NGOs can set clear priorities and turn them into results."
+  },
+  "groups": [
+    {
+      "id": "research",
+      "name": "Research, Monitoring and Evaluation",
+      "subjects": ["design", "survey", "field", "stats", "qual", "mel", "market", "writing"]
+    },
+    {
+      "id": "leadership",
+      "name": "Leadership, Strategy and Governance",
+      "subjects": [
+        "strategy",
+        "leadership",
+        "governance",
+        "negotiation",
+        "executive",
+        "stakeholder",
+        "personal",
+        "sustainability",
+        "creativity"
+      ]
+    },
+    {
+      "id": "tech",
+      "name": "AI, Data and Emerging Technologies",
+      "subjects": ["ai", "viz", "cyber", "digital", "future", "fintech", "creativity", "aiapps"]
+    },
+    {
+      "id": "finance",
+      "name": "Finance, Investment and Banking",
+      "subjects": ["finance", "treasury", "fraud", "banking", "fintech", "tax", "refinance", "jv"]
+    },
+    {
+      "id": "project",
+      "name": "Project, Procurement and Contracts",
+      "subjects": ["project", "procurement", "contracts", "construction", "ppp", "legal", "negotiation", "future"]
+    },
+    {
+      "id": "people",
+      "name": "People, HR and Talent Management",
+      "subjects": ["hr", "lnd", "personal", "behavioural", "admin"]
+    },
+    {
+      "id": "operations",
+      "name": "Operations, Quality and Auditing",
+      "subjects": ["creativity", "opex", "bpm", "quality", "rca"]
+    },
+    {
+      "id": "sales",
+      "name": "PR, Sales and Customer Service",
+      "subjects": ["sales", "customer", "negotiation", "comms", "pr", "hospitality"]
+    },
+    {
+      "id": "engineering",
+      "name": "Engineering, Maintenance, Oil and Gas",
+      "subjects": [
+        "oilgas",
+        "maintenance",
+        "electrical",
+        "instrumentation",
+        "mechanical",
+        "construction",
+        "facilities",
+        "rca",
+        "chemical",
+        "power",
+        "energy",
+        "hydrogen",
+        "mining",
+        "corrosion",
+        "manufacturing",
+        "quality"
+      ]
+    },
+    {
+      "id": "hse",
+      "name": "HSE, Emergency and Security",
+      "subjects": ["hse", "emergency", "security", "waste", "sustainability", "cyber"]
+    },
+    {
+      "id": "sector",
+      "name": "Sector-Specific Courses",
+      "subjects": [
+        "realestate",
+        "future",
+        "oilgas",
+        "refining",
+        "chemical",
+        "energy",
+        "power",
+        "hydrogen",
+        "manufacturing",
+        "legal",
+        "urban",
+        "public",
+        "health",
+        "hospitality",
+        "pensions",
+        "policing",
+        "traffic",
+        "defence",
+        "ports",
+        "agri"
+      ]
+    }
+  ],
+  "formats": ["Classroom", "Live online", "In-house"],
+  "venues": [
+    {
+      "country": "Ghana",
+      "cities": ["Accra", "Kumasi", "Tamale", "Takoradi", "Sunyani"]
+    },
+    {
+      "country": "Nigeria",
+      "cities": ["Lagos", "Abuja"]
+    },
+    {
+      "country": "Kenya",
+      "cities": ["Nairobi", "Mombasa"]
+    },
+    {
+      "country": "Uganda",
+      "cities": ["Kampala"]
+    },
+    {
+      "country": "Tanzania",
+      "cities": ["Dar es Salaam", "Arusha"]
+    },
+    {
+      "country": "Rwanda",
+      "cities": ["Kigali"]
+    },
+    {
+      "country": "South Africa",
+      "cities": ["Johannesburg", "Cape Town"]
+    },
+    {
+      "country": "Zambia",
+      "cities": ["Lusaka"]
+    },
+    {
+      "country": "Zimbabwe",
+      "cities": ["Harare"]
+    },
+    {
+      "country": "Botswana",
+      "cities": ["Gaborone"]
+    },
+    {
+      "country": "Namibia",
+      "cities": ["Windhoek"]
+    },
+    {
+      "country": "Malawi",
+      "cities": ["Lilongwe"]
+    },
+    {
+      "country": "Sierra Leone",
+      "cities": ["Freetown"]
+    },
+    {
+      "country": "Liberia",
+      "cities": ["Monrovia"]
+    },
+    {
+      "country": "The Gambia",
+      "cities": ["Banjul"]
+    },
+    {
+      "country": "Eswatini",
+      "cities": ["Mbabane"]
+    },
+    {
+      "country": "Lesotho",
+      "cities": ["Maseru"]
+    },
+    {
+      "country": "Mauritius",
+      "cities": ["Port Louis"]
+    },
+    {
+      "country": "South Sudan",
+      "cities": ["Juba"]
+    }
+  ],
+  "courses": [
+    {
+      "id": "rd-applied",
+      "cat": "design",
+      "title": "Applied Research Design and Methods",
+      "days": 5,
+      "level": "Foundation",
+      "summary": "Turn a broad question into a sound, feasible study: from problem statement to design, sampling and analysis plan.",
+      "objectives": [
+        "Write clear research questions and hypotheses",
+        "Choose between experimental, quasi-experimental, cross-sectional and longitudinal designs",
+        "Match methods and data sources to each question",
+        "Write a concise research protocol"
+      ],
+      "audience": "Researchers, programme staff, postgraduate students and analysts who plan or commission studies.",
+      "outline": [
+        [
+          "From problem to research questions",
+          "Defining the problem; literature scan; research questions and hypotheses"
+        ],
+        ["Choosing a design", "Experimental and quasi-experimental designs; surveys; case studies; mixed methods"],
+        ["Measurement", "Concepts, indicators and variables; validity and reliability; existing scales"],
+        ["Sampling and data", "Population and sampling frame; sample size; primary and secondary data"],
+        ["The research protocol", "Analysis plan; timeline and budget; ethics; presenting your protocol"]
+      ]
+    },
+    {
+      "id": "rd-mixed",
+      "cat": "design",
+      "title": "Mixed Methods Research",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Combine numbers and narratives so each strengthens the other, and integrate them in one coherent report.",
+      "objectives": [
+        "Explain convergent, explanatory and exploratory mixed methods designs",
+        "Plan sequencing and sampling across strands",
+        "Integrate findings with joint displays",
+        "Report mixed methods studies credibly"
+      ],
+      "audience": "Researchers and evaluators who use both surveys and interviews or focus groups.",
+      "outline": [
+        ["Designs and purposes", "Why mix methods; core designs; choosing a design"],
+        ["Planning and sampling", "Sequencing; linked samples; instruments for each strand"],
+        ["Integration and reporting", "Joint displays; handling divergent findings; writing up"]
+      ]
+    },
+    {
+      "id": "rd-experiments",
+      "cat": "design",
+      "title": "Impact Evaluation and Field Experiments",
+      "days": 5,
+      "level": "Advanced",
+      "summary": "Estimate what difference a programme makes using randomised and quasi-experimental methods.",
+      "objectives": [
+        "Set out a theory of change and evaluation questions",
+        "Design randomised controlled trials in field settings",
+        "Apply difference-in-differences, matching and regression discontinuity",
+        "Calculate statistical power and interpret effect sizes"
+      ],
+      "audience": "Evaluators, programme managers, economists and policy analysts.",
+      "outline": [
+        ["Causality and counterfactuals", "Theory of change; selection bias; when to evaluate impact"],
+        ["Randomised trials", "Randomisation units; stratification; ethics; implementation"],
+        ["Quasi-experimental methods", "Difference-in-differences; matching; regression discontinuity"],
+        ["Power and sample size", "Minimum detectable effects; clustering; attrition"],
+        ["Analysis and reporting", "Estimating effects; heterogeneity; communicating results"]
+      ]
+    },
+    {
+      "id": "sv-questionnaire",
+      "cat": "survey",
+      "title": "Questionnaire Design for Reliable Data",
+      "days": 3,
+      "level": "Foundation",
+      "summary": "Write questions people understand and answer honestly, and build questionnaires that are easy to analyse.",
+      "objectives": [
+        "Write clear, neutral and unambiguous questions",
+        "Choose suitable answer formats and scales",
+        "Structure and route a questionnaire",
+        "Pre-test and pilot before fieldwork"
+      ],
+      "audience": "Anyone who writes or reviews questionnaires: researchers, M&E officers, students and market researchers.",
+      "outline": [
+        ["Writing good questions", "Common wording errors; double-barrelled and leading questions; sensitive topics"],
+        ["Answer formats and scales", "Closed and open questions; Likert and rating scales; 'don't know' options"],
+        ["Testing the questionnaire", "Cognitive interviews; piloting; translation and back-translation"]
+      ]
+    },
+    {
+      "id": "sv-scales",
+      "cat": "survey",
+      "title": "Measurement Scales and Index Construction",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Build and test multi-item scales and composite indices that measure what they claim to.",
+      "objectives": [
+        "Develop items for a construct",
+        "Test reliability with Cronbach's alpha",
+        "Explore structure with factor analysis",
+        "Combine items into scores and indices"
+      ],
+      "audience": "Researchers, psychologists, evaluators and analysts who measure attitudes, wellbeing or capacity.",
+      "outline": [
+        ["Constructs and items", "Defining constructs; item writing; adapting existing scales"],
+        ["Reliability and validity", "Internal consistency; test-retest; validity evidence"],
+        ["Scores and indices", "Exploratory factor analysis; weighting; reporting scale quality"]
+      ]
+    },
+    {
+      "id": "sv-online",
+      "cat": "survey",
+      "title": "Online and Mobile Surveys",
+      "days": 3,
+      "level": "Foundation",
+      "summary": "Run online and phone-based surveys that reach the right people and produce clean data.",
+      "objectives": [
+        "Design surveys for mobile screens",
+        "Recruit respondents and manage response rates",
+        "Add quality checks such as attention checks and speed flags",
+        "Export and prepare data for analysis"
+      ],
+      "audience": "Researchers, marketers and organisations moving their surveys online.",
+      "outline": [
+        ["Designing for screens", "Mobile-first layouts; question types; consent and privacy"],
+        ["Reaching respondents", "Panels, links and SMS; incentives; response rates and bias"],
+        ["Data quality", "Attention checks; speeding; straight-lining; cleaning and export"]
+      ]
+    },
+    {
+      "id": "fd-sampling",
+      "cat": "field",
+      "title": "Sampling Methods and Sample Size",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Choose a sampling design and calculate a defensible sample size for surveys and evaluations.",
+      "objectives": [
+        "Compare probability and non-probability sampling",
+        "Design stratified, cluster and multi-stage samples",
+        "Calculate sample sizes for proportions and means",
+        "Apply weights and design effects"
+      ],
+      "audience": "Survey managers, statisticians, M&E staff and researchers.",
+      "outline": [
+        ["Sampling designs", "Sampling frames; simple, systematic and stratified sampling"],
+        ["Cluster and multi-stage samples", "Design effects; intra-cluster correlation; listing"],
+        ["Sample size and weights", "Margin of error; power; non-response adjustment; weighting"]
+      ]
+    },
+    {
+      "id": "fd-capi",
+      "cat": "field",
+      "title": "Mobile Data Collection with KoboToolbox and ODK",
+      "days": 3,
+      "level": "Foundation",
+      "summary": "Build digital forms, collect data on phones and tablets, and monitor quality in real time.",
+      "objectives": [
+        "Build XLSForm questionnaires with skip logic and validation",
+        "Deploy forms to devices and collect offline",
+        "Monitor submissions and data quality during fieldwork",
+        "Download and clean the data"
+      ],
+      "audience": "Field coordinators, enumerators' supervisors, M&E officers and researchers.",
+      "outline": [
+        ["Building forms", "XLSForm basics; question types; relevance and constraints"],
+        ["Deploying and collecting", "Devices; offline collection; GPS, photos and media"],
+        ["Monitoring quality", "Dashboards; back-checks; cleaning and export"]
+      ]
+    },
+    {
+      "id": "fd-management",
+      "cat": "field",
+      "title": "Fieldwork Management and Data Quality",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Plan, staff and supervise fieldwork so that data arrive on time, on budget and of high quality.",
+      "objectives": [
+        "Plan logistics, budgets and timelines for fieldwork",
+        "Recruit, train and supervise enumerators",
+        "Run quality assurance and back-checks",
+        "Handle consent, safety and data protection in the field"
+      ],
+      "audience": "Survey and field managers, research coordinators and NGO programme staff.",
+      "outline": [
+        ["Planning fieldwork", "Workplans; budgets; logistics; risk"],
+        ["Teams and training", "Recruiting enumerators; training design; role plays"],
+        ["Supervision", "Spot checks; daily reports; managing non-response"],
+        ["Quality assurance", "Back-checks; high-frequency checks; corrective action"],
+        ["Ethics and closing out", "Consent; safeguarding; data security; field reports"]
+      ]
+    },
+    {
+      "id": "st-spss",
+      "cat": "stats",
+      "title": "Data Analysis with SPSS",
+      "days": 5,
+      "level": "Foundation",
+      "summary": "Go from raw survey data to tables, charts and statistical tests using SPSS.",
+      "objectives": [
+        "Import, label and clean data",
+        "Produce descriptive statistics, tables and charts",
+        "Run and interpret t-tests, ANOVA, chi-square and correlation",
+        "Fit and explain linear regression models"
+      ],
+      "audience": "Researchers, students, M&E staff and analysts new to statistical software.",
+      "outline": [
+        ["Getting data ready", "Importing; variable labels; recoding; missing values"],
+        ["Describing data", "Frequencies; descriptives; cross-tabulations; charts"],
+        ["Comparing groups", "t-tests; ANOVA; chi-square; non-parametric tests"],
+        ["Relationships", "Correlation; simple and multiple regression"],
+        ["Reporting", "Tables for reports; interpreting output; a full worked example"]
+      ]
+    },
+    {
+      "id": "st-stata",
+      "cat": "stats",
+      "title": "Data Analysis with Stata",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Use Stata for reproducible data management and analysis of survey and programme data.",
+      "objectives": [
+        "Write do-files for reproducible work",
+        "Merge, reshape and clean datasets",
+        "Analyse survey data with weights and design",
+        "Fit regression models for continuous and binary outcomes"
+      ],
+      "audience": "Economists, epidemiologists, evaluators and analysts.",
+      "outline": [
+        ["Stata essentials", "Do-files; data types; labels; logs"],
+        ["Data management", "Merging; appending; reshaping; loops"],
+        ["Survey data", "svyset; weighted estimates; standard errors"],
+        ["Regression", "Linear, logistic and probit models; diagnostics"],
+        ["Output and reproducibility", "Exporting tables; project structure; worked example"]
+      ]
+    },
+    {
+      "id": "st-r",
+      "cat": "stats",
+      "title": "Data Science with R",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Clean, analyse and visualise data in R with the tidyverse, and produce reproducible reports.",
+      "objectives": [
+        "Import and tidy data with the tidyverse",
+        "Create publication-quality charts with ggplot2",
+        "Fit and interpret statistical models",
+        "Write reproducible reports with R Markdown or Quarto"
+      ],
+      "audience": "Analysts, researchers and students who want a free, powerful analysis tool.",
+      "outline": [
+        ["R and RStudio", "Projects; packages; data import"],
+        ["Tidying data", "dplyr and tidyr; joins; missing values"],
+        ["Visualisation", "ggplot2; themes; charts for reports"],
+        ["Modelling", "Tests; linear and logistic regression"],
+        ["Reproducible reports", "R Markdown and Quarto; automating reports"]
+      ]
+    },
+    {
+      "id": "st-python",
+      "cat": "stats",
+      "title": "Python for Data Analysis",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Analyse and visualise data in Python with pandas, and automate repetitive work.",
+      "objectives": [
+        "Load and clean data with pandas",
+        "Summarise, group and reshape data",
+        "Visualise data with matplotlib and seaborn",
+        "Automate routine analysis and reporting"
+      ],
+      "audience": "Analysts and researchers who want to programme their analysis.",
+      "outline": [
+        ["Python basics", "Notebooks; data types; functions"],
+        ["pandas", "Reading files; selecting; cleaning"],
+        ["Analysis", "Grouping; pivoting; merging; statistics"],
+        ["Visualisation", "matplotlib; seaborn; charts for reports"],
+        ["Automation", "Scripts; scheduled reports; a worked project"]
+      ]
+    },
+    {
+      "id": "st-regression",
+      "cat": "stats",
+      "title": "Regression and Multivariate Analysis",
+      "days": 5,
+      "level": "Advanced",
+      "summary": "Model relationships between many variables and explain the results to non-specialists.",
+      "objectives": [
+        "Fit and diagnose multiple regression models",
+        "Use logistic regression for binary outcomes",
+        "Apply factor and cluster analysis",
+        "Present multivariate results clearly"
+      ],
+      "audience": "Analysts, researchers and postgraduate students with a basic statistics background.",
+      "outline": [
+        ["Multiple regression", "Assumptions; diagnostics; interactions"],
+        ["Categorical outcomes", "Logistic and multinomial regression; odds ratios"],
+        ["Multilevel data", "Clustered data; random effects; when to use them"],
+        ["Multivariate methods", "Factor analysis; cluster analysis; segmentation"],
+        ["Communicating results", "Effect sizes; charts; writing for decision-makers"]
+      ]
+    },
+    {
+      "id": "ql-methods",
+      "cat": "qual",
+      "title": "Qualitative Research Methods",
+      "days": 5,
+      "level": "Foundation",
+      "summary": "Plan and run interviews and focus groups, and analyse what people say rigorously.",
+      "objectives": [
+        "Design qualitative studies and sampling",
+        "Conduct in-depth interviews and focus groups",
+        "Code and analyse transcripts thematically",
+        "Write credible qualitative findings"
+      ],
+      "audience": "Researchers, evaluators, social scientists and programme staff.",
+      "outline": [
+        ["Qualitative designs", "Approaches; purposive sampling; saturation"],
+        ["Interviews", "Guides; probing; recording and transcription"],
+        ["Focus groups", "Planning; moderating; managing group dynamics"],
+        ["Analysis", "Coding; thematic analysis; framework method"],
+        ["Writing up", "Quotes; trustworthiness; reporting standards"]
+      ]
+    },
+    {
+      "id": "ql-nvivo",
+      "cat": "qual",
+      "title": "Qualitative Data Analysis with NVivo",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Organise, code and query qualitative data in NVivo for faster, more transparent analysis.",
+      "objectives": [
+        "Set up an NVivo project and import data",
+        "Code transcripts and build a codebook",
+        "Use queries, matrices and visualisations",
+        "Export findings for reports"
+      ],
+      "audience": "Researchers and evaluators working with interviews, focus groups and documents.",
+      "outline": [
+        ["Project set-up", "Importing transcripts, documents and media; cases and attributes"],
+        ["Coding", "Codebooks; coding strategies; teamwork"],
+        ["Queries and outputs", "Matrix coding; framework matrices; exporting results"]
+      ]
+    },
+    {
+      "id": "ql-fgd",
+      "cat": "qual",
+      "title": "Focus Group Facilitation",
+      "days": 3,
+      "level": "Foundation",
+      "summary": "Moderate focus groups that produce rich, usable insight, including in community settings.",
+      "objectives": [
+        "Plan focus group composition and guides",
+        "Moderate discussions and manage dynamics",
+        "Record, note-take and debrief effectively",
+        "Summarise focus group findings"
+      ],
+      "audience": "Researchers, community workers, market researchers and M&E staff.",
+      "outline": [
+        ["Planning", "When to use focus groups; recruitment; venues; consent"],
+        ["Moderating", "Opening; probing; handling dominant and quiet participants"],
+        ["From discussion to findings", "Notes and transcripts; debriefs; summarising"]
+      ]
+    },
+    {
+      "id": "me-fundamentals",
+      "cat": "mel",
+      "title": "Monitoring and Evaluation Fundamentals",
+      "days": 5,
+      "level": "Foundation",
+      "summary": "Build an M&E system that tracks progress and shows results to funders and managers.",
+      "objectives": [
+        "Develop theories of change and logframes",
+        "Select SMART indicators with baselines and targets",
+        "Design data collection and reporting systems",
+        "Plan and manage evaluations"
+      ],
+      "audience": "Programme managers, M&E officers, NGO and public sector staff.",
+      "outline": [
+        ["Results thinking", "Theory of change; results chains; logframes"],
+        ["Indicators", "SMART indicators; baselines; targets; disaggregation"],
+        ["M&E systems", "Data collection plans; tools; data quality"],
+        ["Evaluation", "Evaluation types and questions; terms of reference"],
+        ["Using results", "Reporting; learning; adaptive management"]
+      ]
+    },
+    {
+      "id": "me-results",
+      "cat": "mel",
+      "title": "Results-Based Management and Reporting",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Use evidence to steer programmes and report convincingly to donors and boards.",
+      "objectives": [
+        "Link plans, budgets and results",
+        "Build results frameworks and dashboards",
+        "Write clear, evidence-based progress reports",
+        "Create a learning agenda"
+      ],
+      "audience": "Programme and project managers, M&E leads and grant managers.",
+      "outline": [
+        ["Managing for results", "Principles; results frameworks; risk"],
+        ["Tracking performance", "Indicator tracking; dashboards; reviews"],
+        ["Reporting and learning", "Donor reports; storytelling with data; learning agendas"]
+      ]
+    },
+    {
+      "id": "me-dqa",
+      "cat": "mel",
+      "title": "Data Quality Assessment for Programmes",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Check that programme data are valid, reliable, timely and complete, and fix the gaps.",
+      "objectives": [
+        "Apply data quality dimensions",
+        "Plan and run a data quality assessment",
+        "Verify indicator data against source records",
+        "Write an improvement plan"
+      ],
+      "audience": "M&E officers, health information officers and programme managers.",
+      "outline": [
+        ["Data quality dimensions", "Validity; reliability; timeliness; precision; integrity"],
+        ["Running an assessment", "Sampling sites; verification; tools"],
+        ["Improvement", "Root causes; action plans; follow-up"]
+      ]
+    },
+    {
+      "id": "vz-excel",
+      "cat": "viz",
+      "title": "Excel for Data Analysis and Reporting",
+      "days": 3,
+      "level": "Foundation",
+      "summary": "Clean, analyse and present data in Excel with formulas, PivotTables and charts.",
+      "objectives": [
+        "Clean and structure data in Excel",
+        "Use lookup, logical and summary formulas",
+        "Analyse with PivotTables and PivotCharts",
+        "Build simple, clear report tables and charts"
+      ],
+      "audience": "Administrators, analysts, M&E staff and managers who work with spreadsheets.",
+      "outline": [
+        ["Clean data", "Tables; text tools; removing duplicates; validation"],
+        ["Formulas and PivotTables", "XLOOKUP; IF; SUMIFS; PivotTables"],
+        ["Presenting", "Charts; conditional formatting; one-page summaries"]
+      ]
+    },
+    {
+      "id": "vz-powerbi",
+      "cat": "viz",
+      "title": "Dashboards with Power BI",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Turn data from many sources into interactive dashboards that decision-makers actually use.",
+      "objectives": [
+        "Connect to and transform data with Power Query",
+        "Build data models and relationships",
+        "Write DAX measures",
+        "Design and publish clear dashboards"
+      ],
+      "audience": "Analysts, M&E officers, finance and operations staff.",
+      "outline": [
+        ["Getting data", "Power Query; combining sources; cleaning"],
+        ["Data modelling", "Star schemas; relationships; dates"],
+        ["DAX", "Measures; calculated columns; time intelligence"],
+        ["Dashboard design", "Layouts; visuals; interactivity; accessibility"],
+        ["Sharing", "Publishing; refresh; security"]
+      ]
+    },
+    {
+      "id": "vz-datamgmt",
+      "cat": "viz",
+      "title": "Research Data Management",
+      "days": 3,
+      "level": "Foundation",
+      "summary": "Organise, document, store and share research data safely and in line with data protection law.",
+      "objectives": [
+        "Write a data management plan",
+        "Structure files, variables and documentation",
+        "Store and back up data securely",
+        "Prepare data for sharing and archiving"
+      ],
+      "audience": "Researchers, data managers and students.",
+      "outline": [
+        ["Planning", "Data management plans; roles; storage"],
+        ["Organising data", "File naming; codebooks; version control"],
+        ["Protecting and sharing", "Anonymisation; access control; archiving"]
+      ]
+    },
+    {
+      "id": "mk-research",
+      "cat": "market",
+      "title": "Market Research Methods",
+      "days": 5,
+      "level": "Foundation",
+      "summary": "Understand customers and markets with surveys, interviews and secondary data, and act on the findings.",
+      "objectives": [
+        "Frame business questions as research questions",
+        "Choose suitable quantitative and qualitative methods",
+        "Measure satisfaction, loyalty and Net Promoter Score",
+        "Turn findings into recommendations"
+      ],
+      "audience": "Marketing, product, strategy and business development staff.",
+      "outline": [
+        ["Framing the brief", "Business questions; research objectives; desk research"],
+        ["Quantitative methods", "Customer surveys; sampling; questionnaire design"],
+        ["Qualitative methods", "Interviews; focus groups; observation"],
+        ["Customer metrics", "Satisfaction; loyalty; NPS; key drivers"],
+        ["From data to decisions", "Insight reports; recommendations; presenting"]
+      ]
+    },
+    {
+      "id": "mk-segmentation",
+      "cat": "market",
+      "title": "Customer Insight and Segmentation",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Group customers into meaningful segments and design offers for each.",
+      "objectives": [
+        "Choose segmentation variables",
+        "Run cluster-based segmentation",
+        "Profile and name segments",
+        "Use segments in marketing and product decisions"
+      ],
+      "audience": "Marketing analysts, insight managers and product managers.",
+      "outline": [
+        ["Segmentation strategy", "Purpose; variables; data sources"],
+        ["Building segments", "Cluster analysis; validating segments"],
+        ["Using segments", "Profiles; personas; targeting and tracking"]
+      ]
+    },
+    {
+      "id": "mk-intelligence",
+      "cat": "market",
+      "title": "Market Intelligence and Competitor Analysis for Africa",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Gather and analyse information on African markets, competitors and trends to support strategy.",
+      "objectives": [
+        "Identify reliable secondary data sources for African markets",
+        "Size markets and estimate demand",
+        "Analyse competitors systematically",
+        "Report market intelligence for decision-makers"
+      ],
+      "audience": "Strategy, business development and investment analysts, and entrepreneurs.",
+      "outline": [
+        ["Sources", "National statistics; international databases; trade data; desk research"],
+        ["Market sizing", "Top-down and bottom-up estimates; scenarios"],
+        ["Competitors and reporting", "Competitor profiles; SWOT; intelligence briefs"]
+      ]
+    },
+    {
+      "id": "wr-ethics",
+      "cat": "writing",
+      "title": "Research Ethics and Data Protection",
+      "days": 3,
+      "level": "Foundation",
+      "summary": "Protect participants and their data, from consent to archiving, and prepare for ethics review.",
+      "objectives": [
+        "Design informed consent processes",
+        "Anonymise and protect personal data",
+        "Prepare an ethics review application",
+        "Plan secure storage, retention and sharing"
+      ],
+      "audience": "Researchers, students, data collection teams and ethics committee members.",
+      "outline": [
+        ["Ethical principles", "Respect; beneficence; justice; vulnerable groups"],
+        ["Consent and confidentiality", "Consent forms; anonymisation; data protection law"],
+        ["Ethics review", "Applications; common issues; responding to reviewers"]
+      ]
+    },
+    {
+      "id": "wr-proposal",
+      "cat": "writing",
+      "title": "Writing Winning Research Proposals",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Write clear, convincing proposals for research grants and commissioned studies.",
+      "objectives": [
+        "Read and respond to calls and terms of reference",
+        "Structure a persuasive proposal",
+        "Present methods, workplans and budgets",
+        "Review and polish proposals"
+      ],
+      "audience": "Researchers, consultants, academics and NGO staff seeking funding.",
+      "outline": [
+        ["Understanding the call", "Funders' priorities; criteria; terms of reference"],
+        ["Writing the proposal", "Problem; objectives; methods; team"],
+        ["Workplan, budget and review", "Gantt charts; budgets; peer review"]
+      ]
+    },
+    {
+      "id": "wr-publishing",
+      "cat": "writing",
+      "title": "Academic Writing and Publishing",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Turn research into journal articles and reports, and navigate peer review.",
+      "objectives": [
+        "Structure an empirical paper",
+        "Write clear abstracts, methods and results",
+        "Choose journals and avoid predatory publishers",
+        "Respond to peer reviewers"
+      ],
+      "audience": "Postgraduate students, early-career researchers and academics.",
+      "outline": [
+        ["Planning a paper", "Story; structure; target journal"],
+        ["Introduction and methods", "Literature; gaps; methods reporting"],
+        ["Results and discussion", "Tables and figures; interpretation; limitations"],
+        ["Polishing", "Abstracts; titles; clarity and style"],
+        ["Peer review", "Submission; responding to reviewers; open access"]
+      ]
+    },
+    {
+      "id": "ai-research",
+      "cat": "ai",
+      "title": "AI Tools for Researchers",
+      "days": 3,
+      "level": "Foundation",
+      "summary": "Use AI assistants responsibly to speed up literature review, survey design, coding and analysis.",
+      "objectives": [
+        "Use AI tools for literature search and summaries",
+        "Draft and check questionnaires with AI",
+        "Use AI to help code qualitative data and write analysis code",
+        "Manage risks: accuracy, bias, privacy and integrity"
+      ],
+      "audience": "Researchers, analysts, students and M&E staff.",
+      "outline": [
+        ["AI in the research cycle", "What AI can and can't do; choosing tools; prompts"],
+        ["Practical uses", "Literature; questionnaires; qualitative coding; analysis code"],
+        ["Responsible use", "Checking outputs; bias; data protection; disclosure"]
+      ]
+    },
+    {
+      "id": "ai-ml",
+      "cat": "ai",
+      "title": "Introduction to Machine Learning for Analysts",
+      "days": 5,
+      "level": "Advanced",
+      "summary": "Understand and apply core machine learning methods to prediction and classification problems.",
+      "objectives": [
+        "Frame problems for machine learning",
+        "Prepare features and split data",
+        "Train and evaluate classification and regression models",
+        "Explain models and avoid common pitfalls"
+      ],
+      "audience": "Analysts and researchers with Python or R experience.",
+      "outline": [
+        ["Foundations", "Supervised and unsupervised learning; workflow"],
+        ["Data preparation", "Features; encoding; train and test splits"],
+        ["Models", "Decision trees; random forests; regularised regression"],
+        ["Evaluation", "Accuracy; precision and recall; cross-validation"],
+        ["Responsible ML", "Explainability; fairness; deployment basics"]
+      ]
+    },
+    {
+      "id": "ls-strategy",
+      "cat": "strategy",
+      "title": "Strategic Planning and Execution",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Set direction, choose priorities and turn strategy into plans, budgets and measurable results.",
+      "objectives": [
+        "Analyse the external and internal environment",
+        "Set vision, goals and strategic priorities",
+        "Translate strategy into plans, KPIs and budgets",
+        "Monitor execution and adjust course"
+      ],
+      "audience": "Senior managers, strategy and planning staff, and board members.",
+      "outline": [
+        ["Strategic thinking", "Purpose; strategy versus planning; strategic questions"],
+        ["Analysis", "PESTLE; SWOT; competitor and stakeholder analysis"],
+        ["Choosing priorities", "Options; criteria; trade-offs; scenarios"],
+        ["From strategy to plans", "Objectives; KPIs; balanced scorecard; budgets"],
+        ["Execution", "Governance; reviews; managing change"]
+      ]
+    },
+    {
+      "id": "ls-leadership",
+      "cat": "leadership",
+      "title": "Leadership and People Management",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Lead teams with clarity: set expectations, coach performance and build a culture that delivers.",
+      "objectives": [
+        "Adapt leadership style to people and situations",
+        "Set goals and give useful feedback",
+        "Coach and develop team members",
+        "Lead teams through change"
+      ],
+      "audience": "Team leaders, managers and supervisors.",
+      "outline": [
+        ["Leadership foundations", "Styles; self-awareness; credibility"],
+        ["Direction and goals", "Expectations; delegation; accountability"],
+        ["Feedback and coaching", "Feedback models; coaching conversations"],
+        ["Teams", "Motivation; conflict; trust; remote teams"],
+        ["Leading change", "Resistance; communication; sustaining change"]
+      ]
+    },
+    {
+      "id": "ls-governance",
+      "cat": "governance",
+      "title": "Corporate Governance, Compliance and Risk",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Strengthen boards, controls and compliance, and manage risk across the organisation.",
+      "objectives": [
+        "Explain governance roles of boards and management",
+        "Build a risk register and risk appetite",
+        "Design internal controls and compliance programmes",
+        "Report governance and risk to boards"
+      ],
+      "audience": "Board members, company secretaries, risk, audit and compliance staff.",
+      "outline": [
+        ["Governance principles", "Boards; committees; accountability; ethics"],
+        ["Enterprise risk", "Risk identification; assessment; appetite"],
+        ["Controls", "Internal control frameworks; three lines model"],
+        ["Compliance", "Regulation; policies; monitoring; whistleblowing"],
+        ["Reporting", "Board reporting; dashboards; assurance"]
+      ]
+    },
+    {
+      "id": "ls-negotiation",
+      "cat": "negotiation",
+      "title": "Negotiation and Influencing Skills",
+      "days": 3,
+      "level": "Foundation",
+      "summary": "Prepare for and conduct negotiations that reach durable agreements and protect relationships.",
+      "objectives": [
+        "Prepare interests, options and walk-away points",
+        "Use principled negotiation techniques",
+        "Influence stakeholders without authority",
+        "Handle difficult tactics and deadlock"
+      ],
+      "audience": "Managers, procurement and sales staff, and anyone who negotiates.",
+      "outline": [
+        ["Preparation", "Interests; BATNA; options; planning"],
+        ["At the table", "Opening; trading concessions; principled negotiation"],
+        ["Influence", "Persuasion; difficult tactics; closing and follow-up"]
+      ]
+    },
+    {
+      "id": "ls-executive",
+      "cat": "executive",
+      "title": "Executive Development Programme",
+      "days": 5,
+      "level": "Advanced",
+      "summary": "Strengthen the strategic, financial and people skills senior leaders need to run organisations.",
+      "objectives": [
+        "Think strategically about the organisation's future",
+        "Read financial statements for decisions",
+        "Lead culture and high-performing teams",
+        "Make and communicate difficult decisions"
+      ],
+      "audience": "Senior managers and executives, and those preparing for executive roles.",
+      "outline": [
+        ["Strategic leadership", "Vision; strategy; leading in uncertainty"],
+        ["Finance for executives", "Statements; ratios; value; investment decisions"],
+        ["People and culture", "Culture; talent; executive presence"],
+        ["Decision-making", "Evidence; risk; ethics; biases"],
+        ["Leading change", "Transformation; stakeholders; personal action plan"]
+      ]
+    },
+    {
+      "id": "ls-stakeholder",
+      "cat": "stakeholder",
+      "title": "Stakeholder Engagement and Relations",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Identify, prioritise and engage the people who can make or break your plans.",
+      "objectives": [
+        "Map and prioritise stakeholders",
+        "Design an engagement plan",
+        "Run consultations and handle conflict",
+        "Track engagement and trust"
+      ],
+      "audience": "Project managers, public affairs, community relations and programme staff.",
+      "outline": [
+        ["Mapping stakeholders", "Interests; influence; power-interest grids"],
+        ["Engagement planning", "Methods; consultation; communities"],
+        ["Managing relationships", "Conflict; grievances; measuring trust"]
+      ]
+    },
+    {
+      "id": "ls-personal",
+      "cat": "personal",
+      "title": "Personal Effectiveness and Productivity",
+      "days": 3,
+      "level": "Foundation",
+      "summary": "Manage time, priorities and energy, and work well with others under pressure.",
+      "objectives": [
+        "Prioritise work and plan effectively",
+        "Manage time, meetings and email",
+        "Communicate assertively",
+        "Build resilience and manage stress"
+      ],
+      "audience": "Professionals at all levels.",
+      "outline": [
+        ["Priorities and planning", "Goals; prioritisation; planning tools"],
+        ["Time and focus", "Meetings; email; deep work; delegation"],
+        ["Working with others", "Assertiveness; resilience; wellbeing"]
+      ]
+    },
+    {
+      "id": "ls-sustainability",
+      "cat": "sustainability",
+      "title": "Sustainability, ESG and CSR",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Build an ESG and sustainability strategy and report credible results.",
+      "objectives": [
+        "Explain ESG, CSR and sustainability frameworks",
+        "Identify material issues for your organisation",
+        "Set targets and track indicators",
+        "Report sustainability performance credibly"
+      ],
+      "audience": "Sustainability, CSR, strategy, investor relations and reporting staff.",
+      "outline": [
+        ["Foundations", "ESG; CSR; SDGs; materiality"],
+        ["Strategy and targets", "Material issues; targets; indicators; data"],
+        ["Reporting", "Frameworks; assurance; avoiding greenwashing"]
+      ]
+    },
+    {
+      "id": "ls-creativity",
+      "cat": "creativity",
+      "title": "Creativity, Innovation and Design Thinking",
+      "days": 3,
+      "level": "Foundation",
+      "summary": "Generate and test new ideas that solve real problems for customers and organisations.",
+      "objectives": [
+        "Apply design thinking to problems",
+        "Run idea-generation sessions",
+        "Prototype and test ideas quickly",
+        "Build a culture that supports innovation"
+      ],
+      "audience": "Managers, team leaders, product, service and innovation staff.",
+      "outline": [
+        ["Understanding users", "Empathy; problem framing; insight"],
+        ["Generating ideas", "Ideation techniques; selecting ideas"],
+        ["Testing and scaling", "Prototypes; experiments; innovation culture"]
+      ]
+    },
+    {
+      "id": "ai-cyber",
+      "cat": "cyber",
+      "title": "Cybersecurity Essentials for Organisations",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Understand cyber threats and put practical controls, policies and response plans in place.",
+      "objectives": [
+        "Identify common threats and attack methods",
+        "Apply basic security controls and policies",
+        "Plan incident response",
+        "Build a security-aware culture"
+      ],
+      "audience": "IT staff, managers, risk and compliance officers.",
+      "outline": [
+        ["Threat landscape", "Phishing; ransomware; insider threats"],
+        ["Controls", "Access; patching; backups; encryption"],
+        ["Policies and standards", "Frameworks; data protection; risk assessment"],
+        ["Incident response", "Detection; response plans; exercises"],
+        ["People and culture", "Awareness; reporting; measuring security"]
+      ]
+    },
+    {
+      "id": "ai-digital",
+      "cat": "digital",
+      "title": "Leading Digital Transformation",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Plan and lead digital change that improves services and operations, not just technology.",
+      "objectives": [
+        "Assess digital maturity",
+        "Build a digital transformation roadmap",
+        "Redesign processes and services around users",
+        "Manage the people side of digital change"
+      ],
+      "audience": "Managers, transformation, IT and operations leads.",
+      "outline": [
+        ["Why transform", "Digital trends; maturity; vision"],
+        ["Roadmap", "Priorities; business cases; sequencing"],
+        ["Processes and services", "User journeys; automation; data"],
+        ["Technology choices", "Cloud; platforms; vendors"],
+        ["People and change", "Skills; adoption; measuring benefits"]
+      ]
+    },
+    {
+      "id": "ai-future",
+      "cat": "future",
+      "title": "Future Skills for the Digital Workplace",
+      "days": 3,
+      "level": "Foundation",
+      "summary": "Build the digital, analytical and collaboration skills modern workplaces need.",
+      "objectives": [
+        "Use digital collaboration tools effectively",
+        "Work confidently with data and AI tools",
+        "Think critically and solve problems",
+        "Plan your own skills development"
+      ],
+      "audience": "Professionals at all levels.",
+      "outline": [
+        ["Digital working", "Collaboration tools; remote work; digital etiquette"],
+        ["Data and AI basics", "Data literacy; AI assistants; checking outputs"],
+        ["Thinking skills", "Critical thinking; problem solving; learning plans"]
+      ]
+    },
+    {
+      "id": "ai-fintech",
+      "cat": "fintech",
+      "title": "Fintech, Digital Payments and Blockchain",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Understand fintech, mobile money and blockchain, and what they mean for finance in Africa.",
+      "objectives": [
+        "Explain fintech business models and mobile money",
+        "Understand blockchain and digital assets",
+        "Assess regulatory and risk issues",
+        "Identify opportunities for your organisation"
+      ],
+      "audience": "Banking, finance, regulatory and strategy staff.",
+      "outline": [
+        ["Fintech landscape", "Mobile money; digital lending; payments"],
+        ["Blockchain", "How it works; digital assets; use cases"],
+        ["Risk and regulation", "Consumer protection; AML; sandboxes"]
+      ]
+    },
+    {
+      "id": "ai-apps",
+      "cat": "aiapps",
+      "title": "Applying AI in Your Sector",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Find practical, responsible uses of AI in operations, services and decision-making.",
+      "objectives": [
+        "Identify AI use cases with clear value",
+        "Assess data readiness and risks",
+        "Run a small AI pilot",
+        "Set governance for responsible AI"
+      ],
+      "audience": "Managers and specialists in any sector exploring AI.",
+      "outline": [
+        ["AI opportunities", "Use cases by sector; value and feasibility"],
+        ["Data and risk", "Data readiness; bias; privacy; security"],
+        ["Pilots and governance", "Pilot design; measuring results; AI policies"]
+      ]
+    },
+    {
+      "id": "fi-budgeting",
+      "cat": "finance",
+      "title": "Financial Management and Budgeting",
+      "days": 5,
+      "level": "Foundation",
+      "summary": "Plan, control and report finances: budgets, cash flow, costs and financial statements.",
+      "objectives": [
+        "Read and interpret financial statements",
+        "Prepare and monitor budgets",
+        "Manage cash flow and working capital",
+        "Analyse costs and variances"
+      ],
+      "audience": "Managers, budget holders and finance staff.",
+      "outline": [
+        ["Financial statements", "Income statement; balance sheet; cash flow"],
+        ["Budgeting", "Budget methods; forecasts; zero-based budgets"],
+        ["Cash and working capital", "Cash flow forecasts; receivables; payables"],
+        ["Costs", "Cost behaviour; break-even; variance analysis"],
+        ["Reporting", "Management accounts; KPIs; dashboards"]
+      ]
+    },
+    {
+      "id": "fi-treasury",
+      "cat": "treasury",
+      "title": "Treasury and Investment Management",
+      "days": 5,
+      "level": "Advanced",
+      "summary": "Manage liquidity, funding, investments and financial risk.",
+      "objectives": [
+        "Manage liquidity and cash positions",
+        "Evaluate investment options",
+        "Measure and hedge interest rate and currency risk",
+        "Set treasury policies and controls"
+      ],
+      "audience": "Treasury, finance and investment staff.",
+      "outline": [
+        ["Treasury role", "Objectives; organisation; policies"],
+        ["Liquidity", "Cash management; forecasting; funding"],
+        ["Investments", "Instruments; valuation; portfolios"],
+        ["Financial risk", "Interest rate and FX risk; hedging"],
+        ["Controls", "Limits; reporting; governance"]
+      ]
+    },
+    {
+      "id": "fi-fraud",
+      "cat": "fraud",
+      "title": "Fraud Prevention, Detection and Investigation",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Prevent, detect and investigate fraud using controls, data analysis and sound procedure.",
+      "objectives": [
+        "Identify fraud risks and red flags",
+        "Design anti-fraud controls",
+        "Use data analysis to detect anomalies",
+        "Plan and document investigations"
+      ],
+      "audience": "Auditors, finance, compliance and risk staff.",
+      "outline": [
+        ["Understanding fraud", "Fraud triangle; schemes; red flags"],
+        ["Prevention", "Controls; culture; whistleblowing"],
+        ["Detection", "Data analytics; Benford's law; exception reports"],
+        ["Investigation", "Planning; evidence; interviews"],
+        ["Reporting", "Reports; legal considerations; lessons learned"]
+      ]
+    },
+    {
+      "id": "fi-banking",
+      "cat": "banking",
+      "title": "Banking Regulation and Risk",
+      "days": 5,
+      "level": "Advanced",
+      "summary": "Understand capital, liquidity and conduct regulation and how banks manage risk.",
+      "objectives": [
+        "Explain the Basel framework and capital requirements",
+        "Measure credit, market and operational risk",
+        "Apply liquidity regulation",
+        "Meet AML and conduct requirements"
+      ],
+      "audience": "Bank risk, compliance, finance and regulatory staff.",
+      "outline": [
+        ["Regulatory framework", "Basel principles; supervisors; local regulation"],
+        ["Capital", "Risk-weighted assets; capital adequacy"],
+        ["Risk management", "Credit; market; operational risk"],
+        ["Liquidity", "Liquidity ratios; stress testing"],
+        ["Conduct and AML", "KYC; AML; consumer protection"]
+      ]
+    },
+    {
+      "id": "fi-tax",
+      "cat": "tax",
+      "title": "Tax and Revenue Management",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Understand tax principles, compliance and revenue administration.",
+      "objectives": [
+        "Explain direct and indirect taxes",
+        "Plan for compliance and avoid penalties",
+        "Apply transfer pricing basics",
+        "Use data to improve revenue collection"
+      ],
+      "audience": "Finance, tax and revenue authority staff.",
+      "outline": [
+        ["Tax principles", "Direct and indirect taxes; residence; withholding"],
+        ["Compliance", "Filing; audits; disputes; penalties"],
+        ["Revenue administration", "Risk-based audits; data; taxpayer services"]
+      ]
+    },
+    {
+      "id": "fi-realestate",
+      "cat": "refinance",
+      "title": "Real Estate Investment and Finance",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Analyse, finance and manage property investments.",
+      "objectives": [
+        "Value property using common methods",
+        "Build a property investment appraisal",
+        "Compare financing options",
+        "Assess market and development risk"
+      ],
+      "audience": "Investors, developers, bankers and property managers.",
+      "outline": [
+        ["Property markets", "Market analysis; demand; supply"],
+        ["Valuation and appraisal", "Comparables; income method; cash-flow appraisal"],
+        ["Finance and risk", "Debt and equity; risk; portfolio management"]
+      ]
+    },
+    {
+      "id": "fi-jv",
+      "cat": "jv",
+      "title": "Joint Ventures and Strategic Partnerships",
+      "days": 3,
+      "level": "Advanced",
+      "summary": "Structure, negotiate and manage joint ventures and partnerships that work.",
+      "objectives": [
+        "Assess when a joint venture fits",
+        "Choose a structure and governance",
+        "Negotiate key terms",
+        "Manage performance and exits"
+      ],
+      "audience": "Business development, legal, finance and senior management staff.",
+      "outline": [
+        ["Why partner", "Strategic fit; partner selection; due diligence"],
+        ["Structuring", "Legal forms; governance; key terms"],
+        ["Managing", "Performance; disputes; exits"]
+      ]
+    },
+    {
+      "id": "pp-project",
+      "cat": "project",
+      "title": "Project Management Essentials",
+      "days": 5,
+      "level": "Foundation",
+      "summary": "Plan, run and close projects on time, on budget and to the agreed quality.",
+      "objectives": [
+        "Define scope, deliverables and success criteria",
+        "Build schedules and budgets",
+        "Manage risks, issues and changes",
+        "Monitor progress and close projects"
+      ],
+      "audience": "Project managers, team leaders and project staff.",
+      "outline": [
+        ["Starting projects", "Life cycle; charter; stakeholders"],
+        ["Scope and schedule", "Work breakdown; critical path; Gantt charts"],
+        ["Cost and quality", "Budgets; earned value; quality plans"],
+        ["Risk and change", "Risk registers; issues; change control"],
+        ["Delivery and closure", "Reporting; teams; lessons learned"]
+      ]
+    },
+    {
+      "id": "pp-procurement",
+      "cat": "procurement",
+      "title": "Procurement and Supply Chain Management",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Buy well and run reliable supply chains: sourcing, tendering, suppliers and logistics.",
+      "objectives": [
+        "Plan procurement and sourcing strategies",
+        "Run transparent tenders and evaluations",
+        "Manage supplier performance",
+        "Improve inventory and logistics"
+      ],
+      "audience": "Procurement, supply chain, logistics and finance staff.",
+      "outline": [
+        ["Procurement strategy", "Spend analysis; category management"],
+        ["Tendering", "Specifications; evaluation; integrity"],
+        ["Suppliers", "Relationships; performance; risk"],
+        ["Inventory and logistics", "Stock control; warehousing; transport"],
+        ["Improvement", "KPIs; savings; sustainable procurement"]
+      ]
+    },
+    {
+      "id": "pp-contracts",
+      "cat": "contracts",
+      "title": "Contract Management",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Draft, manage and close contracts that deliver value and limit disputes.",
+      "objectives": [
+        "Understand key contract terms and risks",
+        "Plan contract management",
+        "Handle variations, claims and disputes",
+        "Measure contractor performance"
+      ],
+      "audience": "Contract managers, procurement, project and legal staff.",
+      "outline": [
+        ["Contract basics", "Formation; key clauses; types of contract"],
+        ["Planning", "Roles; obligations; risk allocation"],
+        ["Managing performance", "KPIs; reviews; payment"],
+        ["Variations and claims", "Change; claims; dispute resolution"],
+        ["Closing out", "Acceptance; final accounts; lessons"]
+      ]
+    },
+    {
+      "id": "pp-construction",
+      "cat": "construction",
+      "title": "Construction Project Management",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Manage construction projects from design to handover: cost, time, quality and safety.",
+      "objectives": [
+        "Plan construction projects and schedules",
+        "Control cost and cash flow",
+        "Manage contractors and site quality",
+        "Handle claims and handover"
+      ],
+      "audience": "Construction managers, engineers, quantity surveyors and client representatives.",
+      "outline": [
+        ["Project set-up", "Procurement routes; design management"],
+        ["Planning", "Schedules; resources; site logistics"],
+        ["Cost control", "Estimates; valuations; cash flow"],
+        ["Quality and safety", "Inspections; site safety; defects"],
+        ["Claims and handover", "Variations; claims; commissioning"]
+      ]
+    },
+    {
+      "id": "pp-ppp",
+      "cat": "ppp",
+      "title": "Public-Private Partnerships",
+      "days": 5,
+      "level": "Advanced",
+      "summary": "Prepare, procure and manage PPP projects that deliver public value.",
+      "objectives": [
+        "Assess when a PPP gives value for money",
+        "Structure risk allocation and payment",
+        "Run PPP procurement",
+        "Manage PPP contracts over their life"
+      ],
+      "audience": "Government officials, infrastructure, finance and legal staff.",
+      "outline": [
+        ["PPP basics", "Models; value for money; fiscal risk"],
+        ["Preparation", "Feasibility; business cases; market sounding"],
+        ["Structuring", "Risk allocation; payment mechanisms; finance"],
+        ["Procurement", "Bids; evaluation; negotiation"],
+        ["Contract management", "Monitoring; renegotiation; handback"]
+      ]
+    },
+    {
+      "id": "pp-legal",
+      "cat": "legal",
+      "title": "Legal Essentials for Managers",
+      "days": 3,
+      "level": "Foundation",
+      "summary": "Understand the legal issues managers meet in contracts, employment, data and disputes.",
+      "objectives": [
+        "Recognise legal risks in daily decisions",
+        "Understand contract and employment basics",
+        "Meet data protection duties",
+        "Know when and how to involve lawyers"
+      ],
+      "audience": "Managers and non-lawyers who handle legal matters.",
+      "outline": [
+        ["Legal foundations", "Legal systems; liability; corporate duties"],
+        ["Contracts and employment", "Contracts; employment rules; disputes"],
+        ["Compliance", "Data protection; intellectual property; working with counsel"]
+      ]
+    },
+    {
+      "id": "hr-management",
+      "cat": "hr",
+      "title": "Strategic Human Resource Management",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Align HR with strategy: workforce planning, talent, performance and reward.",
+      "objectives": [
+        "Link HR strategy to organisational goals",
+        "Plan the workforce and recruit well",
+        "Design performance and reward systems",
+        "Use HR data to inform decisions"
+      ],
+      "audience": "HR professionals and line managers with people responsibilities.",
+      "outline": [
+        ["HR strategy", "Role of HR; strategy; policies"],
+        ["Workforce and talent", "Planning; recruitment; selection"],
+        ["Performance", "Goals; appraisal; managing performance"],
+        ["Reward and relations", "Pay; benefits; employee relations"],
+        ["HR analytics", "Metrics; turnover; engagement surveys"]
+      ]
+    },
+    {
+      "id": "hr-ld",
+      "cat": "lnd",
+      "title": "Learning and Development: Design and Evaluation",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Identify training needs, design effective learning and evaluate its impact.",
+      "objectives": [
+        "Run a training needs analysis",
+        "Design engaging learning programmes",
+        "Deliver and facilitate learning",
+        "Evaluate learning impact"
+      ],
+      "audience": "L&D, HR and training staff.",
+      "outline": [
+        ["Needs analysis", "Competencies; gaps; priorities"],
+        ["Learning design", "Objectives; methods; blended learning"],
+        ["Delivery", "Facilitation; adult learning; online learning"],
+        ["Evaluation", "Kirkpatrick levels; surveys; return on training"],
+        ["L&D strategy", "Learning culture; budgets; partners"]
+      ]
+    },
+    {
+      "id": "hr-behavioural",
+      "cat": "behavioural",
+      "title": "Emotional Intelligence and Interpersonal Skills",
+      "days": 3,
+      "level": "Foundation",
+      "summary": "Understand yourself and others to communicate, collaborate and handle conflict better.",
+      "objectives": [
+        "Recognise and manage your own emotions",
+        "Read and respond to others' emotions",
+        "Handle difficult conversations",
+        "Build productive working relationships"
+      ],
+      "audience": "Professionals at all levels.",
+      "outline": [
+        ["Emotional intelligence", "Self-awareness; self-management"],
+        ["Understanding others", "Empathy; listening; communication styles"],
+        ["Relationships", "Conflict; difficult conversations; trust"]
+      ]
+    },
+    {
+      "id": "hr-admin",
+      "cat": "admin",
+      "title": "Office Administration and Executive Support",
+      "days": 3,
+      "level": "Foundation",
+      "summary": "Run an efficient office: organisation, communication, records and support to executives.",
+      "objectives": [
+        "Organise diaries, meetings and travel",
+        "Manage records and documents",
+        "Write clear business correspondence",
+        "Use digital office tools well"
+      ],
+      "audience": "Administrators, executive assistants and office managers.",
+      "outline": [
+        ["The modern office", "Roles; priorities; working with executives"],
+        ["Organisation", "Diaries; meetings; minutes; records"],
+        ["Communication and tools", "Business writing; digital tools; customer care"]
+      ]
+    },
+    {
+      "id": "op-excellence",
+      "cat": "opex",
+      "title": "Operational Excellence and Lean",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Improve efficiency and quality using lean thinking and continuous improvement.",
+      "objectives": [
+        "Map value streams and spot waste",
+        "Apply lean tools such as 5S and standard work",
+        "Run improvement projects",
+        "Sustain a continuous improvement culture"
+      ],
+      "audience": "Operations, quality and service managers.",
+      "outline": [
+        ["Lean principles", "Value; waste; flow"],
+        ["Mapping", "Value stream maps; process data"],
+        ["Tools", "5S; standard work; visual management"],
+        ["Improvement projects", "PDCA; Kaizen; measuring results"],
+        ["Sustaining", "Leadership; culture; daily management"]
+      ]
+    },
+    {
+      "id": "op-bpm",
+      "cat": "bpm",
+      "title": "Business Process Management",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Document, analyse and redesign processes to work faster and better.",
+      "objectives": [
+        "Model processes with BPMN",
+        "Analyse process performance",
+        "Redesign and automate processes",
+        "Govern processes over time"
+      ],
+      "audience": "Process owners, analysts and operations staff.",
+      "outline": [
+        ["Process modelling", "BPMN; process maps"],
+        ["Analysis", "Bottlenecks; process metrics; root causes"],
+        ["Redesign", "Simplification; automation; governance"]
+      ]
+    },
+    {
+      "id": "op-quality",
+      "cat": "quality",
+      "title": "Quality Management and Internal Auditing",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Build a quality management system and audit it to drive improvement.",
+      "objectives": [
+        "Explain quality management principles and ISO 9001 requirements",
+        "Document processes and controls",
+        "Plan and conduct internal audits",
+        "Manage corrective and preventive actions"
+      ],
+      "audience": "Quality, audit and operations staff.",
+      "outline": [
+        ["Quality principles", "Customer focus; process approach; standards"],
+        ["Quality systems", "Documentation; controls; risk-based thinking"],
+        ["Audit planning", "Audit programmes; checklists"],
+        ["Conducting audits", "Evidence; findings; reports"],
+        ["Improvement", "Corrective action; management review"]
+      ]
+    },
+    {
+      "id": "op-rca",
+      "cat": "rca",
+      "title": "Root Cause Analysis and Problem Solving",
+      "days": 3,
+      "level": "Foundation",
+      "summary": "Find the real causes of problems and fix them so they don't come back.",
+      "objectives": [
+        "Define problems precisely",
+        "Use 5 Whys, fishbone and fault tree tools",
+        "Verify causes with data",
+        "Choose and track corrective actions"
+      ],
+      "audience": "Engineers, quality, operations, safety and maintenance staff.",
+      "outline": [
+        ["Defining problems", "Problem statements; data collection"],
+        ["Finding causes", "5 Whys; fishbone; fault trees"],
+        ["Solving and preventing", "Verification; actions; follow-up"]
+      ]
+    },
+    {
+      "id": "sc-sales",
+      "cat": "sales",
+      "title": "Sales and Marketing Strategy",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Win and keep customers with focused marketing and effective selling.",
+      "objectives": [
+        "Segment markets and choose target customers",
+        "Build a marketing plan and mix",
+        "Manage a sales pipeline",
+        "Measure marketing and sales performance"
+      ],
+      "audience": "Sales, marketing and business development staff.",
+      "outline": [
+        ["Market and customers", "Segmentation; targeting; positioning"],
+        ["Marketing plan", "Product; price; place; promotion; digital"],
+        ["Selling", "Pipelines; consultative selling; key accounts"],
+        ["Customers", "Retention; loyalty; CRM"],
+        ["Measurement", "KPIs; marketing analytics"]
+      ]
+    },
+    {
+      "id": "sc-customer",
+      "cat": "customer",
+      "title": "Customer Service Excellence",
+      "days": 3,
+      "level": "Foundation",
+      "summary": "Deliver service that keeps customers coming back, and handle complaints well.",
+      "objectives": [
+        "Understand customer expectations",
+        "Communicate professionally in person, by phone and online",
+        "Handle complaints and difficult customers",
+        "Measure satisfaction and improve service"
+      ],
+      "audience": "Front-line staff, supervisors and service managers.",
+      "outline": [
+        ["Service foundations", "Expectations; moments of truth"],
+        ["Communication", "Listening; tone; written service"],
+        ["Complaints and improvement", "Complaints; recovery; satisfaction surveys and NPS"]
+      ]
+    },
+    {
+      "id": "sc-comms",
+      "cat": "comms",
+      "title": "Corporate Communication",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Plan communication that builds understanding and support inside and outside the organisation.",
+      "objectives": [
+        "Write a communication strategy",
+        "Craft clear key messages",
+        "Choose channels for each audience",
+        "Evaluate communication results"
+      ],
+      "audience": "Communication, PR, HR and management staff.",
+      "outline": [
+        ["Strategy", "Audiences; objectives; key messages"],
+        ["Channels", "Internal communication; digital; events"],
+        ["Evaluation", "Metrics; surveys; reporting"]
+      ]
+    },
+    {
+      "id": "sc-pr",
+      "cat": "pr",
+      "title": "Public Relations and Media Management",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Manage reputation, work with the media and communicate in a crisis.",
+      "objectives": [
+        "Plan PR campaigns",
+        "Write press releases and media statements",
+        "Handle interviews",
+        "Communicate during a crisis"
+      ],
+      "audience": "PR, communication and senior management staff.",
+      "outline": [
+        ["Reputation and PR", "Planning; audiences; campaigns"],
+        ["Media", "Press releases; interviews; social media"],
+        ["Crisis communication", "Preparation; holding statements; recovery"]
+      ]
+    },
+    {
+      "id": "sc-hospitality",
+      "cat": "hospitality",
+      "title": "Hospitality and Tourism Management",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Run hospitality and tourism businesses that delight guests and perform financially.",
+      "objectives": [
+        "Design guest experiences",
+        "Manage revenue and pricing",
+        "Lead hospitality teams",
+        "Market destinations and services"
+      ],
+      "audience": "Hotel, tourism and hospitality managers.",
+      "outline": [
+        ["Guest experience", "Service design; standards"],
+        ["Operations", "Rooms; food and beverage; quality"],
+        ["Revenue", "Pricing; occupancy; distribution"],
+        ["People", "Recruitment; training; motivation"],
+        ["Marketing", "Destination marketing; online reviews"]
+      ]
+    },
+    {
+      "id": "en-oilgas",
+      "cat": "oilgas",
+      "title": "Oil and Gas Industry Fundamentals",
+      "days": 5,
+      "level": "Foundation",
+      "summary": "Understand the oil and gas value chain from exploration to market.",
+      "objectives": [
+        "Explain upstream, midstream and downstream activities",
+        "Understand reserves, production and economics",
+        "Recognise key contracts and regulation",
+        "Follow local content and sustainability issues"
+      ],
+      "audience": "New entrants and non-technical staff in the oil and gas sector.",
+      "outline": [
+        ["Value chain", "Exploration; production; processing; marketing"],
+        ["Upstream", "Reserves; drilling; production"],
+        ["Midstream and downstream", "Transport; refining; distribution"],
+        ["Economics and contracts", "Fiscal regimes; production sharing"],
+        ["Policy", "Regulation; local content; energy transition"]
+      ]
+    },
+    {
+      "id": "en-maintenance",
+      "cat": "maintenance",
+      "title": "Maintenance Planning and Reliability",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Plan maintenance that keeps assets reliable and costs under control.",
+      "objectives": [
+        "Choose preventive, predictive and corrective strategies",
+        "Plan and schedule maintenance work",
+        "Use reliability tools such as FMEA",
+        "Track maintenance KPIs"
+      ],
+      "audience": "Maintenance planners, engineers and supervisors.",
+      "outline": [
+        ["Maintenance strategy", "Strategies; criticality"],
+        ["Planning and scheduling", "Work orders; backlog; shutdowns"],
+        ["Reliability", "FMEA; failure data; RCM"],
+        ["Spares and costs", "Inventory; budgets"],
+        ["Performance", "KPIs; CMMS; improvement"]
+      ]
+    },
+    {
+      "id": "en-electrical",
+      "cat": "electrical",
+      "title": "Electrical Systems: Operation and Safety",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Operate and maintain electrical systems safely and reliably.",
+      "objectives": [
+        "Read single-line diagrams",
+        "Understand protection systems",
+        "Plan electrical maintenance",
+        "Apply electrical safety procedures"
+      ],
+      "audience": "Electrical engineers, technicians and supervisors.",
+      "outline": [
+        ["Power systems", "Generation; distribution; single-line diagrams"],
+        ["Equipment", "Transformers; switchgear; motors"],
+        ["Protection", "Relays; coordination; earthing"],
+        ["Maintenance", "Testing; condition monitoring"],
+        ["Safety", "Isolation; permits; arc flash"]
+      ]
+    },
+    {
+      "id": "en-instrumentation",
+      "cat": "instrumentation",
+      "title": "Instrumentation and Process Control",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Understand measurement, control loops and control systems in process plants.",
+      "objectives": [
+        "Explain common instruments and measurements",
+        "Tune control loops",
+        "Understand PLC, DCS and SCADA systems",
+        "Maintain and calibrate instruments"
+      ],
+      "audience": "Instrument technicians, process and control engineers.",
+      "outline": [
+        ["Measurement", "Pressure; flow; level; temperature"],
+        ["Control loops", "PID control; tuning"],
+        ["Control systems", "PLC; DCS; SCADA"],
+        ["Calibration", "Procedures; records; uncertainty"],
+        ["Safety systems", "Alarms; safety instrumented systems"]
+      ]
+    },
+    {
+      "id": "en-mechanical",
+      "cat": "mechanical",
+      "title": "Mechanical Equipment: Pumps, Compressors and Valves",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Operate, maintain and troubleshoot rotating and static mechanical equipment.",
+      "objectives": [
+        "Explain how pumps, compressors and valves work",
+        "Diagnose common failures",
+        "Apply alignment, lubrication and vibration basics",
+        "Plan equipment maintenance"
+      ],
+      "audience": "Mechanical engineers, technicians and maintenance staff.",
+      "outline": [
+        ["Pumps", "Types; performance curves; cavitation"],
+        ["Compressors", "Types; operation; surge"],
+        ["Valves and seals", "Valve types; seals; leaks"],
+        ["Condition monitoring", "Vibration; alignment; lubrication"],
+        ["Troubleshooting", "Failure analysis; case studies"]
+      ]
+    },
+    {
+      "id": "en-facilities",
+      "cat": "facilities",
+      "title": "Facilities Management",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Manage buildings, services and workplaces safely and cost-effectively.",
+      "objectives": [
+        "Plan facilities services and budgets",
+        "Manage maintenance contracts",
+        "Meet safety and compliance duties",
+        "Improve space use and sustainability"
+      ],
+      "audience": "Facilities, estates and administration managers.",
+      "outline": [
+        ["Facilities strategy", "Services; budgets; outsourcing"],
+        ["Operations", "Maintenance; contracts; helpdesks"],
+        ["Compliance and sustainability", "Safety; energy; space"]
+      ]
+    },
+    {
+      "id": "en-chemical",
+      "cat": "chemical",
+      "title": "Chemical and Petrochemical Process Operations",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Understand and operate chemical and petrochemical processes safely and efficiently.",
+      "objectives": [
+        "Explain key unit operations",
+        "Read process flow diagrams",
+        "Optimise process performance",
+        "Apply process safety management"
+      ],
+      "audience": "Process engineers, operators and supervisors.",
+      "outline": [
+        ["Process basics", "Mass and energy balances; flow diagrams"],
+        ["Unit operations", "Reactors; distillation; heat exchange"],
+        ["Optimisation", "Yields; energy; troubleshooting"],
+        ["Process safety", "Hazards; HAZOP; management of change"],
+        ["Environment", "Emissions; effluents; compliance"]
+      ]
+    },
+    {
+      "id": "en-power",
+      "cat": "power",
+      "title": "Power Generation and Utilities Management",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Plan, operate and manage power and utility services reliably and sustainably.",
+      "objectives": [
+        "Compare generation technologies",
+        "Understand grids, tariffs and losses",
+        "Plan utility asset management",
+        "Improve customer service and revenue collection"
+      ],
+      "audience": "Utility managers, engineers and regulators.",
+      "outline": [
+        ["Generation", "Thermal; hydro; solar; wind"],
+        ["Networks", "Transmission; distribution; losses"],
+        ["Regulation and tariffs", "Tariff design; regulation"],
+        ["Asset management", "Planning; maintenance; investment"],
+        ["Customers", "Metering; billing; collection"]
+      ]
+    },
+    {
+      "id": "en-energy",
+      "cat": "energy",
+      "title": "Energy Transition and Renewable Energy",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Understand the energy transition and plan renewable and efficiency projects.",
+      "objectives": [
+        "Explain energy transition trends for Africa",
+        "Compare renewable technologies and costs",
+        "Assess project feasibility",
+        "Plan energy efficiency measures"
+      ],
+      "audience": "Energy, policy, investment and project staff.",
+      "outline": [
+        ["The transition", "Trends; policy; climate goals"],
+        ["Renewables", "Solar; wind; storage; mini-grids"],
+        ["Projects", "Feasibility; finance; efficiency"]
+      ]
+    },
+    {
+      "id": "en-hydrogen",
+      "cat": "hydrogen",
+      "title": "Hydrogen Economy Fundamentals",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Understand hydrogen production, uses, costs and the opportunities for Africa.",
+      "objectives": [
+        "Explain hydrogen production routes",
+        "Understand storage, transport and safety",
+        "Assess costs and markets",
+        "Identify opportunities and risks"
+      ],
+      "audience": "Energy, policy, engineering and investment staff.",
+      "outline": [
+        ["Production", "Grey, blue and green hydrogen; electrolysis"],
+        ["Infrastructure", "Storage; transport; safety"],
+        ["Markets", "Costs; demand; projects in Africa"]
+      ]
+    },
+    {
+      "id": "en-mining",
+      "cat": "mining",
+      "title": "Mining Operations and Management",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Plan and manage mining operations safely, efficiently and responsibly.",
+      "objectives": [
+        "Explain the mining value chain",
+        "Plan mine production",
+        "Manage mining safety and environment",
+        "Engage communities and meet regulation"
+      ],
+      "audience": "Mining engineers, managers and regulators.",
+      "outline": [
+        ["Mining value chain", "Exploration; development; production; closure"],
+        ["Planning", "Mine design; scheduling; costs"],
+        ["Operations", "Equipment; processing; productivity"],
+        ["Safety and environment", "Hazards; rehabilitation"],
+        ["Communities", "Licence to operate; regulation; reporting"]
+      ]
+    },
+    {
+      "id": "en-corrosion",
+      "cat": "corrosion",
+      "title": "Corrosion Control and Inspection",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Prevent and detect corrosion to keep plant and pipelines safe.",
+      "objectives": [
+        "Explain corrosion mechanisms",
+        "Select protection methods",
+        "Plan inspections and testing",
+        "Assess integrity and remaining life"
+      ],
+      "audience": "Inspection, integrity, maintenance and materials engineers.",
+      "outline": [
+        ["Corrosion mechanisms", "Types; environments"],
+        ["Protection", "Coatings; cathodic protection; inhibitors"],
+        ["Inspection", "NDT methods; inspection plans"],
+        ["Integrity", "Risk-based inspection; fitness for service"],
+        ["Management", "Data; reporting; programmes"]
+      ]
+    },
+    {
+      "id": "en-manufacturing",
+      "cat": "manufacturing",
+      "title": "Manufacturing Operations Management",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Run productive, high-quality manufacturing operations.",
+      "objectives": [
+        "Plan production and capacity",
+        "Control quality and costs",
+        "Apply lean and maintenance practices",
+        "Measure performance with OEE"
+      ],
+      "audience": "Production, operations and plant managers.",
+      "outline": [
+        ["Production planning", "Forecasts; capacity; scheduling"],
+        ["Quality", "Process control; inspections"],
+        ["Efficiency", "Lean; OEE; downtime"],
+        ["Supply", "Materials; inventory"],
+        ["Performance", "KPIs; improvement plans"]
+      ]
+    },
+    {
+      "id": "hs-hse",
+      "cat": "hse",
+      "title": "Health, Safety and Environment Management",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Build a safety management system that prevents harm and meets legal duties.",
+      "objectives": [
+        "Identify hazards and assess risks",
+        "Design safe systems of work",
+        "Investigate incidents",
+        "Measure and improve HSE performance"
+      ],
+      "audience": "HSE officers, supervisors and managers.",
+      "outline": [
+        ["HSE management", "Leadership; policy; legal duties"],
+        ["Risk assessment", "Hazards; controls; permits"],
+        ["Environment", "Impacts; waste; compliance"],
+        ["Incidents", "Reporting; investigation; learning"],
+        ["Performance", "Indicators; audits; culture"]
+      ]
+    },
+    {
+      "id": "hs-emergency",
+      "cat": "emergency",
+      "title": "Emergency and Crisis Management",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Prepare for, respond to and recover from emergencies and crises.",
+      "objectives": [
+        "Assess emergency risks",
+        "Write emergency and crisis plans",
+        "Run exercises and drills",
+        "Lead response and recovery"
+      ],
+      "audience": "Managers, HSE, security and business continuity staff.",
+      "outline": [
+        ["Risk and preparedness", "Scenarios; plans; resources"],
+        ["Response", "Command structures; communication"],
+        ["Crisis leadership", "Decisions; stakeholders; media"],
+        ["Business continuity", "Impact analysis; continuity plans"],
+        ["Exercises and recovery", "Drills; reviews; recovery"]
+      ]
+    },
+    {
+      "id": "hs-security",
+      "cat": "security",
+      "title": "Security Management",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Protect people, assets and information with risk-based security management.",
+      "objectives": [
+        "Assess security risks",
+        "Design physical and procedural controls",
+        "Manage security teams and contractors",
+        "Respond to and investigate incidents"
+      ],
+      "audience": "Security managers, officers and facility managers.",
+      "outline": [
+        ["Security risk", "Threats; vulnerabilities; assessments"],
+        ["Protection", "Physical security; access control"],
+        ["People and procedures", "Teams; contractors; training"],
+        ["Incidents", "Response; investigation; reporting"],
+        ["Integration", "Information security; continuity"]
+      ]
+    },
+    {
+      "id": "hs-waste",
+      "cat": "waste",
+      "title": "Waste Management and Circular Economy",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Reduce, manage and dispose of waste responsibly, and find value in it.",
+      "objectives": [
+        "Classify waste and legal duties",
+        "Plan waste minimisation",
+        "Manage collection, treatment and disposal",
+        "Apply circular economy ideas"
+      ],
+      "audience": "Environmental, facilities, municipal and operations staff.",
+      "outline": [
+        ["Waste basics", "Types; hierarchy; regulation"],
+        ["Operations", "Collection; treatment; disposal"],
+        ["Circular economy", "Recycling; reuse; business models"]
+      ]
+    },
+    {
+      "id": "sx-realestate",
+      "cat": "realestate",
+      "title": "Real Estate Development and Property Management",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Plan developments and manage property portfolios for value and occupancy.",
+      "objectives": [
+        "Assess development feasibility",
+        "Manage leases and tenants",
+        "Plan property maintenance",
+        "Report portfolio performance"
+      ],
+      "audience": "Developers, property managers and asset managers.",
+      "outline": [
+        ["Development", "Feasibility; planning; approvals"],
+        ["Property management", "Leases; tenants; collections"],
+        ["Asset performance", "Maintenance; reporting; value"]
+      ]
+    },
+    {
+      "id": "sx-refining",
+      "cat": "refining",
+      "title": "Petroleum Refining Processes",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Understand refinery processes, economics and operations.",
+      "objectives": [
+        "Explain crude properties and refinery configuration",
+        "Understand key conversion processes",
+        "Assess refinery margins",
+        "Apply refinery safety and environmental practice"
+      ],
+      "audience": "Refinery engineers, operators and planners.",
+      "outline": [
+        ["Crude and products", "Crude assays; product specifications"],
+        ["Separation", "Distillation; treating"],
+        ["Conversion", "Cracking; reforming; blending"],
+        ["Economics", "Margins; planning"],
+        ["Safety and environment", "Process safety; emissions"]
+      ]
+    },
+    {
+      "id": "sx-urban",
+      "cat": "urban",
+      "title": "Urban Planning and Development",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Plan inclusive, liveable cities using data, policy and community engagement.",
+      "objectives": [
+        "Analyse urban growth and land use",
+        "Prepare development plans",
+        "Plan infrastructure and services",
+        "Engage communities in planning"
+      ],
+      "audience": "Urban planners, municipal officials and development practitioners.",
+      "outline": [
+        ["Urbanisation in Africa", "Trends; informality; data"],
+        ["Land use", "Zoning; land administration"],
+        ["Infrastructure", "Transport; water; housing"],
+        ["Finance", "Municipal finance; investment"],
+        ["Participation", "Community engagement; monitoring"]
+      ]
+    },
+    {
+      "id": "sx-public",
+      "cat": "public",
+      "title": "Public Sector Management and Policy",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Design, deliver and evaluate public policies and services that work.",
+      "objectives": [
+        "Analyse policy problems and options",
+        "Plan and budget public programmes",
+        "Improve public service delivery",
+        "Use evidence and evaluation in policy"
+      ],
+      "audience": "Civil servants, public managers and policy analysts.",
+      "outline": [
+        ["Policy making", "Problem analysis; options; consultation"],
+        ["Planning and budgets", "Programme budgets; results"],
+        ["Service delivery", "Citizens; performance; digital services"],
+        ["Evidence", "Data; evaluation; using research"],
+        ["Accountability", "Transparency; audit; reporting"]
+      ]
+    },
+    {
+      "id": "sx-health",
+      "cat": "health",
+      "title": "Healthcare Management",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Manage health services for quality, access and efficiency.",
+      "objectives": [
+        "Plan health services and resources",
+        "Improve quality and patient safety",
+        "Manage health finances",
+        "Use health information for decisions"
+      ],
+      "audience": "Hospital and clinic managers, health programme staff.",
+      "outline": [
+        ["Health systems", "Building blocks; financing"],
+        ["Operations", "Patient flow; staffing; supplies"],
+        ["Quality and safety", "Standards; audits; patient safety"],
+        ["Finance", "Budgets; insurance; costs"],
+        ["Health information", "HMIS; indicators; data use"]
+      ]
+    },
+    {
+      "id": "sx-pensions",
+      "cat": "pensions",
+      "title": "Social Insurance and Pensions Management",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Design, administer and finance social insurance and pension schemes.",
+      "objectives": [
+        "Explain social insurance and pension models",
+        "Manage contributions and benefits",
+        "Understand actuarial basics and sustainability",
+        "Improve member services"
+      ],
+      "audience": "Pension and social security staff and regulators.",
+      "outline": [
+        ["Scheme design", "Models; coverage; benefits"],
+        ["Administration", "Contributions; records; payments"],
+        ["Sustainability", "Actuarial basics; investment; governance"]
+      ]
+    },
+    {
+      "id": "sx-policing",
+      "cat": "policing",
+      "title": "Data and Evidence for Law Enforcement",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Use data, analysis and evaluation to plan policing and community safety.",
+      "objectives": [
+        "Collect and analyse crime and incident data",
+        "Map hotspots and trends",
+        "Evaluate crime prevention programmes",
+        "Work with communities using evidence"
+      ],
+      "audience": "Police analysts, commanders and community safety staff.",
+      "outline": [
+        ["Data for policing", "Data sources; quality; ethics"],
+        ["Analysis", "Trends; hotspots; problem analysis"],
+        ["Prevention", "Problem-oriented policing; partnerships"],
+        ["Evaluation", "Measuring what works"],
+        ["Communities", "Surveys; trust; reporting"]
+      ]
+    },
+    {
+      "id": "sx-traffic",
+      "cat": "traffic",
+      "title": "Traffic Management and Road Safety",
+      "days": 3,
+      "level": "Intermediate",
+      "summary": "Plan traffic systems and road safety measures using data.",
+      "objectives": [
+        "Analyse traffic and crash data",
+        "Plan traffic management measures",
+        "Design road safety programmes",
+        "Evaluate interventions"
+      ],
+      "audience": "Traffic engineers, transport planners and road safety officials.",
+      "outline": [
+        ["Traffic data", "Counts; speeds; crash data"],
+        ["Management", "Junctions; signals; public transport"],
+        ["Road safety", "Safe system approach; evaluation"]
+      ]
+    },
+    {
+      "id": "sx-defence",
+      "cat": "defence",
+      "title": "Strategic Analysis and Risk for National Security",
+      "days": 5,
+      "level": "Advanced",
+      "summary": "Apply structured analysis to security risks, policy options and resource planning.",
+      "objectives": [
+        "Apply structured analytic techniques",
+        "Assess risks and scenarios",
+        "Support policy and resource decisions",
+        "Communicate analysis to decision-makers"
+      ],
+      "audience": "Policy, planning and analysis staff in security institutions.",
+      "outline": [
+        ["Analysis", "Structured analytic techniques; biases"],
+        ["Risk", "Risk assessment; horizon scanning"],
+        ["Scenarios", "Scenario planning; indicators"],
+        ["Planning", "Resources; capability planning"],
+        ["Briefing", "Writing and briefing for decision-makers"]
+      ]
+    },
+    {
+      "id": "sx-ports",
+      "cat": "ports",
+      "title": "Port and Shipping Management",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Run efficient, safe and competitive ports and shipping operations.",
+      "objectives": [
+        "Understand port operations and governance",
+        "Improve terminal productivity",
+        "Manage port safety and security",
+        "Plan port development"
+      ],
+      "audience": "Port, shipping and logistics managers.",
+      "outline": [
+        ["Ports and shipping", "Governance; trade; shipping markets"],
+        ["Operations", "Terminals; berths; cargo handling"],
+        ["Performance", "KPIs; dwell time; productivity"],
+        ["Safety and security", "Port safety; security codes"],
+        ["Development", "Planning; investment; partnerships"]
+      ]
+    },
+    {
+      "id": "sx-agri",
+      "cat": "agri",
+      "title": "Agribusiness Development",
+      "days": 5,
+      "level": "Intermediate",
+      "summary": "Build profitable, resilient agribusinesses and value chains.",
+      "objectives": [
+        "Analyse agricultural value chains",
+        "Plan agribusiness finance and investment",
+        "Improve market access and quality",
+        "Manage climate and market risk"
+      ],
+      "audience": "Agribusiness owners, development practitioners and lenders.",
+      "outline": [
+        ["Value chains", "Mapping; actors; margins"],
+        ["Business planning", "Costs; finance; investment"],
+        ["Markets", "Standards; contracts; exports"],
+        ["Risk", "Climate; prices; insurance"],
+        ["Growth", "Cooperatives; partnerships; impact measurement"]
+      ]
+    }
+  ],
+  "newCourses": [
+    "ls-strategy",
+    "ls-executive",
+    "ls-governance",
+    "ai-apps",
+    "ai-digital",
+    "fi-budgeting",
+    "pp-project",
+    "pp-procurement",
+    "hr-management",
+    "sx-public",
+    "sx-health",
+    "en-energy"
+  ],
+  "analytics": {
+    "services": [
+      {
+        "id": "statistics",
+        "name": "Statistical analysis and modelling",
+        "summary": "Rigorous analysis that answers your questions with the right tests and models, written up so non-specialists can act on it.",
+        "questions": [
+          "Is the difference between groups real, or chance?",
+          "Which factors are linked to the outcome we care about?",
+          "How big is the effect, and how sure can we be?"
+        ],
+        "deliverables": [
+          "An agreed analysis plan",
+          "Tables and charts ready for your report",
+          "A plain-language summary of what the results mean",
+          "The analysis files or code, so the work can be repeated"
+        ],
+        "methods": "Descriptive statistics, hypothesis tests, regression (linear, logistic, multilevel), ANOVA, factor and cluster analysis.",
+        "courses": ["st-spss", "st-regression", "st-stata"]
+      },
+      {
+        "id": "survey",
+        "name": "Survey data analysis and weighting",
+        "summary": "Turn survey responses into reliable estimates for your population, with the right weights and margins of error.",
+        "questions": [
+          "What share of the population has this characteristic, by region or group?",
+          "Has the situation changed since the last round?",
+          "How confident can we be in these estimates?"
+        ],
+        "deliverables": [
+          "Weighted estimates with confidence intervals",
+          "Cross-tabulations by your key groups",
+          "A short methods note on sampling and weighting",
+          "Clean, documented datasets"
+        ],
+        "methods": "Design weights, non-response adjustment, complex survey estimation, indices and scales, trend analysis.",
+        "courses": ["fd-sampling", "sv-scales", "sv-questionnaire"]
+      },
+      {
+        "id": "mel",
+        "name": "Monitoring, evaluation and impact analysis",
+        "summary": "Measure what programmes achieve: indicator tracking, evaluation analysis and estimates of impact.",
+        "questions": [
+          "Are we on track against our targets?",
+          "What difference did the programme make, and for whom?",
+          "Which parts of the programme work best?"
+        ],
+        "deliverables": [
+          "Indicator calculations against baselines and targets",
+          "Evaluation findings tables and charts",
+          "Impact estimates with their limitations explained",
+          "Inputs for donor and board reports"
+        ],
+        "methods": "Indicator tracking, difference-in-differences, matching, regression discontinuity, cost-effectiveness, mixed methods.",
+        "courses": ["me-fundamentals", "rd-experiments", "me-dqa"]
+      },
+      {
+        "id": "dashboards",
+        "name": "Dashboards and business intelligence",
+        "summary": "Interactive dashboards that keep leaders and teams up to date with the numbers that matter.",
+        "questions": [
+          "How are we performing this month across sites or regions?",
+          "Where are the problems, and where should we act first?",
+          "Can our managers see this without asking an analyst?"
+        ],
+        "deliverables": [
+          "A dashboard design agreed with your users",
+          "A working dashboard in Power BI, Excel or your preferred tool",
+          "Documentation and a handover session",
+          "Optional monthly updates"
+        ],
+        "methods": "KPI design, data modelling, Power BI and Excel dashboards, automated refresh where your systems allow.",
+        "courses": ["vz-powerbi", "vz-excel"]
+      },
+      {
+        "id": "data",
+        "name": "Data management and cleaning",
+        "summary": "Make messy data analysis-ready: entry, cleaning, coding, merging and documentation.",
+        "questions": [
+          "Can we trust this dataset?",
+          "How do we combine data from several sources or rounds?",
+          "How should our data be organised for the future?"
+        ],
+        "deliverables": [
+          "A cleaned, labelled dataset",
+          "A codebook describing every variable",
+          "A log of every cleaning decision",
+          "Recommendations to keep future data clean"
+        ],
+        "methods": "Data entry and validation, de-duplication, recoding, merging and reshaping, coding open answers, codebooks.",
+        "courses": ["vz-datamgmt", "fd-capi"]
+      },
+      {
+        "id": "market",
+        "name": "Market and customer analytics",
+        "summary": "Understand customers and markets: satisfaction, segments, demand and competitors.",
+        "questions": [
+          "Who are our customers, and which segments matter most?",
+          "What drives satisfaction and loyalty?",
+          "How big is the market, and where is the opportunity?"
+        ],
+        "deliverables": [
+          "Customer and market insight reports",
+          "Segment profiles",
+          "Key driver analysis",
+          "Recommendations linked to the evidence"
+        ],
+        "methods": "Satisfaction and NPS analysis, key driver analysis, segmentation, market sizing, competitor analysis.",
+        "courses": ["mk-research", "mk-segmentation", "mk-intelligence"]
+      },
+      {
+        "id": "predictive",
+        "name": "Predictive analytics, machine learning and AI",
+        "summary": "Use your data to forecast, classify and spot risk early, with models you can understand and check.",
+        "questions": [
+          "Which clients or cases are most at risk?",
+          "What will demand look like next quarter?",
+          "Can we automate a routine classification task?"
+        ],
+        "deliverables": [
+          "A model tested on data it hasn't seen",
+          "Clear accuracy measures and limitations",
+          "An explanation of what drives the predictions",
+          "Code and guidance to run it again"
+        ],
+        "methods": "Forecasting, classification and regression models, model validation, explainability checks, responsible-AI review.",
+        "courses": ["ai-ml", "st-python", "ai-apps"]
+      },
+      {
+        "id": "qualitative",
+        "name": "Qualitative and text analysis",
+        "summary": "Make sense of interviews, focus groups and written answers, systematically and transparently.",
+        "questions": [
+          "What themes come up in what people told us?",
+          "How do views differ between groups?",
+          "What do open-ended survey answers say?"
+        ],
+        "deliverables": [
+          "A coding framework",
+          "Thematic findings with supporting quotes",
+          "Counts of how often themes appear",
+          "Integration with your quantitative results, where relevant"
+        ],
+        "methods": "Thematic and framework analysis, NVivo, coding of open survey answers, AI-assisted coding checked by an analyst.",
+        "courses": ["ql-nvivo", "ql-methods"]
+      }
+    ],
+    "sectors": [
+      {
+        "id": "government",
+        "name": "Government and the public sector",
+        "summary": "Evidence for policy, planning and public services.",
+        "questions": [
+          "Are services reaching the people they are meant for?",
+          "Which districts need more resources?",
+          "Did a policy change make a difference?"
+        ],
+        "services": ["statistics", "survey", "dashboards", "mel"]
+      },
+      {
+        "id": "ngos",
+        "name": "NGOs and development partners",
+        "summary": "Analysis that shows results to funders and helps programmes improve.",
+        "questions": [
+          "Are we reaching our targets?",
+          "What changed for participants?",
+          "What should we report to donors?"
+        ],
+        "services": ["mel", "survey", "qualitative", "dashboards"]
+      },
+      {
+        "id": "health",
+        "name": "Health",
+        "summary": "Data for better health services and programmes.",
+        "questions": [
+          "Where are service gaps and bottlenecks?",
+          "Which patient groups are we missing?",
+          "How is coverage changing over time?"
+        ],
+        "services": ["statistics", "dashboards", "data", "mel"]
+      },
+      {
+        "id": "education",
+        "name": "Education",
+        "summary": "Evidence on learning, access and school performance.",
+        "questions": [
+          "Which schools or groups are falling behind?",
+          "What is linked to better learning outcomes?",
+          "Did a training programme improve teaching?"
+        ],
+        "services": ["statistics", "survey", "mel", "dashboards"]
+      },
+      {
+        "id": "finance",
+        "name": "Banking and financial services",
+        "summary": "Analytics for customers, risk and growth.",
+        "questions": [
+          "Which customers are at risk of leaving or defaulting?",
+          "Which products and segments are growing?",
+          "How satisfied are our customers?"
+        ],
+        "services": ["predictive", "market", "dashboards", "statistics"]
+      },
+      {
+        "id": "agriculture",
+        "name": "Agriculture and food security",
+        "summary": "Evidence on production, markets and household welfare.",
+        "questions": [
+          "How many households are food insecure, and where?",
+          "What explains differences in yields?",
+          "How are prices and markets changing?"
+        ],
+        "services": ["survey", "statistics", "mel", "market"]
+      },
+      {
+        "id": "energy",
+        "name": "Energy and utilities",
+        "summary": "Data for planning, operations and customers.",
+        "questions": [
+          "Where is demand growing?",
+          "Where are losses and outages highest?",
+          "How do customers rate the service?"
+        ],
+        "services": ["dashboards", "predictive", "market", "data"]
+      },
+      {
+        "id": "consumer",
+        "name": "Retail, consumer goods and telecoms",
+        "summary": "Customer and market insight to grow sales and loyalty.",
+        "questions": ["Who buys from us, and why?", "Which promotions and channels work?", "Where should we expand?"],
+        "services": ["market", "predictive", "dashboards", "survey"]
+      }
+    ],
+    "tools": [
+      {
+        "name": "SPSS",
+        "use": "Statistical analysis and survey tables"
+      },
+      {
+        "name": "Stata",
+        "use": "Survey, econometric and evaluation analysis"
+      },
+      {
+        "name": "R",
+        "use": "Statistics, modelling and reproducible reports"
+      },
+      {
+        "name": "Python",
+        "use": "Data processing, automation and machine learning"
+      },
+      {
+        "name": "Power BI",
+        "use": "Interactive dashboards and business intelligence"
+      },
+      {
+        "name": "Excel",
+        "use": "Tables, models and dashboards your team can maintain"
+      },
+      {
+        "name": "NVivo",
+        "use": "Qualitative coding and analysis"
+      },
+      {
+        "name": "KoboToolbox and ODK",
+        "use": "Mobile data collection and monitoring"
+      },
+      {
+        "name": "Afrimetrica Surveys",
+        "use": "Online surveys with built-in analysis"
+      }
+    ]
+  },
+  "consultancy": {
+    "services": [
+      {
+        "id": "design",
+        "name": "Research design and methodology",
+        "summary": "Study designs, sampling plans, protocols and data collection tools tailored to your questions and budget.",
+        "when": [
+          "You have a question but not yet a study design",
+          "A funder or ethics committee needs a clear protocol",
+          "You want a second opinion on methods or sample size"
+        ],
+        "deliverables": [
+          "A research protocol or methodology note",
+          "Sampling plan and sample size calculations",
+          "Questionnaires, interview guides and consent forms",
+          "An analysis plan"
+        ],
+        "analytics": ["statistics", "survey"],
+        "courses": ["rd-applied", "fd-sampling", "sv-questionnaire"]
+      },
+      {
+        "id": "mel",
+        "name": "Monitoring, evaluation and learning systems",
+        "summary": "Theories of change, results frameworks, indicators and the systems to track them.",
+        "when": [
+          "A new programme needs an M&E framework",
+          "Indicators exist but data are unreliable or late",
+          "Your team wants to use data to learn and adapt"
+        ],
+        "deliverables": [
+          "Theory of change and results framework",
+          "Indicator reference sheets with baselines and targets",
+          "Data collection tools and reporting templates",
+          "An M&E plan and dashboard design"
+        ],
+        "analytics": ["mel", "dashboards"],
+        "courses": ["me-fundamentals", "me-results", "me-dqa"]
+      },
+      {
+        "id": "evaluations",
+        "name": "Baseline, mid-term and final evaluations",
+        "summary": "Independent evaluations that show what a programme achieved, why, and what to do next.",
+        "when": [
+          "A donor requires an independent evaluation",
+          "You need a baseline before a programme starts",
+          "You want to know what worked, for whom, and why"
+        ],
+        "deliverables": [
+          "Inception report and evaluation matrix",
+          "Fieldwork, analysis and findings",
+          "Evaluation report with recommendations",
+          "A presentation of findings to your team"
+        ],
+        "analytics": ["mel", "statistics", "qualitative"],
+        "courses": ["rd-experiments", "rd-mixed", "me-fundamentals"]
+      },
+      {
+        "id": "fieldwork",
+        "name": "Surveys and fieldwork",
+        "summary": "Online, telephone and face-to-face data collection with trained field teams and quality checks.",
+        "when": [
+          "You need household, customer or staff surveys",
+          "You need interviews or focus groups in several locations",
+          "You want high-quality data collected on tablets"
+        ],
+        "deliverables": [
+          "Trained enumerators and supervisors",
+          "Digital questionnaires with checks built in",
+          "Daily quality monitoring during fieldwork",
+          "Clean, documented datasets"
+        ],
+        "analytics": ["survey", "data"],
+        "courses": ["fd-management", "fd-capi", "ql-fgd"]
+      },
+      {
+        "id": "feasibility",
+        "name": "Feasibility, market and baseline studies",
+        "summary": "Evidence to decide whether, where and how to invest or intervene.",
+        "when": [
+          "You are planning a new product, service or programme",
+          "You need to understand demand, costs and risks",
+          "Investors or funders ask for a feasibility study"
+        ],
+        "deliverables": [
+          "Market and needs assessment",
+          "Demand and cost estimates",
+          "Risk assessment and options",
+          "A feasibility report with recommendations"
+        ],
+        "analytics": ["market", "statistics"],
+        "courses": ["mk-research", "mk-intelligence", "ls-strategy"]
+      },
+      {
+        "id": "policy",
+        "name": "Policy research and analysis",
+        "summary": "Rigorous, accessible evidence for policy makers and public institutions.",
+        "when": [
+          "A ministry or agency needs evidence for a policy decision",
+          "You need a review of what has worked elsewhere",
+          "You want to test policy options before choosing"
+        ],
+        "deliverables": [
+          "Evidence and literature reviews",
+          "Policy analysis of options and trade-offs",
+          "Policy briefs for decision-makers",
+          "Validation workshops with stakeholders"
+        ],
+        "analytics": ["statistics", "survey"],
+        "courses": ["sx-public", "wr-proposal"]
+      },
+      {
+        "id": "strategy",
+        "name": "Strategy and organisational development",
+        "summary": "Strategic plans, capacity assessments and organisational reviews grounded in evidence.",
+        "when": [
+          "You are preparing a new strategic plan",
+          "You want to assess and strengthen your organisation's capacity",
+          "A board or funder asks for an organisational review"
+        ],
+        "deliverables": [
+          "Situation analysis and stakeholder consultations",
+          "A strategic plan with results framework",
+          "Capacity assessment and development plan",
+          "Facilitated leadership workshops"
+        ],
+        "analytics": ["dashboards", "mel"],
+        "courses": ["ls-strategy", "ls-governance", "ls-executive"]
+      },
+      {
+        "id": "reports",
+        "name": "Commissioned studies, writing and review",
+        "summary": "End-to-end studies and expert support with proposals, reports and questionnaires.",
+        "when": [
+          "You need a study delivered from start to finish",
+          "You need help writing a proposal or a report",
+          "You want an expert review of a questionnaire or report"
+        ],
+        "deliverables": [
+          "Inception report to final report",
+          "Proposal and report writing support",
+          "Questionnaire and report reviews",
+          "Presentations and dissemination materials"
+        ],
+        "analytics": ["statistics", "qualitative"],
+        "courses": ["wr-proposal", "wr-publishing", "sv-questionnaire"]
+      }
+    ],
+    "sectors": [
+      {
+        "id": "government",
+        "name": "Government and the public sector",
+        "summary": "Evidence and advice for ministries, agencies and local government.",
+        "assignments": [
+          "Policy research and reviews",
+          "Programme and service evaluations",
+          "Strategic and sector plans",
+          "Household and service delivery surveys"
+        ],
+        "services": ["policy", "evaluations", "strategy", "fieldwork"]
+      },
+      {
+        "id": "development",
+        "name": "NGOs and development partners",
+        "summary": "Independent research and evaluation for donor-funded programmes.",
+        "assignments": [
+          "Baseline, mid-term and final evaluations",
+          "M&E frameworks and systems",
+          "Needs assessments",
+          "Learning reviews"
+        ],
+        "services": ["evaluations", "mel", "fieldwork", "reports"]
+      },
+      {
+        "id": "health",
+        "name": "Health",
+        "summary": "Research and evaluation for health programmes and services.",
+        "assignments": [
+          "Health facility and household surveys",
+          "Programme evaluations",
+          "Patient experience studies",
+          "Health information system reviews"
+        ],
+        "services": ["fieldwork", "evaluations", "mel", "design"]
+      },
+      {
+        "id": "education",
+        "name": "Education",
+        "summary": "Evidence on access, learning and school performance.",
+        "assignments": [
+          "Learning assessments",
+          "School and teacher surveys",
+          "Programme evaluations",
+          "Education sector reviews"
+        ],
+        "services": ["fieldwork", "evaluations", "design", "policy"]
+      },
+      {
+        "id": "agriculture",
+        "name": "Agriculture and food security",
+        "summary": "Studies that support farmers, markets and food security programmes.",
+        "assignments": [
+          "Value chain and market studies",
+          "Food security assessments",
+          "Agricultural programme evaluations",
+          "Farmer surveys"
+        ],
+        "services": ["feasibility", "fieldwork", "evaluations", "mel"]
+      },
+      {
+        "id": "finance",
+        "name": "Banking and financial services",
+        "summary": "Research for financial inclusion, products and customers.",
+        "assignments": [
+          "Customer and market research",
+          "Financial inclusion studies",
+          "Product feasibility studies",
+          "Customer satisfaction tracking"
+        ],
+        "services": ["feasibility", "fieldwork", "design", "strategy"]
+      },
+      {
+        "id": "private",
+        "name": "Private sector and investors",
+        "summary": "Evidence to grow, invest and manage risk.",
+        "assignments": [
+          "Market entry and feasibility studies",
+          "Customer research",
+          "Impact measurement for investors",
+          "Strategic planning"
+        ],
+        "services": ["feasibility", "strategy", "fieldwork", "mel"]
+      },
+      {
+        "id": "research",
+        "name": "Universities and research institutes",
+        "summary": "Methods support and fieldwork for academic research.",
+        "assignments": [
+          "Study design and methods review",
+          "Fieldwork and data collection",
+          "Data management and analysis support",
+          "Proposal and publication support"
+        ],
+        "services": ["design", "fieldwork", "reports", "mel"]
+      }
+    ]
+  },
+  "about": {
+    "mission": "To help organisations, governments and NGOs make better decisions and deliver results, by building their people's skills in data, research and leadership, and by providing reliable data and independent analysis.",
+    "vision": "An Africa where every organisation, government and NGO has the data, evidence and skilled people it needs to make good decisions and deliver results.",
+    "values": [
+      {
+        "title": "Rigour",
+        "text": "Methods and advice that are sound, transparent and honestly reported."
+      },
+      {
+        "title": "Practicality",
+        "text": "Training and solutions that work in real organisations, field conditions and budgets."
+      },
+      {
+        "title": "Evidence-led leadership",
+        "text": "Helping leaders use data and evidence to set priorities and make decisions."
+      },
+      {
+        "title": "Ethics and data protection",
+        "text": "Respect for participants, informed consent and careful handling of personal data."
+      },
+      {
+        "title": "Building capacity",
+        "text": "Leaving people and organisations more skilled, and more independent, than we found them."
+      }
+    ],
+    "units": [
+      {
+        "role": "Organisation",
+        "name": "Afrimetrica — Data, Research and Executive Training",
+        "href": ""
+      },
+      {
+        "role": "Training",
+        "name": "Afrimetrica Academy (data, research and executive training)",
+        "href": "#training"
+      },
+      {
+        "role": "Survey software",
+        "name": "Afrimetrica Surveys",
+        "href": "#surveys"
+      },
+      {
+        "role": "Analytics",
+        "name": "Afrimetrica Analytics",
+        "href": "#analytics"
+      },
+      {
+        "role": "Consultancy",
+        "name": "Afrimetrica Consulting",
+        "href": "#consultancy"
+      },
+      {
+        "role": "Research resources",
+        "name": "Afrimetrica Knowledge Hub",
+        "href": "#resources"
+      }
+    ]
+  }
+}

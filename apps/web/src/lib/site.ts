@@ -1,8 +1,8 @@
 // Brand facts shared by every page. Keep in sync with docs/requirements.md.
 export const SITE = {
   name: "Afrimetrica",
-  longName: "Afrimetrica — Research Methods and Analytics",
-  tagline: "Advancing Research, Measurement and Evidence",
+  longName: "Afrimetrica — Data, Research and Executive Training",
+  tagline: "Plan. Analyse. Lead.",
   // The legal operator. Kept for documents and invoices; by the owner's choice it isn't shown on the website.
   operator: "Regelco International Ltd",
   operatorCountry: "Ghana",

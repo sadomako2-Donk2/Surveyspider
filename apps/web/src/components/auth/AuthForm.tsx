@@ -77,6 +77,12 @@ export function AuthForm({
           />
         </label>
         {up && <p className="hint">At least 8 characters.</p>}
+        {up && (
+          <p className="hint">
+            By creating an account you agree to our <Link href="/terms">terms of use</Link>. Our{" "}
+            <Link href="/privacy">privacy notice</Link> explains how we use your data.
+          </p>
+        )}
         {error && (
           <p className="errs" role="alert">
             {error}
