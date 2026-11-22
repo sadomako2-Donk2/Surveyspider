@@ -16,6 +16,6 @@ Prefix every prompt with: "Read CLAUDE.md and docs/. Keep Phase 1 running until 
 11. **Later.** Subscription and Payment (Paystack or Flutterwave for GHS, Stripe for cards), certificates as PDFs, learning materials.
 
 ## Live-site changes still to carry into Phase 2 before cut-over
-- Training page course catalogue (Nov 2026): 99 courses in 78 subjects grouped into 11 subject areas (GLOMACS-style), search and filters, venues across English-speaking Africa, course pages with day-by-day outlines and a prefilled "Request dates and fees" enquiry. Source: `CATALOGUE`, `VENUES`, `viewTraining` and `catDetail` in `public/index.html` on `main`.
+- Training section (Nov 2026): 99 courses in 78 subjects in 11 subject areas, with a GLOMACS-style menu (New, Course finder, Courses, Training venues, Certificates, Training sectors) and separate pages (#training/finder, /area, /subject, /venue, /course), search and filters, venues across English-speaking Africa, course pages with day-by-day outlines and a prefilled "Request dates and fees" enquiry. Source: `CATALOGUE`, `VENUES`, `viewTraining` and `catDetail` in `public/index.html` on `main`.
 - Deeper gold (`--gold-ink`) for small gold labels on the live site (Phase 2 already uses it).
 - Positioning as "Data, research and executive training" (Nov 2026): home heading and intro, "What we do", About heading, intro, mission and values, header logo line, footer and page title. Copy the wording from `public/index.html` on `main`.
