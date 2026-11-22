@@ -881,7 +881,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     const msg = S.notice || (S.mode === "demo" ? "Demo mode: everything you create is saved in this browser only. Open the published page while signed in to claude.ai to share data with other people." : "") || (S.stale ? "Can't reach the saved data yet. What you see may be out of date." : "");
     b.hidden = !msg; b.textContent = msg;
     if (!msg && unverified()) { b.hidden = false; b.innerHTML = `<b>Confirm your email address.</b> We sent a link to ${esc(S.user.email)}. You can browse and save drafts now; confirm to launch surveys, take paid studies and use AI. <button type="button" class="linkbtn" data-act="resendVerify">Send it again</button>`; }
-    $("#foot").innerHTML = `<div class="foot-inner"><div><b>Afrimetrica</b> · Centre for Research Methods and Analytics<br><span class="hint">Advancing Research, Measurement and Evidence. ${LEGAL}</span></div><div class="hint">Afrimetrica Surveys platform fee ${Math.round(FEE * 100)}% of participant rewards. ${S.mode === "live" ? (API ? "Survey answers are stored on Afrimetrica's server and shown only to the survey's owner." : "Data is shared with everyone who can open this page.") : S.mode === "demo" ? "Demo data stays in this browser." : "Connecting…"}</div></div>`;
+    $("#foot").innerHTML = `<div class="foot-inner"><div><b>Afrimetrica</b> · Research Methods and Analytics<br><span class="hint">Advancing Research, Measurement and Evidence.</span></div><div class="hint">Afrimetrica Surveys platform fee ${Math.round(FEE * 100)}% of participant rewards. ${S.mode === "live" ? (API ? "Survey answers are stored on Afrimetrica's server and shown only to the survey's owner." : "Data is shared with everyone who can open this page.") : S.mode === "demo" ? "Demo data stays in this browser." : "Connecting…"}</div></div>`;
   }
   function render() {
     pending = false;
@@ -894,6 +894,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     let h = location.hash.replace("#", "");
     if (h === "paper-to-pen") h = "paper-survey"; // old links keep working
     if (h === "library") h = "resources";
+    if ((ROUTES.has(h) ? h : "home") !== S.view) slideIdx = 0; // a new page's slideshow starts at its first photo
     S.view = ROUTES.has(h) ? h : "home";
     if (S.view !== "training") { S.courseOpen = null; S.regFor = null; }
     if (S.view !== "resources") S.guideOpen = null;
@@ -936,7 +937,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
         <div class="rm-rec"><b>Recommendation</b>Add a 30-minute workplace practice task to each module, then re-survey in 6 weeks.</div>
       </div>
     </section>
-    ${photo("surveys")}
+    ${slideshow("surveys")}
     <section class="stats" aria-label="Platform activity">
       <div class="stat"><span class="v">${int(live)}</span><span class="l">Surveys open now</span></div>
       <div class="stat"><span class="v">${int(S.responses.length)}</span><span class="l">Responses collected</span></div>
@@ -1078,7 +1079,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     S.gen = { status: "busy", goal, aud, n };
     setGenStatus("Writing your survey… this usually takes 20–40 seconds.");
     aiCtl = new AbortController();
-    const prompt = `You are an expert survey designer for Afrimetrica Surveys, part of Afrimetrica, a centre for research methods and analytics.
+    const prompt = `You are an expert survey designer for Afrimetrica Surveys, part of Afrimetrica, a research methods and analytics organisation.
 Write an online survey for this goal: ${goal}
 Who will answer: ${aud || "a general adult audience"}
 Write about ${n} questions.
@@ -2705,7 +2706,6 @@ ${richSummary(st, rows)}`;
   const TOPNAV = [["home", "Home"], ["about", "About"], ["training", "Training"], ["surveys", "Surveys"], ["analytics", "Analytics"], ["consultancy", "Consultancy"], ["resources", "Resources"], ["contact", "Contact"], ["account", "My Account"]];
   const SURVEY_NAV = [["surveys", "Overview"], ["create", "Create"], ["import", "Upload"], ["paper-survey", "Paper surveys"], ["studies", "My surveys"], ["results", "Analyze"], ["panel", "Take surveys"], ["pricing", "Plans"]];
   const ROUTES = new Set([...TOPNAV.map(([k]) => k), ...SURVEY_NAV.map(([k]) => k), "signin", "business"]);
-  const LEGAL = "Afrimetrica is operated by Regelco International Ltd, a company registered in Ghana.";
   const CUR = { USD: "US$", GHS: "GH₵", GBP: "£", EUR: "€" };
   const fee = (x, c) => (+x > 0 ? (CUR[c] || "") + (+x).toLocaleString("en-US", { maximumFractionDigits: 2 }) : "Free");
   const fmtDay = (d) => (d ? new Date(d + "T12:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : "Date to be confirmed");
@@ -2729,13 +2729,14 @@ ${richSummary(st, rows)}`;
   // Home page slideshow: starts with the first photo and moves on every 5 seconds. Visitors can pause it
   // (needed for accessibility); it starts paused for people who ask their device to reduce motion.
   const SLIDES = ["home", "training", "academy", "surveys", "analytics", "consultancy", "about"];
-  let slideIdx = 0, slidePaused = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
-  const slideshow = () => `<section class="slideshow" aria-roledescription="carousel" aria-label="Photos">
-    <div class="slides" style="transform:translateX(-${slideIdx * 100}%)">${SLIDES.map((k, i) => { const [f, alt, pos] = PHOTO[k]; return `<div class="slide" role="group" aria-roledescription="slide" aria-label="${i + 1} of ${SLIDES.length}"${i === slideIdx ? "" : ' aria-hidden="true"'}><img src="/photos/${f}" alt="${esc(alt)}" style="object-position:${pos}"${i ? ' fetchpriority="low"' : ""}></div>`; }).join("")}</div>
-    <div class="slide-ctl"><button class="slide-play" data-act="slidePause" aria-pressed="${slidePaused}">${slidePaused ? "Play" : "Pause"}</button>${SLIDES.map((_, i) => `<button class="slide-dot" data-act="slideGo" data-i="${i}" aria-label="Show photo ${i + 1}"${i === slideIdx ? ' aria-current="true"' : ""}></button>`).join("")}</div>
-  </section>`;
+  let slideOrder = SLIDES, slideIdx = 0, slidePaused = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+  // Each page's slideshow starts with that page's own photo(s), then shows the rest in the usual order.
+  const slideshow = (...first) => { slideOrder = [...first, ...SLIDES.filter((k) => !first.includes(k))]; return `<section class="slideshow" aria-roledescription="carousel" aria-label="Photos">
+    <div class="slides" style="transform:translateX(-${slideIdx * 100}%)">${slideOrder.map((k, i) => { const [f, alt, pos] = PHOTO[k]; return `<div class="slide" role="group" aria-roledescription="slide" aria-label="${i + 1} of ${slideOrder.length}"${i === slideIdx ? "" : ' aria-hidden="true"'}><img src="/photos/${f}" alt="${esc(alt)}" style="object-position:${pos}"${i ? ' fetchpriority="low"' : ""}></div>`; }).join("")}</div>
+    <div class="slide-ctl"><button class="slide-play" data-act="slidePause" aria-pressed="${slidePaused}">${slidePaused ? "Play" : "Pause"}</button>${slideOrder.map((_, i) => `<button class="slide-dot" data-act="slideGo" data-i="${i}" aria-label="Show photo ${i + 1}"${i === slideIdx ? ' aria-current="true"' : ""}></button>`).join("")}</div>
+  </section>`; };
   function showSlide(i) {
-    slideIdx = (i + SLIDES.length) % SLIDES.length;
+    slideIdx = (i + slideOrder.length) % slideOrder.length;
     const box = document.querySelector(".slideshow"); if (!box) return;
     box.querySelector(".slides").style.transform = `translateX(-${slideIdx * 100}%)`;
     box.querySelectorAll(".slide").forEach((s, j) => (j === slideIdx ? s.removeAttribute("aria-hidden") : s.setAttribute("aria-hidden", "true")));
@@ -2831,15 +2832,14 @@ ${richSummary(st, rows)}`;
     return `
     <section class="hero2 afri-hero hero-solo">
       <div>
-        <span class="eyebrow gold">Centre for Research Methods and Analytics · Ghana</span>
         <h1>Advancing research, <span class="gold-text">measurement and evidence.</span></h1>
         <p class="lede">Afrimetrica helps researchers, organisations and students design better studies, collect reliable data and turn it into evidence. We train, build survey tools, analyse data and advise, all in one place.</p>
         <div class="hero-ctas"><a class="btn gold big" href="#training">Explore courses</a><a class="btn primary big" href="#surveys">Start a survey</a><a class="btn big" href="#consultancy">Talk to a consultant</a></div>
       </div>
     </section>
-    ${slideshow()}
+    ${slideshow("home")}
     <section class="stack">
-      <div class="section-head"><span class="eyebrow gold">What we do</span><h2 class="h2xl">One centre, four ways to strengthen your research</h2></div>
+      <div class="section-head"><span class="eyebrow gold">What we do</span><h2 class="h2xl">Four ways to strengthen your research</h2></div>
       <div class="units">${UNITS.map((u) => `<article class="card unit"><span class="eyebrow gold">${esc(u.brand)}</span><h3>${esc(u.title)}</h3><p class="muted">${esc(u.text)}</p><ul class="ticks small">${u.points.map((x) => `<li><div><span>${esc(x)}</span></div></li>`).join("")}</ul><a class="btn" href="#${u.key}" style="align-self:flex-start">${esc(u.cta)}</a></article>`).join("")}</div>
     </section>
     <section class="stack">
@@ -2856,13 +2856,13 @@ ${richSummary(st, rows)}`;
     </section>`;
   }
   function viewAbout() {
-    const rows = [["Organisation", "Afrimetrica — Centre for Research Methods and Analytics"], ["Training", "Afrimetrica Academy"], ["Survey software", "Afrimetrica Surveys"], ["Analytics", "Afrimetrica Analytics"], ["Consultancy", "Afrimetrica Consulting"], ["Research resources", "Afrimetrica Knowledge Hub"], ["Legal operator", "Regelco International Ltd (Ghana)"]];
-    return `<div class="page-head"><div><span class="eyebrow gold">About Afrimetrica</span><h1>A research centre built around good evidence</h1><p class="muted" style="max-width:66ch">Afrimetrica is a Ghana-based centre for research methods and analytics. We work with universities, public bodies, NGOs and businesses across Africa and beyond.</p></div></div>
-      ${photo("about")}
+    const rows = [["Organisation", "Afrimetrica — Research Methods and Analytics"], ["Training", "Afrimetrica Academy"], ["Survey software", "Afrimetrica Surveys"], ["Analytics", "Afrimetrica Analytics"], ["Consultancy", "Afrimetrica Consulting"], ["Research resources", "Afrimetrica Knowledge Hub"]];
+    return `<div class="page-head"><div><span class="eyebrow gold">About Afrimetrica</span><h1>Research built around good evidence</h1><p class="muted" style="max-width:66ch">Afrimetrica provides research methods training, survey tools, data analytics and consultancy. We work with universities, public bodies, NGOs and businesses across Africa and beyond.</p></div></div>
+      ${slideshow("about")}
       <div class="split">
         <section class="card"><h2>Our mission</h2><p>To strengthen the quality and use of research by teaching sound methods, providing reliable tools for collecting data, and turning data into evidence people can act on.</p><h3>What we stand for</h3>
           <ul class="ticks small"><li><div><b>Rigour</b><span>Methods that are appropriate, transparent and honestly reported.</span></div></li><li><div><b>Practicality</b><span>Approaches that work in real field conditions and budgets.</span></div></li><li><div><b>Ethics and data protection</b><span>Respect for participants, informed consent and careful handling of personal data.</span></div></li><li><div><b>Building capacity</b><span>Leaving teams more skilled than we found them.</span></div></li></ul></section>
-        <section class="card"><h2>How we're organised</h2><div class="table-wrap"><table><tbody>${rows.map(([a, b]) => `<tr><th scope="row" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.88rem;color:var(--muted);font-weight:500">${a}</th><td>${b}</td></tr>`).join("")}</tbody></table></div><p class="hint">${LEGAL}</p></section>
+        <section class="card"><h2>How we're organised</h2><div class="table-wrap"><table><tbody>${rows.map(([a, b]) => `<tr><th scope="row" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.88rem;color:var(--muted);font-weight:500">${a}</th><td>${b}</td></tr>`).join("")}</tbody></table></div></section>
       </div>
       <section class="card"><h2>Our team</h2><p class="muted">Profiles of our faculty, analysts and consultants will be published here. To work with us or join our associate network, <a href="#contact">get in touch</a>.</p></section>
       <section class="card"><h2>About our certificates</h2><p class="muted">Afrimetrica Academy issues certificates of completion. They confirm that a participant attended and completed a course; they are not accredited academic qualifications.</p></section>`;
@@ -2880,7 +2880,7 @@ ${richSummary(st, rows)}`;
     if (S.courseOpen) { const c = courseById(S.courseOpen); if (c) return courseDetail(c); S.courseOpen = null; }
     const pub = S.courses.filter((c) => c.status === "published").sort((a, b) => ((upcoming(a)[0] || {}).start || "9").localeCompare((upcoming(b)[0] || {}).start || "9"));
     return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Academy</span><h1>Research methods training</h1><p class="muted" style="max-width:66ch">Practical courses in research design, surveys, data analysis, qualitative methods and monitoring and evaluation. Public short courses, online learning and in-house workshops for your organisation.</p></div></div>
-      <div class="photo-pair">${photo("training")}${photo("academy")}</div>
+      ${slideshow("training", "academy")}
       ${pub.length ? `<div class="course-grid">${pub.map((c) => courseCard(c)).join("")}</div>` : `<div class="empty"><h2>Our course schedule is being finalised</h2><p class="muted">Send us your details below and tell us which topics interest you. We'll contact you as soon as registration opens.</p></div>`}
       <div class="split">
         ${enquiryForm("training", { title: pub.length ? "Training for your organisation" : "Register your interest", intro: "Tell us what you'd like to learn, how many people would attend and where. We run public courses and tailored in-house workshops.", services: TRAINING_SERVICES, serviceLabel: "What are you interested in?", messageLabel: "Topics, group size and location", placeholder: "e.g. A 2-day questionnaire design workshop for 20 M&E staff in Kumasi" })}
@@ -2941,7 +2941,7 @@ ${richSummary(st, rows)}`;
   function serviceCards(list) { return `<div class="units">${list.map(([t, d]) => `<article class="card unit"><h3>${esc(t)}</h3><p class="muted">${esc(d)}</p></article>`).join("")}</div>`; }
   function viewAnalyticsSvc() {
     return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Analytics</span><h1>Data analysis you can rely on</h1><p class="muted" style="max-width:66ch">Send us your data and your questions. Our analysts clean it, analyse it with the right methods and give you results you can explain and defend.</p></div></div>
-      ${photo("analytics")}
+      ${slideshow("analytics")}
       ${serviceCards([["Statistical analysis", "Descriptive statistics, hypothesis tests, regression and multivariate methods, with clear write-ups of what the results mean."], ["Dashboards and reporting", "Interactive dashboards and polished reports that keep decision-makers up to date."], ["Data management and cleaning", "Data entry, cleaning, coding, merging and documentation so your dataset is analysis-ready."], ["Survey and M&E data", "Weighting, indicator calculation and trend analysis for surveys and monitoring systems."]])}
       <div class="split">
         ${enquiryForm("analytics", { title: "Request an analysis", intro: "Describe your data and what you need to know. We'll reply with an approach, a timeline and a quote.", services: ANALYTICS_SERVICES, budget: true, messageLabel: "Your data and questions", placeholder: "e.g. 1,200 household survey responses in Excel; we need prevalence estimates by region and a regression on food security." })}
@@ -2951,7 +2951,7 @@ ${richSummary(st, rows)}`;
   }
   function viewConsult() {
     return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Consulting</span><h1>Research and evaluation consultancy</h1><p class="muted" style="max-width:66ch">From a single questionnaire review to a full multi-site study, we design, run and report research that stands up to scrutiny.</p></div></div>
-      ${photo("consultancy")}
+      ${slideshow("consultancy")}
       ${serviceCards([["Research design and methodology", "Study designs, sampling plans, protocols and data collection tools tailored to your questions and budget."], ["Monitoring and evaluation", "Theories of change, results frameworks, baselines, mid-term and final evaluations."], ["Surveys and fieldwork", "Online, telephone and face-to-face data collection with trained field teams and quality checks."], ["Commissioned studies and reports", "End-to-end studies, from inception report to final report and presentation."]])}
       <div class="split">
         ${enquiryForm("consultancy", { title: "Discuss a project", intro: "Tell us about your project. We'll reply within two working days to arrange a call.", services: CONSULT_SERVICES, budget: true, messageLabel: "About your project", placeholder: "Objectives, target population, locations, deadlines and any terms of reference." })}
@@ -2994,7 +2994,7 @@ ${richSummary(st, rows)}`;
     return `<div class="page-head"><div><span class="eyebrow gold">Contact</span><h1>Get in touch</h1><p class="muted" style="max-width:66ch">Questions about courses, surveys, analysis or a project? Send us a message and we'll reply within two working days.</p></div></div>
       <div class="split">
         ${enquiryForm("contact", { title: "Send us a message", subject: true, messageLabel: "Your message" })}
-        <section class="card"><h2>Contact details</h2>${details || `<p class="muted">Use the form and we'll reply by email.</p>`}<p class="hint">${LEGAL}</p>
+        <section class="card"><h2>Contact details</h2>${details || `<p class="muted">Use the form and we'll reply by email.</p>`}
           <h3>Looking for something specific?</h3><ul class="links"><li><a href="#training">Course registration and in-house training</a></li><li><a href="#consultancy">Research and evaluation projects</a></li><li><a href="#analytics">Data analysis requests</a></li><li><a href="#paper-survey">Face-to-face fieldwork quotes</a></li></ul></section>
       </div>`;
   }
