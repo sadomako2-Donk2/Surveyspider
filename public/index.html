@@ -695,7 +695,7 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
     studies: [], responses: [], profile: null,
     view: "home", draft: ls.get("cohortly-draft"), taking: null, takeStart: 0, justDone: null,
     editProfile: false, resultsId: null, excludeFlagged: true, libQuery: "", libOpen: null,
-    catFilter: { q: "", group: "", sub: "", venue: "", format: "", days: "" }, catPage: 1, catEnquiry: "", tr: "", an: "", co: "", res: "", ct: "", ab: "", trMenu: null,
+    catFilter: { q: "", group: "", sub: "", venue: "", format: "", days: "" }, catPage: 1, catEnquiry: "", tr: "", an: "", co: "", res: "", ct: "", ab: "", acc: "", trMenu: null,
     confirmDel: null, stale: false, notice: "",
     imp: { status: "idle" }, importNote: null,
     gen: { status: "idle" }, billing: "annual", anTab: "summary", aiCheck: null, ask: { q: "", a: "", busy: false },
@@ -962,6 +962,7 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
     if (k === "analytics") return [["Services", AN_SERVICES.map((x) => L(`#analytics/service/${x.id}`, x.name))], ["Sectors", AN_SECTORS.map((x) => L(`#analytics/sector/${x.id}`, x.name))], ["More", [L("#analytics", "Overview"), L("#analytics/tools", "Tools we use"), L("#analytics/how-we-work", "How we work"), L("#analytics/data-security", "Data security"), L("#analytics/request", "Request analysis")]]];
     if (k === "consultancy") return [["Services", CO_SERVICES.map((x) => L(`#consultancy/service/${x.id}`, x.name))], ["Sectors", CO_SECTORS.map((x) => L(`#consultancy/sector/${x.id}`, x.name))], ["More", [L("#consultancy", "Overview"), L("#consultancy/approach", "Our approach"), L("#paper-survey", "Fieldwork quote"), L("#consultancy/work-with-us", "Work with us"), L("#consultancy/request", "Request a proposal")]]];
     if (k === "resources") return [["Knowledge Hub", RES_MENU.map(([x, l]) => L(`#resources${x ? "/" + x : ""}`, l))]];
+    if (k === "account") return [["My Account", [...ACCOUNT_MENU.map(([x, l]) => L(`#account${x ? "/" + x : ""}`, l)), ...(S.isOwner ? [L("#business", "Admin area")] : [])]]];
     if (k === "contact") return [["Contact", [...CONTACT_MENU.map(([x, l]) => L(`#contact${x ? "/" + x : ""}`, l)), L("#training/finder", "Find training")]]];
     return null;
   }
@@ -991,7 +992,7 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
     const top = inSurveys ? "surveys" : S.view === "business" || S.view === "signin" ? "account" : S.view;
     $("#tabs").innerHTML = TOPNAV.map(([k, v]) => `<a href="#${k}"${top === k ? ' aria-current="page"' : ""}${navDropGroups(k) ? ` data-drop="${k}"` : ""}>${v}</a>`).join("");
     const sub = $("#subnav");
-    const sectionNav = { about: abNav, training: trNav, analytics: anNav, consultancy: coNav, resources: resNav, contact: ctNav }[S.view];
+    const sectionNav = { account: accNav, about: abNav, training: trNav, analytics: anNav, consultancy: coNav, resources: resNav, contact: ctNav }[S.view];
     if (sectionNav) { sub.hidden = false; sub.innerHTML = sectionNav(); }
     else {
     sub.hidden = !inSurveys;
@@ -1032,6 +1033,9 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
     const abPart = h.startsWith("about/") ? h.slice(6) : "";
     if (abPart) h = "about";
     S.ab = h === "about" ? abPart : "";
+    const accPart = h.startsWith("account/") ? h.slice(8) : "";
+    if (accPart) h = "account";
+    S.acc = h === "account" ? accPart : "";
     if ((S.tr || "").startsWith("course/") && S.tr !== trPart) S.catEnquiry = "";
     S.tr = h === "training" ? trPart : ""; S.trMenu = null;
     if (h === "library") h = "resources";
@@ -2998,6 +3002,8 @@ ${richSummary(st, rows)}`;
   }
   // ---- About section: its own menu and pages (#about/<part>) ----
   const ABOUT_MENU = [["", "Overview"], ["mission", "Our mission"], ["vision", "Our vision"], ["team", "Our team"], ["organisation", "How we're organised"], ["certificates", "About our certificates"]];
+  const ACCOUNT_MENU = [["", "Overview"], ["courses", "My courses"], ["surveys", "My surveys"], ["enquiries", "My enquiries"], ["profile", "My profile"]];
+  const accNav = () => `<div class="subnav-inner"><span class="subnav-label">My Account</span><div class="subnav-links">${subLinks("account", ACCOUNT_MENU, S.acc || "")}${S.isOwner ? `<a href="#business">Admin area</a>` : ""}</div></div>`;
   const abNav = () => `<div class="subnav-inner"><span class="subnav-label">About Afrimetrica</span><div class="subnav-links">${subLinks("about", ABOUT_MENU, S.ab || "")}</div></div>`;
   const abCrumbs = (label) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#about">About</a> › <span>${esc(label)}</span></nav>`;
   const AB_MISSION = "To help organisations, governments and NGOs make better decisions and deliver results, by building their people's skills in data, research and leadership, and by providing reliable data and independent analysis.";
@@ -4094,21 +4100,26 @@ ${richSummary(st, rows)}`;
     const enq = S.enquiries.filter((e) => e.requesterId === S.uid).sort((a, b) => b.createdAt - a.createdAt);
     const fw = S.fieldwork.filter((f) => f.requesterId === S.uid);
     const mine = myStudies();
-    return `<div class="page-head"><div><span class="eyebrow gold">My Account</span><h1>${API ? `Hello${firstName(u) ? ", " + esc(firstName(u)) : ""}` : "Your account"}</h1></div>${S.isOwner ? `<a class="btn gold" href="#business">Open admin area</a>` : ""}</div>
+    const sec = { courses: `<section class="card"><div class="qmeta"><h2>My courses</h2><a class="btn small" href="#training">Browse courses</a></div>`, surveys: `<section class="card"><div class="qmeta"><h2>My surveys</h2><a class="btn small" href="#studies">Open My surveys</a></div><p class="muted">${mine.length ? `${mine.length} survey${mine.length === 1 ? "" : "s"}: ${mine.filter((x) => x.status === "live").length} live, ${mine.filter((x) => x.status === "draft").length} draft.` : "You haven't created a survey yet."}</p><div class="row wrap"><a class="btn small primary" href="#create">Create a survey</a><a class="btn small" href="#panel">Take paid surveys</a></div></section>`, enquiries: `<section class="card"><h2>My enquiries</h2>${enq.length || fw.length ? `<div class="table-wrap"><table><thead><tr><th>Date</th><th>About</th><th>Status</th></tr></thead><tbody>${enq.map((e) => `<tr><td class="n">${fmtDate(e.createdAt)}</td><td>${esc({ analytics: "Data analysis", consultancy: "Consultancy", contact: "General", training: "Training" }[e.type] || e.type)}${e.details && e.details.service ? ` · ${esc(e.details.service)}` : ""}</td><td><span class="pill">${st[e.status] || e.status}</span></td></tr>`).join("")}${fw.map((f) => `<tr><td class="n">${fmtDate(f.createdAt)}</td><td>Paper survey fieldwork · ${esc(f.ref || "")}</td><td><span class="pill">${esc({ new: "Received", contacted: "We've been in touch", quoted: "Final quote sent", won: "Agreed", lost: "Closed" }[f.status] || f.status)}</span></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No enquiries yet. Ask us about <a href="#consultancy">consultancy</a>, <a href="#analytics">analysis</a> or <a href="#training">training</a>.</p>`}</section>`, profile: `<section class="card"><h2>Profile</h2>${API ? `<dl class="kv"><dt>Name</dt><dd>${esc(u.name || "—")}</dd><dt>Email</dt><dd>${esc(u.email)}</dd><dt>Sign-in</dt><dd>${u.google ? "Google" : "Email and password"}</dd><dt>Email</dt><dd>${unverified() ? `<span class="warn">Not confirmed</span> <button class="linkbtn" data-act="resendVerifyAcct">Send link again</button>` : "Confirmed"}</dd></dl><div><button class="btn small ghost" data-act="signout">Sign out</button></div>` : `<p class="muted">On claude.ai, Afrimetrica uses your Claude account.</p>`}</section>`, participant: `<section class="card"><h2>Participant profile</h2><p class="muted">${S.profile ? `${esc(S.profile.age)} · ${esc(S.profile.gender)} · ${esc(S.profile.country)} · ${esc(S.profile.occupation)}` : "Set up a short profile to take paid surveys."}</p><a class="btn small" href="#panel" style="align-self:flex-start">${S.profile ? "Studies and earnings" : "Set up profile"}</a></section>` };
+    const part = (S.acc || "").split("/")[0];
+    const head = `<div class="page-head"><div><span class="eyebrow gold">My Account</span><h1>${API ? `Hello${firstName(u) ? ", " + esc(firstName(u)) : ""}` : "Your account"}</h1></div>${S.isOwner ? `<a class="btn gold" href="#business">Open admin area</a>` : ""}</div>`;
+    if (part === "courses") return head + sec.courses;
+    if (part === "surveys") return head + sec.surveys;
+    if (part === "enquiries") return head + sec.enquiries;
+    if (part === "profile") return head + `<div class="split">${sec.profile}${sec.participant}</div>`;
+    return `${head}
       <div class="results-grid">
         <div class="stack">
-          <section class="card"><div class="qmeta"><h2>My courses</h2><a class="btn small" href="#training">Browse courses</a></div>
-            ${enr.length ? `<div class="table-wrap"><table><thead><tr><th>Course</th><th>Dates</th><th>Status</th><th></th></tr></thead><tbody>${enr.map((e) => { const c = courseById(e.courseId), s = c && (c.sessions || []).find((x) => x.id === e.sessionId); return `<tr><td>${esc(c ? c.title : "Course no longer listed")}</td><td>${e.sessionId ? esc(s ? fmtDay(s.start) : "—") : "Dates to be announced"}</td><td><span class="pill${e.status === "confirmed" || e.status === "completed" ? " live" : ""}">${st[e.status] || e.status}</span></td><td>${["registered", "interest"].includes(e.status) ? `<button class="btn small ghost danger" data-act="enrCancel" data-id="${esc(e.id)}">Cancel</button>` : ""}</td></tr>`; }).join("")}</tbody></table></div>` : `<p class="muted">You haven't registered for a course yet.</p>`}</section>
-          <section class="card"><div class="qmeta"><h2>My surveys</h2><a class="btn small" href="#studies">Open My surveys</a></div><p class="muted">${mine.length ? `${mine.length} survey${mine.length === 1 ? "" : "s"}: ${mine.filter((x) => x.status === "live").length} live, ${mine.filter((x) => x.status === "draft").length} draft.` : "You haven't created a survey yet."}</p><div class="row wrap"><a class="btn small primary" href="#create">Create a survey</a><a class="btn small" href="#panel">Take paid surveys</a></div></section>
-          <section class="card"><h2>My enquiries</h2>${enq.length || fw.length ? `<div class="table-wrap"><table><thead><tr><th>Date</th><th>About</th><th>Status</th></tr></thead><tbody>${enq.map((e) => `<tr><td class="n">${fmtDate(e.createdAt)}</td><td>${esc({ analytics: "Data analysis", consultancy: "Consultancy", contact: "General", training: "Training" }[e.type] || e.type)}${e.details && e.details.service ? ` · ${esc(e.details.service)}` : ""}</td><td><span class="pill">${st[e.status] || e.status}</span></td></tr>`).join("")}${fw.map((f) => `<tr><td class="n">${fmtDate(f.createdAt)}</td><td>Paper survey fieldwork · ${esc(f.ref || "")}</td><td><span class="pill">${esc({ new: "Received", contacted: "We've been in touch", quoted: "Final quote sent", won: "Agreed", lost: "Closed" }[f.status] || f.status)}</span></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No enquiries yet. Ask us about <a href="#consultancy">consultancy</a>, <a href="#analytics">analysis</a> or <a href="#training">training</a>.</p>`}</section>
+          ${sec.courses}
+          ${sec.surveys}
+          ${sec.enquiries}
         </div>
         <aside class="stack">
-          <section class="card"><h2>Profile</h2>${API ? `<dl class="kv"><dt>Name</dt><dd>${esc(u.name || "—")}</dd><dt>Email</dt><dd>${esc(u.email)}</dd><dt>Sign-in</dt><dd>${u.google ? "Google" : "Email and password"}</dd><dt>Email</dt><dd>${unverified() ? `<span class="warn">Not confirmed</span> <button class="linkbtn" data-act="resendVerifyAcct">Send link again</button>` : "Confirmed"}</dd></dl><div><button class="btn small ghost" data-act="signout">Sign out</button></div>` : `<p class="muted">On claude.ai, Afrimetrica uses your Claude account.</p>`}</section>
-          <section class="card"><h2>Participant profile</h2><p class="muted">${S.profile ? `${esc(S.profile.age)} · ${esc(S.profile.gender)} · ${esc(S.profile.country)} · ${esc(S.profile.occupation)}` : "Set up a short profile to take paid surveys."}</p><a class="btn small" href="#panel" style="align-self:flex-start">${S.profile ? "Studies and earnings" : "Set up profile"}</a></section>
+          ${sec.profile}
+          ${sec.participant}
         </aside>
       </div>`;
   }
-
   // ---------- admin: courses, registrations, enquiries, contact details ----------
   function blankCourse() { return { id: newId("c"), title: "", status: "draft", level: "Introductory", format: "In person", duration: "", summary: "", description: "", outcomesText: "", audience: "", certificate: true, sessions: [] }; }
   function coursesAdmin() {
