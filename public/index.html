@@ -571,6 +571,7 @@ a.venue { text-decoration: none; color: var(--ink); }
 a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
 @media (max-width: 860px) { .finder-grid { grid-template-columns: 1fr 1fr; } .course-line { grid-template-columns: 1fr; } .course-line-meta { justify-content: flex-start; } }
 @media (max-width: 560px) { .finder-grid { grid-template-columns: 1fr; } }
+.cta-badge { background: var(--gold); color: #0e1d3a; text-transform: none; letter-spacing: 0; font-size: .8rem; padding: 3px 10px; }
 </style>
 
 <header class="topbar gutter">
@@ -673,7 +674,7 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
     studies: [], responses: [], profile: null,
     view: "home", draft: ls.get("cohortly-draft"), taking: null, takeStart: 0, justDone: null,
     editProfile: false, resultsId: null, excludeFlagged: true, libQuery: "", libOpen: null,
-    catFilter: { q: "", group: "", sub: "", venue: "", format: "", days: "" }, catPage: 1, catEnquiry: "", tr: "", trMenu: null,
+    catFilter: { q: "", group: "", sub: "", venue: "", format: "", days: "" }, catPage: 1, catEnquiry: "", tr: "", an: "", trMenu: null,
     confirmDel: null, stale: false, notice: "",
     imp: { status: "idle" }, importNote: null,
     gen: { status: "idle" }, billing: "annual", anTab: "summary", aiCheck: null, ask: { q: "", a: "", busy: false },
@@ -938,7 +939,7 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
     const top = inSurveys ? "surveys" : S.view === "business" || S.view === "signin" ? "account" : S.view;
     $("#tabs").innerHTML = TOPNAV.map(([k, v]) => `<a href="#${k}"${top === k ? ' aria-current="page"' : ""}>${v}</a>`).join("");
     const sub = $("#subnav");
-    if (S.view === "training") { sub.hidden = false; sub.innerHTML = trNav(); }
+    if (S.view === "training" || S.view === "analytics") { sub.hidden = false; sub.innerHTML = S.view === "training" ? trNav() : anNav(); }
     else {
     sub.hidden = !inSurveys;
     sub.innerHTML = inSurveys ? `<div class="subnav-inner"><span class="subnav-label">Afrimetrica Surveys</span><div class="subnav-links">${SURVEY_NAV.map(([k, v]) => `<a href="#${k}"${S.view === k ? ' aria-current="page"' : ""}>${v}${k === "panel" && avail ? `<span class="count">${avail}</span>` : ""}</a>`).join("")}</div></div>` : "";
@@ -962,6 +963,10 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
     // Training has its own pages: #training/<part>[/<item>]
     const trPart = h.startsWith("training/") ? h.slice(9) : "";
     if (trPart) h = "training";
+    // Analytics also has its own pages: #analytics/<part>[/<item>]
+    const anPart = h.startsWith("analytics/") ? h.slice(10) : "";
+    if (anPart) h = "analytics";
+    S.an = h === "analytics" ? anPart : "";
     if ((S.tr || "").startsWith("course/") && S.tr !== trPart) S.catEnquiry = "";
     S.tr = h === "training" ? trPart : ""; S.trMenu = null;
     if (h === "library") h = "resources";
@@ -3620,15 +3625,133 @@ ${richSummary(st, rows)}`;
     if (ok) { S.regFor = null; render(); }
   }
   function serviceCards(list) { return `<div class="units">${list.map(([t, d]) => `<article class="card unit"><h3>${esc(t)}</h3><p class="muted">${esc(d)}</p></article>`).join("")}</div>`; }
-  function viewAnalyticsSvc() {
-    return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Analytics</span><h1>Data analysis you can rely on</h1><p class="muted" style="max-width:66ch">Send us your data and your questions. Our analysts clean it, analyse it with the right methods and give you results you can explain and defend.</p></div></div>
+  // ---- Analytics section: its own menu and pages (#analytics/<part>[/<id>]) ----
+  // [id, name, summary, questions it answers, what you receive, methods, related course ids]
+  const AN_SERVICES = [
+    ["statistics", "Statistical analysis and modelling", "Rigorous analysis that answers your questions with the right tests and models, written up so non-specialists can act on it.",
+      ["Is the difference between groups real, or chance?", "Which factors are linked to the outcome we care about?", "How big is the effect, and how sure can we be?"],
+      ["An agreed analysis plan", "Tables and charts ready for your report", "A plain-language summary of what the results mean", "The analysis files or code, so the work can be repeated"],
+      "Descriptive statistics, hypothesis tests, regression (linear, logistic, multilevel), ANOVA, factor and cluster analysis.", ["st-spss", "st-regression", "st-stata"]],
+    ["survey", "Survey data analysis and weighting", "Turn survey responses into reliable estimates for your population, with the right weights and margins of error.",
+      ["What share of the population has this characteristic, by region or group?", "Has the situation changed since the last round?", "How confident can we be in these estimates?"],
+      ["Weighted estimates with confidence intervals", "Cross-tabulations by your key groups", "A short methods note on sampling and weighting", "Clean, documented datasets"],
+      "Design weights, non-response adjustment, complex survey estimation, indices and scales, trend analysis.", ["fd-sampling", "sv-scales", "sv-questionnaire"]],
+    ["mel", "Monitoring, evaluation and impact analysis", "Measure what programmes achieve: indicator tracking, evaluation analysis and estimates of impact.",
+      ["Are we on track against our targets?", "What difference did the programme make, and for whom?", "Which parts of the programme work best?"],
+      ["Indicator calculations against baselines and targets", "Evaluation findings tables and charts", "Impact estimates with their limitations explained", "Inputs for donor and board reports"],
+      "Indicator tracking, difference-in-differences, matching, regression discontinuity, cost-effectiveness, mixed methods.", ["me-fundamentals", "rd-experiments", "me-dqa"]],
+    ["dashboards", "Dashboards and business intelligence", "Interactive dashboards that keep leaders and teams up to date with the numbers that matter.",
+      ["How are we performing this month across sites or regions?", "Where are the problems, and where should we act first?", "Can our managers see this without asking an analyst?"],
+      ["A dashboard design agreed with your users", "A working dashboard in Power BI, Excel or your preferred tool", "Documentation and a handover session", "Optional monthly updates"],
+      "KPI design, data modelling, Power BI and Excel dashboards, automated refresh where your systems allow.", ["vz-powerbi", "vz-excel"]],
+    ["data", "Data management and cleaning", "Make messy data analysis-ready: entry, cleaning, coding, merging and documentation.",
+      ["Can we trust this dataset?", "How do we combine data from several sources or rounds?", "How should our data be organised for the future?"],
+      ["A cleaned, labelled dataset", "A codebook describing every variable", "A log of every cleaning decision", "Recommendations to keep future data clean"],
+      "Data entry and validation, de-duplication, recoding, merging and reshaping, coding open answers, codebooks.", ["vz-datamgmt", "fd-capi"]],
+    ["market", "Market and customer analytics", "Understand customers and markets: satisfaction, segments, demand and competitors.",
+      ["Who are our customers, and which segments matter most?", "What drives satisfaction and loyalty?", "How big is the market, and where is the opportunity?"],
+      ["Customer and market insight reports", "Segment profiles", "Key driver analysis", "Recommendations linked to the evidence"],
+      "Satisfaction and NPS analysis, key driver analysis, segmentation, market sizing, competitor analysis.", ["mk-research", "mk-segmentation", "mk-intelligence"]],
+    ["predictive", "Predictive analytics, machine learning and AI", "Use your data to forecast, classify and spot risk early, with models you can understand and check.",
+      ["Which clients or cases are most at risk?", "What will demand look like next quarter?", "Can we automate a routine classification task?"],
+      ["A model tested on data it hasn't seen", "Clear accuracy measures and limitations", "An explanation of what drives the predictions", "Code and guidance to run it again"],
+      "Forecasting, classification and regression models, model validation, explainability checks, responsible-AI review.", ["ai-ml", "st-python", "ai-apps"]],
+    ["qualitative", "Qualitative and text analysis", "Make sense of interviews, focus groups and written answers, systematically and transparently.",
+      ["What themes come up in what people told us?", "How do views differ between groups?", "What do open-ended survey answers say?"],
+      ["A coding framework", "Thematic findings with supporting quotes", "Counts of how often themes appear", "Integration with your quantitative results, where relevant"],
+      "Thematic and framework analysis, NVivo, coding of open survey answers, AI-assisted coding checked by an analyst.", ["ql-nvivo", "ql-methods"]],
+  ].map(([id, name, summary, questions, deliverables, methods, courses]) => ({ id, name, summary, questions, deliverables, methods, courses }));
+  const AN_SECTORS = [
+    ["government", "Government and the public sector", "Evidence for policy, planning and public services.", ["Are services reaching the people they are meant for?", "Which districts need more resources?", "Did a policy change make a difference?"], ["statistics", "survey", "dashboards", "mel"]],
+    ["ngos", "NGOs and development partners", "Analysis that shows results to funders and helps programmes improve.", ["Are we reaching our targets?", "What changed for participants?", "What should we report to donors?"], ["mel", "survey", "qualitative", "dashboards"]],
+    ["health", "Health", "Data for better health services and programmes.", ["Where are service gaps and bottlenecks?", "Which patient groups are we missing?", "How is coverage changing over time?"], ["statistics", "dashboards", "data", "mel"]],
+    ["education", "Education", "Evidence on learning, access and school performance.", ["Which schools or groups are falling behind?", "What is linked to better learning outcomes?", "Did a training programme improve teaching?"], ["statistics", "survey", "mel", "dashboards"]],
+    ["finance", "Banking and financial services", "Analytics for customers, risk and growth.", ["Which customers are at risk of leaving or defaulting?", "Which products and segments are growing?", "How satisfied are our customers?"], ["predictive", "market", "dashboards", "statistics"]],
+    ["agriculture", "Agriculture and food security", "Evidence on production, markets and household welfare.", ["How many households are food insecure, and where?", "What explains differences in yields?", "How are prices and markets changing?"], ["survey", "statistics", "mel", "market"]],
+    ["energy", "Energy and utilities", "Data for planning, operations and customers.", ["Where is demand growing?", "Where are losses and outages highest?", "How do customers rate the service?"], ["dashboards", "predictive", "market", "data"]],
+    ["consumer", "Retail, consumer goods and telecoms", "Customer and market insight to grow sales and loyalty.", ["Who buys from us, and why?", "Which promotions and channels work?", "Where should we expand?"], ["market", "predictive", "dashboards", "survey"]],
+  ].map(([id, name, summary, questions, services]) => ({ id, name, summary, questions, services }));
+  const AN_TOOLS = [
+    ["SPSS", "Statistical analysis and survey tables"], ["Stata", "Survey, econometric and evaluation analysis"], ["R", "Statistics, modelling and reproducible reports"],
+    ["Python", "Data processing, automation and machine learning"], ["Power BI", "Interactive dashboards and business intelligence"], ["Excel", "Tables, models and dashboards your team can maintain"],
+    ["NVivo", "Qualitative coding and analysis"], ["KoboToolbox and ODK", "Mobile data collection and monitoring"], ["Afrimetrica Surveys", "Online surveys with built-in analysis"],
+  ];
+  const anService = (id) => AN_SERVICES.find((x) => x.id === id);
+  const anSector = (id) => AN_SECTORS.find((x) => x.id === id);
+  function anNav() {
+    const t = S.an || "", m = S.trMenu;
+    const cur = (k) => (t === k || t.startsWith(k + "/") ? ' aria-current="page"' : "");
+    const menu = (k, label, active) => `<button type="button" class="tr-menu-btn" data-act="trMenu" data-k="${k}" aria-expanded="${m === k}" aria-controls="trPanel"${active ? ' aria-current="page"' : ""}>${label} <span aria-hidden="true">▾</span></button>`;
+    const links = `<a href="#analytics"${t === "" ? ' aria-current="page"' : ""}>Overview</a>${menu("an-services", "Services", t.startsWith("service/"))}${menu("an-sectors", "Sectors", t.startsWith("sector/"))}<a href="#analytics/tools"${cur("tools")}>Tools we use</a><a href="#analytics/how-we-work"${cur("how-we-work")}>How we work</a><a href="#analytics/data-security"${cur("data-security")}>Data security</a><a href="#analytics/request"${cur("request")}><span class="new-badge cta-badge">Request analysis</span></a>`;
+    let panel = "";
+    if (m === "an-services") panel = `<div class="tr-panel-grid">${AN_SERVICES.map((x) => `<a href="#analytics/service/${x.id}"><b>${esc(x.name)}</b><span>${esc(x.summary)}</span></a>`).join("")}</div>`;
+    if (m === "an-sectors") panel = `<div class="tr-panel-grid">${AN_SECTORS.map((x) => `<a href="#analytics/sector/${x.id}"><b>${esc(x.name)}</b><span>${esc(x.summary)}</span></a>`).join("")}</div>`;
+    return `<div class="subnav-inner"><span class="subnav-label">Afrimetrica Analytics</span><div class="subnav-links tr-links">${links}</div></div>${panel ? `<div class="tr-panel" id="trPanel" role="region" aria-label="${m === "an-services" ? "Analytics services" : "Sectors"}"><div class="tr-panel-inner">${panel}</div></div>` : ""}`;
+  }
+  const anCrumbs = (...items) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#analytics">Analytics</a>${items.map(([href, label]) => (href ? ` › <a href="${href}">${esc(label)}</a>` : ` › <span>${esc(label)}</span>`)).join("")}</nav>`;
+  const anServiceCards = (ids) => `<div class="area-grid">${(ids || AN_SERVICES.map((x) => x.id)).map(anService).map((x) => `<a class="card area-card" href="#analytics/service/${x.id}"><b>${esc(x.name)}</b><span class="hint">${esc(x.summary)}</span></a>`).join("")}</div>`;
+  const anForm = (title, message) => enquiryForm("analytics", { title, intro: "Describe your data and what you need to know. We'll reply with an approach, a timeline and a quote.", services: ANALYTICS_SERVICES, budget: true, messageLabel: "Your data and questions", placeholder: "e.g. 1,200 household survey responses in Excel; we need prevalence estimates by region and a regression on food security.", message });
+  const anSteps = `<ol class="steps"><li>You tell us your questions and describe your data. Share it securely when we're ready to start.</li><li>We agree an analysis plan, a timeline and a fixed price.</li><li>We clean and analyse the data and check the results.</li><li>You receive tables, charts and a plain-language summary, and we walk you through them.</li></ol>`;
+  function anLanding() {
+    return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Analytics</span><h1>Data analysis you can rely on</h1><p class="muted" style="max-width:70ch">Send us your data and your questions. Our analysts clean it, analyse it with the right methods and give organisations, governments and NGOs results they can explain, defend and act on.</p></div></div>
       ${slideshow("analytics")}
-      ${serviceCards([["Statistical analysis", "Descriptive statistics, hypothesis tests, regression and multivariate methods, with clear write-ups of what the results mean."], ["Dashboards and reporting", "Interactive dashboards and polished reports that keep decision-makers up to date."], ["Data management and cleaning", "Data entry, cleaning, coding, merging and documentation so your dataset is analysis-ready."], ["Survey and M&E data", "Weighting, indicator calculation and trend analysis for surveys and monitoring systems."]])}
-      <div class="split">
-        ${enquiryForm("analytics", { title: "Request an analysis", intro: "Describe your data and what you need to know. We'll reply with an approach, a timeline and a quote.", services: ANALYTICS_SERVICES, budget: true, messageLabel: "Your data and questions", placeholder: "e.g. 1,200 household survey responses in Excel; we need prevalence estimates by region and a regression on food security." })}
-        <section class="card"><h2>Collecting data with Afrimetrica Surveys?</h2><p class="muted">Every survey you run on Afrimetrica Surveys comes with built-in analysis: charts, group comparisons, key drivers, statistical tests, AI insight reports and Excel exports.</p><a class="btn primary" href="#results" style="align-self:flex-start">Open Analyze</a>
-          <h3>How we work</h3><ol class="steps"><li>You share your data securely and tell us your questions.</li><li>We agree an analysis plan, timeline and price.</li><li>We clean and analyse the data and check the results.</li><li>You receive tables, charts and a plain-language summary, and we walk you through them.</li></ol></section>
+      <section class="stack" aria-labelledby="anSvcH"><div class="section-head"><span class="eyebrow gold">Services</span><h2 id="anSvcH" class="h2xl">What we can do with your data</h2></div>${anServiceCards()}</section>
+      <section class="stack" aria-labelledby="anSecH"><div class="section-head"><span class="eyebrow gold">Sectors</span><h2 id="anSecH" class="h2xl">Analysis for your sector</h2></div><nav class="sub-jump" aria-label="Sectors">${AN_SECTORS.map((x) => `<a href="#analytics/sector/${x.id}">${esc(x.name)}</a>`).join("")}</nav></section>
+      <div class="split">${anForm("Request an analysis", "")}
+        <section class="card"><h2>How we work</h2>${anSteps}<p><a href="#analytics/how-we-work">More about how we work</a> · <a href="#analytics/data-security">How we protect your data</a></p>
+          <h3>Collecting data with Afrimetrica Surveys?</h3><p class="muted">Every survey you run on Afrimetrica Surveys comes with built-in analysis: charts, group comparisons, key drivers, statistical tests, AI insight reports and Excel exports.</p><a class="btn" href="#results" style="align-self:flex-start">Open Analyze</a></section>
       </div>`;
+  }
+  function anServicePage(x) {
+    const courses = x.courses.map(catCourse).filter(Boolean);
+    return `${anCrumbs(["", x.name])}<div class="page-head"><div><span class="eyebrow gold">Analytics service</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.summary)}</p></div></div>
+      <div class="split">
+        <section class="card"><h2>Questions we help you answer</h2><ul class="ticks small">${x.questions.map((q) => `<li><div><span>${esc(q)}</span></div></li>`).join("")}</ul><h3>Methods</h3><p class="muted">${esc(x.methods)}</p></section>
+        <section class="card"><h2>What you receive</h2><ul class="ticks small">${x.deliverables.map((q) => `<li><div><span>${esc(q)}</span></div></li>`).join("")}</ul><h3>How it works</h3>${anSteps}</section>
+      </div>
+      ${courses.length ? `<section class="card"><h2>Build these skills in your own team</h2><p class="muted">Related Afrimetrica Academy courses, in the classroom, live online or in-house.</p>${courseLines(courses)}</section>` : ""}
+      <div id="anEnquiry">${anForm(`Ask about ${x.name.toLowerCase()}`, `Service: ${x.name}\nOur data: \nOur questions: `)}</div>`;
+  }
+  function anSectorPage(x) {
+    return `${anCrumbs(["", x.name])}<div class="page-head"><div><span class="eyebrow gold">Sector</span><h1>Data analysis for ${esc(x.name.charAt(0).toLowerCase() + x.name.slice(1))}</h1><p class="muted" style="max-width:70ch">${esc(x.summary)}</p></div></div>
+      <section class="card"><h2>Questions we help answer</h2><ul class="ticks small">${x.questions.map((q) => `<li><div><span>${esc(q)}</span></div></li>`).join("")}</ul></section>
+      <section class="stack"><h2>Services that fit</h2>${anServiceCards(x.services)}</section>
+      <div>${anForm(`Ask about analysis for ${x.name.toLowerCase()}`, `Sector: ${x.name}\nOur data: \nOur questions: `)}</div>`;
+  }
+  function anTools() {
+    return `${anCrumbs(["", "Tools we use"])}<div class="page-head"><div><span class="eyebrow gold">Tools</span><h1>Tools we use</h1><p class="muted" style="max-width:70ch">We work in the software that suits your data and your team, and hand over files your staff can open, check and reuse.</p></div></div>
+      <div class="area-grid">${AN_TOOLS.map(([t, d]) => `<div class="card area-card"><b>${esc(t)}</b><span class="hint">${esc(d)}</span></div>`).join("")}</div>
+      <section class="card"><h2>Want your team to use these tools?</h2><p class="muted">Afrimetrica Academy runs hands-on courses in SPSS, Stata, R, Python, Power BI, Excel and NVivo.</p><a class="btn primary" href="#training/area/research" style="align-self:flex-start">See training courses</a></section>`;
+  }
+  function anHowWeWork() {
+    return `${anCrumbs(["", "How we work"])}<div class="page-head"><div><span class="eyebrow gold">How we work</span><h1>From your questions to clear answers</h1></div></div>
+      <div class="split">
+        <section class="card"><h2>Step by step</h2>${anSteps}</section>
+        <section class="card"><h2>What you can expect</h2><ul class="ticks small"><li><div><b>A plan before we start</b><span>An analysis plan, timeline and price agreed with you in writing.</span></div></li><li><div><b>Plain language</b><span>Results explained so the people who decide can understand them.</span></div></li><li><div><b>Honest limits</b><span>We say what the data can and can't show, and never overstate results.</span></div></li><li><div><b>Work you can reuse</b><span>Files or code so the analysis can be checked and repeated.</span></div></li></ul></section>
+      </div>
+      <section class="card"><h2>Ways to work with us</h2><div class="units"><article class="unit"><h3>One-off analysis</h3><p class="muted">A fixed-price project for a specific question or report.</p></article><article class="unit"><h3>Ongoing support</h3><p class="muted">Regular dashboards, reports or analyst time for monitoring systems.</p></article><article class="unit"><h3>Analysis with training</h3><p class="muted">We do the analysis alongside your team so they can do it next time.</p></article></div></section>
+      <p><a class="btn primary" href="#analytics/request">Request an analysis</a></p>`;
+  }
+  function anSecurity() {
+    return `${anCrumbs(["", "Data security"])}<div class="page-head"><div><span class="eyebrow gold">Data security</span><h1>How we protect your data</h1><p class="muted" style="max-width:70ch">Your data stays yours. We handle it carefully and in line with data protection law, including Ghana's Data Protection Act, 2012 (Act 843).</p></div></div>
+      <div class="split">
+        <section class="card"><h2>Our approach</h2><ul class="ticks small"><li><div><b>Only what we need</b><span>Where possible, remove names and contact details before you send data. We can help you do this.</span></div></li><li><div><b>Used only for your project</b><span>We don't use or share your data for anything else.</span></div></li><li><div><b>Limited access</b><span>Only the people working on your project can open your data.</span></div></li><li><div><b>Returned or deleted</b><span>At the end of the project we return or delete your data, as agreed with you.</span></div></li></ul></section>
+        <section class="card"><h2>Before you share data</h2><p class="muted">Tell us what the data contains when you first get in touch, but don't send the data itself until we've agreed how it will be transferred. We're happy to sign your organisation's confidentiality agreement.</p><a class="btn primary" href="#analytics/request" style="align-self:flex-start">Request an analysis</a></section>
+      </div>`;
+  }
+  function anRequest() {
+    return `${anCrumbs(["", "Request analysis"])}<div class="page-head"><div><span class="eyebrow gold">Request analysis</span><h1>Tell us about your data</h1><p class="muted" style="max-width:70ch">Describe your data and what you need to know. We'll reply with an approach, a timeline and a quote. Please don't attach or paste the data itself yet.</p></div></div>
+      <div class="split">${anForm("Request an analysis", "")}<section class="card"><h2>How it works</h2>${anSteps}<p><a href="#analytics/data-security">How we protect your data</a></p></section></div>`;
+  }
+  function viewAnalyticsSvc() {
+    const [part, arg] = (S.an || "").split("/");
+    if (part === "service" && anService(arg)) return anServicePage(anService(arg));
+    if (part === "sector" && anSector(arg)) return anSectorPage(anSector(arg));
+    if (part === "tools") return anTools();
+    if (part === "how-we-work") return anHowWeWork();
+    if (part === "data-security") return anSecurity();
+    if (part === "request") return anRequest();
+    return anLanding();
   }
   function viewConsult() {
     return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Consulting</span><h1>Research and evaluation consultancy</h1><p class="muted" style="max-width:66ch">From a single questionnaire review to a full multi-site study, we design, run and report research that stands up to scrutiny.</p></div></div>
