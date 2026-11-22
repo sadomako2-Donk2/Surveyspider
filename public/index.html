@@ -2933,6 +2933,10 @@ ${richSummary(st, rows)}`;
     policing: "Police and Law Enforcement", traffic: "Traffic Management", defence: "Defence and National Security",
     ports: "Ships and Port Management", agri: "Agribusiness Development",
   };
+  // Short introductions shown when a subject is chosen.
+  const SUBJECT_INTRO = {
+    strategy: "Envision, plan and lead: practical courses that strengthen executives' skills in strategy and strategic planning, so organisations, governments and NGOs can set clear priorities and turn them into results.",
+  };
   const GROUPS = [
     ["research", "Research, Monitoring and Evaluation", ["design", "survey", "field", "stats", "qual", "mel", "market", "writing"]],
     ["leadership", "Leadership, Strategy and Governance", ["strategy", "leadership", "governance", "negotiation", "executive", "stakeholder", "personal", "sustainability", "creativity"]],
@@ -3378,7 +3382,7 @@ ${richSummary(st, rows)}`;
   function catList() {
     const f = S.catFilter, list = CATALOGUE.filter((c) => catMatches(c, f));
     const where = f.venue ? ` in ${esc(f.venue)}` : "", how = f.format ? ` · ${esc(f.format)}` : "";
-    const sub = f.sub ? `<p class="cat-chip">Subject: <b>${esc(catName(f.sub))}</b> <button class="btn small ghost" data-act="catPick" data-k="${f.sub}">Clear</button></p>` : "";
+    const sub = f.sub ? `<p class="cat-chip">Subject: <b>${esc(catName(f.sub))}</b> <button class="btn small ghost" data-act="catPick" data-k="${f.sub}">Clear</button></p>${SUBJECT_INTRO[f.sub] ? `<p class="muted" style="max-width:70ch;margin:0">${esc(SUBJECT_INTRO[f.sub])}</p>` : ""}` : "";
     return `${sub}<p class="hint" role="status">${list.length} course${list.length === 1 ? "" : "s"}${where}${how}</p>${list.length ? list.map(catRow).join("") : `<div class="empty"><h2>No courses match</h2><p class="muted">Try another word or clear the filters. We also design courses on request.</p></div>`}`;
   }
   function viewTraining() {
@@ -3386,7 +3390,7 @@ ${richSummary(st, rows)}`;
     if (S.catOpen) { const c = catCourse(S.catOpen); if (c) return catDetail(c); S.catOpen = null; }
     const pub = S.courses.filter((c) => c.status === "published").sort((a, b) => ((upcoming(a)[0] || {}).start || "9").localeCompare((upcoming(b)[0] || {}).start || "9"));
     const f = S.catFilter, opt = (list, v) => list.map((x) => `<option${x === v ? " selected" : ""}>${esc(x)}</option>`).join("");
-    return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Academy</span><h1>Research and data training across Africa</h1><p class="muted" style="max-width:70ch">Practical courses in research design, surveys, statistics, qualitative methods, monitoring and evaluation, dashboards and market research. Join a classroom course in a city near you, learn live online, or bring a course to your organisation.</p></div></div>
+    return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Academy · Plan. Analyse. Lead.</span><h1>Data, research and executive training</h1><p style="max-width:70ch;font-size:1.12rem;font-weight:500;margin:10px 0 6px">Practical training that helps organisations, governments and NGOs make better decisions and deliver results.</p><p class="muted" style="max-width:70ch">Build skills in research design, surveys, statistics, monitoring and evaluation, dashboards and market research, alongside executive programmes in strategy and strategic planning, leadership, governance, finance and project management. Join a classroom course in a city near you, learn live online, or bring any course to your organisation, tailored to your sector and your team.</p></div></div>
       ${slideshow("training", "academy")}
       <section class="card cat-search" aria-label="Find a course">
         <div class="grid4">
