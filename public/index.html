@@ -16,6 +16,7 @@
   --gold: #b88a2c;
   --gold-hi: #f2d27e;
   --gold-soft: #f7efdb;
+  --gold-ink: #85601a; /* gold for small text: 4.5:1 or better on light backgrounds */
   --navy-band: #0e1d3a;
   --navy-band-ink: #f4f1e8;
   --signal: #b8651a;
@@ -29,14 +30,14 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0a1224; --surface: #111c33; --ink: #e9edf6; --muted: #9aa6bf; --line: #24324f;
-    --accent: #dcb75a; --accent-ink: #0e1d3a; --accent-soft: #1b2849; --gold: #dcb75a; --gold-hi: #f6dd96; --gold-soft: #2c2716;
+    --accent: #dcb75a; --accent-ink: #0e1d3a; --accent-soft: #1b2849; --gold: #dcb75a; --gold-hi: #f6dd96; --gold-soft: #2c2716; --gold-ink: #dcb75a;
     --navy-band: #0f1a33; --navy-band-ink: #f4f1e8; --signal: #f0a35b; --signal-soft: #3a2a18; --good: #5cc98f; --bad: #ef7a6d;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #0a1224; --surface: #111c33; --ink: #e9edf6; --muted: #9aa6bf; --line: #24324f;
-  --accent: #dcb75a; --accent-ink: #0e1d3a; --accent-soft: #1b2849; --gold: #dcb75a; --gold-hi: #f6dd96; --gold-soft: #2c2716;
+  --accent: #dcb75a; --accent-ink: #0e1d3a; --accent-soft: #1b2849; --gold: #dcb75a; --gold-hi: #f6dd96; --gold-soft: #2c2716; --gold-ink: #dcb75a;
   --navy-band: #0f1a33; --navy-band-ink: #f4f1e8; --signal: #f0a35b; --signal-soft: #3a2a18; --good: #5cc98f; --bad: #ef7a6d;
   color-scheme: dark;
 }
@@ -51,7 +52,7 @@ p { margin: 0; }
 a { color: var(--accent); }
 :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 .eyebrow { font-family: var(--font-display); font-weight: 600; font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); }
-.eyebrow.gold { color: var(--gold); }
+.eyebrow.gold { color: var(--gold-ink); }
 .muted { color: var(--muted); }
 .hint { font-size: 0.85rem; color: var(--muted); }
 .gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
@@ -276,7 +277,7 @@ td.n { font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-
 .ways { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .way { text-decoration: none; color: var(--ink); }
 .way:hover { border-color: var(--gold); }
-.way-n { font-family: var(--font-display); font-weight: 800; font-size: 0.78rem; letter-spacing: 0.14em; color: var(--gold); }
+.way-n { font-family: var(--font-display); font-weight: 800; font-size: 0.78rem; letter-spacing: 0.14em; color: var(--gold-ink); }
 .way p { color: var(--muted); font-size: 0.92rem; }
 .diff { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
 .diff .card { gap: 8px; }
@@ -438,7 +439,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
 /* Afrimetrica: survey sub-navigation, institution pages, Academy, Knowledge Hub */
 .subnav { background: var(--bg); border-bottom: 1px solid var(--line); }
 .subnav-inner { max-width: 1180px; margin: 0 auto; display: flex; align-items: center; gap: 14px; padding-block: 6px; min-width: 0; }
-.subnav-label { font-family: var(--font-display); font-weight: 700; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); white-space: nowrap; }
+.subnav-label { font-family: var(--font-display); font-weight: 700; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-ink); white-space: nowrap; }
 .subnav-links { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; min-width: 0; }
 .subnav-links a { padding: 6px 10px; border-radius: 7px; color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
 .subnav-links a:hover { color: var(--ink); background: var(--surface); }
@@ -509,6 +510,26 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
 .photo-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .photo-pair .photo-frame { aspect-ratio: 4 / 3; }
 @media (max-width: 700px) { .photo-frame { aspect-ratio: 4 / 3; } .photo-pair { grid-template-columns: 1fr; } }
+/* training catalogue */
+.cat-search .grid4 { align-items: end; }
+.cat-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.cat-tile { text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; display: grid; gap: 4px; cursor: pointer; font: inherit; color: var(--ink); }
+.cat-tile span { color: var(--muted); font-size: .85rem; }
+.cat-tile:hover, .cat-tile.on { border-color: var(--gold); box-shadow: inset 0 0 0 1px var(--gold); }
+.cat-row { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: center; }
+.cat-row h3 { margin: 4px 0; font-size: 1.05rem; }
+.cat-row p { margin: 0; }
+.cat-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: flex-end; max-width: 330px; }
+.cat-link { background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; text-align: left; }
+.cat-row h3 .cat-link:hover, .venue .cat-link:hover { color: var(--accent); text-decoration: underline; }
+.venue-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.venue { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--gold); border-radius: 10px; padding: 10px 14px; display: grid; gap: 2px; }
+.venue span { color: var(--muted); font-size: .9rem; }
+.cat-detail { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+.cat-detail aside .card { position: sticky; top: 16px; display: grid; gap: 10px; }
+.outline { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.outline li { display: grid; gap: 2px; padding-left: 12px; border-left: 3px solid var(--gold-soft); }
+@media (max-width: 860px) { .cat-row { grid-template-columns: 1fr; } .cat-meta { justify-content: flex-start; max-width: none; } .cat-detail { grid-template-columns: 1fr; } }
 </style>
 
 <header class="topbar gutter">
@@ -611,6 +632,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     studies: [], responses: [], profile: null,
     view: "home", draft: ls.get("cohortly-draft"), taking: null, takeStart: 0, justDone: null,
     editProfile: false, resultsId: null, excludeFlagged: true, libQuery: "", libOpen: null,
+    catFilter: { q: "", cat: "", venue: "", format: "" }, catOpen: null, catEnquiry: "",
     confirmDel: null, stale: false, notice: "",
     imp: { status: "idle" }, importNote: null,
     gen: { status: "idle" }, billing: "annual", anTab: "summary", aiCheck: null, ask: { q: "", a: "", busy: false },
@@ -896,7 +918,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     if (h === "library") h = "resources";
     if ((ROUTES.has(h) ? h : "home") !== S.view) slideIdx = 0; // a new page's slideshow starts at its first photo
     S.view = ROUTES.has(h) ? h : "home";
-    if (S.view !== "training") { S.courseOpen = null; S.regFor = null; }
+    if (S.view !== "training") { S.courseOpen = null; S.regFor = null; S.catOpen = null; S.catEnquiry = ""; }
     if (S.view !== "resources") S.guideOpen = null;
     if (S.view !== "business") S.courseEdit = null;
     if (S.view !== "panel") S.taking = null;
@@ -2807,7 +2829,7 @@ ${richSummary(st, rows)}`;
         ${o.budget ? sel("timeline", "Timeline", TIMELINES) + sel("budget", "Approximate budget", BUDGETS) : ""}
       </div>
       ${o.subject ? `<label for="${f("subject")}">Subject<input id="${f("subject")}" maxlength="160"></label>` : ""}
-      <label for="${f("msg")}">${esc(o.messageLabel || "Tell us about your project")}<textarea id="${f("msg")}" rows="5" maxlength="4000" placeholder="${esc(o.placeholder || "")}"></textarea></label>
+      <label for="${f("msg")}">${esc(o.messageLabel || "Tell us about your project")}<textarea id="${f("msg")}" rows="5" maxlength="4000" placeholder="${esc(o.placeholder || "")}">${esc(o.message || "")}</textarea></label>
       <label class="inline" for="${f("ok")}"><input type="checkbox" id="${f("ok")}">You can contact me about this enquiry.</label>
       <div id="${f("err")}"></div><div><button class="btn primary" type="submit">Send enquiry</button></div></form>`;
   }
@@ -2876,16 +2898,230 @@ ${richSummary(st, rows)}`;
       ${mine ? `<span class="pill live" style="align-self:flex-start">${mine.status === "interest" ? "Interest registered" : "You're registered"}</span>` : ""}
       <div><button class="btn primary" data-act="openCourse" data-id="${esc(c.id)}">${s ? "Details and registration" : "Details"}</button></div></article>`;
   }
+  // ---- Afrimetrica Academy course catalogue (public courses, live online and in-house) ----
+  // Dates and fees are not listed here: they are set per venue and quoted on request, or published by an
+  // administrator as dated courses (S.courses), which appear on the Training page with registration.
+  const CAT_CATEGORIES = [
+    ["design", "Research Design and Methods"],
+    ["survey", "Survey and Questionnaire Design"],
+    ["field", "Sampling, Fieldwork and Data Collection"],
+    ["stats", "Statistics and Data Analysis"],
+    ["qual", "Qualitative Research"],
+    ["mel", "Monitoring, Evaluation and Learning"],
+    ["viz", "Data Management, Visualisation and Dashboards"],
+    ["market", "Market Research and Business Intelligence"],
+    ["writing", "Research Ethics, Writing and Publishing"],
+    ["ai", "AI and Digital Tools for Research"],
+  ];
+  const CAT_FORMATS = ["Classroom", "Live online", "In-house"];
+  const VENUES = [
+    ["Ghana", ["Accra", "Kumasi"]], ["Nigeria", ["Lagos", "Abuja"]], ["Kenya", ["Nairobi", "Mombasa"]], ["Uganda", ["Kampala"]],
+    ["Tanzania", ["Dar es Salaam", "Arusha"]], ["Rwanda", ["Kigali"]], ["South Africa", ["Johannesburg", "Cape Town"]], ["Zambia", ["Lusaka"]],
+    ["Zimbabwe", ["Harare"]], ["Botswana", ["Gaborone"]], ["Namibia", ["Windhoek"]], ["Malawi", ["Lilongwe"]],
+    ["Sierra Leone", ["Freetown"]], ["Liberia", ["Monrovia"]], ["The Gambia", ["Banjul"]], ["Eswatini", ["Mbabane"]],
+    ["Lesotho", ["Maseru"]], ["Mauritius", ["Port Louis"]], ["South Sudan", ["Juba"]],
+  ];
+  const VENUE_CITIES = VENUES.flatMap(([country, cities]) => cities.map((c) => `${c}, ${country}`));
+  // [id, category, title, days, level, summary, objectives, who should attend, outline: [day title, topics]]
+  const CATALOGUE = [
+    ["rd-applied", "design", "Applied Research Design and Methods", 5, "Foundation", "Turn a broad question into a sound, feasible study: from problem statement to design, sampling and analysis plan.",
+      ["Write clear research questions and hypotheses", "Choose between experimental, quasi-experimental, cross-sectional and longitudinal designs", "Match methods and data sources to each question", "Write a concise research protocol"],
+      "Researchers, programme staff, postgraduate students and analysts who plan or commission studies.",
+      [["From problem to research questions", "Defining the problem; literature scan; research questions and hypotheses"], ["Choosing a design", "Experimental and quasi-experimental designs; surveys; case studies; mixed methods"], ["Measurement", "Concepts, indicators and variables; validity and reliability; existing scales"], ["Sampling and data", "Population and sampling frame; sample size; primary and secondary data"], ["The research protocol", "Analysis plan; timeline and budget; ethics; presenting your protocol"]]],
+    ["rd-mixed", "design", "Mixed Methods Research", 3, "Intermediate", "Combine numbers and narratives so each strengthens the other, and integrate them in one coherent report.",
+      ["Explain convergent, explanatory and exploratory mixed methods designs", "Plan sequencing and sampling across strands", "Integrate findings with joint displays", "Report mixed methods studies credibly"],
+      "Researchers and evaluators who use both surveys and interviews or focus groups.",
+      [["Designs and purposes", "Why mix methods; core designs; choosing a design"], ["Planning and sampling", "Sequencing; linked samples; instruments for each strand"], ["Integration and reporting", "Joint displays; handling divergent findings; writing up"]]],
+    ["rd-experiments", "design", "Impact Evaluation and Field Experiments", 5, "Advanced", "Estimate what difference a programme makes using randomised and quasi-experimental methods.",
+      ["Set out a theory of change and evaluation questions", "Design randomised controlled trials in field settings", "Apply difference-in-differences, matching and regression discontinuity", "Calculate statistical power and interpret effect sizes"],
+      "Evaluators, programme managers, economists and policy analysts.",
+      [["Causality and counterfactuals", "Theory of change; selection bias; when to evaluate impact"], ["Randomised trials", "Randomisation units; stratification; ethics; implementation"], ["Quasi-experimental methods", "Difference-in-differences; matching; regression discontinuity"], ["Power and sample size", "Minimum detectable effects; clustering; attrition"], ["Analysis and reporting", "Estimating effects; heterogeneity; communicating results"]]],
+    ["sv-questionnaire", "survey", "Questionnaire Design for Reliable Data", 3, "Foundation", "Write questions people understand and answer honestly, and build questionnaires that are easy to analyse.",
+      ["Write clear, neutral and unambiguous questions", "Choose suitable answer formats and scales", "Structure and route a questionnaire", "Pre-test and pilot before fieldwork"],
+      "Anyone who writes or reviews questionnaires: researchers, M&E officers, students and market researchers.",
+      [["Writing good questions", "Common wording errors; double-barrelled and leading questions; sensitive topics"], ["Answer formats and scales", "Closed and open questions; Likert and rating scales; 'don't know' options"], ["Testing the questionnaire", "Cognitive interviews; piloting; translation and back-translation"]]],
+    ["sv-scales", "survey", "Measurement Scales and Index Construction", 3, "Intermediate", "Build and test multi-item scales and composite indices that measure what they claim to.",
+      ["Develop items for a construct", "Test reliability with Cronbach's alpha", "Explore structure with factor analysis", "Combine items into scores and indices"],
+      "Researchers, psychologists, evaluators and analysts who measure attitudes, wellbeing or capacity.",
+      [["Constructs and items", "Defining constructs; item writing; adapting existing scales"], ["Reliability and validity", "Internal consistency; test-retest; validity evidence"], ["Scores and indices", "Exploratory factor analysis; weighting; reporting scale quality"]]],
+    ["sv-online", "survey", "Online and Mobile Surveys", 3, "Foundation", "Run online and phone-based surveys that reach the right people and produce clean data.",
+      ["Design surveys for mobile screens", "Recruit respondents and manage response rates", "Add quality checks such as attention checks and speed flags", "Export and prepare data for analysis"],
+      "Researchers, marketers and organisations moving their surveys online.",
+      [["Designing for screens", "Mobile-first layouts; question types; consent and privacy"], ["Reaching respondents", "Panels, links and SMS; incentives; response rates and bias"], ["Data quality", "Attention checks; speeding; straight-lining; cleaning and export"]]],
+    ["fd-sampling", "field", "Sampling Methods and Sample Size", 3, "Intermediate", "Choose a sampling design and calculate a defensible sample size for surveys and evaluations.",
+      ["Compare probability and non-probability sampling", "Design stratified, cluster and multi-stage samples", "Calculate sample sizes for proportions and means", "Apply weights and design effects"],
+      "Survey managers, statisticians, M&E staff and researchers.",
+      [["Sampling designs", "Sampling frames; simple, systematic and stratified sampling"], ["Cluster and multi-stage samples", "Design effects; intra-cluster correlation; listing"], ["Sample size and weights", "Margin of error; power; non-response adjustment; weighting"]]],
+    ["fd-capi", "field", "Mobile Data Collection with KoboToolbox and ODK", 3, "Foundation", "Build digital forms, collect data on phones and tablets, and monitor quality in real time.",
+      ["Build XLSForm questionnaires with skip logic and validation", "Deploy forms to devices and collect offline", "Monitor submissions and data quality during fieldwork", "Download and clean the data"],
+      "Field coordinators, enumerators' supervisors, M&E officers and researchers.",
+      [["Building forms", "XLSForm basics; question types; relevance and constraints"], ["Deploying and collecting", "Devices; offline collection; GPS, photos and media"], ["Monitoring quality", "Dashboards; back-checks; cleaning and export"]]],
+    ["fd-management", "field", "Fieldwork Management and Data Quality", 5, "Intermediate", "Plan, staff and supervise fieldwork so that data arrive on time, on budget and of high quality.",
+      ["Plan logistics, budgets and timelines for fieldwork", "Recruit, train and supervise enumerators", "Run quality assurance and back-checks", "Handle consent, safety and data protection in the field"],
+      "Survey and field managers, research coordinators and NGO programme staff.",
+      [["Planning fieldwork", "Workplans; budgets; logistics; risk"], ["Teams and training", "Recruiting enumerators; training design; role plays"], ["Supervision", "Spot checks; daily reports; managing non-response"], ["Quality assurance", "Back-checks; high-frequency checks; corrective action"], ["Ethics and closing out", "Consent; safeguarding; data security; field reports"]]],
+    ["st-spss", "stats", "Data Analysis with SPSS", 5, "Foundation", "Go from raw survey data to tables, charts and statistical tests using SPSS.",
+      ["Import, label and clean data", "Produce descriptive statistics, tables and charts", "Run and interpret t-tests, ANOVA, chi-square and correlation", "Fit and explain linear regression models"],
+      "Researchers, students, M&E staff and analysts new to statistical software.",
+      [["Getting data ready", "Importing; variable labels; recoding; missing values"], ["Describing data", "Frequencies; descriptives; cross-tabulations; charts"], ["Comparing groups", "t-tests; ANOVA; chi-square; non-parametric tests"], ["Relationships", "Correlation; simple and multiple regression"], ["Reporting", "Tables for reports; interpreting output; a full worked example"]]],
+    ["st-stata", "stats", "Data Analysis with Stata", 5, "Intermediate", "Use Stata for reproducible data management and analysis of survey and programme data.",
+      ["Write do-files for reproducible work", "Merge, reshape and clean datasets", "Analyse survey data with weights and design", "Fit regression models for continuous and binary outcomes"],
+      "Economists, epidemiologists, evaluators and analysts.",
+      [["Stata essentials", "Do-files; data types; labels; logs"], ["Data management", "Merging; appending; reshaping; loops"], ["Survey data", "svyset; weighted estimates; standard errors"], ["Regression", "Linear, logistic and probit models; diagnostics"], ["Output and reproducibility", "Exporting tables; project structure; worked example"]]],
+    ["st-r", "stats", "Data Science with R", 5, "Intermediate", "Clean, analyse and visualise data in R with the tidyverse, and produce reproducible reports.",
+      ["Import and tidy data with the tidyverse", "Create publication-quality charts with ggplot2", "Fit and interpret statistical models", "Write reproducible reports with R Markdown or Quarto"],
+      "Analysts, researchers and students who want a free, powerful analysis tool.",
+      [["R and RStudio", "Projects; packages; data import"], ["Tidying data", "dplyr and tidyr; joins; missing values"], ["Visualisation", "ggplot2; themes; charts for reports"], ["Modelling", "Tests; linear and logistic regression"], ["Reproducible reports", "R Markdown and Quarto; automating reports"]]],
+    ["st-python", "stats", "Python for Data Analysis", 5, "Intermediate", "Analyse and visualise data in Python with pandas, and automate repetitive work.",
+      ["Load and clean data with pandas", "Summarise, group and reshape data", "Visualise data with matplotlib and seaborn", "Automate routine analysis and reporting"],
+      "Analysts and researchers who want to programme their analysis.",
+      [["Python basics", "Notebooks; data types; functions"], ["pandas", "Reading files; selecting; cleaning"], ["Analysis", "Grouping; pivoting; merging; statistics"], ["Visualisation", "matplotlib; seaborn; charts for reports"], ["Automation", "Scripts; scheduled reports; a worked project"]]],
+    ["st-regression", "stats", "Regression and Multivariate Analysis", 5, "Advanced", "Model relationships between many variables and explain the results to non-specialists.",
+      ["Fit and diagnose multiple regression models", "Use logistic regression for binary outcomes", "Apply factor and cluster analysis", "Present multivariate results clearly"],
+      "Analysts, researchers and postgraduate students with a basic statistics background.",
+      [["Multiple regression", "Assumptions; diagnostics; interactions"], ["Categorical outcomes", "Logistic and multinomial regression; odds ratios"], ["Multilevel data", "Clustered data; random effects; when to use them"], ["Multivariate methods", "Factor analysis; cluster analysis; segmentation"], ["Communicating results", "Effect sizes; charts; writing for decision-makers"]]],
+    ["ql-methods", "qual", "Qualitative Research Methods", 5, "Foundation", "Plan and run interviews and focus groups, and analyse what people say rigorously.",
+      ["Design qualitative studies and sampling", "Conduct in-depth interviews and focus groups", "Code and analyse transcripts thematically", "Write credible qualitative findings"],
+      "Researchers, evaluators, social scientists and programme staff.",
+      [["Qualitative designs", "Approaches; purposive sampling; saturation"], ["Interviews", "Guides; probing; recording and transcription"], ["Focus groups", "Planning; moderating; managing group dynamics"], ["Analysis", "Coding; thematic analysis; framework method"], ["Writing up", "Quotes; trustworthiness; reporting standards"]]],
+    ["ql-nvivo", "qual", "Qualitative Data Analysis with NVivo", 3, "Intermediate", "Organise, code and query qualitative data in NVivo for faster, more transparent analysis.",
+      ["Set up an NVivo project and import data", "Code transcripts and build a codebook", "Use queries, matrices and visualisations", "Export findings for reports"],
+      "Researchers and evaluators working with interviews, focus groups and documents.",
+      [["Project set-up", "Importing transcripts, documents and media; cases and attributes"], ["Coding", "Codebooks; coding strategies; teamwork"], ["Queries and outputs", "Matrix coding; framework matrices; exporting results"]]],
+    ["ql-fgd", "qual", "Focus Group Facilitation", 3, "Foundation", "Moderate focus groups that produce rich, usable insight, including in community settings.",
+      ["Plan focus group composition and guides", "Moderate discussions and manage dynamics", "Record, note-take and debrief effectively", "Summarise focus group findings"],
+      "Researchers, community workers, market researchers and M&E staff.",
+      [["Planning", "When to use focus groups; recruitment; venues; consent"], ["Moderating", "Opening; probing; handling dominant and quiet participants"], ["From discussion to findings", "Notes and transcripts; debriefs; summarising"]]],
+    ["me-fundamentals", "mel", "Monitoring and Evaluation Fundamentals", 5, "Foundation", "Build an M&E system that tracks progress and shows results to funders and managers.",
+      ["Develop theories of change and logframes", "Select SMART indicators with baselines and targets", "Design data collection and reporting systems", "Plan and manage evaluations"],
+      "Programme managers, M&E officers, NGO and public sector staff.",
+      [["Results thinking", "Theory of change; results chains; logframes"], ["Indicators", "SMART indicators; baselines; targets; disaggregation"], ["M&E systems", "Data collection plans; tools; data quality"], ["Evaluation", "Evaluation types and questions; terms of reference"], ["Using results", "Reporting; learning; adaptive management"]]],
+    ["me-results", "mel", "Results-Based Management and Reporting", 3, "Intermediate", "Use evidence to steer programmes and report convincingly to donors and boards.",
+      ["Link plans, budgets and results", "Build results frameworks and dashboards", "Write clear, evidence-based progress reports", "Create a learning agenda"],
+      "Programme and project managers, M&E leads and grant managers.",
+      [["Managing for results", "Principles; results frameworks; risk"], ["Tracking performance", "Indicator tracking; dashboards; reviews"], ["Reporting and learning", "Donor reports; storytelling with data; learning agendas"]]],
+    ["me-dqa", "mel", "Data Quality Assessment for Programmes", 3, "Intermediate", "Check that programme data are valid, reliable, timely and complete, and fix the gaps.",
+      ["Apply data quality dimensions", "Plan and run a data quality assessment", "Verify indicator data against source records", "Write an improvement plan"],
+      "M&E officers, health information officers and programme managers.",
+      [["Data quality dimensions", "Validity; reliability; timeliness; precision; integrity"], ["Running an assessment", "Sampling sites; verification; tools"], ["Improvement", "Root causes; action plans; follow-up"]]],
+    ["vz-excel", "viz", "Excel for Data Analysis and Reporting", 3, "Foundation", "Clean, analyse and present data in Excel with formulas, PivotTables and charts.",
+      ["Clean and structure data in Excel", "Use lookup, logical and summary formulas", "Analyse with PivotTables and PivotCharts", "Build simple, clear report tables and charts"],
+      "Administrators, analysts, M&E staff and managers who work with spreadsheets.",
+      [["Clean data", "Tables; text tools; removing duplicates; validation"], ["Formulas and PivotTables", "XLOOKUP; IF; SUMIFS; PivotTables"], ["Presenting", "Charts; conditional formatting; one-page summaries"]]],
+    ["vz-powerbi", "viz", "Dashboards with Power BI", 5, "Intermediate", "Turn data from many sources into interactive dashboards that decision-makers actually use.",
+      ["Connect to and transform data with Power Query", "Build data models and relationships", "Write DAX measures", "Design and publish clear dashboards"],
+      "Analysts, M&E officers, finance and operations staff.",
+      [["Getting data", "Power Query; combining sources; cleaning"], ["Data modelling", "Star schemas; relationships; dates"], ["DAX", "Measures; calculated columns; time intelligence"], ["Dashboard design", "Layouts; visuals; interactivity; accessibility"], ["Sharing", "Publishing; refresh; security"]]],
+    ["vz-datamgmt", "viz", "Research Data Management", 3, "Foundation", "Organise, document, store and share research data safely and in line with data protection law.",
+      ["Write a data management plan", "Structure files, variables and documentation", "Store and back up data securely", "Prepare data for sharing and archiving"],
+      "Researchers, data managers and students.",
+      [["Planning", "Data management plans; roles; storage"], ["Organising data", "File naming; codebooks; version control"], ["Protecting and sharing", "Anonymisation; access control; archiving"]]],
+    ["mk-research", "market", "Market Research Methods", 5, "Foundation", "Understand customers and markets with surveys, interviews and secondary data, and act on the findings.",
+      ["Frame business questions as research questions", "Choose suitable quantitative and qualitative methods", "Measure satisfaction, loyalty and Net Promoter Score", "Turn findings into recommendations"],
+      "Marketing, product, strategy and business development staff.",
+      [["Framing the brief", "Business questions; research objectives; desk research"], ["Quantitative methods", "Customer surveys; sampling; questionnaire design"], ["Qualitative methods", "Interviews; focus groups; observation"], ["Customer metrics", "Satisfaction; loyalty; NPS; key drivers"], ["From data to decisions", "Insight reports; recommendations; presenting"]]],
+    ["mk-segmentation", "market", "Customer Insight and Segmentation", 3, "Intermediate", "Group customers into meaningful segments and design offers for each.",
+      ["Choose segmentation variables", "Run cluster-based segmentation", "Profile and name segments", "Use segments in marketing and product decisions"],
+      "Marketing analysts, insight managers and product managers.",
+      [["Segmentation strategy", "Purpose; variables; data sources"], ["Building segments", "Cluster analysis; validating segments"], ["Using segments", "Profiles; personas; targeting and tracking"]]],
+    ["mk-intelligence", "market", "Market Intelligence and Competitor Analysis for Africa", 3, "Intermediate", "Gather and analyse information on African markets, competitors and trends to support strategy.",
+      ["Identify reliable secondary data sources for African markets", "Size markets and estimate demand", "Analyse competitors systematically", "Report market intelligence for decision-makers"],
+      "Strategy, business development and investment analysts, and entrepreneurs.",
+      [["Sources", "National statistics; international databases; trade data; desk research"], ["Market sizing", "Top-down and bottom-up estimates; scenarios"], ["Competitors and reporting", "Competitor profiles; SWOT; intelligence briefs"]]],
+    ["wr-ethics", "writing", "Research Ethics and Data Protection", 3, "Foundation", "Protect participants and their data, from consent to archiving, and prepare for ethics review.",
+      ["Design informed consent processes", "Anonymise and protect personal data", "Prepare an ethics review application", "Plan secure storage, retention and sharing"],
+      "Researchers, students, data collection teams and ethics committee members.",
+      [["Ethical principles", "Respect; beneficence; justice; vulnerable groups"], ["Consent and confidentiality", "Consent forms; anonymisation; data protection law"], ["Ethics review", "Applications; common issues; responding to reviewers"]]],
+    ["wr-proposal", "writing", "Writing Winning Research Proposals", 3, "Intermediate", "Write clear, convincing proposals for research grants and commissioned studies.",
+      ["Read and respond to calls and terms of reference", "Structure a persuasive proposal", "Present methods, workplans and budgets", "Review and polish proposals"],
+      "Researchers, consultants, academics and NGO staff seeking funding.",
+      [["Understanding the call", "Funders' priorities; criteria; terms of reference"], ["Writing the proposal", "Problem; objectives; methods; team"], ["Workplan, budget and review", "Gantt charts; budgets; peer review"]]],
+    ["wr-publishing", "writing", "Academic Writing and Publishing", 5, "Intermediate", "Turn research into journal articles and reports, and navigate peer review.",
+      ["Structure an empirical paper", "Write clear abstracts, methods and results", "Choose journals and avoid predatory publishers", "Respond to peer reviewers"],
+      "Postgraduate students, early-career researchers and academics.",
+      [["Planning a paper", "Story; structure; target journal"], ["Introduction and methods", "Literature; gaps; methods reporting"], ["Results and discussion", "Tables and figures; interpretation; limitations"], ["Polishing", "Abstracts; titles; clarity and style"], ["Peer review", "Submission; responding to reviewers; open access"]]],
+    ["ai-research", "ai", "AI Tools for Researchers", 3, "Foundation", "Use AI assistants responsibly to speed up literature review, survey design, coding and analysis.",
+      ["Use AI tools for literature search and summaries", "Draft and check questionnaires with AI", "Use AI to help code qualitative data and write analysis code", "Manage risks: accuracy, bias, privacy and integrity"],
+      "Researchers, analysts, students and M&E staff.",
+      [["AI in the research cycle", "What AI can and can't do; choosing tools; prompts"], ["Practical uses", "Literature; questionnaires; qualitative coding; analysis code"], ["Responsible use", "Checking outputs; bias; data protection; disclosure"]]],
+    ["ai-ml", "ai", "Introduction to Machine Learning for Analysts", 5, "Advanced", "Understand and apply core machine learning methods to prediction and classification problems.",
+      ["Frame problems for machine learning", "Prepare features and split data", "Train and evaluate classification and regression models", "Explain models and avoid common pitfalls"],
+      "Analysts and researchers with Python or R experience.",
+      [["Foundations", "Supervised and unsupervised learning; workflow"], ["Data preparation", "Features; encoding; train and test splits"], ["Models", "Decision trees; random forests; regularised regression"], ["Evaluation", "Accuracy; precision and recall; cross-validation"], ["Responsible ML", "Explainability; fairness; deployment basics"]]],
+  ].map(([id, cat, title, days, level, summary, objectives, audience, outline]) => ({ id, cat, title, days, level, summary, objectives, audience, outline }));
+  const catName = (k) => (CAT_CATEGORIES.find(([x]) => x === k) || [k, k])[1];
+  const catCourse = (id) => CATALOGUE.find((c) => c.id === id);
+  const CAT_DEFAULT = { q: "", cat: "", venue: "", format: "" };
+  const catMatches = (c, f) => {
+    const q = f.q.trim().toLowerCase();
+    return (!f.cat || c.cat === f.cat) && (!q || [c.title, c.summary, catName(c.cat), ...c.objectives].join(" ").toLowerCase().includes(q));
+  };
+  const catRow = (c) => `<article class="cat-row"><div><span class="eyebrow gold">${esc(catName(c.cat))}</span><h3><button class="cat-link" data-act="catOpen" data-id="${c.id}">${esc(c.title)}</button></h3><p class="muted">${esc(c.summary)}</p></div>
+    <div class="cat-meta"><span class="pill">${c.days} days</span><span class="pill">${esc(c.level)}</span><span class="hint">${CAT_FORMATS.join(" · ")}</span><button class="btn small primary" data-act="catOpen" data-id="${c.id}">Course details</button></div></article>`;
+  function catList() {
+    const f = S.catFilter, list = CATALOGUE.filter((c) => catMatches(c, f));
+    const where = f.venue ? ` in ${esc(f.venue)}` : "", how = f.format ? ` · ${esc(f.format)}` : "";
+    return `<p class="hint" role="status">${list.length} course${list.length === 1 ? "" : "s"}${where}${how}</p>${list.length ? list.map(catRow).join("") : `<div class="empty"><h2>No courses match</h2><p class="muted">Try another word or clear the filters. We also design courses on request.</p></div>`}`;
+  }
   function viewTraining() {
     if (S.courseOpen) { const c = courseById(S.courseOpen); if (c) return courseDetail(c); S.courseOpen = null; }
+    if (S.catOpen) { const c = catCourse(S.catOpen); if (c) return catDetail(c); S.catOpen = null; }
     const pub = S.courses.filter((c) => c.status === "published").sort((a, b) => ((upcoming(a)[0] || {}).start || "9").localeCompare((upcoming(b)[0] || {}).start || "9"));
-    return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Academy</span><h1>Research methods training</h1><p class="muted" style="max-width:66ch">Practical courses in research design, surveys, data analysis, qualitative methods and monitoring and evaluation. Public short courses, online learning and in-house workshops for your organisation.</p></div></div>
+    const f = S.catFilter, opt = (list, v) => list.map((x) => `<option${x === v ? " selected" : ""}>${esc(x)}</option>`).join("");
+    return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Academy</span><h1>Research and data training across Africa</h1><p class="muted" style="max-width:70ch">Practical courses in research design, surveys, statistics, qualitative methods, monitoring and evaluation, dashboards and market research. Join a classroom course in a city near you, learn live online, or bring a course to your organisation.</p></div></div>
       ${slideshow("training", "academy")}
-      ${pub.length ? `<div class="course-grid">${pub.map((c) => courseCard(c)).join("")}</div>` : `<div class="empty"><h2>Our course schedule is being finalised</h2><p class="muted">Send us your details below and tell us which topics interest you. We'll contact you as soon as registration opens.</p></div>`}
-      <div class="split">
-        ${enquiryForm("training", { title: pub.length ? "Training for your organisation" : "Register your interest", intro: "Tell us what you'd like to learn, how many people would attend and where. We run public courses and tailored in-house workshops.", services: TRAINING_SERVICES, serviceLabel: "What are you interested in?", messageLabel: "Topics, group size and location", placeholder: "e.g. A 2-day questionnaire design workshop for 20 M&E staff in Kumasi" })}
-        <section class="card"><h2>What to expect</h2><ul class="ticks small"><li><div><b>Hands-on learning</b><span>Short explanations followed by practice on real or your own data.</span></div></li><li><div><b>Small groups</b><span>Enough time for questions and feedback.</span></div></li><li><div><b>Course materials</b><span>Slides, templates and exercises to keep.</span></div></li><li><div><b>Certificate of completion</b><span>For participants who attend and complete the course. Not an accredited qualification.</span></div></li></ul></section>
+      <section class="card cat-search" aria-label="Find a course">
+        <div class="grid4">
+          <label for="catQ">Search courses<input id="catQ" type="search" value="${esc(f.q)}" placeholder="e.g. SPSS, sampling, Power BI"></label>
+          <label for="catCat">Category<select id="catCat"><option value="">All categories</option>${CAT_CATEGORIES.map(([k, n]) => `<option value="${k}"${k === f.cat ? " selected" : ""}>${esc(n)}</option>`).join("")}</select></label>
+          <label for="catVenue">Venue<select id="catVenue"><option value="">All venues</option>${opt(VENUE_CITIES, f.venue)}</select></label>
+          <label for="catFmt">Format<select id="catFmt"><option value="">All formats</option>${opt(CAT_FORMATS, f.format)}</select></label>
+        </div>
+      </section>
+      <section class="stack" aria-labelledby="catCatsH">
+        <div class="section-head"><span class="eyebrow gold">Course categories</span><h2 id="catCatsH" class="h2xl">Browse by subject</h2></div>
+        <div class="cat-tiles">${CAT_CATEGORIES.map(([k, n]) => `<button class="cat-tile${k === f.cat ? " on" : ""}" data-act="catPick" data-k="${k}" aria-pressed="${k === f.cat}"><b>${esc(n)}</b><span>${CATALOGUE.filter((c) => c.cat === k).length} courses</span></button>`).join("")}</div>
+      </section>
+      ${pub.length ? `<section class="stack"><div class="section-head"><span class="eyebrow gold">Scheduled dates</span><h2 class="h2xl">Courses open for registration</h2></div><div class="course-grid">${pub.map((c) => courseCard(c)).join("")}</div></section>` : ""}
+      <section class="stack" aria-labelledby="catListH">
+        <div class="section-head"><span class="eyebrow gold">Course catalogue</span><h2 id="catListH" class="h2xl">All courses</h2></div>
+        <div id="catList" class="stack">${catList()}</div>
+      </section>
+      <section class="stack" aria-labelledby="venuesH">
+        <div class="section-head"><span class="eyebrow gold">Training venues</span><h2 id="venuesH" class="h2xl">Where we train</h2><p class="muted" style="max-width:70ch">Classroom courses can run in these cities across English-speaking Africa. Dates are set for each venue: ask for the dates and fees for the course and city you want, or bring any course to your own premises.</p></div>
+        <div class="venue-grid">${VENUES.map(([country, cities]) => `<div class="venue"><b>${esc(country)}</b><span>${cities.map((c) => `<button class="cat-link" data-act="catVenue" data-v="${esc(`${c}, ${country}`)}">${esc(c)}</button>`).join(" · ")}</span></div>`).join("")}</div>
+      </section>
+      <section class="units" aria-label="Ways to learn">
+        <article class="card unit"><span class="eyebrow gold">Classroom</span><h3>Public courses</h3><p class="muted">Learn alongside professionals from other organisations, in a city near you.</p></article>
+        <article class="card unit"><span class="eyebrow gold">Live online</span><h3>Online with a trainer</h3><p class="muted">The same course, taught live in short daily sessions you can join from anywhere.</p></article>
+        <article class="card unit"><span class="eyebrow gold">In-house</span><h3>For your organisation</h3><p class="muted">Any course, adapted to your data, sector and team, at your premises or online.</p></article>
+        <article class="card unit"><span class="eyebrow gold">Tailored</span><h3>Designed for you</h3><p class="muted">Need something not listed? We build courses around your goals and your data.</p></article>
+      </section>
+      <div class="split" id="catEnquiry">
+        ${enquiryForm("training", { title: "Ask about dates, fees or in-house training", intro: "Tell us which course, where and how many people. We'll reply with dates, fees and options.", services: TRAINING_SERVICES, serviceLabel: "What are you interested in?", messageLabel: "Course, venue and group size", placeholder: "e.g. Data Analysis with SPSS for 12 staff in Nairobi, or online", message: S.catEnquiry || "" })}
+        <section class="card"><h2>What to expect</h2><ul class="ticks small"><li><div><b>Hands-on learning</b><span>Short explanations followed by practice on real or your own data.</span></div></li><li><div><b>Small groups</b><span>Enough time for questions and feedback.</span></div></li><li><div><b>Course materials</b><span>Slides, templates and exercises to keep.</span></div></li><li><div><b>Certificate of completion</b><span>Awarded to participants who attend and complete the course. It is not an accredited qualification.</span></div></li></ul></section>
       </div>`;
+  }
+  function catDetail(c) {
+    const f = S.catFilter;
+    return `<div><button class="btn small ghost" data-act="catClose">← All courses</button></div>
+      <div class="page-head"><div><span class="eyebrow gold">${esc(catName(c.cat))}</span><h1>${esc(c.title)}</h1><div class="row wrap" style="gap:6px"><span class="pill">${c.days} days</span><span class="pill">${esc(c.level)}</span>${CAT_FORMATS.map((x) => `<span class="pill">${esc(x)}</span>`).join("")}</div><p class="muted" style="max-width:70ch;margin-top:10px">${esc(c.summary)}</p></div></div>
+      <div class="cat-detail">
+        <div class="stack">
+          <section class="card"><h2>What you will be able to do</h2><ul class="ticks small">${c.objectives.map((o) => `<li><div><span>${esc(o)}</span></div></li>`).join("")}</ul></section>
+          <section class="card"><h2>Who should attend</h2><p>${esc(c.audience)}</p></section>
+          <section class="card"><h2>Course outline</h2><ol class="outline">${c.outline.map(([t, topics], i) => `<li><span class="eyebrow gold">Day ${i + 1}</span><b>${esc(t)}</b><span class="muted">${esc(topics)}</span></li>`).join("")}</ol></section>
+          <section class="card"><h2>How the course is taught</h2><p class="muted">Short explanations, worked examples and practical exercises, with time to work on participants' own questions and data. Software courses are taught hands-on: bring a laptop, or ask us about equipment. Materials, templates and exercise files are yours to keep.</p>
+            <h3>Certificate</h3><p class="muted">Participants who attend and complete the course receive an Afrimetrica Academy certificate of completion. It is not an accredited academic qualification.</p></section>
+        </div>
+        <aside class="stack">
+          <section class="card"><h2>Venues and dates</h2><p class="muted">This course can run as a classroom course in any of our venues, live online, or in-house. Dates and fees depend on the venue.</p>
+            <label for="catReqVenue">Preferred venue<select id="catReqVenue"><option value="">Live online</option>${VENUE_CITIES.map((v) => `<option${v === f.venue ? " selected" : ""}>${esc(v)}</option>`).join("")}</select></label>
+            <button class="btn primary" data-act="catRequest" data-id="${c.id}">Request dates and fees</button>
+            <button class="btn" data-act="catInhouse" data-id="${c.id}">Run it in-house</button></section>
+        </aside>
+      </div>
+      <div id="catEnquiry">${enquiryForm("training", { title: "Ask about this course", intro: "We'll reply with dates, fees and options for the venue you choose.", services: TRAINING_SERVICES, serviceLabel: "What are you interested in?", messageLabel: "Course, venue and group size", message: S.catEnquiry || `Course: ${c.title} (${c.days} days)\nPreferred venue: ${f.venue || "Live online"}\nNumber of participants: ` })}</div>`;
   }
   function courseDetail(c) {
     const sess = (c.sessions || []).slice().sort((a, b) => (a.start || "9").localeCompare(b.start || "9"));
@@ -3101,6 +3337,12 @@ ${richSummary(st, rows)}`;
   // ---------- events ----------
   function setPath(o, path, v) { const k = path.split("."); let t = o; while (k.length > 1) t = t[k.shift()]; t[k[0]] = v; }
   function onField(t) {
+    if (t.id === "catQ" || t.id === "catCat" || t.id === "catVenue" || t.id === "catFmt") {
+      const k = { catQ: "q", catCat: "cat", catVenue: "venue", catFmt: "format" }[t.id];
+      S.catFilter[k] = t.value; const box = $("#catList"); if (box) box.innerHTML = catList();
+      if (k === "cat") document.querySelectorAll(".cat-tile").forEach((x) => { const on = x.dataset.k === t.value; x.classList.toggle("on", on); x.setAttribute("aria-pressed", String(on)); });
+      return;
+    }
     if (S.view === "create" && S.draft) {
       const d = S.draft;
       if (t.dataset.f) {
@@ -3276,6 +3518,17 @@ ${richSummary(st, rows)}`;
       case "closeGuide": S.guideOpen = null; render(); window.scrollTo(0, 0); break;
       case "openCourse": S.courseOpen = id; S.regFor = null; if (S.view !== "training") go("training"); else { render(); window.scrollTo(0, 0); } break;
       case "closeCourse": S.courseOpen = null; S.regFor = null; render(); window.scrollTo(0, 0); break;
+      case "catOpen": S.catOpen = id; S.catEnquiry = ""; S.courseOpen = null; if (S.view !== "training") go("training"); else { render(); window.scrollTo(0, 0); } break;
+      case "catClose": S.catOpen = null; S.catEnquiry = ""; render(); window.scrollTo(0, 0); break;
+      case "catPick": S.catFilter.cat = S.catFilter.cat === b.dataset.k ? "" : b.dataset.k; render(); $("#catListH").scrollIntoView({ behavior: "smooth", block: "start" }); break;
+      case "catVenue": S.catFilter.venue = b.dataset.v; render(); $("#catListH").scrollIntoView({ behavior: "smooth", block: "start" }); break;
+      case "catRequest": case "catInhouse": {
+        const c = catCourse(id), v = ($("#catReqVenue") || {}).value || "";
+        S.catEnquiry = act === "catInhouse" ? `Course: ${c.title} (${c.days} days)\nIn-house for our organisation, at: \nNumber of participants: ` : `Course: ${c.title} (${c.days} days)\nPreferred venue: ${v || "Live online"}\nNumber of participants: `;
+        const ta = $("#eq-training-msg"); if (ta) ta.value = S.catEnquiry;
+        const sv = $("#eq-training-service"); if (sv) sv.value = act === "catInhouse" ? TRAINING_SERVICES[1] : v ? TRAINING_SERVICES[0] : TRAINING_SERVICES[2];
+        $("#catEnquiry").scrollIntoView({ behavior: "smooth", block: "start" }); if (ta) ta.focus({ preventScroll: true }); break;
+      }
       case "regStart":
         if (API && !S.user) { requireSignIn("Sign in or create a free account to register for a course."); break; }
         if (unverified()) { toast(`Confirm your email first. We sent a link to ${S.user.email}.`); break; }
