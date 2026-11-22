@@ -14,3 +14,7 @@ Prefix every prompt with: "Read CLAUDE.md and docs/. Keep Phase 1 running until 
 9. ✅ **Data migration.** *(done: `npm run db:import-phase1` with a dry run by default, one transaction, safe to repeat, report without personal details; tested on a sample written by the real Phase 1 server. Runbook: `docs/migration.md`)* Script that imports Phase 1 `store.json` into PostgreSQL, with a dry-run report. Test on a copy.
 10. **Cut-over.** Deploy, run the migration, switch the Render domain, keep the Phase 1 disk as a read-only backup for 90 days.
 11. **Later.** Subscription and Payment (Paystack or Flutterwave for GHS, Stripe for cards), certificates as PDFs, learning materials.
+
+## Live-site changes still to carry into Phase 2 before cut-over
+- Training page course catalogue (Nov 2026): 31 courses in 10 categories, search and filters, venues across English-speaking Africa, course pages with day-by-day outlines and a prefilled "Request dates and fees" enquiry. Source: `CATALOGUE`, `VENUES`, `viewTraining` and `catDetail` in `public/index.html` on `main`.
+- Deeper gold (`--gold-ink`) for small gold labels on the live site (Phase 2 already uses it).
