@@ -533,6 +533,44 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
 .group .cat-link { color: var(--ink); }
 .group .cat-link.on { color: var(--accent); font-weight: 700; text-decoration: underline; }
 .cat-chip { display: flex; gap: 8px; align-items: center; margin: 0; }
+/* training section menu and pages */
+.subnav { position: relative; }
+.tr-links { align-items: center; }
+.tr-menu-btn { border: 0; background: none; font: inherit; padding: 6px 10px; border-radius: 7px; color: var(--muted); font-size: 0.85rem; font-weight: 500; white-space: nowrap; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+.tr-menu-btn:hover, .tr-menu-btn[aria-expanded="true"] { color: var(--ink); background: var(--surface); }
+.tr-menu-btn[aria-current="page"] { color: var(--ink); background: var(--surface); box-shadow: inset 0 -2px 0 var(--gold); }
+.tr-menu-btn span { font-size: .7rem; color: var(--bad); }
+.new-badge { background: var(--bad); color: #fff; font-weight: 700; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 5px; }
+.tr-panel { position: absolute; left: 0; right: 0; top: 100%; z-index: 30; background: var(--surface); border-bottom: 1px solid var(--line); box-shadow: 0 12px 24px rgba(14, 29, 58, .12); max-height: 70vh; overflow-y: auto; }
+.tr-panel-inner { max-width: 1180px; margin: 0 auto; padding: 14px 16px 18px; }
+.tr-panel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 4px 16px; }
+.tr-panel-grid a { display: grid; gap: 1px; padding: 8px 10px; border-radius: 8px; text-decoration: none; color: var(--ink); }
+.tr-panel-grid a:hover, .tr-panel-grid a:focus-visible { background: var(--bg); }
+.tr-panel-grid a span { color: var(--muted); font-size: .82rem; }
+.crumbs { font-size: .85rem; color: var(--muted); }
+.crumbs a { color: var(--muted); }
+.quick-find { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; }
+.quick-find label { flex: 1 1 320px; }
+.area-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.area-card { display: grid; gap: 6px; text-decoration: none; color: var(--ink); border-left: 3px solid var(--gold); }
+.area-card:hover { box-shadow: inset 0 0 0 1px var(--gold); }
+.finder-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.course-lines { list-style: none; margin: 0; padding: 0; display: grid; }
+.course-line { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); align-items: start; }
+.course-line:first-child { border-top: 0; }
+.course-line > div:first-child { display: grid; gap: 2px; }
+.course-line a { color: var(--ink); text-decoration: none; }
+.course-line a:hover b { color: var(--accent); text-decoration: underline; }
+.course-line-meta { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.sub-jump { display: flex; flex-wrap: wrap; gap: 8px; }
+.sub-jump a { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 5px 12px; font-size: .88rem; color: var(--ink); text-decoration: none; }
+.sub-jump a:hover { border-color: var(--gold); }
+.pager { display: flex; flex-wrap: wrap; gap: 6px; }
+.venue-btn { text-align: left; font: inherit; cursor: pointer; color: var(--ink); }
+a.venue { text-decoration: none; color: var(--ink); }
+a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
+@media (max-width: 860px) { .finder-grid { grid-template-columns: 1fr 1fr; } .course-line { grid-template-columns: 1fr; } .course-line-meta { justify-content: flex-start; } }
+@media (max-width: 560px) { .finder-grid { grid-template-columns: 1fr; } }
 </style>
 
 <header class="topbar gutter">
@@ -635,7 +673,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     studies: [], responses: [], profile: null,
     view: "home", draft: ls.get("cohortly-draft"), taking: null, takeStart: 0, justDone: null,
     editProfile: false, resultsId: null, excludeFlagged: true, libQuery: "", libOpen: null,
-    catFilter: { q: "", group: "", sub: "", venue: "", format: "" }, catOpen: null, catEnquiry: "",
+    catFilter: { q: "", group: "", sub: "", venue: "", format: "", days: "" }, catPage: 1, catEnquiry: "", tr: "", trMenu: null,
     confirmDel: null, stale: false, notice: "",
     imp: { status: "idle" }, importNote: null,
     gen: { status: "idle" }, billing: "annual", anTab: "summary", aiCheck: null, ask: { q: "", a: "", busy: false },
@@ -900,8 +938,11 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
     const top = inSurveys ? "surveys" : S.view === "business" || S.view === "signin" ? "account" : S.view;
     $("#tabs").innerHTML = TOPNAV.map(([k, v]) => `<a href="#${k}"${top === k ? ' aria-current="page"' : ""}>${v}</a>`).join("");
     const sub = $("#subnav");
+    if (S.view === "training") { sub.hidden = false; sub.innerHTML = trNav(); }
+    else {
     sub.hidden = !inSurveys;
     sub.innerHTML = inSurveys ? `<div class="subnav-inner"><span class="subnav-label">Afrimetrica Surveys</span><div class="subnav-links">${SURVEY_NAV.map(([k, v]) => `<a href="#${k}"${S.view === k ? ' aria-current="page"' : ""}>${v}${k === "panel" && avail ? `<span class="count">${avail}</span>` : ""}</a>`).join("")}</div></div>` : "";
+    }
     const b = $("#banner");
     const msg = S.notice || (S.mode === "demo" ? "Demo mode: everything you create is saved in this browser only. Open the published page while signed in to claude.ai to share data with other people." : "") || (S.stale ? "Can't reach the saved data yet. What you see may be out of date." : "");
     b.hidden = !msg; b.textContent = msg;
@@ -918,10 +959,15 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   function route() {
     let h = location.hash.replace("#", "");
     if (h === "paper-to-pen") h = "paper-survey"; // old links keep working
+    // Training has its own pages: #training/<part>[/<item>]
+    const trPart = h.startsWith("training/") ? h.slice(9) : "";
+    if (trPart) h = "training";
+    if ((S.tr || "").startsWith("course/") && S.tr !== trPart) S.catEnquiry = "";
+    S.tr = h === "training" ? trPart : ""; S.trMenu = null;
     if (h === "library") h = "resources";
     if ((ROUTES.has(h) ? h : "home") !== S.view) slideIdx = 0; // a new page's slideshow starts at its first photo
     S.view = ROUTES.has(h) ? h : "home";
-    if (S.view !== "training") { S.courseOpen = null; S.regFor = null; S.catOpen = null; S.catEnquiry = ""; }
+    if (S.view !== "training") { S.courseOpen = null; S.regFor = null; S.catEnquiry = ""; }
     if (S.view !== "resources") S.guideOpen = null;
     if (S.view !== "business") S.courseEdit = null;
     if (S.view !== "panel") S.taking = null;
@@ -3371,62 +3417,125 @@ ${richSummary(st, rows)}`;
   const catName = (k) => SUBJECTS[k] || k;
   const groupName = (g) => (GROUPS.find(([x]) => x === g) || [g, g])[1];
   const catCourse = (id) => CATALOGUE.find((c) => c.id === id);
-  const catMatches = (c, f) => {
-    const q = f.q.trim().toLowerCase();
-    const inGroup = !f.group || (GROUPS.find(([g]) => g === f.group) || [0, 0, []])[2].includes(c.cat);
-    return inGroup && (!f.sub || c.cat === f.sub) && (!q || [c.title, c.summary, catName(c.cat), ...c.objectives].join(" ").toLowerCase().includes(q));
-  };
+  // ---- Training section: its own menu (New, Course finder, Courses, Training venues, Certificates, Training sectors)
+  // and one page per part, addressed as #training/<part>, so nothing lists every course at once.
+  const slug = (t) => String(t).toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const NEW_IDS = ["ls-strategy", "ls-executive", "ls-governance", "ai-apps", "ai-digital", "fi-budgeting", "pp-project", "pp-procurement", "hr-management", "sx-public", "sx-health", "en-energy"];
+  const SECTOR_GROUP = "sector";
+  const groupOf = (g) => GROUPS.find(([x]) => x === g);
+  const groupsOfSubject = (k) => GROUPS.filter(([, , subs]) => subs.includes(k));
   const subCount = (k) => CATALOGUE.filter((c) => c.cat === k).length;
-  const catRow = (c) => `<article class="cat-row"><div><span class="eyebrow gold">${esc(catName(c.cat))}</span><h3><button class="cat-link" data-act="catOpen" data-id="${c.id}">${esc(c.title)}</button></h3><p class="muted">${esc(c.summary)}</p></div>
-    <div class="cat-meta"><span class="pill">${c.days} days</span><span class="pill">${esc(c.level)}</span><span class="hint">${CAT_FORMATS.join(" · ")}</span><button class="btn small primary" data-act="catOpen" data-id="${c.id}">Course details</button></div></article>`;
-  function catList() {
-    const f = S.catFilter, list = CATALOGUE.filter((c) => catMatches(c, f));
-    const where = f.venue ? ` in ${esc(f.venue)}` : "", how = f.format ? ` · ${esc(f.format)}` : "";
-    const sub = f.sub ? `<p class="cat-chip">Subject: <b>${esc(catName(f.sub))}</b> <button class="btn small ghost" data-act="catPick" data-k="${f.sub}">Clear</button></p>${SUBJECT_INTRO[f.sub] ? `<p class="muted" style="max-width:70ch;margin:0">${esc(SUBJECT_INTRO[f.sub])}</p>` : ""}` : "";
-    return `${sub}<p class="hint" role="status">${list.length} course${list.length === 1 ? "" : "s"}${where}${how}</p>${list.length ? list.map(catRow).join("") : `<div class="empty"><h2>No courses match</h2><p class="muted">Try another word or clear the filters. We also design courses on request.</p></div>`}`;
+  const groupCourses = (g) => CATALOGUE.filter((c) => (groupOf(g) || [0, 0, []])[2].includes(c.cat));
+  const countryOf = (s) => VENUES.find(([country]) => slug(country) === s);
+  const FINDER_PAGE = 12;
+  const DURATIONS = [["3", "3 days"], ["5", "5 days"]];
+  function trNav() {
+    const t = S.tr || "", m = S.trMenu;
+    const cur = (k) => (t === k || t.startsWith(k + "/") ? ' aria-current="page"' : "");
+    const menu = (k, label, active) => `<button type="button" class="tr-menu-btn" data-act="trMenu" data-k="${k}" aria-expanded="${m === k}" aria-controls="trPanel"${active ? ' aria-current="page"' : ""}>${label} <span aria-hidden="true">▾</span></button>`;
+    const links = `<a href="#training/new"${cur("new")}><span class="new-badge">New</span></a><a href="#training/finder"${cur("finder")}>Course finder</a>
+      ${menu("courses", "Courses", t.startsWith("area/") || (t.startsWith("subject/") && !groupOf(SECTOR_GROUP)[2].includes(t.slice(8))))}
+      ${menu("venues", "Training venues", t === "venues" || t.startsWith("venue/"))}<a href="#training/certificates"${cur("certificates")}>Certificates</a>
+      ${menu("sectors", "Training sectors", t === "sectors" || (t.startsWith("subject/") && groupOf(SECTOR_GROUP)[2].includes(t.slice(8))))}`;
+    let panel = "";
+    if (m === "courses") panel = `<div class="tr-panel-grid">${GROUPS.map(([g, name]) => `<a href="#training/area/${g}"><b>${esc(name)}</b><span>${groupCourses(g).length} courses</span></a>`).join("")}</div>`;
+    if (m === "venues") panel = `<div class="tr-panel-grid">${VENUES.map(([country, cities]) => `<a href="#training/venue/${slug(country)}"><b>${esc(country)}</b><span>${esc(cities.join(", "))}</span></a>`).join("")}<a href="#training/venues"><b>All venues</b><span>${VENUES.length} countries</span></a></div>`;
+    if (m === "sectors") panel = `<div class="tr-panel-grid">${groupOf(SECTOR_GROUP)[2].map((k) => `<a href="#training/subject/${k}"><b>${esc(catName(k))}</b><span>${subCount(k)} course${subCount(k) === 1 ? "" : "s"}</span></a>`).join("")}</div>`;
+    return `<div class="subnav-inner"><span class="subnav-label">Afrimetrica Academy</span><div class="subnav-links tr-links">${links}</div></div>${panel ? `<div class="tr-panel" id="trPanel" role="region" aria-label="${m === "courses" ? "Subject areas" : m === "venues" ? "Training venues" : "Training sectors"}"><div class="tr-panel-inner">${panel}</div></div>` : ""}`;
   }
-  function viewTraining() {
-    if (S.courseOpen) { const c = courseById(S.courseOpen); if (c) return courseDetail(c); S.courseOpen = null; }
-    if (S.catOpen) { const c = catCourse(S.catOpen); if (c) return catDetail(c); S.catOpen = null; }
-    const pub = S.courses.filter((c) => c.status === "published").sort((a, b) => ((upcoming(a)[0] || {}).start || "9").localeCompare((upcoming(b)[0] || {}).start || "9"));
+  const crumbs = (...items) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#training">Training</a>${items.map(([href, label]) => (href ? ` › <a href="${href}">${esc(label)}</a>` : ` › <span>${esc(label)}</span>`)).join("")}</nav>`;
+  const courseLine = (c, showSubject) => `<li class="course-line"><div><a href="#training/course/${c.id}"><b>${esc(c.title)}</b></a>${showSubject ? `<span class="hint">${esc(catName(c.cat))}</span>` : ""}<span class="muted">${esc(c.summary)}</span></div><div class="course-line-meta"><span class="pill">${c.days} days</span><span class="pill">${esc(c.level)}</span></div></li>`;
+  const courseLines = (list, showSubject) => (list.length ? `<ul class="course-lines">${list.map((c) => courseLine(c, showSubject)).join("")}</ul>` : `<p class="muted">No courses here yet. Ask us: we also design courses on request.</p>`);
+  const areaCards = () => `<div class="area-grid">${GROUPS.map(([g, name, subs]) => `<a class="card area-card" href="#training/area/${g}"><b>${esc(name)}</b><span class="hint">${subs.length} subjects · ${groupCourses(g).length} courses</span></a>`).join("")}</div>`;
+  const askBlock = (title, message) => `<div class="split" id="catEnquiry">
+        ${enquiryForm("training", { title, intro: "Tell us which course, where and how many people. We'll reply with dates, fees and options.", services: TRAINING_SERVICES, serviceLabel: "What are you interested in?", messageLabel: "Course, venue and group size", placeholder: "e.g. Strategic Planning and Execution for 15 managers in Accra, or online", message })}
+        <section class="card"><h2>What to expect</h2><ul class="ticks small"><li><div><b>Hands-on learning</b><span>Short explanations followed by practice on real cases and your own data.</span></div></li><li><div><b>Small groups</b><span>Enough time for questions and feedback.</span></div></li><li><div><b>Course materials</b><span>Slides, templates and exercises to keep.</span></div></li><li><div><b>Certificate of completion</b><span>For participants who attend and complete the course. It is not an accredited qualification.</span></div></li></ul></section>
+      </div>`;
+  function finderResults() {
+    const f = S.catFilter, q = f.q.trim().toLowerCase();
+    const list = CATALOGUE.filter((c) => (!f.group || (groupOf(f.group) || [0, 0, []])[2].includes(c.cat)) && (!f.sub || c.cat === f.sub) && (!f.days || String(c.days) === f.days)
+      && (!q || [c.title, c.summary, catName(c.cat), ...c.objectives].join(" ").toLowerCase().includes(q)));
+    const pages = Math.max(1, Math.ceil(list.length / FINDER_PAGE)), page = Math.min(S.catPage || 1, pages);
+    const shown = list.slice((page - 1) * FINDER_PAGE, page * FINDER_PAGE);
+    const where = f.venue ? ` · can run in ${esc(f.venue)}` : "", how = f.format ? ` · ${esc(f.format)}` : "";
+    return `<p class="hint" role="status">${list.length} course${list.length === 1 ? "" : "s"}${where}${how}${list.length > FINDER_PAGE ? ` · page ${page} of ${pages}` : ""}</p>${courseLines(shown, true)}
+      ${pages > 1 ? `<nav class="pager" aria-label="Result pages"><button class="btn small" data-act="catPage" data-p="${page - 1}" ${page === 1 ? "disabled" : ""}>Previous</button>${Array.from({ length: pages }, (_, i) => `<button class="btn small${i + 1 === page ? " primary" : ""}" data-act="catPage" data-p="${i + 1}"${i + 1 === page ? ' aria-current="page"' : ""}>${i + 1}</button>`).join("")}<button class="btn small" data-act="catPage" data-p="${page + 1}" ${page === pages ? "disabled" : ""}>Next</button></nav>` : ""}`;
+  }
+  const subOptions = () => { const f = S.catFilter, subs = f.group ? groupOf(f.group)[2] : Object.keys(SUBJECTS).sort((a, b) => catName(a).localeCompare(catName(b))); return `<option value="">All subjects</option>${subs.map((k) => `<option value="${k}"${k === f.sub ? " selected" : ""}>${esc(catName(k))}</option>`).join("")}`; };
+  function trFinder() {
     const f = S.catFilter, opt = (list, v) => list.map((x) => `<option${x === v ? " selected" : ""}>${esc(x)}</option>`).join("");
+    return `${crumbs(["", "Course finder"])}<div class="page-head"><div><span class="eyebrow gold">Course finder</span><h1>Find a course</h1><p class="muted">Search ${CATALOGUE.length} courses by keyword, subject, venue, format and length.</p></div></div>
+      <section class="card cat-search" aria-label="Filters"><div class="finder-grid">
+        <label for="catQ">Keyword<input id="catQ" type="search" value="${esc(f.q)}" placeholder="e.g. strategy, SPSS, procurement"></label>
+        <label for="catGroup">Subject area<select id="catGroup"><option value="">All subject areas</option>${GROUPS.map(([k, n]) => `<option value="${k}"${k === f.group ? " selected" : ""}>${esc(n)}</option>`).join("")}</select></label>
+        <label for="catSub">Subject<select id="catSub">${subOptions()}</select></label>
+        <label for="catVenue">Venue<select id="catVenue"><option value="">All venues</option>${opt(VENUE_CITIES, f.venue)}</select></label>
+        <label for="catFmt">Format<select id="catFmt"><option value="">All formats</option>${opt(CAT_FORMATS, f.format)}</select></label>
+        <label for="catDays">Length<select id="catDays"><option value="">Any length</option>${DURATIONS.map(([v, l]) => `<option value="${v}"${v === f.days ? " selected" : ""}>${l}</option>`).join("")}</select></label>
+      </div><div><button class="btn small ghost" data-act="catReset">Clear filters</button></div></section>
+      <section id="catList" class="stack">${finderResults()}</section>`;
+  }
+  function trLanding() {
+    const pub = S.courses.filter((c) => c.status === "published").sort((a, b) => ((upcoming(a)[0] || {}).start || "9").localeCompare((upcoming(b)[0] || {}).start || "9"));
     return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Academy · Plan. Analyse. Lead.</span><h1>Data, research and executive training</h1><p style="max-width:70ch;font-size:1.12rem;font-weight:500;margin:10px 0 6px">Practical training that helps organisations, governments and NGOs make better decisions and deliver results.</p><p class="muted" style="max-width:70ch">Build skills in research design, surveys, statistics, monitoring and evaluation, dashboards and market research, alongside executive programmes in strategy and strategic planning, leadership, governance, finance and project management. Join a classroom course in a city near you, learn live online, or bring any course to your organisation, tailored to your sector and your team.</p></div></div>
       ${slideshow("training", "academy")}
-      <section class="card cat-search" aria-label="Find a course">
-        <div class="grid4">
-          <label for="catQ">Search courses<input id="catQ" type="search" value="${esc(f.q)}" placeholder="e.g. SPSS, sampling, Power BI"></label>
-          <label for="catGroup">Subject area<select id="catGroup"><option value="">All subject areas</option>${GROUPS.map(([k, n]) => `<option value="${k}"${k === f.group ? " selected" : ""}>${esc(n)}</option>`).join("")}</select></label>
-          <label for="catVenue">Venue<select id="catVenue"><option value="">All venues</option>${opt(VENUE_CITIES, f.venue)}</select></label>
-          <label for="catFmt">Format<select id="catFmt"><option value="">All formats</option>${opt(CAT_FORMATS, f.format)}</select></label>
-        </div>
-      </section>
-      <section class="stack" aria-labelledby="catCatsH">
-        <div class="section-head"><span class="eyebrow gold">Training subjects</span><h2 id="catCatsH" class="h2xl">Start with a subject area</h2><p class="muted">${CATALOGUE.length} courses in ${Object.keys(SUBJECTS).length} subjects. Choose a subject to see its courses.</p></div>
-        <div class="group-grid">${GROUPS.map(([g, name, subs]) => `<section class="card group"><h3>${esc(name)}</h3><ul>${subs.map((k) => `<li><button class="cat-link${k === f.sub ? " on" : ""}" data-act="catPick" data-k="${k}" aria-pressed="${k === f.sub}">${esc(catName(k))}</button> <span class="hint">${subCount(k)}</span></li>`).join("")}</ul></section>`).join("")}</div>
-      </section>
+      <form class="card quick-find" data-act-form="catQuick" role="search"><label for="catQuickQ">Search ${CATALOGUE.length} courses<input id="catQuickQ" type="search" placeholder="e.g. strategy, Power BI, monitoring and evaluation"></label><button class="btn primary" type="submit">Find courses</button></form>
+      <section class="stack" aria-labelledby="areasH"><div class="section-head"><span class="eyebrow gold">Courses</span><h2 id="areasH" class="h2xl">Start with a subject area</h2></div>${areaCards()}</section>
       ${pub.length ? `<section class="stack"><div class="section-head"><span class="eyebrow gold">Scheduled dates</span><h2 class="h2xl">Courses open for registration</h2></div><div class="course-grid">${pub.map((c) => courseCard(c)).join("")}</div></section>` : ""}
-      <section class="stack" aria-labelledby="catListH">
-        <div class="section-head"><span class="eyebrow gold">Course catalogue</span><h2 id="catListH" class="h2xl">All courses</h2></div>
-        <div id="catList" class="stack">${catList()}</div>
-      </section>
-      <section class="stack" aria-labelledby="venuesH">
-        <div class="section-head"><span class="eyebrow gold">Training venues</span><h2 id="venuesH" class="h2xl">Where we train</h2><p class="muted" style="max-width:70ch">Classroom courses can run in these cities across English-speaking Africa. Dates are set for each venue: ask for the dates and fees for the course and city you want, or bring any course to your own premises.</p></div>
-        <div class="venue-grid">${VENUES.map(([country, cities]) => `<div class="venue"><b>${esc(country)}</b><span>${cities.map((c) => `<button class="cat-link" data-act="catVenue" data-v="${esc(`${c}, ${country}`)}">${esc(c)}</button>`).join(" · ")}</span></div>`).join("")}</div>
-      </section>
       <section class="units" aria-label="Ways to learn">
-        <article class="card unit"><span class="eyebrow gold">Classroom</span><h3>Public courses</h3><p class="muted">Learn alongside professionals from other organisations, in a city near you.</p></article>
+        <article class="card unit"><span class="eyebrow gold">Classroom</span><h3>Public courses</h3><p class="muted">Learn alongside professionals from other organisations, in a city near you. <a href="#training/venues">See venues</a>.</p></article>
         <article class="card unit"><span class="eyebrow gold">Live online</span><h3>Online with a trainer</h3><p class="muted">The same course, taught live in short daily sessions you can join from anywhere.</p></article>
         <article class="card unit"><span class="eyebrow gold">In-house</span><h3>For your organisation</h3><p class="muted">Any course, adapted to your data, sector and team, at your premises or online.</p></article>
-        <article class="card unit"><span class="eyebrow gold">Tailored</span><h3>Designed for you</h3><p class="muted">Need something not listed? We build courses around your goals and your data.</p></article>
+        <article class="card unit"><span class="eyebrow gold">Tailored</span><h3>Designed for you</h3><p class="muted">Need something not listed? We build programmes around your goals.</p></article>
       </section>
-      <div class="split" id="catEnquiry">
-        ${enquiryForm("training", { title: "Ask about dates, fees or in-house training", intro: "Tell us which course, where and how many people. We'll reply with dates, fees and options.", services: TRAINING_SERVICES, serviceLabel: "What are you interested in?", messageLabel: "Course, venue and group size", placeholder: "e.g. Data Analysis with SPSS for 12 staff in Nairobi, or online", message: S.catEnquiry || "" })}
-        <section class="card"><h2>What to expect</h2><ul class="ticks small"><li><div><b>Hands-on learning</b><span>Short explanations followed by practice on real or your own data.</span></div></li><li><div><b>Small groups</b><span>Enough time for questions and feedback.</span></div></li><li><div><b>Course materials</b><span>Slides, templates and exercises to keep.</span></div></li><li><div><b>Certificate of completion</b><span>Awarded to participants who attend and complete the course. It is not an accredited qualification.</span></div></li></ul></section>
-      </div>`;
+      ${askBlock("Ask about dates, fees or in-house training", "")}`;
   }
-  function catDetail(c) {
-    const f = S.catFilter;
-    return `<div><button class="btn small ghost" data-act="catClose">← All courses</button></div>
+  function trArea(g) {
+    const [, name, subs] = groupOf(g);
+    return `${crumbs(["", name])}<div class="page-head"><div><span class="eyebrow gold">Subject area</span><h1>${esc(name)}</h1><p class="muted">${subs.length} subjects · ${groupCourses(g).length} courses. Every course can run in the classroom, live online or in-house.</p></div></div>
+      <nav class="sub-jump" aria-label="Subjects in this area">${subs.map((k) => `<a href="#training/subject/${k}">${esc(catName(k))} <span class="hint">${subCount(k)}</span></a>`).join("")}</nav>
+      ${subs.map((k) => `<section class="card"><div class="row-between"><h2>${esc(catName(k))}</h2><a class="btn small" href="#training/subject/${k}">Subject page</a></div>${courseLines(CATALOGUE.filter((c) => c.cat === k))}</section>`).join("")}`;
+  }
+  function trSubject(k) {
+    const areas = groupsOfSubject(k), list = CATALOGUE.filter((c) => c.cat === k);
+    const [g, gname] = areas[0] || ["", ""];
+    return `${crumbs(...(g ? [[`#training/area/${g}`, gname]] : []), ["", catName(k)])}<div class="page-head"><div><span class="eyebrow gold">${esc(areas.map(([, n]) => n).join(" · "))}</span><h1>${esc(catName(k))} training courses</h1>${SUBJECT_INTRO[k] ? `<p class="muted" style="max-width:70ch">${esc(SUBJECT_INTRO[k])}</p>` : `<p class="muted">${list.length} course${list.length === 1 ? "" : "s"}, in the classroom, live online or in-house.</p>`}</div></div>
+      <section class="card">${courseLines(list)}</section>
+      ${g ? `<section class="stack"><h2>More in ${esc(gname)}</h2><nav class="sub-jump">${groupOf(g)[2].filter((x) => x !== k).map((x) => `<a href="#training/subject/${x}">${esc(catName(x))} <span class="hint">${subCount(x)}</span></a>`).join("")}</nav></section>` : ""}
+      ${askBlock(`Ask about ${catName(k)} training`, "")}`;
+  }
+  function trVenues() {
+    return `${crumbs(["", "Training venues"])}<div class="page-head"><div><span class="eyebrow gold">Training venues</span><h1>Where we train</h1><p class="muted" style="max-width:70ch">Classroom courses can run in these cities across English-speaking Africa. Dates are set for each venue: ask for the dates and fees for the course and city you want, learn live online, or bring any course to your own premises.</p></div></div>
+      <div class="venue-grid">${VENUES.map(([country, cities]) => `<a class="venue" href="#training/venue/${slug(country)}"><b>${esc(country)}</b><span>${esc(cities.join(" · "))}</span></a>`).join("")}</div>`;
+  }
+  function trVenue(s) {
+    const [country, cities] = countryOf(s);
+    return `${crumbs(["#training/venues", "Training venues"], ["", country])}<div class="page-head"><div><span class="eyebrow gold">Training venue</span><h1>Training courses in ${esc(country)}</h1><p class="muted" style="max-width:70ch">Every course in our catalogue can run as a classroom course in ${esc(cities.join(", ").replace(/, ([^,]*)$/, " and $1"))}, or in-house at your organisation in ${esc(country)}. Choose a city to find courses, then ask us for dates and fees.</p></div></div>
+      <div class="venue-grid">${cities.map((c) => `<button class="venue venue-btn" data-act="catVenue" data-v="${esc(`${c}, ${country}`)}"><b>${esc(c)}</b><span>Find courses in ${esc(c)} →</span></button>`).join("")}</div>
+      <section class="stack"><h2>Browse by subject area</h2>${areaCards()}</section>
+      ${askBlock(`Ask about training in ${country}`, `Preferred venue: ${cities[0]}, ${country}\nCourse: \nNumber of participants: `)}`;
+  }
+  function trSectors() {
+    const subs = groupOf(SECTOR_GROUP)[2];
+    return `${crumbs(["", "Training sectors"])}<div class="page-head"><div><span class="eyebrow gold">Training sectors</span><h1>Training for your sector</h1><p class="muted" style="max-width:70ch">Courses built around the challenges of specific sectors, from energy and health to the public sector and agribusiness. Any course can also be tailored to your organisation.</p></div></div>
+      <div class="area-grid">${subs.map((k) => `<a class="card area-card" href="#training/subject/${k}"><b>${esc(catName(k))}</b><span class="hint">${subCount(k)} course${subCount(k) === 1 ? "" : "s"}</span></a>`).join("")}</div>`;
+  }
+  function trNew() {
+    const list = NEW_IDS.map(catCourse).filter(Boolean);
+    return `${crumbs(["", "New courses"])}<div class="page-head"><div><span class="eyebrow gold">New</span><h1>New courses</h1><p class="muted" style="max-width:70ch">Recently added executive and professional courses. All run in the classroom, live online or in-house.</p></div></div>
+      <section class="card">${courseLines(list, true)}</section><p><a class="btn" href="#training/finder">Search all ${CATALOGUE.length} courses</a></p>`;
+  }
+  function trCertificates() {
+    return `${crumbs(["", "Certificates"])}<div class="page-head"><div><span class="eyebrow gold">Certificates</span><h1>Certificates of completion</h1><p class="muted" style="max-width:70ch">Every participant who attends and completes an Afrimetrica Academy course receives a certificate of completion.</p></div></div>
+      <div class="split">
+        <section class="card"><h2>What the certificate shows</h2><ul class="ticks small"><li><div><span>The participant's name</span></div></li><li><div><span>The course title and its length</span></div></li><li><div><span>The dates and the venue, or "live online"</span></div></li><li><div><span>That the participant attended and completed the course</span></div></li></ul></section>
+        <section class="card"><h2>What it is not</h2><p class="muted">Our certificates confirm attendance and completion. They are not accredited academic or professional qualifications, and we don't claim endorsement by any professional body.</p><h3>Continuing professional development</h3><p class="muted">If your professional body asks you to log training hours, you can usually record an Afrimetrica course as CPD yourself. Check your body's own rules.</p></section>
+      </div>
+      <p><a class="btn primary" href="#training/finder">Find a course</a></p>`;
+  }
+  function trCourse(c) {
+    const f = S.catFilter, [g, gname] = groupsOfSubject(c.cat)[0] || ["", ""];
+    return `${crumbs(...(g ? [[`#training/area/${g}`, gname]] : []), [`#training/subject/${c.cat}`, catName(c.cat)], ["", c.title])}
       <div class="page-head"><div><span class="eyebrow gold">${esc(catName(c.cat))}</span><h1>${esc(c.title)}</h1><div class="row wrap" style="gap:6px"><span class="pill">${c.days} days</span><span class="pill">${esc(c.level)}</span>${CAT_FORMATS.map((x) => `<span class="pill">${esc(x)}</span>`).join("")}</div><p class="muted" style="max-width:70ch;margin-top:10px">${esc(c.summary)}</p></div></div>
       <div class="cat-detail">
         <div class="stack">
@@ -3444,6 +3553,20 @@ ${richSummary(st, rows)}`;
         </aside>
       </div>
       <div id="catEnquiry">${enquiryForm("training", { title: "Ask about this course", intro: "We'll reply with dates, fees and options for the venue you choose.", services: TRAINING_SERVICES, serviceLabel: "What are you interested in?", messageLabel: "Course, venue and group size", message: S.catEnquiry || `Course: ${c.title} (${c.days} days)\nPreferred venue: ${f.venue || "Live online"}\nNumber of participants: ` })}</div>`;
+  }
+  function viewTraining() {
+    if (S.courseOpen) { const c = courseById(S.courseOpen); if (c) return courseDetail(c); S.courseOpen = null; }
+    const [part, arg] = (S.tr || "").split("/");
+    if (part === "finder") return trFinder();
+    if (part === "new") return trNew();
+    if (part === "certificates") return trCertificates();
+    if (part === "venues") return trVenues();
+    if (part === "sectors") return trSectors();
+    if (part === "area" && groupOf(arg)) return trArea(arg);
+    if (part === "subject" && SUBJECTS[arg]) return trSubject(arg);
+    if (part === "venue" && countryOf(arg)) return trVenue(arg);
+    if (part === "course" && catCourse(arg)) return trCourse(catCourse(arg));
+    return trLanding();
   }
   function courseDetail(c) {
     const sess = (c.sessions || []).slice().sort((a, b) => (a.start || "9").localeCompare(b.start || "9"));
@@ -3659,11 +3782,12 @@ ${richSummary(st, rows)}`;
   // ---------- events ----------
   function setPath(o, path, v) { const k = path.split("."); let t = o; while (k.length > 1) t = t[k.shift()]; t[k[0]] = v; }
   function onField(t) {
-    if (t.id === "catQ" || t.id === "catGroup" || t.id === "catVenue" || t.id === "catFmt") {
-      const k = { catQ: "q", catGroup: "group", catVenue: "venue", catFmt: "format" }[t.id];
-      S.catFilter[k] = t.value; if (k === "group") S.catFilter.sub = "";
-      const box = $("#catList"); if (box) box.innerHTML = catList();
-      if (k === "group") document.querySelectorAll(".group .cat-link.on").forEach((x) => { x.classList.remove("on"); x.setAttribute("aria-pressed", "false"); });
+    const FINDER_FIELDS = { catQ: "q", catGroup: "group", catSub: "sub", catVenue: "venue", catFmt: "format", catDays: "days" };
+    if (FINDER_FIELDS[t.id]) {
+      const k = FINDER_FIELDS[t.id];
+      S.catFilter[k] = t.value; S.catPage = 1;
+      if (k === "group") { S.catFilter.sub = ""; const sel = $("#catSub"); if (sel) sel.innerHTML = subOptions(); }
+      const box = $("#catList"); if (box) box.innerHTML = finderResults();
       return;
     }
     if (S.view === "create" && S.draft) {
@@ -3750,6 +3874,7 @@ ${richSummary(st, rows)}`;
     if (e.target.id === "actionForm") { saveAction(); return; }
     if (e.target.id === "f2fForm") { sendF2FRequest(); return; }
     if (e.target.dataset && e.target.dataset.enq) { submitEnquiry(e.target.dataset.enq); return; }
+    if (e.target.dataset && e.target.dataset.actForm === "catQuick") { S.catFilter = { q: ($("#catQuickQ").value || "").trim(), group: "", sub: "", venue: "", format: "", days: "" }; S.catPage = 1; location.hash = "training/finder"; return; }
     if (e.target.id === "regForm") { submitRegistration(); return; }
     if (e.target.id === "courseForm") { saveCourse(); return; }
     if (e.target.id === "settingsForm") { saveSettings(); return; }
@@ -3841,10 +3966,9 @@ ${richSummary(st, rows)}`;
       case "closeGuide": S.guideOpen = null; render(); window.scrollTo(0, 0); break;
       case "openCourse": S.courseOpen = id; S.regFor = null; if (S.view !== "training") go("training"); else { render(); window.scrollTo(0, 0); } break;
       case "closeCourse": S.courseOpen = null; S.regFor = null; render(); window.scrollTo(0, 0); break;
-      case "catOpen": S.catOpen = id; S.catEnquiry = ""; S.courseOpen = null; if (S.view !== "training") go("training"); else { render(); window.scrollTo(0, 0); } break;
-      case "catClose": S.catOpen = null; S.catEnquiry = ""; render(); window.scrollTo(0, 0); break;
-      case "catPick": S.catFilter.sub = S.catFilter.sub === b.dataset.k ? "" : b.dataset.k; if (S.catFilter.sub) S.catFilter.group = ""; render(); $("#catListH").scrollIntoView({ behavior: "smooth", block: "start" }); break;
-      case "catVenue": S.catFilter.venue = b.dataset.v; render(); $("#catListH").scrollIntoView({ behavior: "smooth", block: "start" }); break;
+      case "catVenue": S.catFilter.venue = b.dataset.v; S.catPage = 1; location.hash = "training/finder"; break;
+      case "catPage": S.catPage = Math.max(1, +b.dataset.p || 1); $("#catList").innerHTML = finderResults(); $("#catList").scrollIntoView({ block: "start" }); break;
+      case "catReset": S.catFilter = { q: "", group: "", sub: "", venue: "", format: "", days: "" }; S.catPage = 1; render(); break;
       case "catRequest": case "catInhouse": {
         const c = catCourse(id), v = ($("#catReqVenue") || {}).value || "";
         S.catEnquiry = act === "catInhouse" ? `Course: ${c.title} (${c.days} days)\nIn-house for our organisation, at: \nNumber of participants: ` : `Course: ${c.title} (${c.days} days)\nPreferred venue: ${v || "Live online"}\nNumber of participants: `;
@@ -3880,6 +4004,14 @@ ${richSummary(st, rows)}`;
     if (b.dataset.act === "goSignin") { e.preventDefault(); const h = location.hash.replace("#", ""); if (h && h !== "signin") S.returnTo = h; S.authMode = "signin"; S.authError = ""; go("signin"); }
   });
   document.addEventListener("click", (e) => { const d = $(".acct-menu[open]"); if (d && !d.contains(e.target)) d.open = false; });
+  // Training menu: the Courses, Training venues and Training sectors buttons open a panel under the menu bar.
+  $("#subnav").addEventListener("click", (e) => {
+    const b = e.target.closest('[data-act="trMenu"]'); if (!b) return;
+    S.trMenu = S.trMenu === b.dataset.k ? null : b.dataset.k; renderTabs();
+    const p = $("#trPanel a"); if (p && S.trMenu) p.focus({ preventScroll: true });
+  });
+  document.addEventListener("click", (e) => { if (S.trMenu && !e.composedPath().some((n) => n.id === "subnav")) { S.trMenu = null; renderTabs(); } });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && S.trMenu) { const k = S.trMenu; S.trMenu = null; renderTabs(); const b = $(`[data-act="trMenu"][data-k="${k}"]`); if (b) b.focus(); } });
   window.addEventListener("hashchange", () => { route(); render(); window.scrollTo(0, 0); if (API) refreshServer().then(softRender).catch(() => {}); });
   const refreshSoon = () => { if (API && document.visibilityState === "visible") refreshServer().then(softRender).catch(() => {}); };
   document.addEventListener("visibilitychange", refreshSoon);
