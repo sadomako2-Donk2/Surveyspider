@@ -674,7 +674,7 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
     studies: [], responses: [], profile: null,
     view: "home", draft: ls.get("cohortly-draft"), taking: null, takeStart: 0, justDone: null,
     editProfile: false, resultsId: null, excludeFlagged: true, libQuery: "", libOpen: null,
-    catFilter: { q: "", group: "", sub: "", venue: "", format: "", days: "" }, catPage: 1, catEnquiry: "", tr: "", an: "", trMenu: null,
+    catFilter: { q: "", group: "", sub: "", venue: "", format: "", days: "" }, catPage: 1, catEnquiry: "", tr: "", an: "", co: "", trMenu: null,
     confirmDel: null, stale: false, notice: "",
     imp: { status: "idle" }, importNote: null,
     gen: { status: "idle" }, billing: "annual", anTab: "summary", aiCheck: null, ask: { q: "", a: "", busy: false },
@@ -939,7 +939,7 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
     const top = inSurveys ? "surveys" : S.view === "business" || S.view === "signin" ? "account" : S.view;
     $("#tabs").innerHTML = TOPNAV.map(([k, v]) => `<a href="#${k}"${top === k ? ' aria-current="page"' : ""}>${v}</a>`).join("");
     const sub = $("#subnav");
-    if (S.view === "training" || S.view === "analytics") { sub.hidden = false; sub.innerHTML = S.view === "training" ? trNav() : anNav(); }
+    if (S.view === "training" || S.view === "analytics" || S.view === "consultancy") { sub.hidden = false; sub.innerHTML = S.view === "training" ? trNav() : S.view === "analytics" ? anNav() : coNav(); }
     else {
     sub.hidden = !inSurveys;
     sub.innerHTML = inSurveys ? `<div class="subnav-inner"><span class="subnav-label">Afrimetrica Surveys</span><div class="subnav-links">${SURVEY_NAV.map(([k, v]) => `<a href="#${k}"${S.view === k ? ' aria-current="page"' : ""}>${v}${k === "panel" && avail ? `<span class="count">${avail}</span>` : ""}</a>`).join("")}</div></div>` : "";
@@ -967,6 +967,10 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
     const anPart = h.startsWith("analytics/") ? h.slice(10) : "";
     if (anPart) h = "analytics";
     S.an = h === "analytics" ? anPart : "";
+    // and Consultancy: #consultancy/<part>[/<item>]
+    const coPart = h.startsWith("consultancy/") ? h.slice(12) : "";
+    if (coPart) h = "consultancy";
+    S.co = h === "consultancy" ? coPart : "";
     if ((S.tr || "").startsWith("course/") && S.tr !== trPart) S.catEnquiry = "";
     S.tr = h === "training" ? trPart : ""; S.trMenu = null;
     if (h === "library") h = "resources";
@@ -3625,6 +3629,8 @@ ${richSummary(st, rows)}`;
     if (ok) { S.regFor = null; render(); }
   }
   function serviceCards(list) { return `<div class="units">${list.map(([t, d]) => `<article class="card unit"><h3>${esc(t)}</h3><p class="muted">${esc(d)}</p></article>`).join("")}</div>`; }
+  // Lower-cases the first letter for use mid-sentence, but leaves abbreviations such as "NGOs" or "AI" alone.
+  const lcFirst = (t) => (/^[A-Z]{2}/.test(t) ? t : t.charAt(0).toLowerCase() + t.slice(1));
   // ---- Analytics section: its own menu and pages (#analytics/<part>[/<id>]) ----
   // [id, name, summary, questions it answers, what you receive, methods, related course ids]
   const AN_SERVICES = [
@@ -3710,13 +3716,13 @@ ${richSummary(st, rows)}`;
         <section class="card"><h2>What you receive</h2><ul class="ticks small">${x.deliverables.map((q) => `<li><div><span>${esc(q)}</span></div></li>`).join("")}</ul><h3>How it works</h3>${anSteps}</section>
       </div>
       ${courses.length ? `<section class="card"><h2>Build these skills in your own team</h2><p class="muted">Related Afrimetrica Academy courses, in the classroom, live online or in-house.</p>${courseLines(courses)}</section>` : ""}
-      <div id="anEnquiry">${anForm(`Ask about ${x.name.toLowerCase()}`, `Service: ${x.name}\nOur data: \nOur questions: `)}</div>`;
+      <div id="anEnquiry">${anForm(`Ask about ${lcFirst(x.name)}`, `Service: ${x.name}\nOur data: \nOur questions: `)}</div>`;
   }
   function anSectorPage(x) {
-    return `${anCrumbs(["", x.name])}<div class="page-head"><div><span class="eyebrow gold">Sector</span><h1>Data analysis for ${esc(x.name.charAt(0).toLowerCase() + x.name.slice(1))}</h1><p class="muted" style="max-width:70ch">${esc(x.summary)}</p></div></div>
+    return `${anCrumbs(["", x.name])}<div class="page-head"><div><span class="eyebrow gold">Sector</span><h1>Data analysis for ${esc(lcFirst(x.name))}</h1><p class="muted" style="max-width:70ch">${esc(x.summary)}</p></div></div>
       <section class="card"><h2>Questions we help answer</h2><ul class="ticks small">${x.questions.map((q) => `<li><div><span>${esc(q)}</span></div></li>`).join("")}</ul></section>
       <section class="stack"><h2>Services that fit</h2>${anServiceCards(x.services)}</section>
-      <div>${anForm(`Ask about analysis for ${x.name.toLowerCase()}`, `Sector: ${x.name}\nOur data: \nOur questions: `)}</div>`;
+      <div>${anForm(`Ask about analysis for ${lcFirst(x.name)}`, `Sector: ${x.name}\nOur data: \nOur questions: `)}</div>`;
   }
   function anTools() {
     return `${anCrumbs(["", "Tools we use"])}<div class="page-head"><div><span class="eyebrow gold">Tools</span><h1>Tools we use</h1><p class="muted" style="max-width:70ch">We work in the software that suits your data and your team, and hand over files your staff can open, check and reuse.</p></div></div>
@@ -3753,15 +3759,118 @@ ${richSummary(st, rows)}`;
     if (part === "request") return anRequest();
     return anLanding();
   }
-  function viewConsult() {
-    return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Consulting</span><h1>Research and evaluation consultancy</h1><p class="muted" style="max-width:66ch">From a single questionnaire review to a full multi-site study, we design, run and report research that stands up to scrutiny.</p></div></div>
+  // ---- Consultancy section: its own menu and pages (#consultancy/<part>[/<id>]) ----
+  // [id, name, summary, when it helps, what you receive, related analytics service ids, related course ids]
+  const CO_SERVICES = [
+    ["design", "Research design and methodology", "Study designs, sampling plans, protocols and data collection tools tailored to your questions and budget.",
+      ["You have a question but not yet a study design", "A funder or ethics committee needs a clear protocol", "You want a second opinion on methods or sample size"],
+      ["A research protocol or methodology note", "Sampling plan and sample size calculations", "Questionnaires, interview guides and consent forms", "An analysis plan"], ["statistics", "survey"], ["rd-applied", "fd-sampling", "sv-questionnaire"]],
+    ["mel", "Monitoring, evaluation and learning systems", "Theories of change, results frameworks, indicators and the systems to track them.",
+      ["A new programme needs an M&E framework", "Indicators exist but data are unreliable or late", "Your team wants to use data to learn and adapt"],
+      ["Theory of change and results framework", "Indicator reference sheets with baselines and targets", "Data collection tools and reporting templates", "An M&E plan and dashboard design"], ["mel", "dashboards"], ["me-fundamentals", "me-results", "me-dqa"]],
+    ["evaluations", "Baseline, mid-term and final evaluations", "Independent evaluations that show what a programme achieved, why, and what to do next.",
+      ["A donor requires an independent evaluation", "You need a baseline before a programme starts", "You want to know what worked, for whom, and why"],
+      ["Inception report and evaluation matrix", "Fieldwork, analysis and findings", "Evaluation report with recommendations", "A presentation of findings to your team"], ["mel", "statistics", "qualitative"], ["rd-experiments", "rd-mixed", "me-fundamentals"]],
+    ["fieldwork", "Surveys and fieldwork", "Online, telephone and face-to-face data collection with trained field teams and quality checks.",
+      ["You need household, customer or staff surveys", "You need interviews or focus groups in several locations", "You want high-quality data collected on tablets"],
+      ["Trained enumerators and supervisors", "Digital questionnaires with checks built in", "Daily quality monitoring during fieldwork", "Clean, documented datasets"], ["survey", "data"], ["fd-management", "fd-capi", "ql-fgd"]],
+    ["feasibility", "Feasibility, market and baseline studies", "Evidence to decide whether, where and how to invest or intervene.",
+      ["You are planning a new product, service or programme", "You need to understand demand, costs and risks", "Investors or funders ask for a feasibility study"],
+      ["Market and needs assessment", "Demand and cost estimates", "Risk assessment and options", "A feasibility report with recommendations"], ["market", "statistics"], ["mk-research", "mk-intelligence", "ls-strategy"]],
+    ["policy", "Policy research and analysis", "Rigorous, accessible evidence for policy makers and public institutions.",
+      ["A ministry or agency needs evidence for a policy decision", "You need a review of what has worked elsewhere", "You want to test policy options before choosing"],
+      ["Evidence and literature reviews", "Policy analysis of options and trade-offs", "Policy briefs for decision-makers", "Validation workshops with stakeholders"], ["statistics", "survey"], ["sx-public", "wr-proposal"]],
+    ["strategy", "Strategy and organisational development", "Strategic plans, capacity assessments and organisational reviews grounded in evidence.",
+      ["You are preparing a new strategic plan", "You want to assess and strengthen your organisation's capacity", "A board or funder asks for an organisational review"],
+      ["Situation analysis and stakeholder consultations", "A strategic plan with results framework", "Capacity assessment and development plan", "Facilitated leadership workshops"], ["dashboards", "mel"], ["ls-strategy", "ls-governance", "ls-executive"]],
+    ["reports", "Commissioned studies, writing and review", "End-to-end studies and expert support with proposals, reports and questionnaires.",
+      ["You need a study delivered from start to finish", "You need help writing a proposal or a report", "You want an expert review of a questionnaire or report"],
+      ["Inception report to final report", "Proposal and report writing support", "Questionnaire and report reviews", "Presentations and dissemination materials"], ["statistics", "qualitative"], ["wr-proposal", "wr-publishing", "sv-questionnaire"]],
+  ].map(([id, name, summary, when, deliverables, analytics, courses]) => ({ id, name, summary, when, deliverables, analytics, courses }));
+  const CO_SECTORS = [
+    ["government", "Government and the public sector", "Evidence and advice for ministries, agencies and local government.", ["Policy research and reviews", "Programme and service evaluations", "Strategic and sector plans", "Household and service delivery surveys"], ["policy", "evaluations", "strategy", "fieldwork"]],
+    ["development", "NGOs and development partners", "Independent research and evaluation for donor-funded programmes.", ["Baseline, mid-term and final evaluations", "M&E frameworks and systems", "Needs assessments", "Learning reviews"], ["evaluations", "mel", "fieldwork", "reports"]],
+    ["health", "Health", "Research and evaluation for health programmes and services.", ["Health facility and household surveys", "Programme evaluations", "Patient experience studies", "Health information system reviews"], ["fieldwork", "evaluations", "mel", "design"]],
+    ["education", "Education", "Evidence on access, learning and school performance.", ["Learning assessments", "School and teacher surveys", "Programme evaluations", "Education sector reviews"], ["fieldwork", "evaluations", "design", "policy"]],
+    ["agriculture", "Agriculture and food security", "Studies that support farmers, markets and food security programmes.", ["Value chain and market studies", "Food security assessments", "Agricultural programme evaluations", "Farmer surveys"], ["feasibility", "fieldwork", "evaluations", "mel"]],
+    ["finance", "Banking and financial services", "Research for financial inclusion, products and customers.", ["Customer and market research", "Financial inclusion studies", "Product feasibility studies", "Customer satisfaction tracking"], ["feasibility", "fieldwork", "design", "strategy"]],
+    ["private", "Private sector and investors", "Evidence to grow, invest and manage risk.", ["Market entry and feasibility studies", "Customer research", "Impact measurement for investors", "Strategic planning"], ["feasibility", "strategy", "fieldwork", "mel"]],
+    ["research", "Universities and research institutes", "Methods support and fieldwork for academic research.", ["Study design and methods review", "Fieldwork and data collection", "Data management and analysis support", "Proposal and publication support"], ["design", "fieldwork", "reports", "mel"]],
+  ].map(([id, name, summary, assignments, services]) => ({ id, name, summary, assignments, services }));
+  const coService = (id) => CO_SERVICES.find((x) => x.id === id);
+  const coSector = (id) => CO_SECTORS.find((x) => x.id === id);
+  function coNav() {
+    const t = S.co || "", m = S.trMenu;
+    const cur = (k) => (t === k || t.startsWith(k + "/") ? ' aria-current="page"' : "");
+    const menu = (k, label, active) => `<button type="button" class="tr-menu-btn" data-act="trMenu" data-k="${k}" aria-expanded="${m === k}" aria-controls="trPanel"${active ? ' aria-current="page"' : ""}>${label} <span aria-hidden="true">▾</span></button>`;
+    const links = `<a href="#consultancy"${t === "" ? ' aria-current="page"' : ""}>Overview</a>${menu("co-services", "Services", t.startsWith("service/"))}${menu("co-sectors", "Sectors", t.startsWith("sector/"))}<a href="#consultancy/approach"${cur("approach")}>Our approach</a><a href="#paper-survey">Fieldwork quote</a><a href="#consultancy/work-with-us"${cur("work-with-us")}>Work with us</a><a href="#consultancy/request"${cur("request")}><span class="new-badge cta-badge">Request a proposal</span></a>`;
+    let panel = "";
+    if (m === "co-services") panel = `<div class="tr-panel-grid">${CO_SERVICES.map((x) => `<a href="#consultancy/service/${x.id}"><b>${esc(x.name)}</b><span>${esc(x.summary)}</span></a>`).join("")}</div>`;
+    if (m === "co-sectors") panel = `<div class="tr-panel-grid">${CO_SECTORS.map((x) => `<a href="#consultancy/sector/${x.id}"><b>${esc(x.name)}</b><span>${esc(x.summary)}</span></a>`).join("")}</div>`;
+    return `<div class="subnav-inner"><span class="subnav-label">Afrimetrica Consulting</span><div class="subnav-links tr-links">${links}</div></div>${panel ? `<div class="tr-panel" id="trPanel" role="region" aria-label="${m === "co-services" ? "Consultancy services" : "Sectors"}"><div class="tr-panel-inner">${panel}</div></div>` : ""}`;
+  }
+  const coCrumbs = (...items) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#consultancy">Consultancy</a>${items.map(([href, label]) => (href ? ` › <a href="${href}">${esc(label)}</a>` : ` › <span>${esc(label)}</span>`)).join("")}</nav>`;
+  const coServiceCards = (ids) => `<div class="area-grid">${(ids || CO_SERVICES.map((x) => x.id)).map(coService).map((x) => `<a class="card area-card" href="#consultancy/service/${x.id}"><b>${esc(x.name)}</b><span class="hint">${esc(x.summary)}</span></a>`).join("")}</div>`;
+  const coForm = (title, message) => enquiryForm("consultancy", { title, intro: "Tell us about your project. We'll reply within two working days to arrange a call.", services: CONSULT_SERVICES, budget: true, messageLabel: "About your project", placeholder: "Objectives, target population, locations, deadlines and any terms of reference.", message });
+  const coPhases = `<ol class="steps"><li><b>Inception.</b> We agree the questions, scope, methods, timeline and budget, usually in an inception report.</li><li><b>Design.</b> Sampling, tools, ethics approvals and consent procedures.</li><li><b>Data collection.</b> Trained teams, digital tools and daily quality checks.</li><li><b>Analysis.</b> Rigorous analysis, checked before anything is reported.</li><li><b>Reporting and learning.</b> Clear reports, briefs and a presentation, with recommendations you can act on.</li></ol>`;
+  function coLanding() {
+    return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Consulting</span><h1>Research and evaluation consultancy</h1><p class="muted" style="max-width:70ch">From a single questionnaire review to a full multi-site study or a new strategic plan, we design, run and report work that stands up to scrutiny, for organisations, governments and NGOs.</p></div></div>
       ${slideshow("consultancy")}
-      ${serviceCards([["Research design and methodology", "Study designs, sampling plans, protocols and data collection tools tailored to your questions and budget."], ["Monitoring and evaluation", "Theories of change, results frameworks, baselines, mid-term and final evaluations."], ["Surveys and fieldwork", "Online, telephone and face-to-face data collection with trained field teams and quality checks."], ["Commissioned studies and reports", "End-to-end studies, from inception report to final report and presentation."]])}
-      <div class="split">
-        ${enquiryForm("consultancy", { title: "Discuss a project", intro: "Tell us about your project. We'll reply within two working days to arrange a call.", services: CONSULT_SERVICES, budget: true, messageLabel: "About your project", placeholder: "Objectives, target population, locations, deadlines and any terms of reference." })}
+      <section class="stack" aria-labelledby="coSvcH"><div class="section-head"><span class="eyebrow gold">Services</span><h2 id="coSvcH" class="h2xl">How we can help</h2></div>${coServiceCards()}</section>
+      <section class="stack" aria-labelledby="coSecH"><div class="section-head"><span class="eyebrow gold">Sectors</span><h2 id="coSecH" class="h2xl">Who we work with</h2></div><nav class="sub-jump" aria-label="Sectors">${CO_SECTORS.map((x) => `<a href="#consultancy/sector/${x.id}">${esc(x.name)}</a>`).join("")}</nav></section>
+      <div class="split">${coForm("Discuss a project", "")}
         <section class="card"><h2>Need face-to-face interviews?</h2><p class="muted">Upload your questionnaire and get an itemised fieldwork quote in US dollars straight away.</p><a class="btn gold" href="#paper-survey" style="align-self:flex-start">Get a fieldwork quote</a>
-          <h3>Who we work with</h3><ul class="ticks small"><li><div><span>Universities and research institutes</span></div></li><li><div><span>Government agencies and public bodies</span></div></li><li><div><span>NGOs and development partners</span></div></li><li><div><span>Businesses and market research buyers</span></div></li></ul></section>
+          <h3>How we work</h3>${coPhases}<p><a href="#consultancy/approach">More about our approach</a></p></section>
       </div>`;
+  }
+  function coServicePage(x) {
+    const courses = x.courses.map(catCourse).filter(Boolean), an = x.analytics.map(anService).filter(Boolean);
+    return `${coCrumbs(["", x.name])}<div class="page-head"><div><span class="eyebrow gold">Consultancy service</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.summary)}</p></div></div>
+      <div class="split">
+        <section class="card"><h2>When this helps</h2><ul class="ticks small">${x.when.map((q) => `<li><div><span>${esc(q)}</span></div></li>`).join("")}</ul></section>
+        <section class="card"><h2>What you receive</h2><ul class="ticks small">${x.deliverables.map((q) => `<li><div><span>${esc(q)}</span></div></li>`).join("")}</ul></section>
+      </div>
+      <section class="card"><h2>How we work</h2>${coPhases}</section>
+      ${x.id === "fieldwork" ? `<section class="card"><h2>Price face-to-face fieldwork now</h2><p class="muted">Upload your questionnaire and get an itemised quote straight away.</p><a class="btn gold" href="#paper-survey" style="align-self:flex-start">Get a fieldwork quote</a></section>` : ""}
+      <div class="split">
+        ${an.length ? `<section class="card"><h2>Related analytics</h2><ul class="ticks small">${an.map((s) => `<li><div><a href="#analytics/service/${s.id}">${esc(s.name)}</a></div></li>`).join("")}</ul></section>` : ""}
+        ${courses.length ? `<section class="card"><h2>Build these skills in your team</h2>${courseLines(courses)}</section>` : ""}
+      </div>
+      <div>${coForm(`Discuss ${lcFirst(x.name)}`, `Service: ${x.name}\nOur organisation and project: \nTimeline and location: `)}</div>`;
+  }
+  function coSectorPage(x) {
+    return `${coCrumbs(["", x.name])}<div class="page-head"><div><span class="eyebrow gold">Sector</span><h1>Consultancy for ${esc(lcFirst(x.name))}</h1><p class="muted" style="max-width:70ch">${esc(x.summary)}</p></div></div>
+      <section class="card"><h2>Typical assignments</h2><ul class="ticks small">${x.assignments.map((q) => `<li><div><span>${esc(q)}</span></div></li>`).join("")}</ul></section>
+      <section class="stack"><h2>Services that fit</h2>${coServiceCards(x.services)}</section>
+      <div>${coForm("Discuss your project", `Sector: ${x.name}\nOur organisation and project: \nTimeline and location: `)}</div>`;
+  }
+  function coApproach() {
+    return `${coCrumbs(["", "Our approach"])}<div class="page-head"><div><span class="eyebrow gold">Our approach</span><h1>Independent, rigorous and practical</h1><p class="muted" style="max-width:70ch">Every assignment follows the same disciplined path, adapted to your questions, budget and context.</p></div></div>
+      <section class="card"><h2>How an assignment runs</h2>${coPhases}</section>
+      <div class="split">
+        <section class="card"><h2>Quality</h2><ul class="ticks small"><li><div><b>Fit-for-purpose methods</b><span>The simplest design that can answer your question credibly.</span></div></li><li><div><b>Checked results</b><span>Analysis is reviewed before anything is reported.</span></div></li><li><div><b>Honest findings</b><span>We report what the evidence shows, including what didn't work.</span></div></li></ul></section>
+        <section class="card"><h2>Ethics and data protection</h2><ul class="ticks small"><li><div><b>Informed consent</b><span>Participants know what they are agreeing to and can stop at any time.</span></div></li><li><div><b>Ethics approval</b><span>We seek approval from the relevant committees where a study needs it.</span></div></li><li><div><b>Safeguarding</b><span>Extra care with children and vulnerable groups.</span></div></li><li><div><b>Data protection</b><span>Personal data handled in line with the law, including Ghana's Data Protection Act, 2012.</span></div></li></ul></section>
+      </div>
+      <section class="card"><h2>Our team</h2><p class="muted">A core team of researchers and analysts, supported by an associate network of specialists and field staff across English-speaking Africa. Profiles will be published soon.</p><a class="btn" href="#consultancy/work-with-us" style="align-self:flex-start">Join our associate network</a></section>`;
+  }
+  function coWorkWithUs() {
+    return `${coCrumbs(["", "Work with us"])}<div class="page-head"><div><span class="eyebrow gold">Work with us</span><h1>Join our associate network</h1><p class="muted" style="max-width:70ch">We work with independent consultants, researchers, trainers, data analysts, enumerators and field supervisors across English-speaking Africa. Tell us about your skills and where you work.</p></div></div>
+      <div class="split">${enquiryForm("contact", { title: "Tell us about yourself", intro: "Share your expertise, languages and locations. We'll keep your details on file and contact you when a suitable assignment comes up.", messageLabel: "Your skills, experience and locations", placeholder: "e.g. M&E consultant, 8 years' experience, based in Kampala; English and Luganda; available for evaluations in East Africa.", message: "I'd like to join the associate network.\nRole (consultant, trainer, analyst, enumerator, supervisor): \nExperience: \nLocation and languages: " })}
+        <section class="card"><h2>Who we look for</h2><ul class="ticks small"><li><div><span>Researchers and evaluators</span></div></li><li><div><span>Trainers for Afrimetrica Academy courses</span></div></li><li><div><span>Data analysts and statisticians</span></div></li><li><div><span>Enumerators, supervisors and field coordinators</span></div></li><li><div><span>Sector specialists, such as health, education, agriculture and finance</span></div></li></ul><p class="hint">Please don't send CVs or ID documents yet. We'll ask for them when there's a suitable assignment.</p></section>
+      </div>`;
+  }
+  function coRequest() {
+    return `${coCrumbs(["", "Request a proposal"])}<div class="page-head"><div><span class="eyebrow gold">Request a proposal</span><h1>Tell us about your project</h1><p class="muted" style="max-width:70ch">Share your objectives, locations and timeline, and any terms of reference. We'll reply within two working days to arrange a call, then send a proposal and budget.</p></div></div>
+      <div class="split">${coForm("Request a proposal", "")}<section class="card"><h2>What happens next</h2>${coPhases}</section></div>`;
+  }
+  function viewConsult() {
+    const [part, arg] = (S.co || "").split("/");
+    if (part === "service" && coService(arg)) return coServicePage(coService(arg));
+    if (part === "sector" && coSector(arg)) return coSectorPage(coSector(arg));
+    if (part === "approach") return coApproach();
+    if (part === "work-with-us") return coWorkWithUs();
+    if (part === "request") return coRequest();
+    return coLanding();
   }
   function viewResources() {
     if (S.guideOpen) { const g = GUIDES.find((x) => x.id === S.guideOpen); if (g) return guideView(g); S.guideOpen = null; }
