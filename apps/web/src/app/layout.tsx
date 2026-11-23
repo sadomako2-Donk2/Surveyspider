@@ -26,6 +26,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <SiteHeader />
         {children}
         <footer className="wrap foot">
+          {/* eslint-disable-next-line @next/next/no-img-element -- the supplied logo, already sized */}
+          <img
+            className="foot-logo"
+            src="/brand/logo-full.webp"
+            width={216}
+            height={72}
+            alt="Afrimetrica: Data, Research, Executive Training"
+          />
           <b>{SITE.name}</b> · Data, Research and Executive Training
           <br />
           <span className="hint">

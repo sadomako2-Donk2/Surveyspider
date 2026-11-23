@@ -38,7 +38,7 @@ export function brandEmail({ name, paragraphs, button, link, footer }: Brand) {
   const html = `<!doctype html><html><body style="margin:0;background:#f5f6f9;font-family:Arial,Helvetica,sans-serif;color:#0e1d3a">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f6f9;padding:32px 12px"><tr><td align="center">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#ffffff;border:1px solid #dde2ec;border-radius:12px">
-<tr><td style="padding:28px 32px 0;font-size:22px;font-weight:800"><span style="color:#0e1d3a;letter-spacing:1px">AFRI</span><span style="color:#b88a2c;letter-spacing:1px">METRICA</span></td></tr>
+<tr><td style="padding:28px 32px 0;font-size:22px;font-weight:800"><span style="color:#0e1d3a">Afrimetrica</span></td></tr>
 <tr><td style="padding:20px 32px 6px;font-size:15px;line-height:1.6">
 <p style="margin:0 0 14px">${escHtml(hi)}</p>
 ${paragraphs.map((x) => `<p style="margin:0 0 14px">${escHtml(x)}</p>`).join("")}</td></tr>
