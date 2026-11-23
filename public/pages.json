@@ -1,0 +1,1694 @@
+[
+ {
+  "path": "/",
+  "title": "Afrimetrica — Data, Research and Executive Training",
+  "description": "Afrimetrica helps organisations, governments and NGOs make better decisions and deliver results. We train leaders and teams in data, research and management, collect and analyse data, and advise on strategy, research and evaluation, across Africa.",
+  "h1": "Data, research and executive training."
+ },
+ {
+  "path": "/about",
+  "title": "Data, research and executive training for better decisions | Afrimetrica",
+  "description": "Afrimetrica trains leaders and teams, collects and analyses data, and advises organisations, governments and NGOs across Africa. Our courses range from research methods and statistics to strategy, leadership and governance. Every course is practical, grounded in evidence and built around the decisio",
+  "h1": "Data, research and executive training for better decisions"
+ },
+ {
+  "path": "/about/certificates",
+  "title": "Certificates of completion | Afrimetrica",
+  "description": "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.",
+  "h1": "Certificates of completion"
+ },
+ {
+  "path": "/about/mission",
+  "title": "Why we exist | Afrimetrica",
+  "description": "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.",
+  "h1": "Why we exist"
+ },
+ {
+  "path": "/about/organisation",
+  "title": "One organisation, five units | Afrimetrica",
+  "description": "Each part of Afrimetrica focuses on one way of helping organisations make better decisions, and they work together on larger assignments.",
+  "h1": "One organisation, five units"
+ },
+ {
+  "path": "/about/team",
+  "title": "The people behind Afrimetrica | Afrimetrica",
+  "description": "A core team of trainers, researchers, analysts and consultants, supported by an associate network of specialists and field staff across English-speaking Africa.",
+  "h1": "The people behind Afrimetrica"
+ },
+ {
+  "path": "/about/vision",
+  "title": "The future we are working towards | Afrimetrica",
+  "description": "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.",
+  "h1": "The future we are working towards"
+ },
+ {
+  "path": "/analytics",
+  "title": "Data analysis you can rely on | Afrimetrica",
+  "description": "Send us your data and your questions. Our analysts clean it, analyse it with the right methods and give organisations, governments and NGOs results they can explain, defend and act on.",
+  "h1": "Data analysis you can rely on"
+ },
+ {
+  "path": "/analytics/data-security",
+  "title": "How we protect your data | Afrimetrica",
+  "description": "Your data stays yours. We handle it carefully and in line with data protection law, including Ghana's Data Protection Act, 2012 (Act 843).",
+  "h1": "How we protect your data"
+ },
+ {
+  "path": "/analytics/how-we-work",
+  "title": "From your questions to clear answers | Afrimetrica",
+  "description": "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.",
+  "h1": "From your questions to clear answers"
+ },
+ {
+  "path": "/analytics/request",
+  "title": "Tell us about your data | Afrimetrica",
+  "description": "Describe your data and what you need to know. We'll reply with an approach, a timeline and a quote. Please don't attach or paste the data itself yet.",
+  "h1": "Tell us about your data"
+ },
+ {
+  "path": "/analytics/sector/agriculture",
+  "title": "Data analysis for agriculture and food security | Afrimetrica",
+  "description": "Evidence on production, markets and household welfare.",
+  "h1": "Data analysis for agriculture and food security"
+ },
+ {
+  "path": "/analytics/sector/consumer",
+  "title": "Data analysis for retail, consumer goods and telecoms | Afrimetrica",
+  "description": "Customer and market insight to grow sales and loyalty.",
+  "h1": "Data analysis for retail, consumer goods and telecoms"
+ },
+ {
+  "path": "/analytics/sector/education",
+  "title": "Data analysis for education | Afrimetrica",
+  "description": "Evidence on learning, access and school performance.",
+  "h1": "Data analysis for education"
+ },
+ {
+  "path": "/analytics/sector/energy",
+  "title": "Data analysis for energy and utilities | Afrimetrica",
+  "description": "Data for planning, operations and customers.",
+  "h1": "Data analysis for energy and utilities"
+ },
+ {
+  "path": "/analytics/sector/finance",
+  "title": "Data analysis for banking and financial services | Afrimetrica",
+  "description": "Analytics for customers, risk and growth.",
+  "h1": "Data analysis for banking and financial services"
+ },
+ {
+  "path": "/analytics/sector/government",
+  "title": "Data analysis for government and the public sector | Afrimetrica",
+  "description": "Evidence for policy, planning and public services.",
+  "h1": "Data analysis for government and the public sector"
+ },
+ {
+  "path": "/analytics/sector/health",
+  "title": "Data analysis for health | Afrimetrica",
+  "description": "Data for better health services and programmes.",
+  "h1": "Data analysis for health"
+ },
+ {
+  "path": "/analytics/sector/ngos",
+  "title": "Data analysis for NGOs and development partners | Afrimetrica",
+  "description": "Analysis that shows results to funders and helps programmes improve.",
+  "h1": "Data analysis for NGOs and development partners"
+ },
+ {
+  "path": "/analytics/service/dashboards",
+  "title": "Dashboards and business intelligence | Afrimetrica",
+  "description": "Interactive dashboards that keep leaders and teams up to date with the numbers that matter.",
+  "h1": "Dashboards and business intelligence"
+ },
+ {
+  "path": "/analytics/service/data",
+  "title": "Data management and cleaning | Afrimetrica",
+  "description": "Make messy data analysis-ready: entry, cleaning, coding, merging and documentation.",
+  "h1": "Data management and cleaning"
+ },
+ {
+  "path": "/analytics/service/market",
+  "title": "Market and customer analytics | Afrimetrica",
+  "description": "Understand customers and markets: satisfaction, segments, demand and competitors.",
+  "h1": "Market and customer analytics"
+ },
+ {
+  "path": "/analytics/service/mel",
+  "title": "Monitoring, evaluation and impact analysis | Afrimetrica",
+  "description": "Measure what programmes achieve: indicator tracking, evaluation analysis and estimates of impact.",
+  "h1": "Monitoring, evaluation and impact analysis"
+ },
+ {
+  "path": "/analytics/service/predictive",
+  "title": "Predictive analytics, machine learning and AI | Afrimetrica",
+  "description": "Use your data to forecast, classify and spot risk early, with models you can understand and check.",
+  "h1": "Predictive analytics, machine learning and AI"
+ },
+ {
+  "path": "/analytics/service/qualitative",
+  "title": "Qualitative and text analysis | Afrimetrica",
+  "description": "Make sense of interviews, focus groups and written answers, systematically and transparently.",
+  "h1": "Qualitative and text analysis"
+ },
+ {
+  "path": "/analytics/service/statistics",
+  "title": "Statistical analysis and modelling | Afrimetrica",
+  "description": "Rigorous analysis that answers your questions with the right tests and models, written up so non-specialists can act on it.",
+  "h1": "Statistical analysis and modelling"
+ },
+ {
+  "path": "/analytics/service/survey",
+  "title": "Survey data analysis and weighting | Afrimetrica",
+  "description": "Turn survey responses into reliable estimates for your population, with the right weights and margins of error.",
+  "h1": "Survey data analysis and weighting"
+ },
+ {
+  "path": "/analytics/tools",
+  "title": "Tools we use | Afrimetrica",
+  "description": "We work in the software that suits your data and your team, and hand over files your staff can open, check and reuse.",
+  "h1": "Tools we use"
+ },
+ {
+  "path": "/consultancy",
+  "title": "Research and evaluation consultancy | Afrimetrica",
+  "description": "From a single questionnaire review to a full multi-site study or a new strategic plan, we design, run and report work that stands up to scrutiny, for organisations, governments and NGOs.",
+  "h1": "Research and evaluation consultancy"
+ },
+ {
+  "path": "/consultancy/approach",
+  "title": "Independent, rigorous and practical | Afrimetrica",
+  "description": "Every assignment follows the same disciplined path, adapted to your questions, budget and context.",
+  "h1": "Independent, rigorous and practical"
+ },
+ {
+  "path": "/consultancy/request",
+  "title": "Tell us about your project | Afrimetrica",
+  "description": "Share your objectives, locations and timeline, and any terms of reference. We'll reply within two working days to arrange a call, then send a proposal and budget.",
+  "h1": "Tell us about your project"
+ },
+ {
+  "path": "/consultancy/sector/agriculture",
+  "title": "Consultancy for agriculture and food security | Afrimetrica",
+  "description": "Studies that support farmers, markets and food security programmes.",
+  "h1": "Consultancy for agriculture and food security"
+ },
+ {
+  "path": "/consultancy/sector/development",
+  "title": "Consultancy for NGOs and development partners | Afrimetrica",
+  "description": "Independent research and evaluation for donor-funded programmes.",
+  "h1": "Consultancy for NGOs and development partners"
+ },
+ {
+  "path": "/consultancy/sector/education",
+  "title": "Consultancy for education | Afrimetrica",
+  "description": "Evidence on access, learning and school performance.",
+  "h1": "Consultancy for education"
+ },
+ {
+  "path": "/consultancy/sector/finance",
+  "title": "Consultancy for banking and financial services | Afrimetrica",
+  "description": "Research for financial inclusion, products and customers.",
+  "h1": "Consultancy for banking and financial services"
+ },
+ {
+  "path": "/consultancy/sector/government",
+  "title": "Consultancy for government and the public sector | Afrimetrica",
+  "description": "Evidence and advice for ministries, agencies and local government.",
+  "h1": "Consultancy for government and the public sector"
+ },
+ {
+  "path": "/consultancy/sector/health",
+  "title": "Consultancy for health | Afrimetrica",
+  "description": "Research and evaluation for health programmes and services.",
+  "h1": "Consultancy for health"
+ },
+ {
+  "path": "/consultancy/sector/private",
+  "title": "Consultancy for private sector and investors | Afrimetrica",
+  "description": "Evidence to grow, invest and manage risk.",
+  "h1": "Consultancy for private sector and investors"
+ },
+ {
+  "path": "/consultancy/sector/research",
+  "title": "Consultancy for universities and research institutes | Afrimetrica",
+  "description": "Methods support and fieldwork for academic research.",
+  "h1": "Consultancy for universities and research institutes"
+ },
+ {
+  "path": "/consultancy/service/design",
+  "title": "Research design and methodology | Afrimetrica",
+  "description": "Study designs, sampling plans, protocols and data collection tools tailored to your questions and budget.",
+  "h1": "Research design and methodology"
+ },
+ {
+  "path": "/consultancy/service/evaluations",
+  "title": "Baseline, mid-term and final evaluations | Afrimetrica",
+  "description": "Independent evaluations that show what a programme achieved, why, and what to do next.",
+  "h1": "Baseline, mid-term and final evaluations"
+ },
+ {
+  "path": "/consultancy/service/feasibility",
+  "title": "Feasibility, market and baseline studies | Afrimetrica",
+  "description": "Evidence to decide whether, where and how to invest or intervene.",
+  "h1": "Feasibility, market and baseline studies"
+ },
+ {
+  "path": "/consultancy/service/fieldwork",
+  "title": "Surveys and fieldwork | Afrimetrica",
+  "description": "Online, telephone and face-to-face data collection with trained field teams and quality checks.",
+  "h1": "Surveys and fieldwork"
+ },
+ {
+  "path": "/consultancy/service/mel",
+  "title": "Monitoring, evaluation and learning systems | Afrimetrica",
+  "description": "Theories of change, results frameworks, indicators and the systems to track them.",
+  "h1": "Monitoring, evaluation and learning systems"
+ },
+ {
+  "path": "/consultancy/service/policy",
+  "title": "Policy research and analysis | Afrimetrica",
+  "description": "Rigorous, accessible evidence for policy makers and public institutions.",
+  "h1": "Policy research and analysis"
+ },
+ {
+  "path": "/consultancy/service/reports",
+  "title": "Commissioned studies, writing and review | Afrimetrica",
+  "description": "End-to-end studies and expert support with proposals, reports and questionnaires.",
+  "h1": "Commissioned studies, writing and review"
+ },
+ {
+  "path": "/consultancy/service/strategy",
+  "title": "Strategy and organisational development | Afrimetrica",
+  "description": "Strategic plans, capacity assessments and organisational reviews grounded in evidence.",
+  "h1": "Strategy and organisational development"
+ },
+ {
+  "path": "/consultancy/work-with-us",
+  "title": "Join our associate network | Afrimetrica",
+  "description": "We work with independent consultants, researchers, trainers, data analysts, enumerators and field supervisors across English-speaking Africa. Tell us about your skills and where you work.",
+  "h1": "Join our associate network"
+ },
+ {
+  "path": "/contact",
+  "title": "Get in touch | Afrimetrica",
+  "description": "Questions about courses, surveys, analysis or a project? Send us a message and we'll reply within two working days.",
+  "h1": "Get in touch"
+ },
+ {
+  "path": "/contact/careers",
+  "title": "Careers at Afrimetrica | Afrimetrica",
+  "description": "We're building a team of researchers, analysts, trainers and field staff across English-speaking Africa.",
+  "h1": "Careers at Afrimetrica"
+ },
+ {
+  "path": "/contact/hotel",
+  "title": "Accommodation for your course | Afrimetrica",
+  "description": "Travelling for a classroom course? Tell us your venue, dates and budget, and we'll reply with accommodation options near the venue and help you book.",
+  "h1": "Accommodation for your course"
+ },
+ {
+  "path": "/contact/mailing-list",
+  "title": "Join our mailing list | Afrimetrica",
+  "description": "Hear about new courses, course dates, free guides and events. We'll only email you about Afrimetrica, and you can ask to be removed at any time.",
+  "h1": "Join our mailing list"
+ },
+ {
+  "path": "/paper-survey",
+  "title": "Face-to-face surveys and interviews, priced instantly | Afrimetrica",
+  "description": "Our field teams interview people in person, on paper or tablet, for questionnaires, one-to-one interviews and focus groups. Upload your questionnaire and see the full price in US dollars straight away.",
+  "h1": "Face-to-face surveys and interviews, priced instantly"
+ },
+ {
+  "path": "/pricing",
+  "title": "Simple plans. Lower prices. | Afrimetrica",
+  "description": "All prices in US dollars. Every plan includes the survey builder, Word and PDF upload, rating and Likert scales, and charts.",
+  "h1": "Simple plans. Lower prices."
+ },
+ {
+  "path": "/privacy",
+  "title": "How we use your personal data | Afrimetrica",
+  "description": "This notice explains what personal data Afrimetrica collects through this website, why, who we share it with and your rights. Afrimetrica is operated by Regelco International Ltd, a company registered in Ghana, which is responsible for your data (the data controller).",
+  "h1": "How we use your personal data"
+ },
+ {
+  "path": "/resources",
+  "title": "Resources for better research | Afrimetrica",
+  "description": "Free guides, a sample size calculator, ready-made survey templates, published findings and links to open data.",
+  "h1": "Resources for better research"
+ },
+ {
+  "path": "/resources/articles",
+  "title": "Articles and guides | Afrimetrica",
+  "description": "Practical, free guides on research methods, surveys and evaluation, written by our team.",
+  "h1": "Articles and guides"
+ },
+ {
+  "path": "/resources/articles/me",
+  "title": "Planning monitoring and evaluation | Afrimetrica",
+  "description": "From theory of change to indicators, baselines and learning.",
+  "h1": "Planning monitoring and evaluation"
+ },
+ {
+  "path": "/resources/articles/questions",
+  "title": "Writing clear survey questions | Afrimetrica",
+  "description": "Five habits that make answers more accurate and easier to analyse.",
+  "h1": "Writing clear survey questions"
+ },
+ {
+  "path": "/resources/articles/sample",
+  "title": "How many responses do you need? | Afrimetrica",
+  "description": "Margin of error in plain language, with common sample sizes.",
+  "h1": "How many responses do you need?"
+ },
+ {
+  "path": "/resources/articles/scales",
+  "title": "Likert or rating scale? | Afrimetrica",
+  "description": "Choosing scales, points and labels, and how to analyse them.",
+  "h1": "Likert or rating scale?"
+ },
+ {
+  "path": "/resources/case-studies",
+  "title": "Case studies | Afrimetrica",
+  "description": "Short accounts of projects we have delivered: the question, what we did, and what changed.",
+  "h1": "Case studies"
+ },
+ {
+  "path": "/resources/catalogues",
+  "title": "Catalogues and brochures | Afrimetrica",
+  "description": "Print or save as PDF to share with colleagues and decision-makers.",
+  "h1": "Catalogues and brochures"
+ },
+ {
+  "path": "/resources/catalogues/services",
+  "title": "Analytics and consultancy services | Afrimetrica",
+  "description": "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.",
+  "h1": "Analytics and consultancy services"
+ },
+ {
+  "path": "/resources/catalogues/training",
+  "title": "Training course catalogue | Afrimetrica",
+  "description": "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.",
+  "h1": "Training course catalogue"
+ },
+ {
+  "path": "/resources/press",
+  "title": "Press releases and news | Afrimetrica",
+  "description": "Announcements about Afrimetrica, new programmes and published research.",
+  "h1": "Press releases and news"
+ },
+ {
+  "path": "/resources/testimonials",
+  "title": "What participants and clients say | Afrimetrica",
+  "description": "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.",
+  "h1": "What participants and clients say"
+ },
+ {
+  "path": "/resources/videos",
+  "title": "Videos | Afrimetrica",
+  "description": "Short tutorials on research methods and data analysis, and previews of our courses.",
+  "h1": "Videos"
+ },
+ {
+  "path": "/surveys",
+  "title": "Ask better questions. Get answers you can act on. | Afrimetrica",
+  "description": "Afrimetrica Surveys drafts your survey with AI, finds the right people to answer it, and turns every response into findings and recommendations your team can use.",
+  "h1": "Ask better questions. Get answers you can act on."
+ },
+ {
+  "path": "/terms",
+  "title": "Terms of use | Afrimetrica",
+  "description": "These terms apply when you use the Afrimetrica website and its services. Afrimetrica is operated by Regelco International Ltd, a company registered in Ghana. By using the website or creating an account, you agree to them.",
+  "h1": "Terms of use"
+ },
+ {
+  "path": "/training",
+  "title": "Data, research and executive training | Afrimetrica",
+  "description": "Practical training that helps organisations, governments and NGOs make better decisions and deliver results.",
+  "h1": "Data, research and executive training"
+ },
+ {
+  "path": "/training/area/engineering",
+  "title": "Engineering, Maintenance, Oil and Gas | Afrimetrica",
+  "description": "16 subjects · 16 courses. Every course can run in the classroom, live online or in-house.",
+  "h1": "Engineering, Maintenance, Oil and Gas"
+ },
+ {
+  "path": "/training/area/finance",
+  "title": "Finance, Investment and Banking | Afrimetrica",
+  "description": "8 subjects · 8 courses. Every course can run in the classroom, live online or in-house.",
+  "h1": "Finance, Investment and Banking"
+ },
+ {
+  "path": "/training/area/hse",
+  "title": "HSE, Emergency and Security | Afrimetrica",
+  "description": "6 subjects · 6 courses. Every course can run in the classroom, live online or in-house.",
+  "h1": "HSE, Emergency and Security"
+ },
+ {
+  "path": "/training/area/leadership",
+  "title": "Leadership, Strategy and Governance | Afrimetrica",
+  "description": "9 subjects · 9 courses. Every course can run in the classroom, live online or in-house.",
+  "h1": "Leadership, Strategy and Governance"
+ },
+ {
+  "path": "/training/area/operations",
+  "title": "Operations, Quality and Auditing | Afrimetrica",
+  "description": "5 subjects · 5 courses. Every course can run in the classroom, live online or in-house.",
+  "h1": "Operations, Quality and Auditing"
+ },
+ {
+  "path": "/training/area/people",
+  "title": "People, HR and Talent Management | Afrimetrica",
+  "description": "5 subjects · 5 courses. Every course can run in the classroom, live online or in-house.",
+  "h1": "People, HR and Talent Management"
+ },
+ {
+  "path": "/training/area/project",
+  "title": "Project, Procurement and Contracts | Afrimetrica",
+  "description": "8 subjects · 8 courses. Every course can run in the classroom, live online or in-house.",
+  "h1": "Project, Procurement and Contracts"
+ },
+ {
+  "path": "/training/area/research",
+  "title": "Research, Monitoring and Evaluation | Afrimetrica",
+  "description": "8 subjects · 26 courses. Every course can run in the classroom, live online or in-house.",
+  "h1": "Research, Monitoring and Evaluation"
+ },
+ {
+  "path": "/training/area/sales",
+  "title": "PR, Sales and Customer Service | Afrimetrica",
+  "description": "6 subjects · 6 courses. Every course can run in the classroom, live online or in-house.",
+  "h1": "PR, Sales and Customer Service"
+ },
+ {
+  "path": "/training/area/sector",
+  "title": "Sector-Specific Courses | Afrimetrica",
+  "description": "20 subjects · 20 courses. Every course can run in the classroom, live online or in-house.",
+  "h1": "Sector-Specific Courses"
+ },
+ {
+  "path": "/training/area/tech",
+  "title": "AI, Data and Emerging Technologies | Afrimetrica",
+  "description": "8 subjects · 11 courses. Every course can run in the classroom, live online or in-house.",
+  "h1": "AI, Data and Emerging Technologies"
+ },
+ {
+  "path": "/training/certificates",
+  "title": "Certificates of completion | Afrimetrica",
+  "description": "Every participant who attends and completes an Afrimetrica Academy course receives a certificate of completion.",
+  "h1": "Certificates of completion"
+ },
+ {
+  "path": "/training/course/ai-apps",
+  "title": "Applying AI in Your Sector | Afrimetrica",
+  "description": "Find practical, responsible uses of AI in operations, services and decision-making.",
+  "h1": "Applying AI in Your Sector"
+ },
+ {
+  "path": "/training/course/ai-cyber",
+  "title": "Cybersecurity Essentials for Organisations | Afrimetrica",
+  "description": "Understand cyber threats and put practical controls, policies and response plans in place.",
+  "h1": "Cybersecurity Essentials for Organisations"
+ },
+ {
+  "path": "/training/course/ai-digital",
+  "title": "Leading Digital Transformation | Afrimetrica",
+  "description": "Plan and lead digital change that improves services and operations, not just technology.",
+  "h1": "Leading Digital Transformation"
+ },
+ {
+  "path": "/training/course/ai-fintech",
+  "title": "Fintech, Digital Payments and Blockchain | Afrimetrica",
+  "description": "Understand fintech, mobile money and blockchain, and what they mean for finance in Africa.",
+  "h1": "Fintech, Digital Payments and Blockchain"
+ },
+ {
+  "path": "/training/course/ai-future",
+  "title": "Future Skills for the Digital Workplace | Afrimetrica",
+  "description": "Build the digital, analytical and collaboration skills modern workplaces need.",
+  "h1": "Future Skills for the Digital Workplace"
+ },
+ {
+  "path": "/training/course/ai-ml",
+  "title": "Introduction to Machine Learning for Analysts | Afrimetrica",
+  "description": "Understand and apply core machine learning methods to prediction and classification problems.",
+  "h1": "Introduction to Machine Learning for Analysts"
+ },
+ {
+  "path": "/training/course/ai-research",
+  "title": "AI Tools for Researchers | Afrimetrica",
+  "description": "Use AI assistants responsibly to speed up literature review, survey design, coding and analysis.",
+  "h1": "AI Tools for Researchers"
+ },
+ {
+  "path": "/training/course/en-chemical",
+  "title": "Chemical and Petrochemical Process Operations | Afrimetrica",
+  "description": "Understand and operate chemical and petrochemical processes safely and efficiently.",
+  "h1": "Chemical and Petrochemical Process Operations"
+ },
+ {
+  "path": "/training/course/en-corrosion",
+  "title": "Corrosion Control and Inspection | Afrimetrica",
+  "description": "Prevent and detect corrosion to keep plant and pipelines safe.",
+  "h1": "Corrosion Control and Inspection"
+ },
+ {
+  "path": "/training/course/en-electrical",
+  "title": "Electrical Systems: Operation and Safety | Afrimetrica",
+  "description": "Operate and maintain electrical systems safely and reliably.",
+  "h1": "Electrical Systems: Operation and Safety"
+ },
+ {
+  "path": "/training/course/en-energy",
+  "title": "Energy Transition and Renewable Energy | Afrimetrica",
+  "description": "Understand the energy transition and plan renewable and efficiency projects.",
+  "h1": "Energy Transition and Renewable Energy"
+ },
+ {
+  "path": "/training/course/en-facilities",
+  "title": "Facilities Management | Afrimetrica",
+  "description": "Manage buildings, services and workplaces safely and cost-effectively.",
+  "h1": "Facilities Management"
+ },
+ {
+  "path": "/training/course/en-hydrogen",
+  "title": "Hydrogen Economy Fundamentals | Afrimetrica",
+  "description": "Understand hydrogen production, uses, costs and the opportunities for Africa.",
+  "h1": "Hydrogen Economy Fundamentals"
+ },
+ {
+  "path": "/training/course/en-instrumentation",
+  "title": "Instrumentation and Process Control | Afrimetrica",
+  "description": "Understand measurement, control loops and control systems in process plants.",
+  "h1": "Instrumentation and Process Control"
+ },
+ {
+  "path": "/training/course/en-maintenance",
+  "title": "Maintenance Planning and Reliability | Afrimetrica",
+  "description": "Plan maintenance that keeps assets reliable and costs under control.",
+  "h1": "Maintenance Planning and Reliability"
+ },
+ {
+  "path": "/training/course/en-manufacturing",
+  "title": "Manufacturing Operations Management | Afrimetrica",
+  "description": "Run productive, high-quality manufacturing operations.",
+  "h1": "Manufacturing Operations Management"
+ },
+ {
+  "path": "/training/course/en-mechanical",
+  "title": "Mechanical Equipment: Pumps, Compressors and Valves | Afrimetrica",
+  "description": "Operate, maintain and troubleshoot rotating and static mechanical equipment.",
+  "h1": "Mechanical Equipment: Pumps, Compressors and Valves"
+ },
+ {
+  "path": "/training/course/en-mining",
+  "title": "Mining Operations and Management | Afrimetrica",
+  "description": "Plan and manage mining operations safely, efficiently and responsibly.",
+  "h1": "Mining Operations and Management"
+ },
+ {
+  "path": "/training/course/en-oilgas",
+  "title": "Oil and Gas Industry Fundamentals | Afrimetrica",
+  "description": "Understand the oil and gas value chain from exploration to market.",
+  "h1": "Oil and Gas Industry Fundamentals"
+ },
+ {
+  "path": "/training/course/en-power",
+  "title": "Power Generation and Utilities Management | Afrimetrica",
+  "description": "Plan, operate and manage power and utility services reliably and sustainably.",
+  "h1": "Power Generation and Utilities Management"
+ },
+ {
+  "path": "/training/course/fd-capi",
+  "title": "Mobile Data Collection with KoboToolbox and ODK | Afrimetrica",
+  "description": "Build digital forms, collect data on phones and tablets, and monitor quality in real time.",
+  "h1": "Mobile Data Collection with KoboToolbox and ODK"
+ },
+ {
+  "path": "/training/course/fd-management",
+  "title": "Fieldwork Management and Data Quality | Afrimetrica",
+  "description": "Plan, staff and supervise fieldwork so that data arrive on time, on budget and of high quality.",
+  "h1": "Fieldwork Management and Data Quality"
+ },
+ {
+  "path": "/training/course/fd-sampling",
+  "title": "Sampling Methods and Sample Size | Afrimetrica",
+  "description": "Choose a sampling design and calculate a defensible sample size for surveys and evaluations.",
+  "h1": "Sampling Methods and Sample Size"
+ },
+ {
+  "path": "/training/course/fi-banking",
+  "title": "Banking Regulation and Risk | Afrimetrica",
+  "description": "Understand capital, liquidity and conduct regulation and how banks manage risk.",
+  "h1": "Banking Regulation and Risk"
+ },
+ {
+  "path": "/training/course/fi-budgeting",
+  "title": "Financial Management and Budgeting | Afrimetrica",
+  "description": "Plan, control and report finances: budgets, cash flow, costs and financial statements.",
+  "h1": "Financial Management and Budgeting"
+ },
+ {
+  "path": "/training/course/fi-fraud",
+  "title": "Fraud Prevention, Detection and Investigation | Afrimetrica",
+  "description": "Prevent, detect and investigate fraud using controls, data analysis and sound procedure.",
+  "h1": "Fraud Prevention, Detection and Investigation"
+ },
+ {
+  "path": "/training/course/fi-jv",
+  "title": "Joint Ventures and Strategic Partnerships | Afrimetrica",
+  "description": "Structure, negotiate and manage joint ventures and partnerships that work.",
+  "h1": "Joint Ventures and Strategic Partnerships"
+ },
+ {
+  "path": "/training/course/fi-realestate",
+  "title": "Real Estate Investment and Finance | Afrimetrica",
+  "description": "Analyse, finance and manage property investments.",
+  "h1": "Real Estate Investment and Finance"
+ },
+ {
+  "path": "/training/course/fi-tax",
+  "title": "Tax and Revenue Management | Afrimetrica",
+  "description": "Understand tax principles, compliance and revenue administration.",
+  "h1": "Tax and Revenue Management"
+ },
+ {
+  "path": "/training/course/fi-treasury",
+  "title": "Treasury and Investment Management | Afrimetrica",
+  "description": "Manage liquidity, funding, investments and financial risk.",
+  "h1": "Treasury and Investment Management"
+ },
+ {
+  "path": "/training/course/hr-admin",
+  "title": "Office Administration and Executive Support | Afrimetrica",
+  "description": "Run an efficient office: organisation, communication, records and support to executives.",
+  "h1": "Office Administration and Executive Support"
+ },
+ {
+  "path": "/training/course/hr-behavioural",
+  "title": "Emotional Intelligence and Interpersonal Skills | Afrimetrica",
+  "description": "Understand yourself and others to communicate, collaborate and handle conflict better.",
+  "h1": "Emotional Intelligence and Interpersonal Skills"
+ },
+ {
+  "path": "/training/course/hr-ld",
+  "title": "Learning and Development: Design and Evaluation | Afrimetrica",
+  "description": "Identify training needs, design effective learning and evaluate its impact.",
+  "h1": "Learning and Development: Design and Evaluation"
+ },
+ {
+  "path": "/training/course/hr-management",
+  "title": "Strategic Human Resource Management | Afrimetrica",
+  "description": "Align HR with strategy: workforce planning, talent, performance and reward.",
+  "h1": "Strategic Human Resource Management"
+ },
+ {
+  "path": "/training/course/hs-emergency",
+  "title": "Emergency and Crisis Management | Afrimetrica",
+  "description": "Prepare for, respond to and recover from emergencies and crises.",
+  "h1": "Emergency and Crisis Management"
+ },
+ {
+  "path": "/training/course/hs-hse",
+  "title": "Health, Safety and Environment Management | Afrimetrica",
+  "description": "Build a safety management system that prevents harm and meets legal duties.",
+  "h1": "Health, Safety and Environment Management"
+ },
+ {
+  "path": "/training/course/hs-security",
+  "title": "Security Management | Afrimetrica",
+  "description": "Protect people, assets and information with risk-based security management.",
+  "h1": "Security Management"
+ },
+ {
+  "path": "/training/course/hs-waste",
+  "title": "Waste Management and Circular Economy | Afrimetrica",
+  "description": "Reduce, manage and dispose of waste responsibly, and find value in it.",
+  "h1": "Waste Management and Circular Economy"
+ },
+ {
+  "path": "/training/course/ls-creativity",
+  "title": "Creativity, Innovation and Design Thinking | Afrimetrica",
+  "description": "Generate and test new ideas that solve real problems for customers and organisations.",
+  "h1": "Creativity, Innovation and Design Thinking"
+ },
+ {
+  "path": "/training/course/ls-executive",
+  "title": "Executive Development Programme | Afrimetrica",
+  "description": "Strengthen the strategic, financial and people skills senior leaders need to run organisations.",
+  "h1": "Executive Development Programme"
+ },
+ {
+  "path": "/training/course/ls-governance",
+  "title": "Corporate Governance, Compliance and Risk | Afrimetrica",
+  "description": "Strengthen boards, controls and compliance, and manage risk across the organisation.",
+  "h1": "Corporate Governance, Compliance and Risk"
+ },
+ {
+  "path": "/training/course/ls-leadership",
+  "title": "Leadership and People Management | Afrimetrica",
+  "description": "Lead teams with clarity: set expectations, coach performance and build a culture that delivers.",
+  "h1": "Leadership and People Management"
+ },
+ {
+  "path": "/training/course/ls-negotiation",
+  "title": "Negotiation and Influencing Skills | Afrimetrica",
+  "description": "Prepare for and conduct negotiations that reach durable agreements and protect relationships.",
+  "h1": "Negotiation and Influencing Skills"
+ },
+ {
+  "path": "/training/course/ls-personal",
+  "title": "Personal Effectiveness and Productivity | Afrimetrica",
+  "description": "Manage time, priorities and energy, and work well with others under pressure.",
+  "h1": "Personal Effectiveness and Productivity"
+ },
+ {
+  "path": "/training/course/ls-stakeholder",
+  "title": "Stakeholder Engagement and Relations | Afrimetrica",
+  "description": "Identify, prioritise and engage the people who can make or break your plans.",
+  "h1": "Stakeholder Engagement and Relations"
+ },
+ {
+  "path": "/training/course/ls-strategy",
+  "title": "Strategic Planning and Execution | Afrimetrica",
+  "description": "Set direction, choose priorities and turn strategy into plans, budgets and measurable results.",
+  "h1": "Strategic Planning and Execution"
+ },
+ {
+  "path": "/training/course/ls-sustainability",
+  "title": "Sustainability, ESG and CSR | Afrimetrica",
+  "description": "Build an ESG and sustainability strategy and report credible results.",
+  "h1": "Sustainability, ESG and CSR"
+ },
+ {
+  "path": "/training/course/me-dqa",
+  "title": "Data Quality Assessment for Programmes | Afrimetrica",
+  "description": "Check that programme data are valid, reliable, timely and complete, and fix the gaps.",
+  "h1": "Data Quality Assessment for Programmes"
+ },
+ {
+  "path": "/training/course/me-fundamentals",
+  "title": "Monitoring and Evaluation Fundamentals | Afrimetrica",
+  "description": "Build an M&E system that tracks progress and shows results to funders and managers.",
+  "h1": "Monitoring and Evaluation Fundamentals"
+ },
+ {
+  "path": "/training/course/me-results",
+  "title": "Results-Based Management and Reporting | Afrimetrica",
+  "description": "Use evidence to steer programmes and report convincingly to donors and boards.",
+  "h1": "Results-Based Management and Reporting"
+ },
+ {
+  "path": "/training/course/mk-intelligence",
+  "title": "Market Intelligence and Competitor Analysis for Africa | Afrimetrica",
+  "description": "Gather and analyse information on African markets, competitors and trends to support strategy.",
+  "h1": "Market Intelligence and Competitor Analysis for Africa"
+ },
+ {
+  "path": "/training/course/mk-research",
+  "title": "Market Research Methods | Afrimetrica",
+  "description": "Understand customers and markets with surveys, interviews and secondary data, and act on the findings.",
+  "h1": "Market Research Methods"
+ },
+ {
+  "path": "/training/course/mk-segmentation",
+  "title": "Customer Insight and Segmentation | Afrimetrica",
+  "description": "Group customers into meaningful segments and design offers for each.",
+  "h1": "Customer Insight and Segmentation"
+ },
+ {
+  "path": "/training/course/op-bpm",
+  "title": "Business Process Management | Afrimetrica",
+  "description": "Document, analyse and redesign processes to work faster and better.",
+  "h1": "Business Process Management"
+ },
+ {
+  "path": "/training/course/op-excellence",
+  "title": "Operational Excellence and Lean | Afrimetrica",
+  "description": "Improve efficiency and quality using lean thinking and continuous improvement.",
+  "h1": "Operational Excellence and Lean"
+ },
+ {
+  "path": "/training/course/op-quality",
+  "title": "Quality Management and Internal Auditing | Afrimetrica",
+  "description": "Build a quality management system and audit it to drive improvement.",
+  "h1": "Quality Management and Internal Auditing"
+ },
+ {
+  "path": "/training/course/op-rca",
+  "title": "Root Cause Analysis and Problem Solving | Afrimetrica",
+  "description": "Find the real causes of problems and fix them so they don't come back.",
+  "h1": "Root Cause Analysis and Problem Solving"
+ },
+ {
+  "path": "/training/course/pp-construction",
+  "title": "Construction Project Management | Afrimetrica",
+  "description": "Manage construction projects from design to handover: cost, time, quality and safety.",
+  "h1": "Construction Project Management"
+ },
+ {
+  "path": "/training/course/pp-contracts",
+  "title": "Contract Management | Afrimetrica",
+  "description": "Draft, manage and close contracts that deliver value and limit disputes.",
+  "h1": "Contract Management"
+ },
+ {
+  "path": "/training/course/pp-legal",
+  "title": "Legal Essentials for Managers | Afrimetrica",
+  "description": "Understand the legal issues managers meet in contracts, employment, data and disputes.",
+  "h1": "Legal Essentials for Managers"
+ },
+ {
+  "path": "/training/course/pp-ppp",
+  "title": "Public-Private Partnerships | Afrimetrica",
+  "description": "Prepare, procure and manage PPP projects that deliver public value.",
+  "h1": "Public-Private Partnerships"
+ },
+ {
+  "path": "/training/course/pp-procurement",
+  "title": "Procurement and Supply Chain Management | Afrimetrica",
+  "description": "Buy well and run reliable supply chains: sourcing, tendering, suppliers and logistics.",
+  "h1": "Procurement and Supply Chain Management"
+ },
+ {
+  "path": "/training/course/pp-project",
+  "title": "Project Management Essentials | Afrimetrica",
+  "description": "Plan, run and close projects on time, on budget and to the agreed quality.",
+  "h1": "Project Management Essentials"
+ },
+ {
+  "path": "/training/course/ql-fgd",
+  "title": "Focus Group Facilitation | Afrimetrica",
+  "description": "Moderate focus groups that produce rich, usable insight, including in community settings.",
+  "h1": "Focus Group Facilitation"
+ },
+ {
+  "path": "/training/course/ql-methods",
+  "title": "Qualitative Research Methods | Afrimetrica",
+  "description": "Plan and run interviews and focus groups, and analyse what people say rigorously.",
+  "h1": "Qualitative Research Methods"
+ },
+ {
+  "path": "/training/course/ql-nvivo",
+  "title": "Qualitative Data Analysis with NVivo | Afrimetrica",
+  "description": "Organise, code and query qualitative data in NVivo for faster, more transparent analysis.",
+  "h1": "Qualitative Data Analysis with NVivo"
+ },
+ {
+  "path": "/training/course/rd-applied",
+  "title": "Applied Research Design and Methods | Afrimetrica",
+  "description": "Turn a broad question into a sound, feasible study: from problem statement to design, sampling and analysis plan.",
+  "h1": "Applied Research Design and Methods"
+ },
+ {
+  "path": "/training/course/rd-experiments",
+  "title": "Impact Evaluation and Field Experiments | Afrimetrica",
+  "description": "Estimate what difference a programme makes using randomised and quasi-experimental methods.",
+  "h1": "Impact Evaluation and Field Experiments"
+ },
+ {
+  "path": "/training/course/rd-mixed",
+  "title": "Mixed Methods Research | Afrimetrica",
+  "description": "Combine numbers and narratives so each strengthens the other, and integrate them in one coherent report.",
+  "h1": "Mixed Methods Research"
+ },
+ {
+  "path": "/training/course/sc-comms",
+  "title": "Corporate Communication | Afrimetrica",
+  "description": "Plan communication that builds understanding and support inside and outside the organisation.",
+  "h1": "Corporate Communication"
+ },
+ {
+  "path": "/training/course/sc-customer",
+  "title": "Customer Service Excellence | Afrimetrica",
+  "description": "Deliver service that keeps customers coming back, and handle complaints well.",
+  "h1": "Customer Service Excellence"
+ },
+ {
+  "path": "/training/course/sc-hospitality",
+  "title": "Hospitality and Tourism Management | Afrimetrica",
+  "description": "Run hospitality and tourism businesses that delight guests and perform financially.",
+  "h1": "Hospitality and Tourism Management"
+ },
+ {
+  "path": "/training/course/sc-pr",
+  "title": "Public Relations and Media Management | Afrimetrica",
+  "description": "Manage reputation, work with the media and communicate in a crisis.",
+  "h1": "Public Relations and Media Management"
+ },
+ {
+  "path": "/training/course/sc-sales",
+  "title": "Sales and Marketing Strategy | Afrimetrica",
+  "description": "Win and keep customers with focused marketing and effective selling.",
+  "h1": "Sales and Marketing Strategy"
+ },
+ {
+  "path": "/training/course/st-python",
+  "title": "Python for Data Analysis | Afrimetrica",
+  "description": "Analyse and visualise data in Python with pandas, and automate repetitive work.",
+  "h1": "Python for Data Analysis"
+ },
+ {
+  "path": "/training/course/st-r",
+  "title": "Data Science with R | Afrimetrica",
+  "description": "Clean, analyse and visualise data in R with the tidyverse, and produce reproducible reports.",
+  "h1": "Data Science with R"
+ },
+ {
+  "path": "/training/course/st-regression",
+  "title": "Regression and Multivariate Analysis | Afrimetrica",
+  "description": "Model relationships between many variables and explain the results to non-specialists.",
+  "h1": "Regression and Multivariate Analysis"
+ },
+ {
+  "path": "/training/course/st-spss",
+  "title": "Data Analysis with SPSS | Afrimetrica",
+  "description": "Go from raw survey data to tables, charts and statistical tests using SPSS.",
+  "h1": "Data Analysis with SPSS"
+ },
+ {
+  "path": "/training/course/st-stata",
+  "title": "Data Analysis with Stata | Afrimetrica",
+  "description": "Use Stata for reproducible data management and analysis of survey and programme data.",
+  "h1": "Data Analysis with Stata"
+ },
+ {
+  "path": "/training/course/sv-online",
+  "title": "Online and Mobile Surveys | Afrimetrica",
+  "description": "Run online and phone-based surveys that reach the right people and produce clean data.",
+  "h1": "Online and Mobile Surveys"
+ },
+ {
+  "path": "/training/course/sv-questionnaire",
+  "title": "Questionnaire Design for Reliable Data | Afrimetrica",
+  "description": "Write questions people understand and answer honestly, and build questionnaires that are easy to analyse.",
+  "h1": "Questionnaire Design for Reliable Data"
+ },
+ {
+  "path": "/training/course/sv-scales",
+  "title": "Measurement Scales and Index Construction | Afrimetrica",
+  "description": "Build and test multi-item scales and composite indices that measure what they claim to.",
+  "h1": "Measurement Scales and Index Construction"
+ },
+ {
+  "path": "/training/course/sx-agri",
+  "title": "Agribusiness Development | Afrimetrica",
+  "description": "Build profitable, resilient agribusinesses and value chains.",
+  "h1": "Agribusiness Development"
+ },
+ {
+  "path": "/training/course/sx-defence",
+  "title": "Strategic Analysis and Risk for National Security | Afrimetrica",
+  "description": "Apply structured analysis to security risks, policy options and resource planning.",
+  "h1": "Strategic Analysis and Risk for National Security"
+ },
+ {
+  "path": "/training/course/sx-health",
+  "title": "Healthcare Management | Afrimetrica",
+  "description": "Manage health services for quality, access and efficiency.",
+  "h1": "Healthcare Management"
+ },
+ {
+  "path": "/training/course/sx-pensions",
+  "title": "Social Insurance and Pensions Management | Afrimetrica",
+  "description": "Design, administer and finance social insurance and pension schemes.",
+  "h1": "Social Insurance and Pensions Management"
+ },
+ {
+  "path": "/training/course/sx-policing",
+  "title": "Data and Evidence for Law Enforcement | Afrimetrica",
+  "description": "Use data, analysis and evaluation to plan policing and community safety.",
+  "h1": "Data and Evidence for Law Enforcement"
+ },
+ {
+  "path": "/training/course/sx-ports",
+  "title": "Port and Shipping Management | Afrimetrica",
+  "description": "Run efficient, safe and competitive ports and shipping operations.",
+  "h1": "Port and Shipping Management"
+ },
+ {
+  "path": "/training/course/sx-public",
+  "title": "Public Sector Management and Policy | Afrimetrica",
+  "description": "Design, deliver and evaluate public policies and services that work.",
+  "h1": "Public Sector Management and Policy"
+ },
+ {
+  "path": "/training/course/sx-realestate",
+  "title": "Real Estate Development and Property Management | Afrimetrica",
+  "description": "Plan developments and manage property portfolios for value and occupancy.",
+  "h1": "Real Estate Development and Property Management"
+ },
+ {
+  "path": "/training/course/sx-refining",
+  "title": "Petroleum Refining Processes | Afrimetrica",
+  "description": "Understand refinery processes, economics and operations.",
+  "h1": "Petroleum Refining Processes"
+ },
+ {
+  "path": "/training/course/sx-traffic",
+  "title": "Traffic Management and Road Safety | Afrimetrica",
+  "description": "Plan traffic systems and road safety measures using data.",
+  "h1": "Traffic Management and Road Safety"
+ },
+ {
+  "path": "/training/course/sx-urban",
+  "title": "Urban Planning and Development | Afrimetrica",
+  "description": "Plan inclusive, liveable cities using data, policy and community engagement.",
+  "h1": "Urban Planning and Development"
+ },
+ {
+  "path": "/training/course/vz-datamgmt",
+  "title": "Research Data Management | Afrimetrica",
+  "description": "Organise, document, store and share research data safely and in line with data protection law.",
+  "h1": "Research Data Management"
+ },
+ {
+  "path": "/training/course/vz-excel",
+  "title": "Excel for Data Analysis and Reporting | Afrimetrica",
+  "description": "Clean, analyse and present data in Excel with formulas, PivotTables and charts.",
+  "h1": "Excel for Data Analysis and Reporting"
+ },
+ {
+  "path": "/training/course/vz-powerbi",
+  "title": "Dashboards with Power BI | Afrimetrica",
+  "description": "Turn data from many sources into interactive dashboards that decision-makers actually use.",
+  "h1": "Dashboards with Power BI"
+ },
+ {
+  "path": "/training/course/wr-ethics",
+  "title": "Research Ethics and Data Protection | Afrimetrica",
+  "description": "Protect participants and their data, from consent to archiving, and prepare for ethics review.",
+  "h1": "Research Ethics and Data Protection"
+ },
+ {
+  "path": "/training/course/wr-proposal",
+  "title": "Writing Winning Research Proposals | Afrimetrica",
+  "description": "Write clear, convincing proposals for research grants and commissioned studies.",
+  "h1": "Writing Winning Research Proposals"
+ },
+ {
+  "path": "/training/course/wr-publishing",
+  "title": "Academic Writing and Publishing | Afrimetrica",
+  "description": "Turn research into journal articles and reports, and navigate peer review.",
+  "h1": "Academic Writing and Publishing"
+ },
+ {
+  "path": "/training/finder",
+  "title": "Find a course | Afrimetrica",
+  "description": "Search 99 courses by keyword, subject, venue, format and length.",
+  "h1": "Find a course"
+ },
+ {
+  "path": "/training/new",
+  "title": "New courses | Afrimetrica",
+  "description": "Recently added executive and professional courses. All run in the classroom, live online or in-house.",
+  "h1": "New courses"
+ },
+ {
+  "path": "/training/subject/admin",
+  "title": "Office Administration training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Office Administration training courses"
+ },
+ {
+  "path": "/training/subject/agri",
+  "title": "Agribusiness Development training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Agribusiness Development training courses"
+ },
+ {
+  "path": "/training/subject/ai",
+  "title": "Artificial Intelligence (AI) training courses | Afrimetrica",
+  "description": "2 courses, in the classroom, live online or in-house.",
+  "h1": "Artificial Intelligence (AI) training courses"
+ },
+ {
+  "path": "/training/subject/aiapps",
+  "title": "AI Applications training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "AI Applications training courses"
+ },
+ {
+  "path": "/training/subject/banking",
+  "title": "Banking and Financial Regulation training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Banking and Financial Regulation training courses"
+ },
+ {
+  "path": "/training/subject/behavioural",
+  "title": "Behavioural Skills training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Behavioural Skills training courses"
+ },
+ {
+  "path": "/training/subject/bpm",
+  "title": "Business Process Management training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Business Process Management training courses"
+ },
+ {
+  "path": "/training/subject/chemical",
+  "title": "Chemical and Petrochemical training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Chemical and Petrochemical training courses"
+ },
+ {
+  "path": "/training/subject/comms",
+  "title": "Corporate Communication training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Corporate Communication training courses"
+ },
+ {
+  "path": "/training/subject/construction",
+  "title": "Construction Management training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Construction Management training courses"
+ },
+ {
+  "path": "/training/subject/contracts",
+  "title": "Contracts Management training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Contracts Management training courses"
+ },
+ {
+  "path": "/training/subject/corrosion",
+  "title": "Corrosion, Metallurgy and Inspection training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Corrosion, Metallurgy and Inspection training courses"
+ },
+ {
+  "path": "/training/subject/creativity",
+  "title": "Creativity and Innovation training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Creativity and Innovation training courses"
+ },
+ {
+  "path": "/training/subject/customer",
+  "title": "Customer Service training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Customer Service training courses"
+ },
+ {
+  "path": "/training/subject/cyber",
+  "title": "Cybersecurity training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Cybersecurity training courses"
+ },
+ {
+  "path": "/training/subject/defence",
+  "title": "Defence and National Security training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Defence and National Security training courses"
+ },
+ {
+  "path": "/training/subject/design",
+  "title": "Research Design and Methods training courses | Afrimetrica",
+  "description": "3 courses, in the classroom, live online or in-house.",
+  "h1": "Research Design and Methods training courses"
+ },
+ {
+  "path": "/training/subject/digital",
+  "title": "Digital Transformation training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Digital Transformation training courses"
+ },
+ {
+  "path": "/training/subject/electrical",
+  "title": "Electrical Engineering training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Electrical Engineering training courses"
+ },
+ {
+  "path": "/training/subject/emergency",
+  "title": "Emergency and Crisis Management training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Emergency and Crisis Management training courses"
+ },
+ {
+  "path": "/training/subject/energy",
+  "title": "Energy training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Energy training courses"
+ },
+ {
+  "path": "/training/subject/executive",
+  "title": "Executive Development training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Executive Development training courses"
+ },
+ {
+  "path": "/training/subject/facilities",
+  "title": "Facilities Management training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Facilities Management training courses"
+ },
+ {
+  "path": "/training/subject/field",
+  "title": "Sampling, Fieldwork and Data Collection training courses | Afrimetrica",
+  "description": "3 courses, in the classroom, live online or in-house.",
+  "h1": "Sampling, Fieldwork and Data Collection training courses"
+ },
+ {
+  "path": "/training/subject/finance",
+  "title": "Finance and Budgeting training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Finance and Budgeting training courses"
+ },
+ {
+  "path": "/training/subject/fintech",
+  "title": "Fintech and Blockchain training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Fintech and Blockchain training courses"
+ },
+ {
+  "path": "/training/subject/fraud",
+  "title": "Fraud and Financial Audit training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Fraud and Financial Audit training courses"
+ },
+ {
+  "path": "/training/subject/future",
+  "title": "Future Skills training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Future Skills training courses"
+ },
+ {
+  "path": "/training/subject/governance",
+  "title": "Governance, Compliance and Risk training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Governance, Compliance and Risk training courses"
+ },
+ {
+  "path": "/training/subject/health",
+  "title": "Healthcare Management training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Healthcare Management training courses"
+ },
+ {
+  "path": "/training/subject/hospitality",
+  "title": "Hospitality and Tourism training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Hospitality and Tourism training courses"
+ },
+ {
+  "path": "/training/subject/hr",
+  "title": "HR Management training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "HR Management training courses"
+ },
+ {
+  "path": "/training/subject/hse",
+  "title": "Health, Safety and Environment training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Health, Safety and Environment training courses"
+ },
+ {
+  "path": "/training/subject/hydrogen",
+  "title": "Hydrogen training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Hydrogen training courses"
+ },
+ {
+  "path": "/training/subject/instrumentation",
+  "title": "Instrumentation and Process Control training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Instrumentation and Process Control training courses"
+ },
+ {
+  "path": "/training/subject/jv",
+  "title": "Joint Ventures training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Joint Ventures training courses"
+ },
+ {
+  "path": "/training/subject/leadership",
+  "title": "Management and Leadership training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Management and Leadership training courses"
+ },
+ {
+  "path": "/training/subject/legal",
+  "title": "Legal training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Legal training courses"
+ },
+ {
+  "path": "/training/subject/lnd",
+  "title": "Learning and Development training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Learning and Development training courses"
+ },
+ {
+  "path": "/training/subject/maintenance",
+  "title": "Maintenance Engineering training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Maintenance Engineering training courses"
+ },
+ {
+  "path": "/training/subject/manufacturing",
+  "title": "Manufacturing training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Manufacturing training courses"
+ },
+ {
+  "path": "/training/subject/market",
+  "title": "Market Research and Business Intelligence training courses | Afrimetrica",
+  "description": "3 courses, in the classroom, live online or in-house.",
+  "h1": "Market Research and Business Intelligence training courses"
+ },
+ {
+  "path": "/training/subject/mechanical",
+  "title": "Mechanical Engineering training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Mechanical Engineering training courses"
+ },
+ {
+  "path": "/training/subject/mel",
+  "title": "Monitoring, Evaluation and Learning training courses | Afrimetrica",
+  "description": "3 courses, in the classroom, live online or in-house.",
+  "h1": "Monitoring, Evaluation and Learning training courses"
+ },
+ {
+  "path": "/training/subject/mining",
+  "title": "Mining Engineering training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Mining Engineering training courses"
+ },
+ {
+  "path": "/training/subject/negotiation",
+  "title": "Negotiation and Influencing Skills training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Negotiation and Influencing Skills training courses"
+ },
+ {
+  "path": "/training/subject/oilgas",
+  "title": "Oil and Gas training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Oil and Gas training courses"
+ },
+ {
+  "path": "/training/subject/opex",
+  "title": "Operational Excellence training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Operational Excellence training courses"
+ },
+ {
+  "path": "/training/subject/pensions",
+  "title": "Social Insurance and Retirement training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Social Insurance and Retirement training courses"
+ },
+ {
+  "path": "/training/subject/personal",
+  "title": "Personal Effectiveness training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Personal Effectiveness training courses"
+ },
+ {
+  "path": "/training/subject/policing",
+  "title": "Police and Law Enforcement training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Police and Law Enforcement training courses"
+ },
+ {
+  "path": "/training/subject/ports",
+  "title": "Ships and Port Management training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Ships and Port Management training courses"
+ },
+ {
+  "path": "/training/subject/power",
+  "title": "Power and Utilities training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Power and Utilities training courses"
+ },
+ {
+  "path": "/training/subject/ppp",
+  "title": "Public-Private Partnerships training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Public-Private Partnerships training courses"
+ },
+ {
+  "path": "/training/subject/pr",
+  "title": "Public Relations training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Public Relations training courses"
+ },
+ {
+  "path": "/training/subject/procurement",
+  "title": "Purchasing and Supply Chain training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Purchasing and Supply Chain training courses"
+ },
+ {
+  "path": "/training/subject/project",
+  "title": "Project Management training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Project Management training courses"
+ },
+ {
+  "path": "/training/subject/public",
+  "title": "Public Sector and Public Affairs training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Public Sector and Public Affairs training courses"
+ },
+ {
+  "path": "/training/subject/qual",
+  "title": "Qualitative Research training courses | Afrimetrica",
+  "description": "3 courses, in the classroom, live online or in-house.",
+  "h1": "Qualitative Research training courses"
+ },
+ {
+  "path": "/training/subject/quality",
+  "title": "Quality and Audit training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Quality and Audit training courses"
+ },
+ {
+  "path": "/training/subject/rca",
+  "title": "Root Cause Analysis training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Root Cause Analysis training courses"
+ },
+ {
+  "path": "/training/subject/realestate",
+  "title": "Real Estate training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Real Estate training courses"
+ },
+ {
+  "path": "/training/subject/refinance",
+  "title": "Real Estate Investment and Finance training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Real Estate Investment and Finance training courses"
+ },
+ {
+  "path": "/training/subject/refining",
+  "title": "Refining training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Refining training courses"
+ },
+ {
+  "path": "/training/subject/sales",
+  "title": "Sales and Marketing training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Sales and Marketing training courses"
+ },
+ {
+  "path": "/training/subject/security",
+  "title": "Security Management training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Security Management training courses"
+ },
+ {
+  "path": "/training/subject/stakeholder",
+  "title": "Stakeholder Relations training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Stakeholder Relations training courses"
+ },
+ {
+  "path": "/training/subject/stats",
+  "title": "Statistics and Data Analysis training courses | Afrimetrica",
+  "description": "5 courses, in the classroom, live online or in-house.",
+  "h1": "Statistics and Data Analysis training courses"
+ },
+ {
+  "path": "/training/subject/strategy",
+  "title": "Strategy and Strategic Planning training courses | Afrimetrica",
+  "description": "Envision, plan and lead: practical courses that strengthen executives' skills in strategy and strategic planning, so organisations, governments and NGOs can set clear priorities and turn them into results.",
+  "h1": "Strategy and Strategic Planning training courses"
+ },
+ {
+  "path": "/training/subject/survey",
+  "title": "Survey and Questionnaire Design training courses | Afrimetrica",
+  "description": "3 courses, in the classroom, live online or in-house.",
+  "h1": "Survey and Questionnaire Design training courses"
+ },
+ {
+  "path": "/training/subject/sustainability",
+  "title": "Sustainability and CSR training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Sustainability and CSR training courses"
+ },
+ {
+  "path": "/training/subject/tax",
+  "title": "Tax and Revenue training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Tax and Revenue training courses"
+ },
+ {
+  "path": "/training/subject/traffic",
+  "title": "Traffic Management training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Traffic Management training courses"
+ },
+ {
+  "path": "/training/subject/treasury",
+  "title": "Treasury and Investment training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Treasury and Investment training courses"
+ },
+ {
+  "path": "/training/subject/urban",
+  "title": "Urban Planning and Development training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Urban Planning and Development training courses"
+ },
+ {
+  "path": "/training/subject/viz",
+  "title": "Data Management and Analytics training courses | Afrimetrica",
+  "description": "3 courses, in the classroom, live online or in-house.",
+  "h1": "Data Management and Analytics training courses"
+ },
+ {
+  "path": "/training/subject/waste",
+  "title": "Waste Management training courses | Afrimetrica",
+  "description": "1 course, in the classroom, live online or in-house.",
+  "h1": "Waste Management training courses"
+ },
+ {
+  "path": "/training/subject/writing",
+  "title": "Research Ethics, Writing and Publishing training courses | Afrimetrica",
+  "description": "3 courses, in the classroom, live online or in-house.",
+  "h1": "Research Ethics, Writing and Publishing training courses"
+ },
+ {
+  "path": "/training/venue/botswana",
+  "title": "Training courses in Botswana | Afrimetrica",
+  "description": "Every course in our catalogue can run as a classroom course in Gaborone, or in-house at your organisation in Botswana. Choose a city to find courses, then ask us for dates and fees.",
+  "h1": "Training courses in Botswana"
+ },
+ {
+  "path": "/training/venue/eswatini",
+  "title": "Training courses in Eswatini | Afrimetrica",
+  "description": "Every course in our catalogue can run as a classroom course in Mbabane, or in-house at your organisation in Eswatini. Choose a city to find courses, then ask us for dates and fees.",
+  "h1": "Training courses in Eswatini"
+ },
+ {
+  "path": "/training/venue/ghana",
+  "title": "Training courses in Ghana | Afrimetrica",
+  "description": "Every course in our catalogue can run as a classroom course in Accra, Kumasi, Tamale, Takoradi and Sunyani, or in-house at your organisation in Ghana. Choose a city to find courses, then ask us for dates and fees.",
+  "h1": "Training courses in Ghana"
+ },
+ {
+  "path": "/training/venue/kenya",
+  "title": "Training courses in Kenya | Afrimetrica",
+  "description": "Every course in our catalogue can run as a classroom course in Nairobi and Mombasa, or in-house at your organisation in Kenya. Choose a city to find courses, then ask us for dates and fees.",
+  "h1": "Training courses in Kenya"
+ },
+ {
+  "path": "/training/venue/lesotho",
+  "title": "Training courses in Lesotho | Afrimetrica",
+  "description": "Every course in our catalogue can run as a classroom course in Maseru, or in-house at your organisation in Lesotho. Choose a city to find courses, then ask us for dates and fees.",
+  "h1": "Training courses in Lesotho"
+ },
+ {
+  "path": "/training/venue/liberia",
+  "title": "Training courses in Liberia | Afrimetrica",
+  "description": "Every course in our catalogue can run as a classroom course in Monrovia, or in-house at your organisation in Liberia. Choose a city to find courses, then ask us for dates and fees.",
+  "h1": "Training courses in Liberia"
+ },
+ {
+  "path": "/training/venue/malawi",
+  "title": "Training courses in Malawi | Afrimetrica",
+  "description": "Every course in our catalogue can run as a classroom course in Lilongwe, or in-house at your organisation in Malawi. Choose a city to find courses, then ask us for dates and fees.",
+  "h1": "Training courses in Malawi"
+ },
+ {
+  "path": "/training/venue/mauritius",
+  "title": "Training courses in Mauritius | Afrimetrica",
+  "description": "Every course in our catalogue can run as a classroom course in Port Louis, or in-house at your organisation in Mauritius. Choose a city to find courses, then ask us for dates and fees.",
+  "h1": "Training courses in Mauritius"
+ },
+ {
+  "path": "/training/venue/namibia",
+  "title": "Training courses in Namibia | Afrimetrica",
+  "description": "Every course in our catalogue can run as a classroom course in Windhoek, or in-house at your organisation in Namibia. Choose a city to find courses, then ask us for dates and fees.",
+  "h1": "Training courses in Namibia"
+ },
+ {
+  "path": "/training/venue/nigeria",
+  "title": "Training courses in Nigeria | Afrimetrica",
+  "description": "Every course in our catalogue can run as a classroom course in Lagos and Abuja, or in-house at your organisation in Nigeria. Choose a city to find courses, then ask us for dates and fees.",
+  "h1": "Training courses in Nigeria"
+ },
+ {
+  "path": "/training/venue/rwanda",
+  "title": "Training courses in Rwanda | Afrimetrica",
+  "description": "Every course in our catalogue can run as a classroom course in Kigali, or in-house at your organisation in Rwanda. Choose a city to find courses, then ask us for dates and fees.",
+  "h1": "Training courses in Rwanda"
+ },
+ {
+  "path": "/training/venue/sierra-leone",
+  "title": "Training courses in Sierra Leone | Afrimetrica",
+  "description": "Every course in our catalogue can run as a classroom course in Freetown, or in-house at your organisation in Sierra Leone. Choose a city to find courses, then ask us for dates and fees.",
+  "h1": "Training courses in Sierra Leone"
+ },
+ {
+  "path": "/training/venue/south-africa",
+  "title": "Training courses in South Africa | Afrimetrica",
+  "description": "Every course in our catalogue can run as a classroom course in Johannesburg and Cape Town, or in-house at your organisation in South Africa. Choose a city to find courses, then ask us for dates and fees.",
+  "h1": "Training courses in South Africa"
+ },
+ {
+  "path": "/training/venue/south-sudan",
+  "title": "Training courses in South Sudan | Afrimetrica",
+  "description": "Every course in our catalogue can run as a classroom course in Juba, or in-house at your organisation in South Sudan. Choose a city to find courses, then ask us for dates and fees.",
+  "h1": "Training courses in South Sudan"
+ },
+ {
+  "path": "/training/venue/tanzania",
+  "title": "Training courses in Tanzania | Afrimetrica",
+  "description": "Every course in our catalogue can run as a classroom course in Dar es Salaam and Arusha, or in-house at your organisation in Tanzania. Choose a city to find courses, then ask us for dates and fees.",
+  "h1": "Training courses in Tanzania"
+ },
+ {
+  "path": "/training/venue/the-gambia",
+  "title": "Training courses in The Gambia | Afrimetrica",
+  "description": "Every course in our catalogue can run as a classroom course in Banjul, or in-house at your organisation in The Gambia. Choose a city to find courses, then ask us for dates and fees.",
+  "h1": "Training courses in The Gambia"
+ },
+ {
+  "path": "/training/venue/uganda",
+  "title": "Training courses in Uganda | Afrimetrica",
+  "description": "Every course in our catalogue can run as a classroom course in Kampala, or in-house at your organisation in Uganda. Choose a city to find courses, then ask us for dates and fees.",
+  "h1": "Training courses in Uganda"
+ },
+ {
+  "path": "/training/venue/zambia",
+  "title": "Training courses in Zambia | Afrimetrica",
+  "description": "Every course in our catalogue can run as a classroom course in Lusaka, or in-house at your organisation in Zambia. Choose a city to find courses, then ask us for dates and fees.",
+  "h1": "Training courses in Zambia"
+ },
+ {
+  "path": "/training/venue/zimbabwe",
+  "title": "Training courses in Zimbabwe | Afrimetrica",
+  "description": "Every course in our catalogue can run as a classroom course in Harare, or in-house at your organisation in Zimbabwe. Choose a city to find courses, then ask us for dates and fees.",
+  "h1": "Training courses in Zimbabwe"
+ },
+ {
+  "path": "/training/venues",
+  "title": "Where we train | Afrimetrica",
+  "description": "Classroom courses can run in these cities across English-speaking Africa. Dates are set for each venue: ask for the dates and fees for the course and city you want, learn live online, or bring any course to your own premises.",
+  "h1": "Where we train"
+ }
+]

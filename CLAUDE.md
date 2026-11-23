@@ -21,5 +21,7 @@ Phase 1: a single Node.js service (`server.mjs`) plus a single-page front end (`
 - `server.mjs`: JSON store at `DATA_DIR/store.json`; routes under `/api/*`; auth (email+password, Google), Resend emails, rate limits, same-origin checks.
 
 ## Commands
-- `npm test` — 20 statistics checks + 124 API checks. Must pass before pushing.
+- `npm test` — 20 statistics checks + 140 API checks. Must pass before pushing.
 - `npm start` — runs on port 10000.
+- `npm run pages` (with `npm start` running) — re-lists the public pages in `public/pages.json` for the sitemap and each page's title, description and social preview. Run it after adding or renaming public pages (courses, services, articles).
+- Public pages have real addresses (`/training/course/x`); app pages keep `#addresses`. `CLEAN` in `index.html` and `PUBLIC_SECTIONS` in `server.mjs` list the public sections: change both together.

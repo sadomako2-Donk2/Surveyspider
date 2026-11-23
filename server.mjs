@@ -37,10 +37,33 @@ const RESET_MINUTES = 60;
 // Google Search Console ownership check: paste only the code from Google's "HTML tag" method into
 // Render → Environment as GOOGLE_SITE_VERIFICATION (it isn't secret; Google shows it in the page).
 const GOOGLE_VERIFY = (process.env.GOOGLE_SITE_VERIFICATION || "").trim().replace(/^.*content="([^"]+)".*$/s, "$1");
-const SITE_VERIFY = /^[A-Za-z0-9_-]{10,100}$/.test(GOOGLE_VERIFY) ? `<meta name="google-site-verification" content="${GOOGLE_VERIFY}">` : "";
+// Bing Webmaster Tools works the same way (BING_SITE_VERIFICATION); Bing also feeds DuckDuckGo and Yahoo.
+const BING_VERIFY = (process.env.BING_SITE_VERIFICATION || "").trim().replace(/^.*content="([^"]+)".*$/s, "$1");
+const SITE_VERIFY = (/^[A-Za-z0-9_-]{10,100}$/.test(GOOGLE_VERIFY) ? `<meta name="google-site-verification" content="${GOOGLE_VERIFY}">` : "") + (/^[A-Za-z0-9]{10,100}$/.test(BING_VERIFY) ? `<meta name="msvalidate.01" content="${BING_VERIFY}">` : "");
 const SHELL_HEAD = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa."><link rel="icon" type="image/svg+xml" href="/icon.svg">${SITE_VERIFY}<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>`;
 const PAGE = SHELL_HEAD + readFileSync(path.join(here, "public", "index.html"), "utf8") + "</body></html>";
 const ICON = readFileSync(path.join(here, "public", "icon.svg"));
+// Public pages with real addresses, for search engines (written by scripts/build-pages.mjs; see that file).
+const PAGES = new Map((existsSync(path.join(here, "public", "pages.json")) ? JSON.parse(readFileSync(path.join(here, "public", "pages.json"), "utf8")) : [{ path: "/" }]).map((p) => [p.path, p]));
+const PUBLIC_SECTIONS = /^\/(about|training|surveys|analytics|consultancy|resources|contact|privacy|terms|pricing|paper-survey)(\/[a-z0-9-]+)*$/;
+const SOCIAL = existsSync(path.join(here, "public", "social.jpg")) ? readFileSync(path.join(here, "public", "social.jpg")) : null;
+const DEFAULT_TITLE = "Afrimetrica — Data, Research and Executive Training";
+const DEFAULT_DESC = "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.";
+const attr = (x) => String(x).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const shorten = (t, n = 160) => { t = String(t || "").replace(/\s+/g, " ").trim(); if (t.length <= n) return t; const cut = t.slice(0, n - 1); return cut.slice(0, cut.lastIndexOf(" ") > 80 ? cut.lastIndexOf(" ") : cut.length).replace(/[,;:.\s]+$/, "") + "…"; };
+// The page with its own title, description, canonical address, social preview and structured data.
+function pageHtml(info, base, known) {
+  const url = base + info.path, title = info.title || DEFAULT_TITLE;
+  const desc = shorten(info.description && info.description !== DEFAULT_DESC ? info.description : info.h1 && info.path !== "/" ? `${info.h1}. ${DEFAULT_DESC}` : DEFAULT_DESC);
+  const org = { "@type": "Organization", name: "Afrimetrica", url: base + "/", logo: base + "/photos/logo-full.webp", description: DEFAULT_DESC };
+  const ld = info.path === "/" ? { "@context": "https://schema.org", "@graph": [org, { "@type": "WebSite", name: "Afrimetrica", url: base + "/" }] }
+    : info.path.startsWith("/training/course/") ? { "@context": "https://schema.org", "@type": "Course", name: info.h1 || title, description: desc, url, provider: org } : null;
+  const head = (known ? `<link rel="canonical" href="${attr(url)}">` : `<meta name="robots" content="noindex">`) +
+    `<meta property="og:type" content="website"><meta property="og:site_name" content="Afrimetrica"><meta property="og:title" content="${attr(title)}"><meta property="og:description" content="${attr(desc)}"><meta property="og:url" content="${attr(url)}">` +
+    (SOCIAL ? `<meta property="og:image" content="${attr(base)}/social.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">` : "") +
+    (ld ? `<script type="application/ld+json">${JSON.stringify(ld).replace(/</g, "\\u003c")}</script>` : "");
+  return PAGE.replace(`<meta name="description" content="${DEFAULT_DESC}">`, `<meta name="description" content="${attr(desc)}">${head}`).replace(`<title>${DEFAULT_TITLE}</title>`, `<title>${attr(title)}</title>`);
+}
 // Photos for the public pages: every .webp in public/photos, read once at start. Only these exact names are served.
 const PHOTO_DIR = path.join(here, "public", "photos");
 const PHOTOS = new Map(existsSync(PHOTO_DIR) ? readdirSync(PHOTO_DIR).filter((f) => /^[a-z0-9-]+\.webp$/.test(f)).map((f) => [f, readFileSync(path.join(PHOTO_DIR, f))]) : []);
@@ -611,9 +634,17 @@ export const server = http.createServer(async (req, res) => {
     if (url.pathname === "/healthz") return send(res, 200, { ok: true });
     if (url.pathname.startsWith("/photos/") && PHOTOS.has(url.pathname.slice(8))) { res.writeHead(200, { "Content-Type": "image/webp", "Cache-Control": "public, max-age=86400" }); return res.end(PHOTOS.get(url.pathname.slice(8))); }
     if (req.method === "GET" && url.pathname === "/robots.txt") { res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=3600" }); return res.end(`User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /auth/\n\nSitemap: ${baseUrl(req)}/sitemap.xml\n`); }
-    if (req.method === "GET" && url.pathname === "/sitemap.xml") { res.writeHead(200, { "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, max-age=3600" }); return res.end(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${baseUrl(req)}/</loc><changefreq>weekly</changefreq></url></urlset>\n`); }
+    if (req.method === "GET" && url.pathname === "/sitemap.xml") { const b = baseUrl(req); res.writeHead(200, { "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, max-age=3600" }); return res.end(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...PAGES.keys()].map((p) => `<url><loc>${attr(b + p)}</loc></url>`).join("\n")}\n</urlset>\n`); }
+    if (url.pathname === "/social.jpg" && SOCIAL) { res.writeHead(200, { "Content-Type": "image/jpeg", "Cache-Control": "public, max-age=86400" }); return res.end(SOCIAL); }
     if (url.pathname === "/icon.svg") { res.writeHead(200, { "Content-Type": "image/svg+xml", "Cache-Control": "public, max-age=86400" }); return res.end(ICON); }
-    if (req.method === "GET" && (url.pathname === "/" || url.pathname === "/index.html")) { res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache" }); return res.end(PAGE); }
+    if (req.method === "GET" && (url.pathname === "/" || url.pathname === "/index.html")) { res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache" }); return res.end(pageHtml(PAGES.get("/") || { path: "/" }, baseUrl(req), true)); }
+    if (req.method === "GET" && url.pathname.length > 1 && url.pathname.endsWith("/") && PAGES.has(url.pathname.replace(/\/+$/, ""))) { res.writeHead(301, { Location: url.pathname.replace(/\/+$/, "") + url.search }); return res.end(); }
+    if (req.method === "GET" && PUBLIC_SECTIONS.test(url.pathname)) {
+      // A public page: known ones are listed for search engines; others still open in the app but aren't indexed.
+      const known = PAGES.has(url.pathname);
+      res.writeHead(known ? 200 : 404, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache" });
+      return res.end(pageHtml(known ? PAGES.get(url.pathname) : { path: url.pathname }, baseUrl(req), known));
+    }
     res.writeHead(404, { "Content-Type": "text/plain" }); res.end("Not found");
   } catch (e) {
     if (e && e.status) return fail(res, e.status, e.status === 413 ? "quota_exceeded" : "invalid_argument", e.message);

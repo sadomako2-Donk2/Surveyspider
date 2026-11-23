@@ -215,6 +215,7 @@ details summary { cursor: pointer; font-size: 0.88rem; font-weight: 500; }
 .quotes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
 .quotes li { border-left: 2px solid var(--line); padding: 2px 0 2px 12px; font-size: 0.92rem; overflow-wrap: anywhere; }
 .table-wrap { overflow-x: auto; }
+.table-wrap:focus-visible { outline: 3px solid var(--gold-hi, #e9c46a); outline-offset: 2px; }
 table { border-collapse: collapse; width: 100%; font-size: 0.86rem; }
 th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
 th { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 500; white-space: nowrap; }
@@ -865,7 +866,7 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
   }
   // ---------- accounts (own-server mode) ----------
   function requireSignIn(msg, mode) {
-    const h = location.hash.replace("#", "");
+    const h = routeKey();
     S.returnTo = !h || h === "signin" ? "studies" : h; S.authMode = mode || "signin";
     toast(msg || "Sign in to continue."); go("signin");
   }
@@ -1061,8 +1062,26 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
     if (S.view === "create" && S.draft) updateCost();
     setPageMeta();
   }
+  // Public pages have real addresses (/training/course/x) so search engines can list each one; old #links still work.
+  // App pages (create, my surveys, account...) keep #addresses. public/pages.json lists the public pages for the server.
+  const CLEAN = new Set(["home", "about", "training", "surveys", "analytics", "consultancy", "resources", "contact", "privacy", "terms", "pricing", "paper-survey"]);
+  const cleanPath = (k) => (CLEAN.has(k.split("/")[0]) ? "/" + (k === "home" ? "" : k) : null);
+  function routeKey() {
+    const h = location.hash.replace("#", ""), first = h.split("/")[0];
+    if (h && (ROUTES.has(first) || first === "paper-to-pen" || first === "library")) return h;
+    const p = decodeURIComponent(location.pathname).replace(/^\/+|\/+$/g, "");
+    return p && CLEAN.has(p.split("/")[0]) ? p : "";
+  }
+  // Turns #links to public pages into real addresses (run on everything added to the page).
+  function cleanLinks(root) {
+    if (!root.querySelectorAll) return;
+    const all = root.matches && root.matches('a[href^="#"]') ? [root, ...root.querySelectorAll('a[href^="#"]')] : root.querySelectorAll('a[href^="#"]');
+    for (const a of all) { const c = cleanPath(a.getAttribute("href").slice(1)); if (c) a.setAttribute("href", c); }
+  }
+  function onNavigate() { closeNavDrop(true); route(); render(); window.scrollTo(0, 0); if (API) refreshServer().then(softRender).catch(() => {}); }
   function route() {
-    let h = location.hash.replace("#", "");
+    let h = routeKey();
+    { const c = cleanPath(h === "paper-to-pen" ? "paper-survey" : h === "library" ? "resources" : h); if (c && location.hash) history.replaceState(history.state, "", c + location.search); }
     if (h === "paper-to-pen") h = "paper-survey"; // old links keep working
     // Training has its own pages: #training/<part>[/<item>]
     const trPart = h.startsWith("training/") ? h.slice(9) : "";
@@ -1097,7 +1116,12 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
     if (S.view !== "panel") S.taking = null;
     S.confirmDel = null;
   }
-  function go(view) { if (location.hash === "#" + view) { route(); render(); } else location.hash = view; window.scrollTo(0, 0); }
+  function go(view) {
+    const c = cleanPath(view);
+    if (c) { if (location.pathname !== c || location.hash) history.pushState(null, "", c); route(); render(); }
+    else if (location.hash === "#" + view) { route(); render(); } else location.hash = view;
+    window.scrollTo(0, 0);
+  }
   let toastT;
   function toast(m) { const t = $("#toast"); t.textContent = m; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => (t.hidden = true), 3600); }
   const loading = () => (S.mode === "loading" ? `<div class="empty"><p class="muted">Loading studies…</p></div>` : "");
@@ -1224,7 +1248,7 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
         </article>`;
       }).join("")}</section>
       <section class="card"><div class="qmeta"><h2>How we compare</h2><span class="hint">Competitor prices from public pricing guides, November 2026</span></div>
-        <div class="table-wrap"><table><thead><tr><th></th><th>Afrimetrica</th><th>SurveyMonkey</th><th>SurveyHero</th><th>Qualtrics</th></tr></thead><tbody>
+        <div class="table-wrap" tabindex="0"><table><thead><tr><th></th><th>Afrimetrica</th><th>SurveyMonkey</th><th>SurveyHero</th><th>Qualtrics</th></tr></thead><tbody>
         ${COMPARE.map((r) => `<tr><th scope="row" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.86rem;color:var(--ink)">${esc(r[0])}</th><td class="us">${esc(r[1])}</td><td>${esc(r[2])}</td><td>${esc(r[3])}</td><td>${esc(r[4])}</td></tr>`).join("")}
         </tbody></table></div>
         <p class="hint">Competitor figures come from third-party pricing guides, not the vendors' own pages, and can change. Sources: <a href="https://survicate.com/blog/surveymonkey-pricing/" target="_blank" rel="noopener">SurveyMonkey (Survicate)</a>, <a href="https://www.softwareadvice.com/product/450556-SurveyHero/" target="_blank" rel="noopener">SurveyHero (Software Advice)</a>, <a href="https://costbench.com/software/survey-software/qualtrics/" target="_blank" rel="noopener">Qualtrics (Costbench)</a>, <a href="https://www.qualtrics.com/support/survey-platform/managing-your-account/trial-accounts/" target="_blank" rel="noopener">Qualtrics free accounts</a>.</p>
@@ -1511,11 +1535,11 @@ ${dataSummary(st, rows)}`;
       const mx = Math.max(...g.map((x) => x.norm || 0), 0.0001);
       const sorted = [...g].sort((a, b) => b.avg - a.avg);
       if (sorted.length >= 2) insight = `<p class="callout"><b>${esc(sorted[0].name)}</b> scored highest (${fmtAvg(q, sorted[0].avg)}) and <b>${esc(sorted[sorted.length - 1].name)}</b> lowest (${fmtAvg(q, sorted[sorted.length - 1].avg)}).${g.some((x) => x.n < 5) ? " Some groups have fewer than 5 people, so treat their results with care." : ""}</p>`;
-      table = `<div class="table-wrap"><table><thead><tr><th>Group</th><th>People</th><th>Average</th><th style="width:40%"></th></tr></thead><tbody>${g.map((x) => `<tr><td>${esc(x.name)}</td><td class="n">${x.n}</td><td class="n">${fmtAvg(q, x.avg)}</td><td><span class="br-t" style="display:block"><i style="width:${((x.norm / mx) * 100).toFixed(1)}%"></i></span></td></tr>`).join("")}</tbody></table></div>`;
+      table = `<div class="table-wrap" tabindex="0"><table><thead><tr><th>Group</th><th>People</th><th>Average</th><th style="width:40%"></th></tr></thead><tbody>${g.map((x) => `<tr><td>${esc(x.name)}</td><td class="n">${x.n}</td><td class="n">${fmtAvg(q, x.avg)}</td><td><span class="br-t" style="display:block"><i style="width:${((x.norm / mx) * 100).toFixed(1)}%"></i></span></td></tr>`).join("")}</tbody></table></div>`;
     } else {
       const opts = q.options;
       const cell = (rs, o) => { const v = rs.map((r) => r.answers[q.id]).filter((x) => x != null); return pct(v.filter((x) => (Array.isArray(x) ? x.includes(o) : x === o)).length, rs.length); };
-      table = `<div class="table-wrap"><table><thead><tr><th>Answer</th>${groups.map(([n, rs]) => `<th>${esc(short(n, 22))} (${rs.length})</th>`).join("")}</tr></thead><tbody>${opts.map((o) => { const vals = groups.map(([, rs]) => cell(rs, o)); const mx = Math.max(...vals); return `<tr><td>${esc(o)}</td>${vals.map((v) => `<td class="n${v === mx && v > 0 ? " hi" : ""}">${v}%</td>`).join("")}</tr>`; }).join("")}</tbody></table></div><p class="hint">Percentages are of each group. The highest value in each row is highlighted.</p>`;
+      table = `<div class="table-wrap" tabindex="0"><table><thead><tr><th>Answer</th>${groups.map(([n, rs]) => `<th>${esc(short(n, 22))} (${rs.length})</th>`).join("")}</tr></thead><tbody>${opts.map((o) => { const vals = groups.map(([, rs]) => cell(rs, o)); const mx = Math.max(...vals); return `<tr><td>${esc(o)}</td>${vals.map((v) => `<td class="n${v === mx && v > 0 ? " hi" : ""}">${v}%</td>`).join("")}</tr>`; }).join("")}</tbody></table></div><p class="hint">Percentages are of each group. The highest value in each row is highlighted.</p>`;
     }
     return `<section class="card">${controls}${insight}${table}</section>`;
   }
@@ -1544,7 +1568,7 @@ ${dataSummary(st, rows)}`;
         <section class="card"><h2>Key findings</h2><ol class="findings">${(rep.findings || []).map((f) => `<li><b>${esc(f.title)}</b><p>${esc(f.detail)}</p></li>`).join("")}</ol></section>
         <section class="card"><h2>Recommendations</h2><div>${(rep.recommendations || []).map((r) => `<div class="rec"><span class="tag ${pri(r.priority)}">${esc(r.priority || "medium")}</span><div><b>${esc(r.action)}</b><p>${esc(r.why)}</p><button class="btn small" style="margin-top:6px" data-act="toAction" data-title="${esc(r.action)}" data-why="${esc(r.why)}" data-pri="${esc(r.priority || "medium")}">Turn into action</button></div></div>`).join("")}</div></section>
       </div>
-      ${(rep.themes || []).length ? `<section class="card"><h2>Themes in open-text answers</h2><div class="table-wrap"><table><thead><tr><th>Theme</th><th>How common</th><th>Example</th></tr></thead><tbody>${rep.themes.map((t) => `<tr><td><b>${esc(t.theme)}</b></td><td>${esc(t.share)}</td><td class="muted">${esc(t.quote)}</td></tr>`).join("")}</tbody></table></div></section>` : ""}
+      ${(rep.themes || []).length ? `<section class="card"><h2>Themes in open-text answers</h2><div class="table-wrap" tabindex="0"><table><thead><tr><th>Theme</th><th>How common</th><th>Example</th></tr></thead><tbody>${rep.themes.map((t) => `<tr><td><b>${esc(t.theme)}</b></td><td>${esc(t.share)}</td><td class="muted">${esc(t.quote)}</td></tr>`).join("")}</tbody></table></div></section>` : ""}
       ${(rep.caveats || []).length ? `<section class="card"><h2>Read with care</h2><ul class="steps">${rep.caveats.map((c) => `<li>${esc(c)}</li>`).join("")}</ul></section>` : ""}`;
   }
   async function runReport() {
@@ -1957,7 +1981,7 @@ ${richSummary(st, rows)}`;
   function reviewQueue(flagged) {
     if (!flagged.length) return `<section class="card"><h2>Quality review</h2><p class="muted">No responses need review. Responses that fail the attention check or finish in under 30% of the expected time are held here.</p></section>`;
     return `<section class="card"><h2>Quality review</h2><p class="hint">Approve to pay the participant. Reject to free the place for someone else.</p>
-      <div class="table-wrap"><table><thead><tr><th>Reason</th><th>Time</th><th></th></tr></thead><tbody>
+      <div class="table-wrap" tabindex="0"><table><thead><tr><th>Reason</th><th>Time</th><th></th></tr></thead><tbody>
       ${flagged.slice(0, 30).map((r) => `<tr><td>${[!r.passedAttention ? "Failed attention check" : "", r.speeder ? "Too fast" : ""].filter(Boolean).join(", ")}${r.test ? ' <span class="pill">Test</span>' : ""}</td><td class="n">${mmss(r.durationSec)}</td><td><div class="row"><button class="btn small" data-act="approve" data-id="${esc(r.id)}">Approve</button><button class="btn small ghost danger" data-act="reject" data-id="${esc(r.id)}">Reject</button></div></td></tr>`).join("")}
       </tbody></table></div></section>`;
   }
@@ -2202,7 +2226,7 @@ ${richSummary(st, rows)}`;
         <section class="card"><h2>Question design check</h2>${Q.qi.length ? Q.qi.map((x) => `<div class="issue"><span class="tag ${x.sev === "high" ? "warn" : "info"}">${x.sev}</span><span><b>Q${x.q}.</b> ${esc(x.text)}</span></div>`).join("") : `<p class="ok">No wording or answer-option problems found.</p>`}<p class="hint">Automatic checks for leading wording, double questions, absolute words, missing opt-outs, skipped questions and ceiling effects. Use the AI question checker on your next survey for a deeper review.</p></section>
       </div>
       <section class="card"><div class="qmeta"><h2>Responses with quality problems</h2><span class="hint">${low.length} of ${Q.all.length}</span></div>
-        ${low.length ? `<div class="table-wrap"><table><thead><tr><th>Quality score</th><th>Problems</th><th>Time</th><th>Status</th><th></th></tr></thead><tbody>${low.slice(0, 40).map((x) => `<tr><td class="n">${x.score}</td><td>${x.flags.map(esc).join("; ")}</td><td class="n">${mmss(x.r.durationSec)}</td><td><span class="pill${x.r.status === "flagged" ? " flag" : ""}">${x.r.status === "flagged" ? "Waiting for review" : "Approved"}</span></td><td><div class="row">${x.r.status === "flagged" ? `<button class="btn small" data-act="approve" data-id="${esc(x.r.id)}">Approve</button>` : ""}<button class="btn small ghost danger" data-act="reject" data-id="${esc(x.r.id)}">Reject</button></div></td></tr>`).join("")}</tbody></table></div><p class="hint">Rejecting a response removes it from every analysis and frees the place for someone else. Checks: attention check, speed, identical answers to every scale question (straight-lining), meaningless written answers and skipped questions.</p>` : `<p class="ok">Every response passed the quality checks.</p>`}</section>`;
+        ${low.length ? `<div class="table-wrap" tabindex="0"><table><thead><tr><th>Quality score</th><th>Problems</th><th>Time</th><th>Status</th><th></th></tr></thead><tbody>${low.slice(0, 40).map((x) => `<tr><td class="n">${x.score}</td><td>${x.flags.map(esc).join("; ")}</td><td class="n">${mmss(x.r.durationSec)}</td><td><span class="pill${x.r.status === "flagged" ? " flag" : ""}">${x.r.status === "flagged" ? "Waiting for review" : "Approved"}</span></td><td><div class="row">${x.r.status === "flagged" ? `<button class="btn small" data-act="approve" data-id="${esc(x.r.id)}">Approve</button>` : ""}<button class="btn small ghost danger" data-act="reject" data-id="${esc(x.r.id)}">Reject</button></div></td></tr>`).join("")}</tbody></table></div><p class="hint">Rejecting a response removes it from every analysis and frees the place for someone else. Checks: attention check, speed, identical answers to every scale question (straight-lining), meaningless written answers and skipped questions.</p>` : `<p class="ok">Every response passed the quality checks.</p>`}</section>`;
   }
 
   // ---- 5 · hidden patterns and contradictions ----
@@ -2310,7 +2334,7 @@ ${richSummary(st, rows)}`;
     const sel = (id, opts, val) => `<select id="${id}">${opts.map(([k, l]) => `<option value="${esc(k)}"${k === val ? " selected" : ""}>${esc(l)}</option>`).join("")}</select>`;
     let body = "";
     if (T.test === "desc") {
-      body = numQs.length ? `<div class="table-wrap"><table><thead><tr><th>Question</th><th>n</th><th>Mean</th><th>SD</th><th>Median</th><th>IQR</th><th>Range</th><th>95% CI of mean</th></tr></thead><tbody>${numQs.map((q) => { const v = rows.map((r) => scoreOf(q, r.answers[q.id])).filter((x) => x != null); if (!v.length) return `<tr><td>${qNum(st, q)}. ${esc(short(q.text, 60))}</td><td class="n">0</td><td colspan="6" class="muted">No answers</td></tr>`; const d = STAT.describe(v); return `<tr><td>${qNum(st, q)}. ${esc(short(q.text, 60))}</td><td class="n">${d.n}</td><td class="n">${f2(d.mean)}</td><td class="n">${f2(d.sd)}</td><td class="n">${f2(d.median, 1)}</td><td class="n">${f2(d.q1, 1)}–${f2(d.q3, 1)}</td><td class="n">${f2(d.min, 1)}–${f2(d.max, 1)}</td><td class="n">${d.n > 1 ? `${f2(d.lo)}–${f2(d.hi)}` : "–"}</td></tr>`; }).join("")}</tbody></table></div><p class="hint">Likert answers are scored 1 to the number of labels. SD = standard deviation; IQR = middle 50% of answers; CI = 95% confidence interval for the mean (t-distribution).</p>` : `<p class="muted">Add rating, Likert or number questions to see descriptive statistics.</p>`;
+      body = numQs.length ? `<div class="table-wrap" tabindex="0"><table><thead><tr><th>Question</th><th>n</th><th>Mean</th><th>SD</th><th>Median</th><th>IQR</th><th>Range</th><th>95% CI of mean</th></tr></thead><tbody>${numQs.map((q) => { const v = rows.map((r) => scoreOf(q, r.answers[q.id])).filter((x) => x != null); if (!v.length) return `<tr><td>${qNum(st, q)}. ${esc(short(q.text, 60))}</td><td class="n">0</td><td colspan="6" class="muted">No answers</td></tr>`; const d = STAT.describe(v); return `<tr><td>${qNum(st, q)}. ${esc(short(q.text, 60))}</td><td class="n">${d.n}</td><td class="n">${f2(d.mean)}</td><td class="n">${f2(d.sd)}</td><td class="n">${f2(d.median, 1)}</td><td class="n">${f2(d.q1, 1)}–${f2(d.q3, 1)}</td><td class="n">${f2(d.min, 1)}–${f2(d.max, 1)}</td><td class="n">${d.n > 1 ? `${f2(d.lo)}–${f2(d.hi)}` : "–"}</td></tr>`; }).join("")}</tbody></table></div><p class="hint">Likert answers are scored 1 to the number of labels. SD = standard deviation; IQR = middle 50% of answers; CI = 95% confidence interval for the mean (t-distribution).</p>` : `<p class="muted">Add rating, Likert or number questions to see descriptive statistics.</p>`;
     } else if (T.test === "means") {
       if (!numQs.length) body = `<p class="muted">Needs a rating, Likert or number question.</p>`;
       else {
@@ -2323,7 +2347,7 @@ ${richSummary(st, rows)}`;
         if (groups.length === 2) { const w = STAT.welch(groups[0].v, groups[1].v); if (w) res = `<p class="stat-line">Welch's t(${f2(w.df, 1)}) = ${f2(w.t)}, ${fmtP(w.p)}, Cohen's d = ${f2(w.d)}</p><p class="callout">There is ${sigWord(w.p)} between “${esc(groups[0].name)}” (average ${f2(STAT.mean(groups[0].v))}) and “${esc(groups[1].name)}” (average ${f2(STAT.mean(groups[1].v))}). The size of the difference is ${effD(w.d)}.${w.p >= 0.05 ? " The gap you see could be down to chance." : ""}</p>`; }
         else if (groups.length > 2) { const a = STAT.anova(groups.map((g) => g.v)); if (a) { const s = [...groups].sort((x, y) => STAT.mean(y.v) - STAT.mean(x.v)); res = `<p class="stat-line">One-way ANOVA: F(${a.d1}, ${a.d2}) = ${f2(a.F)}, ${fmtP(a.p)}, η² = ${f2(a.eta2, 3)}</p><p class="callout">Across ${groups.length} groups there is ${sigWord(a.p)} in average scores (effect size ${effEta(a.eta2)}). Highest: “${esc(s[0].name)}” (${f2(STAT.mean(s[0].v))}). Lowest: “${esc(s[s.length - 1].name)}” (${f2(STAT.mean(s[s.length - 1].v))}).${a.p < 0.05 ? " ANOVA shows that at least one group differs; compare pairs of groups to see which." : ""}</p>`; } }
         body = `<div class="grid2"><label for="stQ">Score${sel("stQ", numQs.map((x) => [x.id, qNum(st, x) + ". " + short(x.text, 60)]), T.q)}</label><label for="stG">Groups${sel("stG", cv.filter(([k]) => k !== "q:" + T.q), T.g)}</label></div>
-          ${groups.length ? `<div class="table-wrap"><table><thead><tr><th>Group</th><th>n</th><th>Mean</th><th>SD</th></tr></thead><tbody>${groups.map((g) => `<tr><td>${esc(g.name)}</td><td class="n">${g.v.length}</td><td class="n">${f2(STAT.mean(g.v))}</td><td class="n">${f2(STAT.sd(g.v))}</td></tr>`).join("")}</tbody></table></div>` : ""}${res}${hid ? `<p class="hint">${hid} group${hid > 1 ? "s" : ""} with fewer than ${MIN_GROUP} people hidden to protect anonymity.</p>` : ""}`;
+          ${groups.length ? `<div class="table-wrap" tabindex="0"><table><thead><tr><th>Group</th><th>n</th><th>Mean</th><th>SD</th></tr></thead><tbody>${groups.map((g) => `<tr><td>${esc(g.name)}</td><td class="n">${g.v.length}</td><td class="n">${f2(STAT.mean(g.v))}</td><td class="n">${f2(STAT.sd(g.v))}</td></tr>`).join("")}</tbody></table></div>` : ""}${res}${hid ? `<p class="hint">${hid} group${hid > 1 ? "s" : ""} with fewer than ${MIN_GROUP} people hidden to protect anonymity.</p>` : ""}`;
       }
     } else if (T.test === "cross") {
       if (!cv.some(([k]) => k === T.a)) T.a = "country";
@@ -2338,7 +2362,7 @@ ${richSummary(st, rows)}`;
         const T2 = keep.map(([r]) => r.filter((_, j) => cols[j])), Bk = B.filter((_, j) => cols[j]);
         if (T2.length >= 2 && Bk.length >= 2) {
           const c = STAT.chiSquare(T2);
-          table = `<div class="table-wrap"><table><thead><tr><th></th>${Bk.map((b) => `<th>${esc(short(b, 22))}</th>`).join("")}<th>Total</th></tr></thead><tbody>${T2.map((r, i) => { const tot = r.reduce((x, y) => x + y, 0); return `<tr><td>${esc(keep[i][1])}</td>${r.map((x) => `<td class="n">${x} <span class="muted">(${pct(x, tot)}%)</span></td>`).join("")}<td class="n">${tot}</td></tr>`; }).join("")}</tbody></table></div>`;
+          table = `<div class="table-wrap" tabindex="0"><table><thead><tr><th></th>${Bk.map((b) => `<th>${esc(short(b, 22))}</th>`).join("")}<th>Total</th></tr></thead><tbody>${T2.map((r, i) => { const tot = r.reduce((x, y) => x + y, 0); return `<tr><td>${esc(keep[i][1])}</td>${r.map((x) => `<td class="n">${x} <span class="muted">(${pct(x, tot)}%)</span></td>`).join("")}<td class="n">${tot}</td></tr>`; }).join("")}</tbody></table></div>`;
           res = `<p class="stat-line">χ²(${c.df}, N = ${c.N}) = ${f2(c.chi)}, ${fmtP(c.p)}, Cramér's V = ${f2(c.v)}</p><p class="callout">${c.p < 0.05 ? `The two are related: the pattern of answers differs between groups more than chance would explain. The strength of the link is ${effV(c.v)}.` : "No reliable link: differences in this table could be down to chance."}</p>${c.smallShare > 0.2 ? `<p class="warn">${Math.round(c.smallShare * 100)}% of cells expect fewer than 5 people, so the chi-square result is unreliable. Collect more responses or combine answer groups.</p>` : ""}`;
         }
       }
@@ -2348,7 +2372,7 @@ ${richSummary(st, rows)}`;
       if (qs.length < 2) body = `<p class="muted">Needs at least two rating, Likert or number questions.</p>`;
       else {
         const cell = (a, b) => { if (a === b) return `<td class="n muted">1</td>`; const xs = [], ys = []; rows.forEach((r) => { const x = scoreOf(a, r.answers[a.id]), y = scoreOf(b, r.answers[b.id]); if (x != null && y != null) { xs.push(x); ys.push(y); } }); const c = STAT.corr(xs, ys); return c ? `<td class="n${c.p < 0.05 ? " hi" : ""}" title="n = ${c.n}, ${fmtP(c.p)}">${f2(c.r)}${stars(c.p)}</td>` : `<td class="n muted">–</td>`; };
-        body = `<div class="table-wrap"><table><thead><tr><th></th>${qs.map((q) => `<th>${qNum(st, q)}</th>`).join("")}</tr></thead><tbody>${qs.map((a) => `<tr><th scope="row">${qNum(st, a)}</th>${qs.map((b) => cell(a, b)).join("")}</tr>`).join("")}</tbody></table></div>
+        body = `<div class="table-wrap" tabindex="0"><table><thead><tr><th></th>${qs.map((q) => `<th>${qNum(st, q)}</th>`).join("")}</tr></thead><tbody>${qs.map((a) => `<tr><th scope="row">${qNum(st, a)}</th>${qs.map((b) => cell(a, b)).join("")}</tr>`).join("")}</tbody></table></div>
           <ul class="steps">${qs.map((q) => `<li><b>${qNum(st, q)}</b> ${esc(short(q.text, 90))}</li>`).join("")}</ul>
           <p class="hint">Pearson correlation r, from −1 to +1. * p < .05, ** p < .01, *** p < .001. With many pairs, a few will look significant by chance, so focus on strong, sensible links.</p>`;
       }
@@ -2362,7 +2386,7 @@ ${richSummary(st, rows)}`;
         const M = matrix(items), a = STAT.cronbach(M);
         const mixed = new Set(items.map((q) => scaleMax(q) + (q.type === "rating" ? scaleOf(q).min : 1) * 100)).size > 1;
         res = a == null ? `<p class="muted">Needs at least 3 people who answered every ticked question.</p>` : `<p class="stat-line">Cronbach's α = ${f2(a, 3)} (${items.length} items, n = ${M.length} complete responses)</p><p class="callout">Reliability is <b>${alphaWord(a)}</b>. ${a >= 0.7 ? "These questions hang together, so you can average them into one score." : "These questions don't measure one idea consistently. Check the item list below before combining them."}</p>${mixed ? `<p class="warn">The ticked questions use different scales. Alpha is most meaningful when every item uses the same scale.</p>` : ""}
-          ${items.length >= 3 ? `<div class="table-wrap"><table><thead><tr><th>If this item is removed</th><th>α</th></tr></thead><tbody>${items.map((q) => { const rest = items.filter((x) => x !== q), a2 = STAT.cronbach(matrix(rest)); return `<tr><td>${qNum(st, q)}. ${esc(short(q.text, 70))}</td><td class="n${a2 != null && a2 > a + 0.02 ? " hi" : ""}">${f2(a2, 3)}</td></tr>`; }).join("")}</tbody></table></div><p class="hint">A highlighted value means reliability improves without that question.</p>` : ""}`;
+          ${items.length >= 3 ? `<div class="table-wrap" tabindex="0"><table><thead><tr><th>If this item is removed</th><th>α</th></tr></thead><tbody>${items.map((q) => { const rest = items.filter((x) => x !== q), a2 = STAT.cronbach(matrix(rest)); return `<tr><td>${qNum(st, q)}. ${esc(short(q.text, 70))}</td><td class="n${a2 != null && a2 > a + 0.02 ? " hi" : ""}">${f2(a2, 3)}</td></tr>`; }).join("")}</tbody></table></div><p class="hint">A highlighted value means reliability improves without that question.</p>` : ""}`;
       }
       body = cand.length ? `<fieldset><legend class="hint">Questions in the scale</legend><div class="pcheck">${cand.map((q) => `<label><input type="checkbox" id="al-${q.id}" data-alpha="${q.id}" ${T.items.includes(q.id) ? "checked" : ""}>${qNum(st, q)}. ${esc(short(q.text, 60))}</label>`).join("")}</div></fieldset>${res}` : `<p class="muted">Needs Likert or rating questions.</p>`;
     }
@@ -2762,7 +2786,7 @@ ${richSummary(st, rows)}`;
     const onlineReward = Math.ceil(((MIN_HOURLY * 1.25 * Math.max(3, q.mins * 0.7)) / 60) * 20) / 20, online = q.n * onlineReward * (1 + FEE);
     return `<div class="quote-head"><div><span class="eyebrow gold">Instant quote · US dollars</span><div class="quote-total">${usd0(q.total)}</div><span class="hint">${usd(q.per)} per ${unitName} · ref ${esc(S.f2f.ref)} · valid 30 days</span></div>
       <div class="quote-time"><b>About ${q.weeks} week${q.weeks > 1 ? "s" : ""}</b><span>${q.fieldDays} day${q.fieldDays > 1 ? "s" : ""} of fieldwork</span><span>${esc(q.people)}</span></div></div>
-      <div class="table-wrap"><table class="quote-table"><thead><tr><th>Item</th><th>Qty</th><th>Unit</th><th>Amount</th></tr></thead><tbody>
+      <div class="table-wrap" tabindex="0"><table class="quote-table"><thead><tr><th>Item</th><th>Qty</th><th>Unit</th><th>Amount</th></tr></thead><tbody>
       ${groups.map((g) => `<tr class="qgroup"><td colspan="4">${esc(g)}</td></tr>` + q.lines.filter((l) => l.group === g).map((l) => `<tr><td>${esc(l.label)}</td><td class="n">${int(l.qty)}</td><td class="n">${usd(l.unit)}</td><td class="n">${usd(l.amount)}</td></tr>`).join("")).join("")}
       <tr class="qtotal"><td colspan="3">Total</td><td class="n">${usd(q.total)}</td></tr></tbody></table></div>
       ${F.method === "questionnaire" ? `<p class="callout">Running the same survey online with the Afrimetrica Surveys panel would cost about <b>${usd0(online)}</b>. Face-to-face reaches people who aren't online, can't read well, or need an interviewer to explain questions.</p>` : ""}
@@ -2863,7 +2887,7 @@ ${richSummary(st, rows)}`;
     const st = { new: "New", contacted: "Contacted", quoted: "Final quote sent", won: "Won", lost: "Lost" };
     const won = list.filter((r) => r.status === "won").reduce((a, r) => a + ((r.quote && r.quote.total) || 0), 0);
     return `<section class="card"><div class="qmeta"><h2>Paper survey requests</h2><span class="hint">${list.length} request${list.length === 1 ? "" : "s"} · ${usd0(won)} won</span></div>
-      ${list.length ? `<div class="table-wrap"><table><thead><tr><th>Date</th><th>Client</th><th>Project</th><th>Quote</th><th>Status</th></tr></thead><tbody>${list.map((r) => `<tr><td class="n">${fmtDate(r.createdAt)}<br><span class="hint">${esc(r.ref || "")}</span></td><td><b>${esc(r.contact.name)}</b>${r.contact.org ? `<br>${esc(r.contact.org)}` : ""}<br><span class="hint">${esc(r.contact.email)}${r.contact.phone ? " · " + esc(r.contact.phone) : ""}</span></td><td>${esc(F2F_METHODS[r.inputs.method] || r.inputs.method)}<br><span class="hint">${r.inputs.method === "fgd" ? `${esc(r.inputs.groups)} groups` : `${int(r.inputs.n)} interviews`} · ${esc(r.inputs.country)} · ${r.survey ? esc(short(r.survey.title, 40)) : "no survey"}</span>${r.contact.notes ? `<br><span class="hint">“${esc(short(r.contact.notes, 120))}”</span>` : ""}</td><td class="n">${usd0(r.quote.total)}<br><span class="hint">~${r.quote.weeks} wk</span></td><td><select data-fw="${esc(r.id)}" aria-label="Status">${Object.entries(st).map(([k, v]) => `<option value="${k}"${r.status === k ? " selected" : ""}>${v}</option>`).join("")}</select></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No requests yet. They appear here when clients send a quote from the Paper Survey tab.</p>`}</section>`;
+      ${list.length ? `<div class="table-wrap" tabindex="0"><table><thead><tr><th>Date</th><th>Client</th><th>Project</th><th>Quote</th><th>Status</th></tr></thead><tbody>${list.map((r) => `<tr><td class="n">${fmtDate(r.createdAt)}<br><span class="hint">${esc(r.ref || "")}</span></td><td><b>${esc(r.contact.name)}</b>${r.contact.org ? `<br>${esc(r.contact.org)}` : ""}<br><span class="hint">${esc(r.contact.email)}${r.contact.phone ? " · " + esc(r.contact.phone) : ""}</span></td><td>${esc(F2F_METHODS[r.inputs.method] || r.inputs.method)}<br><span class="hint">${r.inputs.method === "fgd" ? `${esc(r.inputs.groups)} groups` : `${int(r.inputs.n)} interviews`} · ${esc(r.inputs.country)} · ${r.survey ? esc(short(r.survey.title, 40)) : "no survey"}</span>${r.contact.notes ? `<br><span class="hint">“${esc(short(r.contact.notes, 120))}”</span>` : ""}</td><td class="n">${usd0(r.quote.total)}<br><span class="hint">~${r.quote.weeks} wk</span></td><td><select data-fw="${esc(r.id)}" aria-label="Status">${Object.entries(st).map(([k, v]) => `<option value="${k}"${r.status === k ? " selected" : ""}>${v}</option>`).join("")}</select></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No requests yet. They appear here when clients send a quote from the Paper Survey tab.</p>`}</section>`;
   }
 
   // ---------- BUSINESS ----------
@@ -2895,7 +2919,7 @@ ${richSummary(st, rows)}`;
     return head + `
       <section class="kpis">${kpi(money(gmv * FEE), "Fee revenue earned")}${kpi(money(gmv), "Paid to participants")}${kpi(money(booked), "Fees on live studies if they fill")}${kpi(int(researchers), "Researchers")}${kpi(int(participants), "Participants")}</section>
       <section class="card"><div class="qmeta"><h2>All studies</h2><span class="hint">Average pay ${money(meanH)}/hour · test responses excluded</span></div>
-        ${S.studies.length ? `<div class="table-wrap"><table><thead><tr><th>Study</th><th>Status</th><th>Responses</th><th>Reward</th><th>Per hour</th><th>Fee earned</th></tr></thead><tbody>
+        ${S.studies.length ? `<div class="table-wrap" tabindex="0"><table><thead><tr><th>Study</th><th>Status</th><th>Responses</th><th>Reward</th><th>Per hour</th><th>Fee earned</th></tr></thead><tbody>
         ${[...S.studies].sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0)).map((s) => { const ap = approved.filter((r) => r.studyId === s.id); return `<tr><td>${esc(s.title || "Untitled")}</td><td><span class="pill${s.status === "live" ? " live" : ""}">${s.status}</span></td><td class="n">${int(usedSlots(s.id))} / ${int(s.target)}</td><td class="n">${money(s.reward)}</td><td class="n${hourly(s) < MIN_HOURLY ? " warn" : ""}">${money(hourly(s))}</td><td class="n">${money(ap.reduce((a, r) => a + r.reward, 0) * FEE)}</td></tr>`; }).join("")}
         </tbody></table></div>` : `<p class="muted">No studies yet.</p>`}
       </section>`;
@@ -3095,7 +3119,7 @@ ${richSummary(st, rows)}`;
   }
   function abOrganisation() {
     return `${abCrumbs("How we're organised")}<div class="page-head"><div><span class="eyebrow gold">How we're organised</span><h1>One organisation, five units</h1><p class="muted" style="max-width:66ch">Each part of Afrimetrica focuses on one way of helping organisations make better decisions, and they work together on larger assignments.</p></div></div>
-      <section class="card"><div class="table-wrap"><table><tbody>${AB_UNITS.map(([a, b2, href]) => `<tr><th scope="row" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.88rem;color:var(--muted);font-weight:500">${a}</th><td>${href ? `<a href="${href}">${esc(b2)}</a>` : esc(b2)}</td></tr>`).join("")}</tbody></table></div></section>`;
+      <section class="card"><div class="table-wrap" tabindex="0"><table><tbody>${AB_UNITS.map(([a, b2, href]) => `<tr><th scope="row" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.88rem;color:var(--muted);font-weight:500">${a}</th><td>${href ? `<a href="${href}">${esc(b2)}</a>` : esc(b2)}</td></tr>`).join("")}</tbody></table></div></section>`;
   }
   function abCertificates() {
     return `${abCrumbs("About our certificates")}<div class="page-head"><div><span class="eyebrow gold">About our certificates</span><h1>Certificates of completion</h1></div></div>
@@ -4082,7 +4106,7 @@ ${richSummary(st, rows)}`;
   const printBar = (back) => `<div class="row wrap no-print"><a class="btn small ghost" href="${back}">← Catalogues and brochures</a><button class="btn small primary" data-act="printPage">Print or save as PDF</button></div>`;
   function resTrainingCatalogue() {
     return `${printBar("#resources/catalogues")}<article class="printable"><header class="print-head"><span class="eyebrow gold">Afrimetrica Academy</span><h1>Training course catalogue</h1><p class="muted">Data, research and executive training. Every course runs in the classroom in our venues across English-speaking Africa, live online or in-house. Ask us for dates and fees. Participants receive a certificate of completion (not an accredited qualification).</p></header>
-      ${GROUPS.map(([g, name, subs]) => { const list = CATALOGUE.filter((c) => subs.includes(c.cat)); return `<section class="print-group"><h2>${esc(name)}</h2><div class="table-wrap"><table class="print-table"><thead><tr><th>Course</th><th>Subject</th><th>Days</th><th>Level</th></tr></thead><tbody>${list.map((c) => `<tr><td>${esc(c.title)}</td><td>${esc(catName(c.cat))}</td><td class="n">${c.days}</td><td>${esc(c.level)}</td></tr>`).join("")}</tbody></table></div></section>`; }).join("")}
+      ${GROUPS.map(([g, name, subs]) => { const list = CATALOGUE.filter((c) => subs.includes(c.cat)); return `<section class="print-group"><h2>${esc(name)}</h2><div class="table-wrap" tabindex="0"><table class="print-table"><thead><tr><th>Course</th><th>Subject</th><th>Days</th><th>Level</th></tr></thead><tbody>${list.map((c) => `<tr><td>${esc(c.title)}</td><td>${esc(catName(c.cat))}</td><td class="n">${c.days}</td><td>${esc(c.level)}</td></tr>`).join("")}</tbody></table></div></section>`; }).join("")}
       <p class="hint">Venues: ${esc(VENUES.map(([country, cities]) => `${country} (${cities.join(", ")})`).join("; "))}.</p></article>`;
   }
   function resServicesBrochure() {
@@ -4184,7 +4208,7 @@ ${richSummary(st, rows)}`;
     return `<div><span class="hint">Completed responses needed</span><b>${int(n)}</b></div><div><span class="hint">People to invite at a ${Math.round(rr * 100)}% response rate</span><b>${int(Math.ceil(n / rr))}</b></div>`;
   }
   function guideView(g) {
-    const table = `<div class="table-wrap"><table><thead><tr><th>Margin of error</th><th>Responses needed</th></tr></thead><tbody>${[10, 5, 3, 2].map((m) => `<tr><td>±${m}%</td><td class="n">${int(sampleN(1.96, m / 100, 0))}</td></tr>`).join("")}</tbody></table></div>`;
+    const table = `<div class="table-wrap" tabindex="0"><table><thead><tr><th>Margin of error</th><th>Responses needed</th></tr></thead><tbody>${[10, 5, 3, 2].map((m) => `<tr><td>±${m}%</td><td class="n">${int(sampleN(1.96, m / 100, 0))}</td></tr>`).join("")}</tbody></table></div>`;
     return `<div><a class="btn small ghost" href="#resources/articles">← Articles and guides</a></div>
       <article class="card prose guide"><span class="eyebrow gold">Afrimetrica Knowledge Hub · ${g.minutes} min read</span><h1>${esc(g.title)}</h1><p class="lede-sm">${esc(g.summary)}</p>
         ${g.sections.map(([h, p]) => `<h2>${esc(h)}</h2>${p === "__SAMPLE_TABLE__" ? table + `<p class="hint">For a yes/no style result, assuming a 50% split, which gives the largest (safest) number.</p>` : `<p>${esc(p)}</p>`}`).join("")}
@@ -4214,7 +4238,7 @@ ${richSummary(st, rows)}`;
     const enq = S.enquiries.filter((e) => e.requesterId === S.uid).sort((a, b) => b.createdAt - a.createdAt);
     const fw = S.fieldwork.filter((f) => f.requesterId === S.uid);
     const mine = myStudies();
-    const sec = { courses: `<section class="card"><div class="qmeta"><h2>My courses</h2><a class="btn small" href="#training">Browse courses</a></div>`, surveys: `<section class="card"><div class="qmeta"><h2>My surveys</h2><a class="btn small" href="#studies">Open My surveys</a></div><p class="muted">${mine.length ? `${mine.length} survey${mine.length === 1 ? "" : "s"}: ${mine.filter((x) => x.status === "live").length} live, ${mine.filter((x) => x.status === "draft").length} draft.` : "You haven't created a survey yet."}</p><div class="row wrap"><a class="btn small primary" href="#create">Create a survey</a><a class="btn small" href="#panel">Take paid surveys</a></div></section>`, enquiries: `<section class="card"><h2>My enquiries</h2>${enq.length || fw.length ? `<div class="table-wrap"><table><thead><tr><th>Date</th><th>About</th><th>Status</th></tr></thead><tbody>${enq.map((e) => `<tr><td class="n">${fmtDate(e.createdAt)}</td><td>${esc({ analytics: "Data analysis", consultancy: "Consultancy", contact: "General", training: "Training" }[e.type] || e.type)}${e.details && e.details.service ? ` · ${esc(e.details.service)}` : ""}</td><td><span class="pill">${st[e.status] || e.status}</span></td></tr>`).join("")}${fw.map((f) => `<tr><td class="n">${fmtDate(f.createdAt)}</td><td>Paper survey fieldwork · ${esc(f.ref || "")}</td><td><span class="pill">${esc({ new: "Received", contacted: "We've been in touch", quoted: "Final quote sent", won: "Agreed", lost: "Closed" }[f.status] || f.status)}</span></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No enquiries yet. Ask us about <a href="#consultancy">consultancy</a>, <a href="#analytics">analysis</a> or <a href="#training">training</a>.</p>`}</section>`, profile: `<section class="card"><h2>Profile</h2>${API ? `<dl class="kv"><dt>Name</dt><dd>${esc(u.name || "—")}</dd><dt>Email</dt><dd>${esc(u.email)}</dd><dt>Sign-in</dt><dd>${u.google ? "Google" : "Email and password"}</dd><dt>Email</dt><dd>${unverified() ? `<span class="warn">Not confirmed</span> <button class="linkbtn" data-act="resendVerifyAcct">Send link again</button>` : "Confirmed"}</dd></dl><div><button class="btn small ghost" data-act="signout">Sign out</button></div>` : `<p class="muted">On claude.ai, Afrimetrica uses your Claude account.</p>`}</section>`, participant: `<section class="card"><h2>Participant profile</h2><p class="muted">${S.profile ? `${esc(S.profile.age)} · ${esc(S.profile.gender)} · ${esc(S.profile.country)} · ${esc(S.profile.occupation)}` : "Set up a short profile to take paid surveys."}</p><a class="btn small" href="#panel" style="align-self:flex-start">${S.profile ? "Studies and earnings" : "Set up profile"}</a></section>` };
+    const sec = { courses: `<section class="card"><div class="qmeta"><h2>My courses</h2><a class="btn small" href="#training">Browse courses</a></div>`, surveys: `<section class="card"><div class="qmeta"><h2>My surveys</h2><a class="btn small" href="#studies">Open My surveys</a></div><p class="muted">${mine.length ? `${mine.length} survey${mine.length === 1 ? "" : "s"}: ${mine.filter((x) => x.status === "live").length} live, ${mine.filter((x) => x.status === "draft").length} draft.` : "You haven't created a survey yet."}</p><div class="row wrap"><a class="btn small primary" href="#create">Create a survey</a><a class="btn small" href="#panel">Take paid surveys</a></div></section>`, enquiries: `<section class="card"><h2>My enquiries</h2>${enq.length || fw.length ? `<div class="table-wrap" tabindex="0"><table><thead><tr><th>Date</th><th>About</th><th>Status</th></tr></thead><tbody>${enq.map((e) => `<tr><td class="n">${fmtDate(e.createdAt)}</td><td>${esc({ analytics: "Data analysis", consultancy: "Consultancy", contact: "General", training: "Training" }[e.type] || e.type)}${e.details && e.details.service ? ` · ${esc(e.details.service)}` : ""}</td><td><span class="pill">${st[e.status] || e.status}</span></td></tr>`).join("")}${fw.map((f) => `<tr><td class="n">${fmtDate(f.createdAt)}</td><td>Paper survey fieldwork · ${esc(f.ref || "")}</td><td><span class="pill">${esc({ new: "Received", contacted: "We've been in touch", quoted: "Final quote sent", won: "Agreed", lost: "Closed" }[f.status] || f.status)}</span></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No enquiries yet. Ask us about <a href="#consultancy">consultancy</a>, <a href="#analytics">analysis</a> or <a href="#training">training</a>.</p>`}</section>`, profile: `<section class="card"><h2>Profile</h2>${API ? `<dl class="kv"><dt>Name</dt><dd>${esc(u.name || "—")}</dd><dt>Email</dt><dd>${esc(u.email)}</dd><dt>Sign-in</dt><dd>${u.google ? "Google" : "Email and password"}</dd><dt>Email</dt><dd>${unverified() ? `<span class="warn">Not confirmed</span> <button class="linkbtn" data-act="resendVerifyAcct">Send link again</button>` : "Confirmed"}</dd></dl><div><button class="btn small ghost" data-act="signout">Sign out</button></div>` : `<p class="muted">On claude.ai, Afrimetrica uses your Claude account.</p>`}</section>`, participant: `<section class="card"><h2>Participant profile</h2><p class="muted">${S.profile ? `${esc(S.profile.age)} · ${esc(S.profile.gender)} · ${esc(S.profile.country)} · ${esc(S.profile.occupation)}` : "Set up a short profile to take paid surveys."}</p><a class="btn small" href="#panel" style="align-self:flex-start">${S.profile ? "Studies and earnings" : "Set up profile"}</a></section>` };
     const part = (S.acc || "").split("/")[0];
     const head = `<div class="page-head"><div><span class="eyebrow gold">My Account</span><h1>${API ? `Hello${firstName(u) ? ", " + esc(firstName(u)) : ""}` : "Your account"}</h1></div>${S.isOwner ? `<a class="btn gold" href="#business">Open admin area</a>` : ""}</div>`;
     if (part === "courses") return head + sec.courses;
@@ -4242,7 +4266,7 @@ ${richSummary(st, rows)}`;
     const regs = (c) => S.enrollments.filter((e) => e.courseId === c.id && e.status !== "cancelled").length;
     return `<section class="card"><div class="qmeta"><h2>Courses</h2><div class="row wrap"><label for="ce-tpl" class="inline" style="gap:6px">Start from<select id="ce-tpl" style="width:auto"><option value="">A blank course</option>${COURSE_TPL.map((t, i) => `<option value="${i}">${esc(t.title)}</option>`).join("")}</select></label><button class="btn primary" data-act="courseNew">New course</button></div></div>
       <p class="hint">Templates fill in a description and learning outcomes. Add your own dates, venues and fees, then publish.</p>
-      ${list.length ? `<div class="table-wrap"><table><thead><tr><th>Course</th><th>Status</th><th>Next date</th><th>Registrations</th><th></th></tr></thead><tbody>${list.map((c) => `<tr><td><b>${esc(c.title)}</b><br><span class="hint">${esc([c.level, c.format, c.duration].filter(Boolean).join(" · "))}</span></td><td><span class="pill${c.status === "published" ? " live" : " flag"}">${c.status === "published" ? "Published" : "Draft"}</span></td><td>${esc(upcoming(c)[0] ? fmtDay(upcoming(c)[0].start) : "—")}</td><td class="n">${regs(c)}</td><td><div class="row wrap">${S.confirmDel === c.id ? `<button class="btn small danger" data-act="courseDel" data-id="${esc(c.id)}">Confirm delete</button><button class="btn small ghost" data-act="canceldel">Keep</button>` : `<button class="btn small" data-act="courseEdit" data-id="${esc(c.id)}">Edit</button><button class="btn small ghost danger" data-act="askdel" data-id="${esc(c.id)}">Delete</button>`}</div></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No courses yet. Create one from a template to get started.</p>`}</section>`;
+      ${list.length ? `<div class="table-wrap" tabindex="0"><table><thead><tr><th>Course</th><th>Status</th><th>Next date</th><th>Registrations</th><th></th></tr></thead><tbody>${list.map((c) => `<tr><td><b>${esc(c.title)}</b><br><span class="hint">${esc([c.level, c.format, c.duration].filter(Boolean).join(" · "))}</span></td><td><span class="pill${c.status === "published" ? " live" : " flag"}">${c.status === "published" ? "Published" : "Draft"}</span></td><td>${esc(upcoming(c)[0] ? fmtDay(upcoming(c)[0].start) : "—")}</td><td class="n">${regs(c)}</td><td><div class="row wrap">${S.confirmDel === c.id ? `<button class="btn small danger" data-act="courseDel" data-id="${esc(c.id)}">Confirm delete</button><button class="btn small ghost" data-act="canceldel">Keep</button>` : `<button class="btn small" data-act="courseEdit" data-id="${esc(c.id)}">Edit</button><button class="btn small ghost danger" data-act="askdel" data-id="${esc(c.id)}">Delete</button>`}</div></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No courses yet. Create one from a template to get started.</p>`}</section>`;
   }
   function courseEditor(c) {
     const sel = (k, label, opts) => `<label for="ce-${k}">${label}<select id="ce-${k}" data-ce="${k}">${opts.map((o) => `<option${c[k] === o ? " selected" : ""}>${esc(o)}</option>`).join("")}</select></label>`;
@@ -4256,7 +4280,7 @@ ${richSummary(st, rows)}`;
         <label for="ce-outcomesText">Learning outcomes, one per line<textarea id="ce-outcomesText" data-ce="outcomesText" rows="4">${esc(c.outcomesText || "")}</textarea></label>
         <label for="ce-audience">Who it's for<input id="ce-audience" data-ce="audience" maxlength="400" value="${esc(c.audience || "")}"></label></section>
       <section class="card"><div class="qmeta"><h2>Dates and fees</h2><button type="button" class="btn small" data-act="sesAdd">+ Add a date</button></div>
-        ${c.sessions.length ? `<div class="table-wrap"><table class="ses-table"><thead><tr><th>Start</th><th>End</th><th>Venue or link</th><th>Seats (0 = no limit)</th><th>Fee</th><th>Currency</th><th></th></tr></thead><tbody>${c.sessions.map((s, i) => `<tr>
+        ${c.sessions.length ? `<div class="table-wrap" tabindex="0"><table class="ses-table"><thead><tr><th>Start</th><th>End</th><th>Venue or link</th><th>Seats (0 = no limit)</th><th>Fee</th><th>Currency</th><th></th></tr></thead><tbody>${c.sessions.map((s, i) => `<tr>
           <td><input type="date" id="se-${i}-start" data-si="${i}" data-sk="start" value="${esc(s.start || "")}" aria-label="Start date"></td><td><input type="date" id="se-${i}-end" data-si="${i}" data-sk="end" value="${esc(s.end || "")}" aria-label="End date"></td>
           <td><input id="se-${i}-location" data-si="${i}" data-sk="location" value="${esc(s.location || "")}" maxlength="120" placeholder="e.g. Accra / Zoom" aria-label="Venue"></td>
           <td><input type="number" id="se-${i}-seats" data-si="${i}" data-sk="seats" value="${esc(s.seats || 0)}" min="0" aria-label="Seats"></td>
@@ -4285,13 +4309,13 @@ ${richSummary(st, rows)}`;
     const list = [...S.enrollments].sort((a, b) => b.createdAt - a.createdAt);
     const cs = (e) => { const c = courseById(e.courseId), s = c && (c.sessions || []).find((x) => x.id === e.sessionId); return [c ? c.title : "(deleted course)", e.sessionId ? (s ? fmtDay(s.start) + (s.location ? ", " + s.location : "") : "(removed date)") : "Interest only"]; };
     return `<section class="card"><div class="qmeta"><h2>Course registrations</h2>${list.length ? `<button class="btn small" data-act="enrCsv">Download CSV</button>` : ""}</div>
-      ${list.length ? `<div class="table-wrap"><table><thead><tr><th>Date</th><th>Person</th><th>Course and date</th><th>Notes</th><th>Status</th></tr></thead><tbody>${list.map((e) => { const [ct, sd] = cs(e); return `<tr><td class="n">${fmtDate(e.createdAt)}</td><td><b>${esc(e.name || "—")}</b><br><span class="hint">${esc(e.email || "")}${e.phone ? " · " + esc(e.phone) : ""}${e.organisation ? "<br>" + esc(e.organisation) : ""}</span></td><td>${esc(ct)}<br><span class="hint">${esc(sd)}</span></td><td class="hint">${esc(short(e.notes || "", 120))}</td><td><select data-enr="${esc(e.id)}" aria-label="Status">${Object.entries(ENROL_LABEL).map(([k, v]) => `<option value="${k}"${e.status === k ? " selected" : ""}>${v}</option>`).join("")}</select></td></tr>`; }).join("")}</tbody></table></div>` : `<p class="muted">No registrations yet.</p>`}</section>`;
+      ${list.length ? `<div class="table-wrap" tabindex="0"><table><thead><tr><th>Date</th><th>Person</th><th>Course and date</th><th>Notes</th><th>Status</th></tr></thead><tbody>${list.map((e) => { const [ct, sd] = cs(e); return `<tr><td class="n">${fmtDate(e.createdAt)}</td><td><b>${esc(e.name || "—")}</b><br><span class="hint">${esc(e.email || "")}${e.phone ? " · " + esc(e.phone) : ""}${e.organisation ? "<br>" + esc(e.organisation) : ""}</span></td><td>${esc(ct)}<br><span class="hint">${esc(sd)}</span></td><td class="hint">${esc(short(e.notes || "", 120))}</td><td><select data-enr="${esc(e.id)}" aria-label="Status">${Object.entries(ENROL_LABEL).map(([k, v]) => `<option value="${k}"${e.status === k ? " selected" : ""}>${v}</option>`).join("")}</select></td></tr>`; }).join("")}</tbody></table></div>` : `<p class="muted">No registrations yet.</p>`}</section>`;
   }
   function enquiriesAdmin() {
     const f = S.enqFilter || "";
     const list = S.enquiries.filter((e) => !f || e.type === f).sort((a, b) => b.createdAt - a.createdAt);
     return `<section class="card"><div class="qmeta"><h2>Enquiries</h2><div class="row wrap"><label for="enqFilter" class="inline" style="gap:6px">Show<select id="enqFilter" style="width:auto"><option value="">All</option>${["analytics", "consultancy", "training", "contact"].map((t) => `<option value="${t}"${f === t ? " selected" : ""}>${t[0].toUpperCase() + t.slice(1)}</option>`).join("")}</select></label>${list.length ? `<button class="btn small" data-act="enqCsv">Download CSV</button>` : ""}</div></div>
-      ${list.length ? `<div class="table-wrap"><table><thead><tr><th>Date</th><th>From</th><th>Enquiry</th><th>Status</th></tr></thead><tbody>${list.map((e) => `<tr><td class="n">${fmtDate(e.createdAt)}<br><span class="pill">${esc(e.type)}</span></td><td><b>${esc(e.contact.name)}</b><br><span class="hint">${esc(e.contact.email)}${e.contact.phone ? " · " + esc(e.contact.phone) : ""}${e.contact.organisation ? "<br>" + esc(e.contact.organisation) : ""}</span></td><td>${e.subject ? `<b>${esc(e.subject)}</b><br>` : ""}${e.details && e.details.service ? `<span class="hint">${esc(e.details.service)}${e.details.timeline ? " · " + esc(e.details.timeline) : ""}${e.details.budget ? " · " + esc(e.details.budget) : ""}</span><br>` : ""}<span style="white-space:pre-line">${esc(short(e.message, 400))}</span></td><td><select data-eqs="${esc(e.id)}" aria-label="Status">${Object.entries(ENQ_LABEL).map(([k, v]) => `<option value="${k}"${e.status === k ? " selected" : ""}>${v}</option>`).join("")}</select></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No enquiries${f ? " of this type" : ""} yet.</p>`}</section>`;
+      ${list.length ? `<div class="table-wrap" tabindex="0"><table><thead><tr><th>Date</th><th>From</th><th>Enquiry</th><th>Status</th></tr></thead><tbody>${list.map((e) => `<tr><td class="n">${fmtDate(e.createdAt)}<br><span class="pill">${esc(e.type)}</span></td><td><b>${esc(e.contact.name)}</b><br><span class="hint">${esc(e.contact.email)}${e.contact.phone ? " · " + esc(e.contact.phone) : ""}${e.contact.organisation ? "<br>" + esc(e.contact.organisation) : ""}</span></td><td>${e.subject ? `<b>${esc(e.subject)}</b><br>` : ""}${e.details && e.details.service ? `<span class="hint">${esc(e.details.service)}${e.details.timeline ? " · " + esc(e.details.timeline) : ""}${e.details.budget ? " · " + esc(e.details.budget) : ""}</span><br>` : ""}<span style="white-space:pre-line">${esc(short(e.message, 400))}</span></td><td><select data-eqs="${esc(e.id)}" aria-label="Status">${Object.entries(ENQ_LABEL).map(([k, v]) => `<option value="${k}"${e.status === k ? " selected" : ""}>${v}</option>`).join("")}</select></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No enquiries${f ? " of this type" : ""} yet.</p>`}</section>`;
   }
   function settingsAdmin() {
     const st = S.settings || {};
@@ -4475,7 +4499,7 @@ ${richSummary(st, rows)}`;
       case "approve": await save(() => backend.patchResponse(id, { status: "approved" }), "Response approved. The participant will be paid."); break;
       case "reject": await save(() => backend.patchResponse(id, { status: "rejected" }), "Response rejected. The place is open again."); break;
       case "csv": exportCsv(); break;
-      case "goSignin": e.preventDefault(); { const h = location.hash.replace("#", ""); if (h && h !== "signin") S.returnTo = h; } S.authMode = b.dataset.m || "signin"; S.authError = ""; go("signin"); break;
+      case "goSignin": e.preventDefault(); { const h = routeKey(); if (h && h !== "signin") S.returnTo = h; } S.authMode = b.dataset.m || "signin"; S.authError = ""; go("signin"); break;
       case "authMode": { const em = $("#au-email") || $("#fp-email"); if (em && em.value) S.forgotEmail = em.value.trim(); } S.authMode = b.dataset.m; S.authError = ""; render(); break;
       case "signout": signOut(); break;
       case "f2fRequest": S.f2f.requesting = true; render(); { const f = $("#f2fForm"); if (f) { f.scrollIntoView({ block: "start" }); $("#fw-name").focus(); } } break;
@@ -4535,7 +4559,7 @@ ${richSummary(st, rows)}`;
   $("#acct").addEventListener("click", (e) => {
     const b = e.target.closest("[data-act]"); if (!b) return;
     if (b.dataset.act === "signout") { e.preventDefault(); b.closest("details").open = false; signOut(); }
-    if (b.dataset.act === "goSignin") { e.preventDefault(); const h = location.hash.replace("#", ""); if (h && h !== "signin") S.returnTo = h; S.authMode = "signin"; S.authError = ""; go("signin"); }
+    if (b.dataset.act === "goSignin") { e.preventDefault(); const h = routeKey(); if (h && h !== "signin") S.returnTo = h; S.authMode = "signin"; S.authError = ""; go("signin"); }
   });
   document.addEventListener("click", (e) => { const d = $(".acct-menu[open]"); if (d && !d.contains(e.target)) d.open = false; });
   // Main menu dropdowns: open when the pointer rests on a menu item or it gets keyboard focus.
@@ -4564,7 +4588,21 @@ ${richSummary(st, rows)}`;
   });
   document.addEventListener("click", (e) => { if (S.trMenu && !e.composedPath().some((n) => n.id === "subnav")) { S.trMenu = null; renderTabs(); } });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && S.trMenu) { const k = S.trMenu; S.trMenu = null; renderTabs(); const b = $(`[data-act="trMenu"][data-k="${k}"]`); if (b) b.focus(); } });
-  window.addEventListener("hashchange", () => { closeNavDrop(true); route(); render(); window.scrollTo(0, 0); if (API) refreshServer().then(softRender).catch(() => {}); });
+  window.addEventListener("hashchange", onNavigate);
+  window.addEventListener("popstate", onNavigate);
+  // Links to public pages move between real addresses without reloading the page.
+  document.addEventListener("click", (e) => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const a = e.target.closest && e.target.closest('a[href^="/"]');
+    if (!a || a.target || a.hasAttribute("download") || a.origin !== location.origin) return;
+    const k = decodeURIComponent(a.pathname).replace(/^\/+|\/+$/g, "");
+    if (k && !CLEAN.has(k.split("/")[0])) return;
+    e.preventDefault();
+    if (a.pathname !== location.pathname || location.hash) history.pushState(null, "", a.pathname);
+    onNavigate();
+  });
+  new MutationObserver((ms) => { for (const m of ms) for (const n of m.addedNodes) cleanLinks(n); }).observe(document.body, { childList: true, subtree: true });
+  cleanLinks(document);
   const refreshSoon = () => { if (API && document.visibilityState === "visible") refreshServer().then(softRender).catch(() => {}); };
   document.addEventListener("visibilitychange", refreshSoon);
   window.addEventListener("focus", refreshSoon);
