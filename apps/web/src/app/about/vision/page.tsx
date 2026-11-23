@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Photo } from "@/components/site/Photo";
 import { Crumbs, Head, Statement, TickList } from "@/components/site/sections";
 import { ABOUT } from "@/content/sections";
 
@@ -17,8 +18,13 @@ export default function Vision() {
           ["", "Our vision"],
         ]}
       />
-      <Head eyebrow="Our vision" title="The future we are working towards" />
-      <Statement>{ABOUT.vision}</Statement>
+      <div className="feature">
+        <Photo slot="vision" />
+        <div className="stack">
+          <Head eyebrow="Our vision" title="The future we are working towards" />
+          <Statement>{ABOUT.vision}</Statement>
+        </div>
+      </div>
       <section className="card">
         <h2>How we get there</h2>
         <TickList

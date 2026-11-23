@@ -37,8 +37,8 @@ export const PHOTOS = {
   },
   about: {
     file: "about.webp",
-    alt: "A busy African city street with office towers, traffic and banners reading Innovation for Africa and Data, Research, Analytics, Impact",
-    position: "center 40%",
+    alt: "Aerial view of a growing town: red-roofed houses, warehouses and green open land, with more houses in the distance",
+    position: "center 55%",
     where: "About page, under the heading",
     // The CEO's photo will get its own place in the "Our team" section when it's ready.
     suggest: "A city or office scene",
@@ -73,15 +73,22 @@ export const PHOTOS = {
   },
   venuesCity: {
     file: "venues-city.webp",
-    alt: "A growing African city: modern office towers, a building under construction and houses among green trees",
-    position: "center 35%",
+    alt: "The Kwame Nkrumah Memorial Park in Accra: the monument and statue above blue fountains under a clear sky",
+    position: "center 55%",
     where: "Training venues page, beside the heading",
     suggest: "A city where courses run",
   },
+  vision: {
+    file: "vision-city.webp",
+    alt: "Aerial view of a city of red-roofed houses and green trees, with a railway line running towards the horizon under a blue sky",
+    position: "center 60%",
+    where: "Our vision page, beside the heading",
+    suggest: "A wide view of a city or town",
+  },
   trainingExec: {
     file: "training-executive.webp",
-    alt: "A trainer speaks to a small group of professionals around a table, in front of a whiteboard",
-    position: "center 30%",
+    alt: "Professionals with laptops in a meeting around a long table in a bright conference room",
+    position: "center 50%",
     where: "Training page, 'Executive and in-house training' section",
     suggest: "An executive or in-house training session",
   },
