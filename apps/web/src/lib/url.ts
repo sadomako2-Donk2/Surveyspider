@@ -12,3 +12,9 @@ export function googleSiteVerification(raw = process.env.GOOGLE_SITE_VERIFICATIO
   const code = (raw ?? "").trim().replace(/^.*content="([^"]+)".*$/s, "$1");
   return /^[A-Za-z0-9_-]{10,100}$/.test(code) ? code : undefined;
 }
+
+/** Bing Webmaster Tools' ownership code (BING_SITE_VERIFICATION); Bing also feeds DuckDuckGo and Yahoo. */
+export function bingSiteVerification(raw = process.env.BING_SITE_VERIFICATION): string | undefined {
+  const code = (raw ?? "").trim().replace(/^.*content="([^"]+)".*$/s, "$1");
+  return /^[A-Za-z0-9]{10,100}$/.test(code) ? code : undefined;
+}

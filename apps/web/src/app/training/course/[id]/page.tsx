@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { JsonLd, courseLd } from "@/components/site/JsonLd";
 import { Crumbs, Head, TickList } from "@/components/site/sections";
 import { RequestCourse } from "@/components/training/RequestCourse";
 import { COURSES, FORMATS, course, groupsOfSubject, subjectName } from "@/content/sections";
@@ -17,6 +18,7 @@ export default async function CoursePage({ params }: P) {
   const area = groupsOfSubject(c.cat)[0];
   return (
     <main id="main" className="wrap stack">
+      <JsonLd data={courseLd(c)} />
       <Crumbs
         items={[
           ["/training", "Training"],

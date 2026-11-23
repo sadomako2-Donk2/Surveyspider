@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata, Viewport } from "next";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SITE } from "@/lib/site";
-import { googleSiteVerification, siteUrl } from "@/lib/url";
+import { bingSiteVerification, googleSiteVerification, siteUrl } from "@/lib/url";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -10,9 +10,18 @@ export const metadata: Metadata = {
   description:
     "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.",
   metadataBase: new URL(siteUrl()),
-  openGraph: { siteName: SITE.name, type: "website", locale: "en_GB" },
+  openGraph: {
+    siteName: SITE.name,
+    type: "website",
+    locale: "en_GB",
+    images: [{ url: "/social.jpg", width: 1200, height: 630, alt: "Afrimetrica: Data, Research, Executive Training" }],
+  },
+  twitter: { card: "summary_large_image" },
   formatDetection: { telephone: false },
-  verification: { google: googleSiteVerification() },
+  verification: {
+    google: googleSiteVerification(),
+    other: bingSiteVerification() ? { "msvalidate.01": bingSiteVerification()! } : undefined,
+  },
 };
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover" };
