@@ -69,8 +69,10 @@ a { color: var(--accent); }
 .logo-mark .af-a { stroke: var(--ink); }
 .logo-mark .af-dot { stroke: var(--surface); stroke-width: 1.4; }
 .brand .wm { display: flex; flex-direction: column; line-height: 1; }
-.brand .wm b { font-family: var(--font-display); font-weight: 800; font-size: 1.22rem; letter-spacing: 0.04em; }
-.brand .wm small { white-space: nowrap; font-family: var(--font-display); font-weight: 600; font-size: 0.56rem; letter-spacing: 0.28em; color: var(--muted); margin-top: 3px; }
+.brand .wm b { font-family: var(--font-display); font-weight: 800; font-size: 1.42rem; letter-spacing: -0.01em; }
+.brand .wm small i { font-style: normal; color: var(--gold); }
+.brand img.logo-mark { display: block; }
+.brand .wm small { white-space: nowrap; font-family: var(--font-display); font-weight: 700; font-size: 0.56rem; letter-spacing: 0.2em; color: var(--muted); margin-top: 4px; }
 .tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; min-width: 0; }
 .tabs a { padding: 7px 11px; border-radius: 8px; color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
 .tabs a:hover { color: var(--ink); background: var(--bg); }
@@ -603,18 +605,14 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
 .side-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 18px; border-bottom: 3px solid var(--gold); display: block; background: var(--navy-band); }
 .card-photo img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 12px; display: block; }
 @media (max-width: 860px) { .feature { grid-template-columns: 1fr; } }
+.foot-logo { display: block; height: 56px; width: auto; border-radius: 8px; margin-bottom: 10px; }
 </style>
 
 <header class="topbar gutter">
   <div class="topbar-inner">
     <a class="brand" href="#home" aria-label="Afrimetrica home">
-      <svg class="logo-mark" width="40" height="40" viewBox="0 0 48 48" aria-hidden="true">
-        <defs><linearGradient id="afGold" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#a87a22"/><stop offset="0.55" stop-color="#f2d27e"/><stop offset="1" stop-color="#c4952f"/></linearGradient></defs>
-        <path class="af-a" d="M6 43 21.2 7.6a3 3 0 0 1 5.6 0L42 43" fill="none" stroke-width="6.2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M13.5 32.5 21 28.5l5 2.2 9.8-8.6" fill="none" stroke="url(#afGold)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="38.6" cy="19.6" r="3.6" fill="#f2d27e" class="af-dot"/>
-      </svg>
-      <span class="wm"><b>AFRI<span class="gold-text">METRICA</span></b><small>DATA · RESEARCH · EXECUTIVE TRAINING</small></span>
+      <img class="logo-mark" src="/photos/logo-sun.webp" width="40" height="40" alt="">
+      <span class="wm"><b>Afrimetrica</b><small>DATA <i>•</i> RESEARCH <i>•</i> EXECUTIVE TRAINING</small></span>
     </a>
     <nav class="tabs" id="tabs" aria-label="Main"></nav>
     <div class="acct" id="acct"></div>
@@ -1013,7 +1011,7 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
     const msg = S.notice || (S.mode === "demo" ? "Demo mode: everything you create is saved in this browser only. Open the published page while signed in to claude.ai to share data with other people." : "") || (S.stale ? "Can't reach the saved data yet. What you see may be out of date." : "");
     b.hidden = !msg; b.textContent = msg;
     if (!msg && unverified()) { b.hidden = false; b.innerHTML = `<b>Confirm your email address.</b> We sent a link to ${esc(S.user.email)}. You can browse and save drafts now; confirm to launch surveys, take paid studies and use AI. <button type="button" class="linkbtn" data-act="resendVerify">Send it again</button>`; }
-    $("#foot").innerHTML = `<div class="foot-inner"><div><b>Afrimetrica</b> · Data, Research and Executive Training<br><span class="hint">Plan. Analyse. Lead. Training, data and advice for organisations, governments and NGOs across Africa.</span><br><span class="hint"><a href="#privacy">Privacy notice</a> · <a href="#terms">Terms of use</a></span></div><div class="hint">Afrimetrica Surveys platform fee ${Math.round(FEE * 100)}% of participant rewards. ${S.mode === "live" ? (API ? "Survey answers are stored on Afrimetrica's server and shown only to the survey's owner." : "Data is shared with everyone who can open this page.") : S.mode === "demo" ? "Demo data stays in this browser." : "Connecting…"}</div></div>`;
+    $("#foot").innerHTML = `<div class="foot-inner"><div><img class="foot-logo" src="/photos/logo-full.webp" width="216" height="72" alt="Afrimetrica: Data, Research, Executive Training"><br><b>Afrimetrica</b> · Data, Research and Executive Training<br><span class="hint">Plan. Analyse. Lead. Training, data and advice for organisations, governments and NGOs across Africa.</span><br><span class="hint"><a href="#privacy">Privacy notice</a> · <a href="#terms">Terms of use</a></span></div><div class="hint">Afrimetrica Surveys platform fee ${Math.round(FEE * 100)}% of participant rewards. ${S.mode === "live" ? (API ? "Survey answers are stored on Afrimetrica's server and shown only to the survey's owner." : "Data is shared with everyone who can open this page.") : S.mode === "demo" ? "Demo data stays in this browser." : "Connecting…"}</div></div>`;
   }
   // Each page gets its own browser-tab title and description (used when people bookmark or share it).
   const SITE_TITLE = "Afrimetrica — Data, Research and Executive Training";
