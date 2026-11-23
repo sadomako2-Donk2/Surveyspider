@@ -2919,10 +2919,11 @@ ${richSummary(st, rows)}`;
     home: ["home.webp", "A team around a laptop discussing research results, with charts and a map of Africa on a screen behind them", "center 30%"],
     training: ["training.webp", "A trainer points to charts and a map of Africa on a screen while participants at a table listen and take notes", "center 35%"],
     surveys: ["surveys.webp", "An interviewer with a tablet talks with a smiling market trader at her stall", "center 35%"],
-    about: ["about.webp", "A busy African city street with office towers, traffic and banners reading Innovation for Africa and Data, Research, Analytics, Impact", "center 40%"],
+    about: ["about.webp", "Aerial view of a growing town: red-roofed houses, warehouses and green open land, with more houses in the distance", "center 55%"],
     consultancy: ["consultancy.webp", "A consultant presents to a group around a meeting table, with a map of Africa and charts on a screen and printed reports on the table", "center 35%"],
-    venuesCity: ["venues-city.webp", "A growing African city: modern office towers, a building under construction and houses among green trees", "center 35%"],
-    trainingExec: ["training-executive.webp", "A trainer speaks to a small group of professionals around a table, in front of a whiteboard", "center 30%"],
+    venuesCity: ["venues-city.webp", "The Kwame Nkrumah Memorial Park in Accra: the monument and statue above blue fountains under a clear sky", "center 55%"],
+    trainingExec: ["training-executive.webp", "Professionals with laptops in a meeting around a long table in a bright conference room", "center 50%"],
+    vision: ["vision-city.webp", "Aerial view of a city of red-roofed houses and green trees, with a railway line running towards the horizon under a blue sky", "center 60%"],
     fieldwork: ["fieldwork-team.webp", "A field team with a tablet and clipboards talks with women in a village, beside thatched houses", "center 40%"],
     analytics: ["analytics.webp", "Three analysts look at a laptop together, with a dashboard of charts on the wall behind them", "center 8%"],
   };
@@ -3081,8 +3082,8 @@ ${richSummary(st, rows)}`;
       <section class="card"><h2>What we stand for</h2>${abValues()}</section>`;
   }
   function abVision() {
-    return `${abCrumbs("Our vision")}<div class="page-head"><div><span class="eyebrow gold">Our vision</span><h1>The future we are working towards</h1></div></div>
-      <section class="card statement"><p>${esc(AB_VISION)}</p></section>
+    return `${abCrumbs("Our vision")}<div class="feature">${sidePhoto("vision")}<div class="stack"><div class="page-head"><div><span class="eyebrow gold">Our vision</span><h1>The future we are working towards</h1></div></div>
+      <section class="card statement"><p>${esc(AB_VISION)}</p></section></div></div>
       <section class="card"><h2>How we get there</h2><ul class="ticks small"><li><div><b>Skills</b><span>Training leaders and teams in data, research and management through Afrimetrica Academy.</span></div></li><li><div><b>Data</b><span>Reliable surveys and data collection through Afrimetrica Surveys and our field teams.</span></div></li><li><div><b>Evidence</b><span>Independent analysis and research through Afrimetrica Analytics and Afrimetrica Consulting.</span></div></li><li><div><b>Knowledge</b><span>Free guides and tools for everyone through the Afrimetrica Knowledge Hub.</span></div></li></ul></section>`;
   }
   function abTeam() {
