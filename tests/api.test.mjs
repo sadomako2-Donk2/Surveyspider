@@ -37,6 +37,7 @@ process.env.RESEND_API_KEY = "test-resend-key";
 process.env.RESEND_API_URL = `http://127.0.0.1:${fakeResend.address().port}/emails`;
 process.env.EMAIL_FROM = "Afrimetrica <hello@afrimetrica.test>";
 process.env.PUBLIC_URL = "https://surveyspider.test";
+process.env.GOOGLE_SITE_VERIFICATION = '<meta name="google-site-verification" content="abcDEF123_-xyz456" />';
 const { server } = await import("../server.mjs");
 await new Promise((r) => server.listen(0, r));
 const base = `http://127.0.0.1:${server.address().port}`;
@@ -62,6 +63,12 @@ const study = { id: "s1", title: "Test survey", status: "live", target: 2, rewar
 
 const A = browser("a"), B = browser("b"), C = browser("c");
 const page = await fetch(base + "/"); check("home page is served", page.status === 200 && (await page.text()).includes("Afrimetrica"));
+const homeHtml = await (await fetch(base + "/")).text();
+check("the Google ownership code is in the page (pasted whole tag is accepted)", homeHtml.includes('<meta name="google-site-verification" content="abcDEF123_-xyz456">'));
+const robots = await fetch(base + "/robots.txt"), robotsText = await robots.text();
+check("robots.txt lets search engines in, keeps them out of the API, and names the sitemap", robots.status === 200 && /Allow: \//.test(robotsText) && /Disallow: \/api\//.test(robotsText) && robotsText.includes("Sitemap: https://surveyspider.test/sitemap.xml"));
+const sitemap = await fetch(base + "/sitemap.xml");
+check("sitemap.xml lists the home page at the public address", sitemap.status === 200 && /xml/.test(sitemap.headers.get("content-type")) && (await sitemap.text()).includes("<loc>https://surveyspider.test/</loc>"));
 check("health check responds", (await A.call("GET", "/healthz")).status === 200);
 const pic = await fetch(base + "/photos/home.webp");
 check("website photos are served", pic.status === 200 && pic.headers.get("content-type") === "image/webp" && (await pic.arrayBuffer()).byteLength > 1000);

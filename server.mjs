@@ -34,7 +34,11 @@ const EMAIL_FROM = process.env.EMAIL_FROM || "Afrimetrica <onboarding@resend.dev
 const RESET_MINUTES = 60;
 
 // ---------- page ----------
-const SHELL_HEAD = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa."><link rel="icon" type="image/svg+xml" href="/icon.svg"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>`;
+// Google Search Console ownership check: paste only the code from Google's "HTML tag" method into
+// Render → Environment as GOOGLE_SITE_VERIFICATION (it isn't secret; Google shows it in the page).
+const GOOGLE_VERIFY = (process.env.GOOGLE_SITE_VERIFICATION || "").trim().replace(/^.*content="([^"]+)".*$/s, "$1");
+const SITE_VERIFY = /^[A-Za-z0-9_-]{10,100}$/.test(GOOGLE_VERIFY) ? `<meta name="google-site-verification" content="${GOOGLE_VERIFY}">` : "";
+const SHELL_HEAD = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa."><link rel="icon" type="image/svg+xml" href="/icon.svg">${SITE_VERIFY}<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>`;
 const PAGE = SHELL_HEAD + readFileSync(path.join(here, "public", "index.html"), "utf8") + "</body></html>";
 const ICON = readFileSync(path.join(here, "public", "icon.svg"));
 // Photos for the public pages: every .webp in public/photos, read once at start. Only these exact names are served.
@@ -606,6 +610,8 @@ export const server = http.createServer(async (req, res) => {
     if (url.pathname === "/auth/google/callback" && req.method === "GET") return await googleCallback(req, res, url);
     if (url.pathname === "/healthz") return send(res, 200, { ok: true });
     if (url.pathname.startsWith("/photos/") && PHOTOS.has(url.pathname.slice(8))) { res.writeHead(200, { "Content-Type": "image/webp", "Cache-Control": "public, max-age=86400" }); return res.end(PHOTOS.get(url.pathname.slice(8))); }
+    if (req.method === "GET" && url.pathname === "/robots.txt") { res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=3600" }); return res.end(`User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /auth/\n\nSitemap: ${baseUrl(req)}/sitemap.xml\n`); }
+    if (req.method === "GET" && url.pathname === "/sitemap.xml") { res.writeHead(200, { "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, max-age=3600" }); return res.end(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${baseUrl(req)}/</loc><changefreq>weekly</changefreq></url></urlset>\n`); }
     if (url.pathname === "/icon.svg") { res.writeHead(200, { "Content-Type": "image/svg+xml", "Cache-Control": "public, max-age=86400" }); return res.end(ICON); }
     if (req.method === "GET" && (url.pathname === "/" || url.pathname === "/index.html")) { res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache" }); return res.end(PAGE); }
     res.writeHead(404, { "Content-Type": "text/plain" }); res.end("Not found");
