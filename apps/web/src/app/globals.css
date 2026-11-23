@@ -2084,3 +2084,50 @@ a.venue:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------- dark navy header with the original logo (matches the live site) ---------- */
+.topbar {
+  background: #010e3a;
+  border-bottom: 3px solid var(--gold);
+  color: #fff;
+}
+.brand img.logo-header {
+  display: block;
+  height: 52px;
+  width: auto;
+}
+.topbar .tabs a {
+  color: rgba(255, 255, 255, 0.82);
+}
+.topbar .tabs a:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+.topbar .tabs a[aria-current="page"] {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 -2px 0 var(--gold-hi);
+}
+.topbar .tabs a:focus-visible,
+.topbar .brand:focus-visible {
+  outline: 3px solid var(--gold-hi);
+  outline-offset: 2px;
+}
+/* the light section bar runs edge to edge, with the gold line between it and the navy */
+.topbar .subnav {
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  border-top: 3px solid var(--gold);
+}
+.topbar:has(.subnav) {
+  border-bottom: 1px solid var(--line);
+}
+.topbar .subnav,
+.topbar .nav-drop,
+.topbar .tr-panel {
+  color: var(--ink);
+}
+@media (max-width: 560px) {
+  .brand img.logo-header {
+    height: 40px;
+  }
+}
