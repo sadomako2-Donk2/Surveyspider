@@ -70,6 +70,27 @@ export const PHOTOS = {
     where: "Consultancy page, under the heading",
     suggest: "A meeting with a client or partners",
   },
+  venuesCity: {
+    file: "venues-city.webp",
+    alt: "A growing African city: modern office towers, a building under construction and houses among green trees",
+    position: "center 35%",
+    where: "Training venues page, beside the heading",
+    suggest: "A city where courses run",
+  },
+  trainingExec: {
+    file: "training-executive.webp",
+    alt: "A trainer speaks to a small group of professionals around a table, in front of a whiteboard",
+    position: "center 30%",
+    where: "Training page, 'Executive and in-house training' section",
+    suggest: "An executive or in-house training session",
+  },
+  fieldwork: {
+    file: "fieldwork-team.webp",
+    alt: "A field team with a tablet and clipboards talks with women in a village, beside thatched houses",
+    position: "center 40%",
+    where: "Consultancy pages, next to fieldwork",
+    suggest: "Enumerators at work in the field",
+  },
 } satisfies Record<string, PhotoSlot>;
 
 export type PhotoKey = keyof typeof PHOTOS;

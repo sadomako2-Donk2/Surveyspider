@@ -2056,3 +2056,16 @@ a.venue:hover {
     padding: 0;
   }
 }
+
+/* photos beside text (for photos too small for a full-width slideshow) */
+.feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: 28px;
+  align-items: center;
+}
+@media (max-width: 860px) {
+  .feature {
+    grid-template-columns: 1fr;
+  }
+}

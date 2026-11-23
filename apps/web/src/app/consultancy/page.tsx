@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CO_PHASES, ConsultancyAsk, Steps } from "@/components/services/asks";
+import { Photo } from "@/components/site/Photo";
 import { Head, LinkCards } from "@/components/site/sections";
 import { Slideshow } from "@/components/site/Slideshow";
 import { slidesStartingWith } from "@/content/photos";
@@ -50,6 +51,7 @@ export default function Consultancy() {
       <div className="split">
         <ConsultancyAsk title="Discuss a project" />
         <section className="card">
+          <Photo slot="fieldwork" />
           <h2>Need face-to-face interviews?</h2>
           <p className="muted">
             Upload your questionnaire and get an itemised fieldwork quote in US dollars straight away.

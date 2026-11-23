@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { CourseCard } from "@/components/academy/CourseCard";
 import Link from "next/link";
-import { AreaCards, Head } from "@/components/site/sections";
+import { AreaCards, Head, TickList } from "@/components/site/sections";
+import { Photo } from "@/components/site/Photo";
 import { Slideshow } from "@/components/site/Slideshow";
 import { TrainingAsk } from "@/components/training/TrainingAsk";
 import { COURSES } from "@/content/sections";
@@ -58,6 +59,36 @@ export default async function Training() {
           </h2>
         </div>
         <AreaCards />
+      </section>
+      <section className="feature" aria-labelledby="exec-h">
+        <Photo slot="trainingExec" />
+        <div className="stack">
+          <div className="section-head">
+            <span className="eyebrow">Executive and in-house training</span>
+            <h2 id="exec-h" className="h2xl">
+              Programmes for leaders and their teams
+            </h2>
+          </div>
+          <p className="muted">
+            Strategy, leadership, governance, finance and data skills for senior teams, run at your premises or at a
+            venue near you, and tailored to your sector, your data and your goals.
+          </p>
+          <TickList
+            items={[
+              "Designed around the decisions your team makes",
+              "Your own cases and data in the exercises",
+              "Classroom, live online or a mix of both",
+            ]}
+          />
+          <div className="ctas tight">
+            <Link className="btn primary" href="/training/area/leadership">
+              Executive courses
+            </Link>
+            <a className="btn" href="#ask">
+              Ask about in-house training
+            </a>
+          </div>
+        </div>
       </section>
       {list && list.length > 0 && (
         <section className="stack" aria-labelledby="courses-h">

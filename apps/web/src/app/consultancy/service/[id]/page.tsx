@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CO_PHASES, ConsultancyAsk, Steps } from "@/components/services/asks";
+import { Photo } from "@/components/site/Photo";
 import { CourseLines, Crumbs, Head, TickList } from "@/components/site/sections";
 import { CO_SERVICES, anService, coService, course, lcFirst } from "@/content/sections";
 
@@ -43,14 +44,20 @@ export default async function Service({ params }: P) {
         <Steps items={CO_PHASES} />
       </section>
       {x.id === "fieldwork" && (
-        <section className="card">
-          <h2>Price face-to-face fieldwork now</h2>
-          <p className="muted">Upload your questionnaire and get an itemised quote straight away.</p>
-          <p>
-            <Link className="btn gold" href="/surveys/paper">
-              Get a fieldwork quote
-            </Link>
-          </p>
+        <section className="feature">
+          <Photo slot="fieldwork" />
+          <div className="stack">
+            <h2>Price face-to-face fieldwork now</h2>
+            <p className="muted">
+              Trained enumerators and supervisors, digital questionnaires and daily quality checks, in towns and
+              villages alike. Upload your questionnaire and get an itemised quote straight away.
+            </p>
+            <p>
+              <Link className="btn gold" href="/surveys/paper">
+                Get a fieldwork quote
+              </Link>
+            </p>
+          </div>
         </section>
       )}
       <div className="split">
