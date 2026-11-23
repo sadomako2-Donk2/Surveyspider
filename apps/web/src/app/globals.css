@@ -2131,3 +2131,60 @@ a.venue:hover {
     height: 40px;
   }
 }
+
+/* ---------- full-width layout (matches the live site): content grows with the window, photos and bands run edge to edge ---------- */
+:root {
+  --page: 1180px;
+}
+@media (min-width: 1360px) {
+  :root {
+    --page: 1280px;
+  }
+}
+@media (min-width: 1500px) {
+  :root {
+    --page: 1440px;
+  }
+}
+body {
+  overflow-x: clip;
+}
+.topbar-inner,
+.tr-panel-inner {
+  max-width: var(--page);
+}
+/* .wrap carries its own side padding */
+.wrap {
+  max-width: calc(var(--page) + 2 * max(16px, env(safe-area-inset-left, 0px)));
+}
+.wrap > .slideshow {
+  margin-inline: calc(50% - 50vw);
+  border-radius: 0;
+  aspect-ratio: auto;
+  height: clamp(240px, 34vw, 580px);
+}
+.wrap > .band {
+  border-radius: 0;
+  box-shadow: 0 0 0 100vmax var(--navy-band);
+  clip-path: inset(0 -100vmax);
+  padding-inline: 0;
+  padding-block: 48px;
+}
+.foot {
+  border-top: 0;
+  background: var(--surface);
+  box-shadow: 0 0 0 100vmax var(--surface);
+  clip-path: inset(0 -100vmax);
+}
+.page-head .lede {
+  max-width: min(82ch, 100%);
+}
+@media (max-width: 700px) {
+  .wrap > .slideshow {
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+  .wrap > .band {
+    padding-block: 32px;
+  }
+}
