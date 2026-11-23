@@ -78,6 +78,20 @@ export const PHOTOS = {
     where: "Training venues page, beside the heading",
     suggest: "A city where courses run",
   },
+  analyticsTeam: {
+    file: "analytics-team.webp",
+    alt: "Three women in a meeting around a table with laptops, in an office with large windows",
+    position: "center 40%",
+    where: "Analytics page, beside the heading",
+    suggest: "Analysts working through results together",
+  },
+  coWorkshop: {
+    file: "consultancy-workshop.webp",
+    alt: "Participants in a workshop write and draw charts on large sheets of paper spread across a table",
+    position: "center 40%",
+    where: "Consultancy page, beside the heading",
+    suggest: "A stakeholder workshop or project meeting",
+  },
   vision: {
     file: "vision-city.webp",
     alt: "Aerial view of a city of red-roofed houses and green trees, with a railway line running towards the horizon under a blue sky",

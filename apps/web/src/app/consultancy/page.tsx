@@ -17,10 +17,13 @@ export const metadata: Metadata = {
 export default function Consultancy() {
   return (
     <main id="main" className="wrap stack xl">
-      <Head eyebrow="Afrimetrica Consulting" title="Research and evaluation consultancy">
-        From a single questionnaire review to a full multi-site study or a new strategic plan, we design, run and report
-        work that stands up to scrutiny, for organisations, governments and NGOs.
-      </Head>
+      <div className="feature">
+        <Photo slot="coWorkshop" />
+        <Head eyebrow="Afrimetrica Consulting" title="Research and evaluation consultancy">
+          From a single questionnaire review to a full multi-site study or a new strategic plan, we design, run and
+          report work that stands up to scrutiny, for organisations, governments and NGOs.
+        </Head>
+      </div>
       <Slideshow slides={slidesStartingWith("consultancy")} />
       <section className="stack" aria-labelledby="svc-h">
         <div className="section-head">

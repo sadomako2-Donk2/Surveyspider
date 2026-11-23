@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AnalyticsAsk, AN_STEPS, Steps } from "@/components/services/asks";
+import { Photo } from "@/components/site/Photo";
 import { Head, LinkCards } from "@/components/site/sections";
 import { Slideshow } from "@/components/site/Slideshow";
 import { slidesStartingWith } from "@/content/photos";
@@ -16,10 +17,13 @@ export const metadata: Metadata = {
 export default function Analytics() {
   return (
     <main id="main" className="wrap stack xl">
-      <Head eyebrow="Afrimetrica Analytics" title="Data analysis you can rely on">
-        Send us your data and your questions. Our analysts clean it, analyse it with the right methods and give
-        organisations, governments and NGOs results they can explain, defend and act on.
-      </Head>
+      <div className="feature">
+        <Photo slot="analyticsTeam" />
+        <Head eyebrow="Afrimetrica Analytics" title="Data analysis you can rely on">
+          Send us your data and your questions. Our analysts clean it, analyse it with the right methods and give
+          organisations, governments and NGOs results they can explain, defend and act on.
+        </Head>
+      </div>
       <Slideshow slides={slidesStartingWith("analytics")} />
       <section className="stack" aria-labelledby="svc-h">
         <div className="section-head">
