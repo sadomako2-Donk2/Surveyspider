@@ -2918,7 +2918,6 @@ ${richSummary(st, rows)}`;
   const PHOTO = {
     home: ["home.webp", "A team around a laptop discussing research results, with charts and a map of Africa on a screen behind them", "center 30%"],
     training: ["training.webp", "A trainer points to charts and a map of Africa on a screen while participants at a table listen and take notes", "center 35%"],
-    academy: ["academy-class.webp", "A trainer speaks to a class seated with laptops, in front of a screen titled Research and Data Analytics Training", "center 30%"],
     surveys: ["surveys.webp", "An interviewer with a tablet talks with a smiling market trader at her stall", "center 35%"],
     about: ["about.webp", "A busy African city street with office towers, traffic and banners reading Innovation for Africa and Data, Research, Analytics, Impact", "center 40%"],
     consultancy: ["consultancy.webp", "A consultant presents to a group around a meeting table, with a map of Africa and charts on a screen and printed reports on the table", "center 35%"],
@@ -2932,7 +2931,7 @@ ${richSummary(st, rows)}`;
   const photo = (k) => { const [f, alt, pos] = PHOTO[k]; return `<figure class="photo"><div class="photo-frame"><img src="/photos/${f}" alt="${esc(alt)}" loading="lazy" decoding="async" style="object-position:${pos}"></div></figure>`; };
   // Home page slideshow: starts with the first photo and moves on every 5 seconds. Visitors can pause it
   // (needed for accessibility); it starts paused for people who ask their device to reduce motion.
-  const SLIDES = ["home", "training", "academy", "surveys", "analytics", "consultancy", "about"];
+  const SLIDES = ["home", "training", "surveys", "analytics", "consultancy", "about"];
   let slideOrder = SLIDES, slideIdx = 0, slidePaused = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
   // Each page's slideshow starts with that page's own photo(s), then shows the rest in the usual order.
   const slideshow = (...first) => { slideOrder = [...first, ...SLIDES.filter((k) => !first.includes(k))]; return `<section class="slideshow" aria-roledescription="carousel" aria-label="Photos">
@@ -3652,7 +3651,7 @@ ${richSummary(st, rows)}`;
   function trLanding() {
     const pub = S.courses.filter((c) => c.status === "published").sort((a, b) => ((upcoming(a)[0] || {}).start || "9").localeCompare((upcoming(b)[0] || {}).start || "9"));
     return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Academy · Plan. Analyse. Lead.</span><h1>Data, research and executive training</h1><p style="max-width:70ch;font-size:1.12rem;font-weight:500;margin:10px 0 6px">Practical training that helps organisations, governments and NGOs make better decisions and deliver results.</p><p class="muted" style="max-width:70ch">Build skills in research design, surveys, statistics, monitoring and evaluation, dashboards and market research, alongside executive programmes in strategy and strategic planning, leadership, governance, finance and project management. Join a classroom course in a city near you, learn live online, or bring any course to your organisation, tailored to your sector and your team.</p></div></div>
-      ${slideshow("training", "academy")}
+      ${slideshow("training")}
       <form class="card quick-find" data-act-form="catQuick" role="search"><label for="catQuickQ">Search ${CATALOGUE.length} courses<input id="catQuickQ" type="search" placeholder="e.g. strategy, Power BI, monitoring and evaluation"></label><button class="btn primary" type="submit">Find courses</button></form>
       <section class="stack" aria-labelledby="areasH"><div class="section-head"><span class="eyebrow gold">Courses</span><h2 id="areasH" class="h2xl">Start with a subject area</h2></div>${areaCards()}</section>
       <section class="feature" aria-labelledby="execH">${sidePhoto("trainingExec")}<div class="stack"><div class="section-head"><span class="eyebrow gold">Executive and in-house training</span><h2 id="execH" class="h2xl">Programmes for leaders and their teams</h2></div><p class="muted">Strategy, leadership, governance, finance and data skills for senior teams, run at your premises or at a venue near you, and tailored to your sector, your data and your goals.</p><ul class="ticks small"><li><div><span>Designed around the decisions your team makes</span></div></li><li><div><span>Your own cases and data in the exercises</span></div></li><li><div><span>Classroom, live online or a mix of both</span></div></li></ul><div class="row wrap"><a class="btn primary" href="#training/area/leadership">Executive courses</a><button class="btn" data-act="scrollToId" data-t="catEnquiry">Ask about in-house training</button></div></div></section>
