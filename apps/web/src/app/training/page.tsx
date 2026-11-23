@@ -41,7 +41,7 @@ export default async function Training() {
         management. Join a classroom course in a city near you, learn live online, or bring any course to your
         organisation, tailored to your sector and your team.
       </p>
-      <Slideshow slides={slidesStartingWith("training", "homeAcademy")} />
+      <Slideshow slides={slidesStartingWith("training")} />
       <form className="card quick-find" action="/training/finder" role="search">
         <label>
           Search {COURSES.length} courses

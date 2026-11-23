@@ -28,8 +28,9 @@ export const PHOTOS = {
     suggest: "A training session, fieldwork team or workshop in progress",
   },
   homeAcademy: {
+    // Empty until a real photo of an Afrimetrica class arrives (the AI-generated one was removed).
     file: "academy-class.webp",
-    alt: "A trainer speaks to a class seated with laptops, in front of a screen titled Research and Data Analytics Training",
+    alt: "",
     position: "center 30%",
     where: "Home page, next to “Practical training in research methods”",
     suggest: "Participants working together in an Academy course",
@@ -96,15 +97,7 @@ export const PHOTOS = {
 export type PhotoKey = keyof typeof PHOTOS;
 
 /** The home page slideshow, in order: it starts with the first. Every slot listed must have a photo. */
-export const SLIDESHOW: PhotoKey[] = [
-  "home",
-  "training",
-  "homeAcademy",
-  "surveys",
-  "analytics",
-  "consultancy",
-  "about",
-];
+export const SLIDESHOW: PhotoKey[] = ["home", "training", "surveys", "analytics", "consultancy", "about"];
 
 /** A page's slideshow: its own photo(s) first, then the rest in SLIDESHOW order. */
 export function slidesStartingWith(...first: PhotoKey[]) {
