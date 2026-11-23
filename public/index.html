@@ -606,13 +606,23 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
 .card-photo img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 12px; display: block; }
 @media (max-width: 860px) { .feature { grid-template-columns: 1fr; } }
 .foot-logo { display: block; height: 56px; width: auto; border-radius: 8px; margin-bottom: 10px; }
+/* dark navy header with the original logo (the navy matches the logo's own background) */
+.topbar { background: #010e3a; border-bottom: 3px solid var(--gold); color: #fff; }
+.brand img.logo-header { display: block; height: 52px; width: auto; }
+.tabs a { color: rgba(255, 255, 255, 0.82); }
+.tabs a:hover { color: #fff; background: rgba(255, 255, 255, 0.1); }
+.tabs a[aria-current="page"] { color: #fff; background: rgba(255, 255, 255, 0.14); box-shadow: inset 0 -2px 0 var(--gold-hi); }
+.tabs a:focus-visible, .acct a:focus-visible, .acct summary:focus-visible, .brand:focus-visible { outline: 3px solid var(--gold-hi); outline-offset: 2px; }
+.acct .btn.primary { background: linear-gradient(100deg, #b88a2c, #e9c46a 55%, #c4952f); border-color: transparent; color: #0e1d3a; }
+.acct-menu summary { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.28); color: #fff; }
+.acct-pop { color: var(--ink); }
+@media (max-width: 560px) { .brand img.logo-header { height: 40px; } }
 </style>
 
 <header class="topbar gutter">
   <div class="topbar-inner">
     <a class="brand" href="#home" aria-label="Afrimetrica home">
-      <img class="logo-mark" src="/photos/logo-sun.webp" width="40" height="40" alt="">
-      <span class="wm"><b>Afrimetrica</b><small>DATA <i>•</i> RESEARCH <i>•</i> EXECUTIVE TRAINING</small></span>
+      <img class="logo-header" src="/photos/logo-header.webp" width="211" height="52" alt="Afrimetrica: Data, Research, Executive Training">
     </a>
     <nav class="tabs" id="tabs" aria-label="Main"></nav>
     <div class="acct" id="acct"></div>
