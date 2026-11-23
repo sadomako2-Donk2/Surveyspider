@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata, Viewport } from "next";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SITE } from "@/lib/site";
-import { siteUrl } from "@/lib/url";
+import { googleSiteVerification, siteUrl } from "@/lib/url";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
   openGraph: { siteName: SITE.name, type: "website", locale: "en_GB" },
   formatDetection: { telephone: false },
+  verification: { google: googleSiteVerification() },
 };
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover" };
