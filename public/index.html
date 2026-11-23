@@ -617,6 +617,25 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
 .acct-menu summary { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.28); color: #fff; }
 .acct-pop { color: var(--ink); }
 @media (max-width: 560px) { .brand img.logo-header { height: 40px; } }
+
+/* full-width layout: content grows with the window (up to 1440px) and photos and colour bands run edge to edge */
+:root { --page: 1180px; }
+@media (min-width: 1360px) { :root { --page: 1280px; } }
+@media (min-width: 1500px) { :root { --page: 1440px; } }
+body { overflow-x: clip; }
+.topbar-inner, .subnav-inner { max-width: var(--page); }
+main, footer { max-width: calc(var(--page) + 2 * max(16px, env(safe-area-inset-left, 0px))); } /* these carry their own side padding */
+.banner { max-width: var(--page); }
+main > .slideshow { margin-inline: calc(50% - 50vw); border-radius: 0; aspect-ratio: auto; height: clamp(240px, 34vw, 580px); }
+main > .band { border-radius: 0; box-shadow: 0 0 0 100vmax var(--navy-band); clip-path: inset(0 -100vmax); padding-inline: 0; padding-block: 48px; margin-block: 12px; }
+main:has(> .band:last-child) { padding-bottom: 0; }
+main:has(> .band:last-child) > .band:last-child { margin-bottom: 0; }
+main:has(> .band:last-child) + footer { margin-top: 0; }
+footer { background: var(--surface); box-shadow: 0 0 0 100vmax var(--surface); clip-path: inset(0 -100vmax); padding-top: 28px; margin-top: 40px; }
+footer .foot-inner { border-top: 0; padding-top: 0; }
+.hero .lede, .hero2 .lede { max-width: 68ch; }
+.page-head > div > p { max-width: min(82ch, 100%) !important; } /* overrides the narrower inline widths on intro text */
+@media (max-width: 700px) { main > .slideshow { height: auto; aspect-ratio: 4 / 3; } main > .band { padding-block: 32px; } }
 </style>
 
 <header class="topbar gutter">
