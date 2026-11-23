@@ -597,6 +597,12 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
 .legal-toc a { color: var(--accent); }
 .notice-warn { border-left: 4px solid var(--signal); background: var(--signal-soft); margin-bottom: 16px; }
 @media (max-width: 560px) { .legal-toc ol { columns: 1; } }
+/* photos beside text */
+.feature { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 28px; align-items: center; }
+.side-photo, .card-photo { margin: 0; }
+.side-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 18px; border-bottom: 3px solid var(--gold); display: block; background: var(--navy-band); }
+.card-photo img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 12px; display: block; }
+@media (max-width: 860px) { .feature { grid-template-columns: 1fr; } }
 </style>
 
 <header class="topbar gutter">
@@ -2889,8 +2895,13 @@ ${richSummary(st, rows)}`;
     surveys: ["surveys.webp", "An interviewer with a tablet talks with a smiling market trader at her stall", "center 35%"],
     about: ["about.webp", "A busy African city street with office towers, traffic and banners reading Innovation for Africa and Data, Research, Analytics, Impact", "center 40%"],
     consultancy: ["consultancy.webp", "A consultant presents to a group around a meeting table, with a map of Africa and charts on a screen and printed reports on the table", "center 35%"],
+    venuesCity: ["venues-city.webp", "A growing African city: modern office towers, a building under construction and houses among green trees", "center 35%"],
+    trainingExec: ["training-executive.webp", "A trainer speaks to a small group of professionals around a table, in front of a whiteboard", "center 30%"],
+    fieldwork: ["fieldwork-team.webp", "A field team with a tablet and clipboards talks with women in a village, beside thatched houses", "center 40%"],
     analytics: ["analytics.webp", "Three analysts look at a laptop together, with a dashboard of charts on the wall behind them", "center 8%"],
   };
+  // A photo shown beside text (for photos too small to stretch across a full-width slideshow).
+  const sidePhoto = (k, cls = "side-photo") => { const [f, alt, pos] = PHOTO[k]; return `<figure class="${cls}"><img src="/photos/${f}" alt="${esc(alt)}" loading="lazy" decoding="async" style="object-position:${pos}"></figure>`; };
   const photo = (k) => { const [f, alt, pos] = PHOTO[k]; return `<figure class="photo"><div class="photo-frame"><img src="/photos/${f}" alt="${esc(alt)}" loading="lazy" decoding="async" style="object-position:${pos}"></div></figure>`; };
   // Home page slideshow: starts with the first photo and moves on every 5 seconds. Visitors can pause it
   // (needed for accessibility); it starts paused for people who ask their device to reduce motion.
@@ -3617,6 +3628,7 @@ ${richSummary(st, rows)}`;
       ${slideshow("training", "academy")}
       <form class="card quick-find" data-act-form="catQuick" role="search"><label for="catQuickQ">Search ${CATALOGUE.length} courses<input id="catQuickQ" type="search" placeholder="e.g. strategy, Power BI, monitoring and evaluation"></label><button class="btn primary" type="submit">Find courses</button></form>
       <section class="stack" aria-labelledby="areasH"><div class="section-head"><span class="eyebrow gold">Courses</span><h2 id="areasH" class="h2xl">Start with a subject area</h2></div>${areaCards()}</section>
+      <section class="feature" aria-labelledby="execH">${sidePhoto("trainingExec")}<div class="stack"><div class="section-head"><span class="eyebrow gold">Executive and in-house training</span><h2 id="execH" class="h2xl">Programmes for leaders and their teams</h2></div><p class="muted">Strategy, leadership, governance, finance and data skills for senior teams, run at your premises or at a venue near you, and tailored to your sector, your data and your goals.</p><ul class="ticks small"><li><div><span>Designed around the decisions your team makes</span></div></li><li><div><span>Your own cases and data in the exercises</span></div></li><li><div><span>Classroom, live online or a mix of both</span></div></li></ul><div class="row wrap"><a class="btn primary" href="#training/area/leadership">Executive courses</a><button class="btn" data-act="scrollToId" data-t="catEnquiry">Ask about in-house training</button></div></div></section>
       ${pub.length ? `<section class="stack"><div class="section-head"><span class="eyebrow gold">Scheduled dates</span><h2 class="h2xl">Courses open for registration</h2></div><div class="course-grid">${pub.map((c) => courseCard(c)).join("")}</div></section>` : ""}
       <section class="units" aria-label="Ways to learn">
         <article class="card unit"><span class="eyebrow gold">Classroom</span><h3>Public courses</h3><p class="muted">Learn alongside professionals from other organisations, in a city near you. <a href="#training/venues">See venues</a>.</p></article>
@@ -3641,7 +3653,7 @@ ${richSummary(st, rows)}`;
       ${askBlock(`Ask about ${catName(k)} training`, "")}`;
   }
   function trVenues() {
-    return `${crumbs(["", "Training venues"])}<div class="page-head"><div><span class="eyebrow gold">Training venues</span><h1>Where we train</h1><p class="muted" style="max-width:70ch">Classroom courses can run in these cities across English-speaking Africa. Dates are set for each venue: ask for the dates and fees for the course and city you want, learn live online, or bring any course to your own premises.</p></div></div>
+    return `${crumbs(["", "Training venues"])}<div class="feature">${sidePhoto("venuesCity")}<div class="page-head"><div><span class="eyebrow gold">Training venues</span><h1>Where we train</h1><p class="muted" style="max-width:70ch">Classroom courses can run in these cities across English-speaking Africa. Dates are set for each venue: ask for the dates and fees for the course and city you want, learn live online, or bring any course to your own premises.</p></div></div></div>
       <div class="venue-grid">${VENUES.map(([country, cities]) => `<a class="venue" href="#training/venue/${slug(country)}"><b>${esc(country)}</b><span>${esc(cities.join(" · "))}</span></a>`).join("")}</div>`;
   }
   function trVenue(s) {
@@ -3946,7 +3958,7 @@ ${richSummary(st, rows)}`;
       <section class="stack" aria-labelledby="coSvcH"><div class="section-head"><span class="eyebrow gold">Services</span><h2 id="coSvcH" class="h2xl">How we can help</h2></div>${coServiceCards()}</section>
       <section class="stack" aria-labelledby="coSecH"><div class="section-head"><span class="eyebrow gold">Sectors</span><h2 id="coSecH" class="h2xl">Who we work with</h2></div><nav class="sub-jump" aria-label="Sectors">${CO_SECTORS.map((x) => `<a href="#consultancy/sector/${x.id}">${esc(x.name)}</a>`).join("")}</nav></section>
       <div class="split">${coForm("Discuss a project", "")}
-        <section class="card"><h2>Need face-to-face interviews?</h2><p class="muted">Upload your questionnaire and get an itemised fieldwork quote in US dollars straight away.</p><a class="btn gold" href="#paper-survey" style="align-self:flex-start">Get a fieldwork quote</a>
+        <section class="card">${sidePhoto("fieldwork", "card-photo")}<h2>Need face-to-face interviews?</h2><p class="muted">Upload your questionnaire and get an itemised fieldwork quote in US dollars straight away.</p><a class="btn gold" href="#paper-survey" style="align-self:flex-start">Get a fieldwork quote</a>
           <h3>How we work</h3>${coPhases}<p><a href="#consultancy/approach">More about our approach</a></p></section>
       </div>`;
   }
@@ -3958,7 +3970,7 @@ ${richSummary(st, rows)}`;
         <section class="card"><h2>What you receive</h2><ul class="ticks small">${x.deliverables.map((q) => `<li><div><span>${esc(q)}</span></div></li>`).join("")}</ul></section>
       </div>
       <section class="card"><h2>How we work</h2>${coPhases}</section>
-      ${x.id === "fieldwork" ? `<section class="card"><h2>Price face-to-face fieldwork now</h2><p class="muted">Upload your questionnaire and get an itemised quote straight away.</p><a class="btn gold" href="#paper-survey" style="align-self:flex-start">Get a fieldwork quote</a></section>` : ""}
+      ${x.id === "fieldwork" ? `<section class="feature">${sidePhoto("fieldwork")}<div class="stack"><h2>Price face-to-face fieldwork now</h2><p class="muted">Trained enumerators and supervisors, digital questionnaires and daily quality checks, in towns and villages alike. Upload your questionnaire and get an itemised quote straight away.</p><a class="btn gold" href="#paper-survey" style="align-self:flex-start">Get a fieldwork quote</a></div></section>` : ""}
       <div class="split">
         ${an.length ? `<section class="card"><h2>Related analytics</h2><ul class="ticks small">${an.map((s) => `<li><div><a href="#analytics/service/${s.id}">${esc(s.name)}</a></div></li>`).join("")}</ul></section>` : ""}
         ${courses.length ? `<section class="card"><h2>Build these skills in your team</h2>${courseLines(courses)}</section>` : ""}
@@ -4454,6 +4466,7 @@ ${richSummary(st, rows)}`;
       case "enqAgain": S.enqSent[b.dataset.t] = false; render(); break;
       case "openGuide": location.hash = "resources/articles/" + id; break;
       case "printPage": window.print(); break;
+      case "scrollToId": { const t = $("#" + b.dataset.t); if (t) t.scrollIntoView({ behavior: "smooth", block: "start" }); } break;
       case "legalJump": e.preventDefault(); { const t = $("#legal-" + b.dataset.i); if (t) t.scrollIntoView({ behavior: "smooth", block: "start" }); } break;
       case "closeGuide": S.guideOpen = null; render(); window.scrollTo(0, 0); break;
       case "openCourse": S.courseOpen = id; S.regFor = null; if (S.view !== "training") go("training"); else { render(); window.scrollTo(0, 0); } break;
