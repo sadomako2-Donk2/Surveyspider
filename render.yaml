@@ -25,6 +25,11 @@ services:
       # Optional: AI requests allowed per visitor per hour (protects your API bill).
       - key: AI_REQUESTS_PER_HOUR
         value: "40"
+      # The site's public address. www.afrimetrica.com points to this service (checked 2026-11-24).
+      # With this set, the sitemap, page addresses, social previews and email links use it, and visitors
+      # on any other address (e.g. surveyspider.onrender.com) are sent to the same page here.
+      - key: PUBLIC_URL
+        value: https://www.afrimetrica.com
     disk:
       name: surveyspider-data
       mountPath: /var/data

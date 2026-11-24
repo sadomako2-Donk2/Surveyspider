@@ -13,7 +13,7 @@ Phase 1: a single Node.js service (`server.mjs`) plus a single-page front end (`
 - No secrets in the repo. API keys go in Render → Environment only.
 - Never claim courses are accredited: certificates are "certificates of completion".
 - Do not deploy with real respondent data until the privacy and security checks in `docs/security.md` are done.
-- The brand is not legally cleared and `afrimetrica.com` is not confirmed. Don't set `PUBLIC_URL` until a domain actually resolves to Render (it turns on a site-wide redirect).
+- The brand is not legally cleared. `www.afrimetrica.com` points to the Render service (afrimetrica.com forwards to it), and `PUBLIC_URL` is set to it in `render.yaml`; it turns on a site-wide redirect, so only change it to an address that already reaches Render.
 
 ## Layout
 - `public/index.html`: hash-routed SPA. `TOPNAV`, `SURVEY_NAV`, `ROUTES` define navigation. Three storage backends behind `backend.*`: own server (`API`), claude.ai artifact database (`DB`), demo (`localStorage`).
