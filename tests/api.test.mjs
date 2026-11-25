@@ -86,6 +86,13 @@ check("a trailing slash redirects to the page's address", slash.status === 301 &
 check("app pages don't get public addresses", (await fetch(base + "/studies")).status === 404 && (await fetch(base + "/admin")).status === 404);
 const social = await fetch(base + "/social.jpg");
 check("the social preview image is served", social.status === 200 && social.headers.get("content-type") === "image/jpeg");
+const sec = await fetch(base + "/"), csp = sec.headers.get("content-security-policy") || "";
+check("pages send a content security policy that blocks outside scripts", /script-src 'self' 'unsafe-inline'(;|$)/.test(csp) && /object-src 'none'/.test(csp) && /frame-ancestors 'self'/.test(csp) && /fonts\.googleapis\.com/.test(csp));
+check("pages send permissions and opener policies", /camera=\(\)/.test(sec.headers.get("permissions-policy") || "") && sec.headers.get("cross-origin-opener-policy") === "same-origin");
+check("HSTS is sent over https only", !sec.headers.get("strict-transport-security") && /max-age=31536000/.test((await fetch(base + "/healthz", { headers: { "X-Forwarded-Proto": "https" } })).headers.get("strict-transport-security") || ""));
+const lib = await fetch(base + "/vendor/exceljs.min.js");
+check("browser libraries are served from this site", lib.status === 200 && /javascript/.test(lib.headers.get("content-type")) && (await lib.arrayBuffer()).byteLength > 100000 && (await fetch(base + "/vendor/pdf.worker.min.js")).status === 200);
+check("only listed library files are served", (await fetch(base + "/vendor/README.md")).status !== 200 && (await fetch(base + "/vendor/..%2Fserver.mjs")).status !== 200);
 check("health check responds", (await A.call("GET", "/healthz")).status === 200);
 const pic = await fetch(base + "/photos/home.webp");
 check("website photos are served", pic.status === 200 && pic.headers.get("content-type") === "image/webp" && (await pic.arrayBuffer()).byteLength > 1000);
@@ -164,6 +171,16 @@ check("cross-site requests are refused", (await A.call("PUT", "/api/studies/s9",
 
 // --- admin access ---
 check("admin code unlocks the business view", (await C.call("GET", "/api/me", undefined, { "X-Admin-Code": "test-admin-code" })).json.isAdmin === true && (await C.call("GET", "/api/me", undefined, { "X-Admin-Code": "wrong" })).json.isAdmin === false);
+{
+  const Z = browser("9");
+  for (let i = 0; i < 20; i++) await Z.call("GET", "/api/me", undefined, { "X-Admin-Code": "wrong-code-" + i, "CF-Connecting-IP": "203.0.113.9" });
+  const locked = (await Z.call("GET", "/api/me", undefined, { "X-Admin-Code": "test-admin-code", "CF-Connecting-IP": "203.0.113.9" })).json.isAdmin;
+  const other = (await Z.call("GET", "/api/me", undefined, { "X-Admin-Code": "test-admin-code", "CF-Connecting-IP": "203.0.113.10" })).json.isAdmin;
+  check("repeated wrong admin codes lock that visitor out (others unaffected)", locked === false && other === true);
+  let blocked = false;
+  for (let i = 0; i < 32 && !blocked; i++) blocked = (await Z.call("POST", "/api/auth/login", { email: "target@example.com", password: "guess " + i }, { "X-Forwarded-For": "198.51.100." + i })).status === 429;
+  check("password guessing is limited per account even from changing addresses", blocked);
+}
 const Boss = browser("d"); await Boss.call("POST", "/api/auth/signup", { email: "boss@example.com", password: "owner password" }); await confirmLatest("boss@example.com");
 check("administrators can see that enquiry emails are switched on", (await Boss.call("GET", "/api/me")).json.notify === true);
 check("other people don't see the email notification setting", (await A.call("GET", "/api/me")).json.notify === undefined);

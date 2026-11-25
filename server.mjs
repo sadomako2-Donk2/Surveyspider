@@ -43,6 +43,9 @@ const SITE_VERIFY = (/^[A-Za-z0-9_-]{10,100}$/.test(GOOGLE_VERIFY) ? `<meta name
 const SHELL_HEAD = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa."><link rel="icon" type="image/svg+xml" href="/icon.svg">${SITE_VERIFY}<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>`;
 const PAGE = SHELL_HEAD + readFileSync(path.join(here, "public", "index.html"), "utf8") + "</body></html>";
 const ICON = readFileSync(path.join(here, "public", "icon.svg"));
+// Browser libraries served from this site rather than a CDN (see public/vendor/README.md). Only these exact names.
+const VENDOR_DIR = path.join(here, "public", "vendor");
+const VENDOR = new Map(existsSync(VENDOR_DIR) ? readdirSync(VENDOR_DIR).filter((f) => /^[a-z0-9.-]+\.js$/.test(f)).map((f) => [f, readFileSync(path.join(VENDOR_DIR, f))]) : []);
 // Public pages with real addresses, for search engines (written by scripts/build-pages.mjs; see that file).
 const PAGES = new Map((existsSync(path.join(here, "public", "pages.json")) ? JSON.parse(readFileSync(path.join(here, "public", "pages.json"), "utf8")) : [{ path: "/" }]).map((p) => [p.path, p]));
 const PUBLIC_SECTIONS = /^\/(about|training|surveys|analytics|consultancy|resources|contact|privacy|terms|pricing|paper-survey)(\/[a-z0-9-]+)*$/;
@@ -114,7 +117,13 @@ function who(req) {
   const t = String(req.headers["x-client-token"] || "");
   const anon = /^[0-9a-f]{48}$/.test(t) ? "c_" + sha(t).slice(0, 24) : null;
   const code = String(req.headers["x-admin-code"] || "");
-  const codeOk = !!ADMIN_CODE && code.length === ADMIN_CODE.length && timingSafeEqual(Buffer.from(code), Buffer.from(ADMIN_CODE));
+  let codeOk = false;
+  if (code && ADMIN_CODE) {
+    // Wrong codes are counted per visitor; after 20 in an hour even the right code is refused for a while.
+    const key = "admin-code|" + clientIp(req), now = Date.now(), recent = (tries.get(key) || []).filter((t) => now - t < 3600e3);
+    codeOk = recent.length < 20 && code.length === ADMIN_CODE.length && timingSafeEqual(Buffer.from(code), Buffer.from(ADMIN_CODE));
+    if (!codeOk) tries.set(key, [...recent, now]);
+  }
   return { uid: user ? user.id : anon, user, anon, isAdmin: codeOk || (!!user && ADMIN_EMAILS.includes(user.email)) };
 }
 // Move anything a visitor made before signing in into their account.
@@ -131,6 +140,16 @@ function claim(anon, uid) {
   return n;
 }
 const tries = new Map();
+// Forget old attempts so the list can't grow without limit.
+setInterval(() => { const now = Date.now(); for (const [k, list] of tries) if (!list.some((t) => now - t < 3600e3)) tries.delete(k); }, 10 * 60e3).unref();
+// The visitor's address, for rate limits. Cloudflare's CF-Connecting-IP can't be faked by a visitor, so it is used
+// when present. Otherwise the first X-Forwarded-For entry, which a visitor can fake: that is why sign-in also has a
+// per-email limit that doesn't depend on the address.
+function clientIp(req) {
+  const cf = String(req.headers["cf-connecting-ip"] || "").trim();
+  if (/^[0-9a-fA-F:.]{3,45}$/.test(cf)) return cf;
+  return String(req.headers["x-forwarded-for"] || req.socket.remoteAddress || "").split(",")[0].trim();
+}
 function tooMany(key, max = 10, windowMs = 15 * 60e3) {
   const now = Date.now(), list = (tries.get(key) || []).filter((t) => now - t < windowMs);
   list.push(now); tries.set(key, list); return list.length > max;
@@ -143,7 +162,7 @@ async function handleAuth(req, res, me, action) {
     addCookie(res, cookieStr(req, "ss_session", "", 0)); persist(); return send(res, 200, { ok: true });
   }
   if (action === "claim") { if (!me.user) return fail(res, 401, "auth_required", "Sign in first."); return send(res, 200, { claimed: claim(me.anon, me.user.id) }); }
-  const ip = String(req.headers["x-forwarded-for"] || req.socket.remoteAddress || "").split(",")[0].trim();
+  const ip = clientIp(req);
   if (action === "forgot") return forgotPassword(req, res, ip);
   if (action === "reset") return resetPassword(req, res, me, ip);
   if (action === "verify") return confirmEmail(req, res, ip);
@@ -151,7 +170,8 @@ async function handleAuth(req, res, me, action) {
   const b = await readBody(req, 10_000);
   const email = String((b && b.email) || "").trim().toLowerCase(), pw = String((b && b.password) || "");
   if (!EMAIL_RX.test(email) || email.length > 160) return fail(res, 400, "invalid_argument", "Enter a valid email address.");
-  if (tooMany((req.headers["x-forwarded-for"] || req.socket.remoteAddress || "") + "|" + email)) return fail(res, 429, "rate_limited", "Too many attempts. Wait 15 minutes and try again.");
+  // Per visitor and email, and per email from anywhere (so changing address doesn't allow more guesses).
+  if (tooMany(ip + "|" + email) || tooMany("email|" + email, 30)) return fail(res, 429, "rate_limited", "Too many attempts. Wait 15 minutes and try again.");
   const existing = findByEmail(email);
   if (action === "signup") {
     if (pw.length < 8 || pw.length > 200) return fail(res, 400, "invalid_argument", "Use a password of at least 8 characters.");
@@ -570,7 +590,7 @@ async function handleApi(req, res, url) {
     const cur = db.enquiries[id];
     if (m === "PUT") {
       if (cur) return fail(res, 409, "invalid_argument", "This enquiry was already sent.");
-      const ip = String(req.headers["x-forwarded-for"] || req.socket.remoteAddress || "").split(",")[0].trim();
+      const ip = clientIp(req);
       if (tooMany("enquiry-ip|" + ip, 10, 3600e3)) return fail(res, 429, "rate_limited", "Too many enquiries from this connection. Please try again later.");
       const b = await readBody(req, 50_000), c = isObj(b) ? b.contact : null;
       if (!isObj(c) || !String(c.name || "").trim() || !EMAIL_RX.test(String(c.email || "").trim())) return fail(res, 400, "invalid_argument", "Add your name and a valid email address.");
@@ -614,11 +634,18 @@ async function handleApi(req, res, url) {
 }
 
 // ---------- server ----------
-const SECURITY = { "X-Content-Type-Options": "nosniff", "Referrer-Policy": "strict-origin-when-cross-origin", "X-Frame-Options": "SAMEORIGIN" };
+// Content Security Policy: scripts, styles, images and connections only from this site (plus Google Fonts).
+// 'unsafe-inline' is needed because the page's own script and styles are inline; outside scripts still can't load.
+const CSP = ["default-src 'self'", "script-src 'self' 'unsafe-inline'", "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com", "font-src 'self' https://fonts.gstatic.com",
+  "img-src 'self' data: blob:", "connect-src 'self'", "worker-src 'self' blob:", "object-src 'none'", "base-uri 'self'", "form-action 'self'", "frame-ancestors 'self'"].join("; ");
+const SECURITY = { "X-Content-Type-Options": "nosniff", "Referrer-Policy": "strict-origin-when-cross-origin", "X-Frame-Options": "SAMEORIGIN",
+  "Content-Security-Policy": CSP, "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()", "Cross-Origin-Opener-Policy": "same-origin" };
 export const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, "http://localhost");
   try {
     for (const [k, v] of Object.entries(SECURITY)) res.setHeader(k, v);
+    // Browsers remember to use https only for a year (only sent over https, as browsers require).
+    if (isHttps(req)) res.setHeader("Strict-Transport-Security", "max-age=31536000");
     const host = String(req.headers.host || "").toLowerCase();
     if (CANONICAL && host && host !== CANONICAL.host && url.pathname !== "/healthz" && !/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host)) {
       res.writeHead(req.method === "GET" || req.method === "HEAD" ? 301 : 308, { Location: CANONICAL.origin + req.url });
@@ -636,6 +663,7 @@ export const server = http.createServer(async (req, res) => {
     if (req.method === "GET" && url.pathname === "/robots.txt") { res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=3600" }); return res.end(`User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /auth/\n\nSitemap: ${baseUrl(req)}/sitemap.xml\n`); }
     if (req.method === "GET" && url.pathname === "/sitemap.xml") { const b = baseUrl(req); res.writeHead(200, { "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, max-age=3600" }); return res.end(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...PAGES.keys()].map((p) => `<url><loc>${attr(b + p)}</loc></url>`).join("\n")}\n</urlset>\n`); }
     if (url.pathname === "/social.jpg" && SOCIAL) { res.writeHead(200, { "Content-Type": "image/jpeg", "Cache-Control": "public, max-age=86400" }); return res.end(SOCIAL); }
+    if (url.pathname.startsWith("/vendor/") && VENDOR.has(url.pathname.slice(8))) { res.writeHead(200, { "Content-Type": "text/javascript; charset=utf-8", "Cache-Control": "public, max-age=86400" }); return res.end(VENDOR.get(url.pathname.slice(8))); }
     if (url.pathname === "/icon.svg") { res.writeHead(200, { "Content-Type": "image/svg+xml", "Cache-Control": "public, max-age=86400" }); return res.end(ICON); }
     if (req.method === "GET" && (url.pathname === "/" || url.pathname === "/index.html")) { res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache" }); return res.end(pageHtml(PAGES.get("/") || { path: "/" }, baseUrl(req), true)); }
     if (req.method === "GET" && url.pathname.length > 1 && url.pathname.endsWith("/") && PAGES.has(url.pathname.replace(/\/+$/, ""))) { res.writeHead(301, { Location: url.pathname.replace(/\/+$/, "") + url.search }); return res.end(); }
