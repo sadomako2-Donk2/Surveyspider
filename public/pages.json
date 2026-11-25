@@ -14,13 +14,13 @@
  {
   "path": "/about/certificates",
   "title": "Certificates of completion | Afrimetrica",
-  "description": "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.",
+  "description": "Certificates of completion: Afrimetrica Academy issues certificates of completion. They confirm that a participant attended and completed a course, and show the course title, its length, the dates and the venue (or \"live online\").",
   "h1": "Certificates of completion"
  },
  {
   "path": "/about/mission",
   "title": "Why we exist | Afrimetrica",
-  "description": "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.",
+  "description": "Why we exist: To help organisations, governments and NGOs make better decisions and deliver results, by building their people's skills in data, research and leadership, and by providing reliable data and independent analysis.",
   "h1": "Why we exist"
  },
  {
@@ -38,7 +38,7 @@
  {
   "path": "/about/vision",
   "title": "The future we are working towards | Afrimetrica",
-  "description": "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.",
+  "description": "The future we are working towards: An Africa where every organisation, government and NGO has the data, evidence and skilled people it needs to make good decisions and deliver results.",
   "h1": "The future we are working towards"
  },
  {
@@ -56,7 +56,7 @@
  {
   "path": "/analytics/how-we-work",
   "title": "From your questions to clear answers | Afrimetrica",
-  "description": "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.",
+  "description": "From your questions to clear answers: A fixed-price project for a specific question or report.",
   "h1": "From your questions to clear answers"
  },
  {
@@ -366,12 +366,6 @@
   "h1": "Likert or rating scale?"
  },
  {
-  "path": "/resources/case-studies",
-  "title": "Case studies | Afrimetrica",
-  "description": "Short accounts of projects we have delivered: the question, what we did, and what changed.",
-  "h1": "Case studies"
- },
- {
   "path": "/resources/catalogues",
   "title": "Catalogues and brochures | Afrimetrica",
   "description": "Print or save as PDF to share with colleagues and decision-makers.",
@@ -380,13 +374,13 @@
  {
   "path": "/resources/catalogues/services",
   "title": "Analytics and consultancy services | Afrimetrica",
-  "description": "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.",
+  "description": "Analytics and consultancy services: Data, research and executive training, analysis and advice for organisations, governments and NGOs across Africa.",
   "h1": "Analytics and consultancy services"
  },
  {
   "path": "/resources/catalogues/training",
   "title": "Training course catalogue | Afrimetrica",
-  "description": "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.",
+  "description": "Training course catalogue: Data, research and executive training. Every course runs in the classroom in our venues across English-speaking Africa, live online or in-house. Ask us for dates and fees. Participants receive a certificate of completion (not an accredited qualification).",
   "h1": "Training course catalogue"
  },
  {
@@ -398,14 +392,8 @@
  {
   "path": "/resources/testimonials",
   "title": "What participants and clients say | Afrimetrica",
-  "description": "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.",
+  "description": "What participants and clients say: We publish only real comments from course participants and clients, with their permission. Testimonials will appear here as courses and projects are completed.",
   "h1": "What participants and clients say"
- },
- {
-  "path": "/resources/videos",
-  "title": "Videos | Afrimetrica",
-  "description": "Short tutorials on research methods and data analysis, and previews of our courses.",
-  "h1": "Videos"
  },
  {
   "path": "/surveys",
@@ -428,67 +416,67 @@
  {
   "path": "/training/area/engineering",
   "title": "Engineering, Maintenance, Oil and Gas | Afrimetrica",
-  "description": "16 subjects · 16 courses. Every course can run in the classroom, live online or in-house.",
+  "description": "Engineering, Maintenance, Oil and Gas: Oil and Gas Industry Fundamentals; Maintenance Planning and Reliability; Electrical Systems: Operation and Safety; Instrumentation and Process Control and more. In the classroom, live online or in-house, across English-speaking Africa.",
   "h1": "Engineering, Maintenance, Oil and Gas"
  },
  {
   "path": "/training/area/finance",
   "title": "Finance, Investment and Banking | Afrimetrica",
-  "description": "8 subjects · 8 courses. Every course can run in the classroom, live online or in-house.",
+  "description": "Finance, Investment and Banking: Financial Management and Budgeting; Treasury and Investment Management; Fraud Prevention, Detection and Investigation; Banking Regulation and Risk and more. In the classroom, live online or in-house, across English-speaking Africa.",
   "h1": "Finance, Investment and Banking"
  },
  {
   "path": "/training/area/hse",
   "title": "HSE, Emergency and Security | Afrimetrica",
-  "description": "6 subjects · 6 courses. Every course can run in the classroom, live online or in-house.",
+  "description": "HSE, Emergency and Security: Health, Safety and Environment Management; Emergency and Crisis Management; Security Management; Waste Management and Circular Economy and more. In the classroom, live online or in-house, across English-speaking Africa.",
   "h1": "HSE, Emergency and Security"
  },
  {
   "path": "/training/area/leadership",
   "title": "Leadership, Strategy and Governance | Afrimetrica",
-  "description": "9 subjects · 9 courses. Every course can run in the classroom, live online or in-house.",
+  "description": "Leadership, Strategy and Governance: Strategic Planning and Execution; Leadership and People Management; Corporate Governance, Compliance and Risk; Negotiation and Influencing Skills and more. In the classroom, live online or in-house, across English-speaking Africa.",
   "h1": "Leadership, Strategy and Governance"
  },
  {
   "path": "/training/area/operations",
   "title": "Operations, Quality and Auditing | Afrimetrica",
-  "description": "5 subjects · 5 courses. Every course can run in the classroom, live online or in-house.",
+  "description": "Operations, Quality and Auditing: Creativity, Innovation and Design Thinking; Operational Excellence and Lean; Business Process Management; Quality Management and Internal Auditing and more. In the classroom, live online or in-house, across English-speaking Africa.",
   "h1": "Operations, Quality and Auditing"
  },
  {
   "path": "/training/area/people",
   "title": "People, HR and Talent Management | Afrimetrica",
-  "description": "5 subjects · 5 courses. Every course can run in the classroom, live online or in-house.",
+  "description": "People, HR and Talent Management: Strategic Human Resource Management; Learning and Development: Design and Evaluation; Personal Effectiveness and Productivity; Emotional Intelligence and Interpersonal Skills and more. In the classroom, live online or in-house, across English-speaking Africa.",
   "h1": "People, HR and Talent Management"
  },
  {
   "path": "/training/area/project",
   "title": "Project, Procurement and Contracts | Afrimetrica",
-  "description": "8 subjects · 8 courses. Every course can run in the classroom, live online or in-house.",
+  "description": "Project, Procurement and Contracts: Project Management Essentials; Procurement and Supply Chain Management; Contract Management; Construction Project Management and more. In the classroom, live online or in-house, across English-speaking Africa.",
   "h1": "Project, Procurement and Contracts"
  },
  {
   "path": "/training/area/research",
   "title": "Research, Monitoring and Evaluation | Afrimetrica",
-  "description": "8 subjects · 26 courses. Every course can run in the classroom, live online or in-house.",
+  "description": "Research, Monitoring and Evaluation: Applied Research Design and Methods; Mixed Methods Research; Impact Evaluation and Field Experiments; Questionnaire Design for Reliable Data and more. In the classroom, live online or in-house, across English-speaking Africa.",
   "h1": "Research, Monitoring and Evaluation"
  },
  {
   "path": "/training/area/sales",
   "title": "PR, Sales and Customer Service | Afrimetrica",
-  "description": "6 subjects · 6 courses. Every course can run in the classroom, live online or in-house.",
+  "description": "PR, Sales and Customer Service: Sales and Marketing Strategy; Customer Service Excellence; Negotiation and Influencing Skills; Corporate Communication and more. In the classroom, live online or in-house, across English-speaking Africa.",
   "h1": "PR, Sales and Customer Service"
  },
  {
   "path": "/training/area/sector",
   "title": "Sector-Specific Courses | Afrimetrica",
-  "description": "20 subjects · 20 courses. Every course can run in the classroom, live online or in-house.",
+  "description": "Sector-Specific Courses: Real Estate Development and Property Management; Future Skills for the Digital Workplace; Oil and Gas Industry Fundamentals; Petroleum Refining Processes and more. In the classroom, live online or in-house, across English-speaking Africa.",
   "h1": "Sector-Specific Courses"
  },
  {
   "path": "/training/area/tech",
   "title": "AI, Data and Emerging Technologies | Afrimetrica",
-  "description": "8 subjects · 11 courses. Every course can run in the classroom, live online or in-house.",
+  "description": "AI, Data and Emerging Technologies: AI Tools for Researchers; Introduction to Machine Learning for Analysts; Excel for Data Analysis and Reporting; Dashboards with Power BI and more. In the classroom, live online or in-house, across English-speaking Africa.",
   "h1": "AI, Data and Emerging Technologies"
  },
  {
@@ -1106,469 +1094,537 @@
  {
   "path": "/training/subject/admin",
   "title": "Office Administration training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Office Administration training courses"
+  "description": "Office Administration training courses: Office Administration and Executive Support. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Office Administration training courses",
+  "canonical": "/training/course/hr-admin"
  },
  {
   "path": "/training/subject/agri",
   "title": "Agribusiness Development training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Agribusiness Development training courses"
+  "description": "Agribusiness Development training courses: Agribusiness Development. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Agribusiness Development training courses",
+  "canonical": "/training/course/sx-agri"
  },
  {
   "path": "/training/subject/ai",
   "title": "Artificial Intelligence (AI) training courses | Afrimetrica",
-  "description": "2 courses, in the classroom, live online or in-house.",
+  "description": "Artificial Intelligence (AI) training courses: AI Tools for Researchers; Introduction to Machine Learning for Analysts. In the classroom, live online or in-house, across English-speaking Africa.",
   "h1": "Artificial Intelligence (AI) training courses"
  },
  {
   "path": "/training/subject/aiapps",
   "title": "AI Applications training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "AI Applications training courses"
+  "description": "AI Applications training courses: Applying AI in Your Sector. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "AI Applications training courses",
+  "canonical": "/training/course/ai-apps"
  },
  {
   "path": "/training/subject/banking",
   "title": "Banking and Financial Regulation training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Banking and Financial Regulation training courses"
+  "description": "Banking and Financial Regulation training courses: Banking Regulation and Risk. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Banking and Financial Regulation training courses",
+  "canonical": "/training/course/fi-banking"
  },
  {
   "path": "/training/subject/behavioural",
   "title": "Behavioural Skills training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Behavioural Skills training courses"
+  "description": "Behavioural Skills training courses: Emotional Intelligence and Interpersonal Skills. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Behavioural Skills training courses",
+  "canonical": "/training/course/hr-behavioural"
  },
  {
   "path": "/training/subject/bpm",
   "title": "Business Process Management training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Business Process Management training courses"
+  "description": "Business Process Management training courses: Business Process Management. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Business Process Management training courses",
+  "canonical": "/training/course/op-bpm"
  },
  {
   "path": "/training/subject/chemical",
   "title": "Chemical and Petrochemical training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Chemical and Petrochemical training courses"
+  "description": "Chemical and Petrochemical training courses: Chemical and Petrochemical Process Operations. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Chemical and Petrochemical training courses",
+  "canonical": "/training/course/en-chemical"
  },
  {
   "path": "/training/subject/comms",
   "title": "Corporate Communication training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Corporate Communication training courses"
+  "description": "Corporate Communication training courses: Corporate Communication. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Corporate Communication training courses",
+  "canonical": "/training/course/sc-comms"
  },
  {
   "path": "/training/subject/construction",
   "title": "Construction Management training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Construction Management training courses"
+  "description": "Construction Management training courses: Construction Project Management. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Construction Management training courses",
+  "canonical": "/training/course/pp-construction"
  },
  {
   "path": "/training/subject/contracts",
   "title": "Contracts Management training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Contracts Management training courses"
+  "description": "Contracts Management training courses: Contract Management. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Contracts Management training courses",
+  "canonical": "/training/course/pp-contracts"
  },
  {
   "path": "/training/subject/corrosion",
   "title": "Corrosion, Metallurgy and Inspection training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Corrosion, Metallurgy and Inspection training courses"
+  "description": "Corrosion, Metallurgy and Inspection training courses: Corrosion Control and Inspection. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Corrosion, Metallurgy and Inspection training courses",
+  "canonical": "/training/course/en-corrosion"
  },
  {
   "path": "/training/subject/creativity",
   "title": "Creativity and Innovation training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Creativity and Innovation training courses"
+  "description": "Creativity and Innovation training courses: Creativity, Innovation and Design Thinking. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Creativity and Innovation training courses",
+  "canonical": "/training/course/ls-creativity"
  },
  {
   "path": "/training/subject/customer",
   "title": "Customer Service training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Customer Service training courses"
+  "description": "Customer Service training courses: Customer Service Excellence. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Customer Service training courses",
+  "canonical": "/training/course/sc-customer"
  },
  {
   "path": "/training/subject/cyber",
   "title": "Cybersecurity training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Cybersecurity training courses"
+  "description": "Cybersecurity training courses: Cybersecurity Essentials for Organisations. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Cybersecurity training courses",
+  "canonical": "/training/course/ai-cyber"
  },
  {
   "path": "/training/subject/defence",
   "title": "Defence and National Security training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Defence and National Security training courses"
+  "description": "Defence and National Security training courses: Strategic Analysis and Risk for National Security. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Defence and National Security training courses",
+  "canonical": "/training/course/sx-defence"
  },
  {
   "path": "/training/subject/design",
   "title": "Research Design and Methods training courses | Afrimetrica",
-  "description": "3 courses, in the classroom, live online or in-house.",
+  "description": "Research Design and Methods training courses: Applied Research Design and Methods; Mixed Methods Research; Impact Evaluation and Field Experiments. In the classroom, live online or in-house, across English-speaking Africa.",
   "h1": "Research Design and Methods training courses"
  },
  {
   "path": "/training/subject/digital",
   "title": "Digital Transformation training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Digital Transformation training courses"
+  "description": "Digital Transformation training courses: Leading Digital Transformation. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Digital Transformation training courses",
+  "canonical": "/training/course/ai-digital"
  },
  {
   "path": "/training/subject/electrical",
   "title": "Electrical Engineering training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Electrical Engineering training courses"
+  "description": "Electrical Engineering training courses: Electrical Systems: Operation and Safety. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Electrical Engineering training courses",
+  "canonical": "/training/course/en-electrical"
  },
  {
   "path": "/training/subject/emergency",
   "title": "Emergency and Crisis Management training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Emergency and Crisis Management training courses"
+  "description": "Emergency and Crisis Management training courses: Emergency and Crisis Management. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Emergency and Crisis Management training courses",
+  "canonical": "/training/course/hs-emergency"
  },
  {
   "path": "/training/subject/energy",
   "title": "Energy training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Energy training courses"
+  "description": "Energy training courses: Energy Transition and Renewable Energy. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Energy training courses",
+  "canonical": "/training/course/en-energy"
  },
  {
   "path": "/training/subject/executive",
   "title": "Executive Development training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Executive Development training courses"
+  "description": "Executive Development training courses: Executive Development Programme. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Executive Development training courses",
+  "canonical": "/training/course/ls-executive"
  },
  {
   "path": "/training/subject/facilities",
   "title": "Facilities Management training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Facilities Management training courses"
+  "description": "Facilities Management training courses: Facilities Management. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Facilities Management training courses",
+  "canonical": "/training/course/en-facilities"
  },
  {
   "path": "/training/subject/field",
   "title": "Sampling, Fieldwork and Data Collection training courses | Afrimetrica",
-  "description": "3 courses, in the classroom, live online or in-house.",
+  "description": "Sampling, Fieldwork and Data Collection training courses: Sampling Methods and Sample Size; Mobile Data Collection with KoboToolbox and ODK; Fieldwork Management and Data Quality. In the classroom, live online or in-house, across English-speaking Africa.",
   "h1": "Sampling, Fieldwork and Data Collection training courses"
  },
  {
   "path": "/training/subject/finance",
   "title": "Finance and Budgeting training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Finance and Budgeting training courses"
+  "description": "Finance and Budgeting training courses: Financial Management and Budgeting. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Finance and Budgeting training courses",
+  "canonical": "/training/course/fi-budgeting"
  },
  {
   "path": "/training/subject/fintech",
   "title": "Fintech and Blockchain training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Fintech and Blockchain training courses"
+  "description": "Fintech and Blockchain training courses: Fintech, Digital Payments and Blockchain. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Fintech and Blockchain training courses",
+  "canonical": "/training/course/ai-fintech"
  },
  {
   "path": "/training/subject/fraud",
   "title": "Fraud and Financial Audit training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Fraud and Financial Audit training courses"
+  "description": "Fraud and Financial Audit training courses: Fraud Prevention, Detection and Investigation. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Fraud and Financial Audit training courses",
+  "canonical": "/training/course/fi-fraud"
  },
  {
   "path": "/training/subject/future",
   "title": "Future Skills training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Future Skills training courses"
+  "description": "Future Skills training courses: Future Skills for the Digital Workplace. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Future Skills training courses",
+  "canonical": "/training/course/ai-future"
  },
  {
   "path": "/training/subject/governance",
   "title": "Governance, Compliance and Risk training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Governance, Compliance and Risk training courses"
+  "description": "Governance, Compliance and Risk training courses: Corporate Governance, Compliance and Risk. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Governance, Compliance and Risk training courses",
+  "canonical": "/training/course/ls-governance"
  },
  {
   "path": "/training/subject/health",
   "title": "Healthcare Management training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Healthcare Management training courses"
+  "description": "Healthcare Management training courses: Healthcare Management. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Healthcare Management training courses",
+  "canonical": "/training/course/sx-health"
  },
  {
   "path": "/training/subject/hospitality",
   "title": "Hospitality and Tourism training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Hospitality and Tourism training courses"
+  "description": "Hospitality and Tourism training courses: Hospitality and Tourism Management. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Hospitality and Tourism training courses",
+  "canonical": "/training/course/sc-hospitality"
  },
  {
   "path": "/training/subject/hr",
   "title": "HR Management training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "HR Management training courses"
+  "description": "HR Management training courses: Strategic Human Resource Management. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "HR Management training courses",
+  "canonical": "/training/course/hr-management"
  },
  {
   "path": "/training/subject/hse",
   "title": "Health, Safety and Environment training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Health, Safety and Environment training courses"
+  "description": "Health, Safety and Environment training courses: Health, Safety and Environment Management. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Health, Safety and Environment training courses",
+  "canonical": "/training/course/hs-hse"
  },
  {
   "path": "/training/subject/hydrogen",
   "title": "Hydrogen training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Hydrogen training courses"
+  "description": "Hydrogen training courses: Hydrogen Economy Fundamentals. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Hydrogen training courses",
+  "canonical": "/training/course/en-hydrogen"
  },
  {
   "path": "/training/subject/instrumentation",
   "title": "Instrumentation and Process Control training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Instrumentation and Process Control training courses"
+  "description": "Instrumentation and Process Control training courses: Instrumentation and Process Control. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Instrumentation and Process Control training courses",
+  "canonical": "/training/course/en-instrumentation"
  },
  {
   "path": "/training/subject/jv",
   "title": "Joint Ventures training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Joint Ventures training courses"
+  "description": "Joint Ventures training courses: Joint Ventures and Strategic Partnerships. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Joint Ventures training courses",
+  "canonical": "/training/course/fi-jv"
  },
  {
   "path": "/training/subject/leadership",
   "title": "Management and Leadership training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Management and Leadership training courses"
+  "description": "Management and Leadership training courses: Leadership and People Management. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Management and Leadership training courses",
+  "canonical": "/training/course/ls-leadership"
  },
  {
   "path": "/training/subject/legal",
   "title": "Legal training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Legal training courses"
+  "description": "Legal training courses: Legal Essentials for Managers. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Legal training courses",
+  "canonical": "/training/course/pp-legal"
  },
  {
   "path": "/training/subject/lnd",
   "title": "Learning and Development training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Learning and Development training courses"
+  "description": "Learning and Development training courses: Learning and Development: Design and Evaluation. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Learning and Development training courses",
+  "canonical": "/training/course/hr-ld"
  },
  {
   "path": "/training/subject/maintenance",
   "title": "Maintenance Engineering training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Maintenance Engineering training courses"
+  "description": "Maintenance Engineering training courses: Maintenance Planning and Reliability. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Maintenance Engineering training courses",
+  "canonical": "/training/course/en-maintenance"
  },
  {
   "path": "/training/subject/manufacturing",
   "title": "Manufacturing training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Manufacturing training courses"
+  "description": "Manufacturing training courses: Manufacturing Operations Management. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Manufacturing training courses",
+  "canonical": "/training/course/en-manufacturing"
  },
  {
   "path": "/training/subject/market",
   "title": "Market Research and Business Intelligence training courses | Afrimetrica",
-  "description": "3 courses, in the classroom, live online or in-house.",
+  "description": "Market Research and Business Intelligence training courses: Market Research Methods; Customer Insight and Segmentation; Market Intelligence and Competitor Analysis for Africa. In the classroom, live online or in-house, across English-speaking Africa.",
   "h1": "Market Research and Business Intelligence training courses"
  },
  {
   "path": "/training/subject/mechanical",
   "title": "Mechanical Engineering training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Mechanical Engineering training courses"
+  "description": "Mechanical Engineering training courses: Mechanical Equipment: Pumps, Compressors and Valves. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Mechanical Engineering training courses",
+  "canonical": "/training/course/en-mechanical"
  },
  {
   "path": "/training/subject/mel",
   "title": "Monitoring, Evaluation and Learning training courses | Afrimetrica",
-  "description": "3 courses, in the classroom, live online or in-house.",
+  "description": "Monitoring, Evaluation and Learning training courses: Monitoring and Evaluation Fundamentals; Results-Based Management and Reporting; Data Quality Assessment for Programmes. In the classroom, live online or in-house, across English-speaking Africa.",
   "h1": "Monitoring, Evaluation and Learning training courses"
  },
  {
   "path": "/training/subject/mining",
   "title": "Mining Engineering training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Mining Engineering training courses"
+  "description": "Mining Engineering training courses: Mining Operations and Management. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Mining Engineering training courses",
+  "canonical": "/training/course/en-mining"
  },
  {
   "path": "/training/subject/negotiation",
   "title": "Negotiation and Influencing Skills training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Negotiation and Influencing Skills training courses"
+  "description": "Negotiation and Influencing Skills training courses: Negotiation and Influencing Skills. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Negotiation and Influencing Skills training courses",
+  "canonical": "/training/course/ls-negotiation"
  },
  {
   "path": "/training/subject/oilgas",
   "title": "Oil and Gas training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Oil and Gas training courses"
+  "description": "Oil and Gas training courses: Oil and Gas Industry Fundamentals. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Oil and Gas training courses",
+  "canonical": "/training/course/en-oilgas"
  },
  {
   "path": "/training/subject/opex",
   "title": "Operational Excellence training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Operational Excellence training courses"
+  "description": "Operational Excellence training courses: Operational Excellence and Lean. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Operational Excellence training courses",
+  "canonical": "/training/course/op-excellence"
  },
  {
   "path": "/training/subject/pensions",
   "title": "Social Insurance and Retirement training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Social Insurance and Retirement training courses"
+  "description": "Social Insurance and Retirement training courses: Social Insurance and Pensions Management. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Social Insurance and Retirement training courses",
+  "canonical": "/training/course/sx-pensions"
  },
  {
   "path": "/training/subject/personal",
   "title": "Personal Effectiveness training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Personal Effectiveness training courses"
+  "description": "Personal Effectiveness training courses: Personal Effectiveness and Productivity. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Personal Effectiveness training courses",
+  "canonical": "/training/course/ls-personal"
  },
  {
   "path": "/training/subject/policing",
   "title": "Police and Law Enforcement training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Police and Law Enforcement training courses"
+  "description": "Police and Law Enforcement training courses: Data and Evidence for Law Enforcement. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Police and Law Enforcement training courses",
+  "canonical": "/training/course/sx-policing"
  },
  {
   "path": "/training/subject/ports",
   "title": "Ships and Port Management training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Ships and Port Management training courses"
+  "description": "Ships and Port Management training courses: Port and Shipping Management. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Ships and Port Management training courses",
+  "canonical": "/training/course/sx-ports"
  },
  {
   "path": "/training/subject/power",
   "title": "Power and Utilities training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Power and Utilities training courses"
+  "description": "Power and Utilities training courses: Power Generation and Utilities Management. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Power and Utilities training courses",
+  "canonical": "/training/course/en-power"
  },
  {
   "path": "/training/subject/ppp",
   "title": "Public-Private Partnerships training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Public-Private Partnerships training courses"
+  "description": "Public-Private Partnerships training courses: Public-Private Partnerships. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Public-Private Partnerships training courses",
+  "canonical": "/training/course/pp-ppp"
  },
  {
   "path": "/training/subject/pr",
   "title": "Public Relations training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Public Relations training courses"
+  "description": "Public Relations training courses: Public Relations and Media Management. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Public Relations training courses",
+  "canonical": "/training/course/sc-pr"
  },
  {
   "path": "/training/subject/procurement",
   "title": "Purchasing and Supply Chain training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Purchasing and Supply Chain training courses"
+  "description": "Purchasing and Supply Chain training courses: Procurement and Supply Chain Management. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Purchasing and Supply Chain training courses",
+  "canonical": "/training/course/pp-procurement"
  },
  {
   "path": "/training/subject/project",
   "title": "Project Management training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Project Management training courses"
+  "description": "Project Management training courses: Project Management Essentials. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Project Management training courses",
+  "canonical": "/training/course/pp-project"
  },
  {
   "path": "/training/subject/public",
   "title": "Public Sector and Public Affairs training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Public Sector and Public Affairs training courses"
+  "description": "Public Sector and Public Affairs training courses: Public Sector Management and Policy. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Public Sector and Public Affairs training courses",
+  "canonical": "/training/course/sx-public"
  },
  {
   "path": "/training/subject/qual",
   "title": "Qualitative Research training courses | Afrimetrica",
-  "description": "3 courses, in the classroom, live online or in-house.",
+  "description": "Qualitative Research training courses: Qualitative Research Methods; Qualitative Data Analysis with NVivo; Focus Group Facilitation. In the classroom, live online or in-house, across English-speaking Africa.",
   "h1": "Qualitative Research training courses"
  },
  {
   "path": "/training/subject/quality",
   "title": "Quality and Audit training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Quality and Audit training courses"
+  "description": "Quality and Audit training courses: Quality Management and Internal Auditing. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Quality and Audit training courses",
+  "canonical": "/training/course/op-quality"
  },
  {
   "path": "/training/subject/rca",
   "title": "Root Cause Analysis training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Root Cause Analysis training courses"
+  "description": "Root Cause Analysis training courses: Root Cause Analysis and Problem Solving. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Root Cause Analysis training courses",
+  "canonical": "/training/course/op-rca"
  },
  {
   "path": "/training/subject/realestate",
   "title": "Real Estate training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Real Estate training courses"
+  "description": "Real Estate training courses: Real Estate Development and Property Management. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Real Estate training courses",
+  "canonical": "/training/course/sx-realestate"
  },
  {
   "path": "/training/subject/refinance",
   "title": "Real Estate Investment and Finance training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Real Estate Investment and Finance training courses"
+  "description": "Real Estate Investment and Finance training courses: Real Estate Investment and Finance. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Real Estate Investment and Finance training courses",
+  "canonical": "/training/course/fi-realestate"
  },
  {
   "path": "/training/subject/refining",
   "title": "Refining training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Refining training courses"
+  "description": "Refining training courses: Petroleum Refining Processes. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Refining training courses",
+  "canonical": "/training/course/sx-refining"
  },
  {
   "path": "/training/subject/sales",
   "title": "Sales and Marketing training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Sales and Marketing training courses"
+  "description": "Sales and Marketing training courses: Sales and Marketing Strategy. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Sales and Marketing training courses",
+  "canonical": "/training/course/sc-sales"
  },
  {
   "path": "/training/subject/security",
   "title": "Security Management training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Security Management training courses"
+  "description": "Security Management training courses: Security Management. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Security Management training courses",
+  "canonical": "/training/course/hs-security"
  },
  {
   "path": "/training/subject/stakeholder",
   "title": "Stakeholder Relations training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Stakeholder Relations training courses"
+  "description": "Stakeholder Relations training courses: Stakeholder Engagement and Relations. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Stakeholder Relations training courses",
+  "canonical": "/training/course/ls-stakeholder"
  },
  {
   "path": "/training/subject/stats",
   "title": "Statistics and Data Analysis training courses | Afrimetrica",
-  "description": "5 courses, in the classroom, live online or in-house.",
+  "description": "Statistics and Data Analysis training courses: Data Analysis with SPSS; Data Analysis with Stata; Data Science with R; Python for Data Analysis and more. In the classroom, live online or in-house, across English-speaking Africa.",
   "h1": "Statistics and Data Analysis training courses"
  },
  {
   "path": "/training/subject/strategy",
   "title": "Strategy and Strategic Planning training courses | Afrimetrica",
   "description": "Envision, plan and lead: practical courses that strengthen executives' skills in strategy and strategic planning, so organisations, governments and NGOs can set clear priorities and turn them into results.",
-  "h1": "Strategy and Strategic Planning training courses"
+  "h1": "Strategy and Strategic Planning training courses",
+  "canonical": "/training/course/ls-strategy"
  },
  {
   "path": "/training/subject/survey",
   "title": "Survey and Questionnaire Design training courses | Afrimetrica",
-  "description": "3 courses, in the classroom, live online or in-house.",
+  "description": "Survey and Questionnaire Design training courses: Questionnaire Design for Reliable Data; Measurement Scales and Index Construction; Online and Mobile Surveys. In the classroom, live online or in-house, across English-speaking Africa.",
   "h1": "Survey and Questionnaire Design training courses"
  },
  {
   "path": "/training/subject/sustainability",
   "title": "Sustainability and CSR training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Sustainability and CSR training courses"
+  "description": "Sustainability and CSR training courses: Sustainability, ESG and CSR. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Sustainability and CSR training courses",
+  "canonical": "/training/course/ls-sustainability"
  },
  {
   "path": "/training/subject/tax",
   "title": "Tax and Revenue training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Tax and Revenue training courses"
+  "description": "Tax and Revenue training courses: Tax and Revenue Management. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Tax and Revenue training courses",
+  "canonical": "/training/course/fi-tax"
  },
  {
   "path": "/training/subject/traffic",
   "title": "Traffic Management training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Traffic Management training courses"
+  "description": "Traffic Management training courses: Traffic Management and Road Safety. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Traffic Management training courses",
+  "canonical": "/training/course/sx-traffic"
  },
  {
   "path": "/training/subject/treasury",
   "title": "Treasury and Investment training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Treasury and Investment training courses"
+  "description": "Treasury and Investment training courses: Treasury and Investment Management. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Treasury and Investment training courses",
+  "canonical": "/training/course/fi-treasury"
  },
  {
   "path": "/training/subject/urban",
   "title": "Urban Planning and Development training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Urban Planning and Development training courses"
+  "description": "Urban Planning and Development training courses: Urban Planning and Development. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Urban Planning and Development training courses",
+  "canonical": "/training/course/sx-urban"
  },
  {
   "path": "/training/subject/viz",
   "title": "Data Management and Analytics training courses | Afrimetrica",
-  "description": "3 courses, in the classroom, live online or in-house.",
+  "description": "Data Management and Analytics training courses: Excel for Data Analysis and Reporting; Dashboards with Power BI; Research Data Management. In the classroom, live online or in-house, across English-speaking Africa.",
   "h1": "Data Management and Analytics training courses"
  },
  {
   "path": "/training/subject/waste",
   "title": "Waste Management training courses | Afrimetrica",
-  "description": "1 course, in the classroom, live online or in-house.",
-  "h1": "Waste Management training courses"
+  "description": "Waste Management training courses: Waste Management and Circular Economy. In the classroom, live online or in-house, across English-speaking Africa.",
+  "h1": "Waste Management training courses",
+  "canonical": "/training/course/hs-waste"
  },
  {
   "path": "/training/subject/writing",
   "title": "Research Ethics, Writing and Publishing training courses | Afrimetrica",
-  "description": "3 courses, in the classroom, live online or in-house.",
+  "description": "Research Ethics, Writing and Publishing training courses: Research Ethics and Data Protection; Writing Winning Research Proposals; Academic Writing and Publishing. In the classroom, live online or in-house, across English-speaking Africa.",
   "h1": "Research Ethics, Writing and Publishing training courses"
  },
  {

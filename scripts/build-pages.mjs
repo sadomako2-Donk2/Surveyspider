@@ -25,8 +25,12 @@ while (queue.length) {
     description: document.querySelector('meta[name="description"]')?.content || "",
     h1: document.querySelector("#main h1")?.textContent.replace(/\s+/g, " ").trim() || "",
     links: [...document.querySelectorAll('a[href^="#"], a[href^="/"]')].map((a) => a.getAttribute("href")),
+    courses: [...new Set([...document.querySelectorAll('#main a[href*="training/course/"]')].map((a) => a.getAttribute("href").replace(/^#/, "/")))],
   }));
-  seen.set(k, { path: "/" + k, title: info.title, description: info.description, h1: info.h1 });
+  const entry = { path: "/" + k, title: info.title, description: info.description, h1: info.h1 };
+  // A subject with a single course mostly repeats that course's page: point search engines to the course instead.
+  if (k.startsWith("training/subject/") && info.courses.length === 1) entry.canonical = info.courses[0];
+  seen.set(k, entry);
   for (const l of info.links) { const n = keyOf(l); if (n !== null && !seen.has(n)) queue.push(n); }
 }
 await browser.close();

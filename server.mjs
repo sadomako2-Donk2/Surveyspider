@@ -61,7 +61,7 @@ function pageHtml(info, base, known) {
   const org = { "@type": "Organization", name: "Afrimetrica", url: base + "/", logo: base + "/photos/logo-full.webp", description: DEFAULT_DESC };
   const ld = info.path === "/" ? { "@context": "https://schema.org", "@graph": [org, { "@type": "WebSite", name: "Afrimetrica", url: base + "/" }] }
     : info.path.startsWith("/training/course/") ? { "@context": "https://schema.org", "@type": "Course", name: info.h1 || title, description: desc, url, provider: org } : null;
-  const head = (known ? `<link rel="canonical" href="${attr(url)}">` : `<meta name="robots" content="noindex">`) +
+  const head = (known ? `<link rel="canonical" href="${attr(info.canonical ? base + info.canonical : url)}">` : `<meta name="robots" content="noindex">`) +
     `<meta property="og:type" content="website"><meta property="og:site_name" content="Afrimetrica"><meta property="og:title" content="${attr(title)}"><meta property="og:description" content="${attr(desc)}"><meta property="og:url" content="${attr(url)}">` +
     (SOCIAL ? `<meta property="og:image" content="${attr(base)}/social.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">` : "") +
     (ld ? `<script type="application/ld+json">${JSON.stringify(ld).replace(/</g, "\\u003c")}</script>` : "");
@@ -661,7 +661,7 @@ export const server = http.createServer(async (req, res) => {
     if (url.pathname === "/healthz") return send(res, 200, { ok: true });
     if (url.pathname.startsWith("/photos/") && PHOTOS.has(url.pathname.slice(8))) { res.writeHead(200, { "Content-Type": "image/webp", "Cache-Control": "public, max-age=86400" }); return res.end(PHOTOS.get(url.pathname.slice(8))); }
     if (req.method === "GET" && url.pathname === "/robots.txt") { res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=3600" }); return res.end(`User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /auth/\n\nSitemap: ${baseUrl(req)}/sitemap.xml\n`); }
-    if (req.method === "GET" && url.pathname === "/sitemap.xml") { const b = baseUrl(req); res.writeHead(200, { "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, max-age=3600" }); return res.end(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...PAGES.keys()].map((p) => `<url><loc>${attr(b + p)}</loc></url>`).join("\n")}\n</urlset>\n`); }
+    if (req.method === "GET" && url.pathname === "/sitemap.xml") { const b = baseUrl(req); res.writeHead(200, { "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, max-age=3600" }); return res.end(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...PAGES.values()].filter((p) => !p.canonical).map((p) => `<url><loc>${attr(b + p.path)}</loc></url>`).join("\n")}\n</urlset>\n`); }
     if (url.pathname === "/social.jpg" && SOCIAL) { res.writeHead(200, { "Content-Type": "image/jpeg", "Cache-Control": "public, max-age=86400" }); return res.end(SOCIAL); }
     if (url.pathname.startsWith("/vendor/") && VENDOR.has(url.pathname.slice(8))) { res.writeHead(200, { "Content-Type": "text/javascript; charset=utf-8", "Cache-Control": "public, max-age=86400" }); return res.end(VENDOR.get(url.pathname.slice(8))); }
     if (url.pathname === "/icon.svg") { res.writeHead(200, { "Content-Type": "image/svg+xml", "Cache-Control": "public, max-age=86400" }); return res.end(ICON); }

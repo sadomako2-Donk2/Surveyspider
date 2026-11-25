@@ -1,7 +1,7 @@
 // Tests the server's sign-in, API and permission rules.
 // Run: node tests/api.test.mjs   (no Anthropic key or real Google account needed)
 import http from "node:http";
-import { mkdtempSync } from "node:fs";
+import { mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
@@ -70,7 +70,7 @@ const robots = await fetch(base + "/robots.txt"), robotsText = await robots.text
 check("robots.txt lets search engines in, keeps them out of the API, and names the sitemap", robots.status === 200 && /Allow: \//.test(robotsText) && /Disallow: \/api\//.test(robotsText) && robotsText.includes("Sitemap: https://surveyspider.test/sitemap.xml"));
 const sitemap = await fetch(base + "/sitemap.xml");
 const smText = await sitemap.text();
-check("sitemap.xml lists every public page at its real address", sitemap.status === 200 && /xml/.test(sitemap.headers.get("content-type")) && smText.includes("<loc>https://surveyspider.test/</loc>") && smText.includes("<loc>https://surveyspider.test/training/venue/ghana</loc>") && (smText.match(/<loc>/g) || []).length > 250 && !/<loc>https:\/\/surveyspider\.test\/(studies|create|results|account|admin|signin)[/<]/.test(smText));
+check("sitemap.xml lists every public page at its real address", sitemap.status === 200 && /xml/.test(sitemap.headers.get("content-type")) && smText.includes("<loc>https://surveyspider.test/</loc>") && smText.includes("<loc>https://surveyspider.test/training/venue/ghana</loc>") && (smText.match(/<loc>/g) || []).length > 200 && !/<loc>https:\/\/surveyspider\.test\/(studies|create|results|account|admin|signin)[/<]/.test(smText));
 check("the Bing ownership code is in the page", homeHtml.includes('<meta name="msvalidate.01" content="ABCDEF0123456789ABCDEF0123456789">'));
 check("the home page has its canonical address, social preview and organisation details", homeHtml.includes('<link rel="canonical" href="https://surveyspider.test/">') && homeHtml.includes('property="og:image" content="https://surveyspider.test/social.jpg"') && /"@type":"Organization"/.test(homeHtml));
 const aboutPage = await fetch(base + "/about"), aboutHtml = await aboutPage.text();
@@ -78,6 +78,10 @@ check("public pages have real addresses with their own title and description", a
 const coursePath = smText.match(/<loc>https:\/\/surveyspider\.test(\/training\/course\/[a-z0-9-]+)<\/loc>/)[1];
 const courseHtml = await (await fetch(base + coursePath)).text();
 check("course pages describe the course for search engines", /"@type":"Course"/.test(courseHtml) && /"provider":\{"@type":"Organization"/.test(courseHtml));
+const oneCourse = JSON.parse(readFileSync(new URL("../public/pages.json", import.meta.url), "utf8")).find((p) => p.canonical);
+const subjHtml = await (await fetch(base + oneCourse.path)).text();
+check("a one-course subject page points search engines to its course and isn't in the sitemap", subjHtml.includes(`<link rel="canonical" href="https://surveyspider.test${oneCourse.canonical}">`) && !smText.includes(`<loc>https://surveyspider.test${oneCourse.path}</loc>`) && smText.includes(`<loc>https://surveyspider.test${oneCourse.canonical}</loc>`));
+check("pages without real content yet are left out of the sitemap", !/case-studies|\/videos</.test(smText));
 check("descriptions are kept to search-result length", [homeHtml, aboutHtml, courseHtml].every((h) => (h.match(/<meta name="description" content="([^"]*)"/) || [, "x".repeat(999)])[1].length <= 170));
 const unknown = await fetch(base + "/training/course/not-a-course");
 check("unknown public addresses still open the app but aren't indexed", unknown.status === 404 && (await unknown.text()).includes('<meta name="robots" content="noindex">'));

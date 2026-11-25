@@ -1046,13 +1046,27 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
   // Each page gets its own browser-tab title and description (used when people bookmark or share it).
   const SITE_TITLE = "Afrimetrica — Data, Research and Executive Training";
   const SITE_DESC = "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.";
+  // A description made only from what is on the page: its opening line; for course lists whose opening line is just
+  // a count ("3 courses, in the classroom..."), the course names; for pages without an opening line, the first paragraph.
+  function pageDescription(heading, lead) {
+    const clean = (t) => (t || "").replace(/\s+/g, " ").trim();
+    let d = lead ? clean(lead.textContent) : "";
+    if (/^\d+ (subjects?|courses?)\b/i.test(d)) {
+      const names = [...new Set([...document.querySelectorAll('#main a[href*="training/course/"]')].map((a) => clean(a.innerText.split("\n")[0])).filter(Boolean))];
+      if (names.length) d = `${heading}: ${names.slice(0, 4).join("; ")}${names.length > 4 ? " and more" : ""}. In the classroom, live online or in-house, across English-speaking Africa.`;
+    } else if (!d) {
+      const p = [...document.querySelectorAll("#main p")].map((x) => clean(x.textContent)).find((t) => t.length >= 40);
+      if (p && heading) d = `${heading}: ${p}`;
+    }
+    return d.slice(0, 300);
+  }
   function setPageMeta() {
     const h1 = $("#main h1"), lead = $("#main .page-head p, #main .lede, #main .lede-sm");
     const heading = h1 ? h1.textContent.replace(/\s+/g, " ").trim() : "";
     document.title = S.view === "home" || !heading ? SITE_TITLE : `${heading} | Afrimetrica`;
     let m = document.querySelector('meta[name="description"]');
     if (!m) { m = document.createElement("meta"); m.name = "description"; document.head.appendChild(m); }
-    m.content = (lead && lead.textContent.replace(/\s+/g, " ").trim().slice(0, 300)) || SITE_DESC;
+    m.content = pageDescription(heading, lead) || SITE_DESC;
   }
   function render() {
     pending = false;
@@ -2962,17 +2976,26 @@ ${richSummary(st, rows)}`;
   let slideOrder = SLIDES, slideIdx = 0, slidePaused = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
   // Each page's slideshow starts with that page's own photo(s), then shows the rest in the usual order.
   const slideshow = (...first) => { slideOrder = [...first, ...SLIDES.filter((k) => !first.includes(k))]; return `<section class="slideshow" aria-roledescription="carousel" aria-label="Photos">
-    <div class="slides" style="transform:translateX(-${slideIdx * 100}%)">${slideOrder.map((k, i) => { const [f, alt, pos] = PHOTO[k]; return `<div class="slide" role="group" aria-roledescription="slide" aria-label="${i + 1} of ${slideOrder.length}"${i === slideIdx ? "" : ' aria-hidden="true"'}><img src="/photos/${f}" alt="${esc(alt)}" style="object-position:${pos}"${i ? ' fetchpriority="low"' : ""}></div>`; }).join("")}</div>
+    <div class="slides" style="transform:translateX(-${slideIdx * 100}%)">${slideOrder.map((k, i) => { const [f, alt, pos] = PHOTO[k]; return `<div class="slide" role="group" aria-roledescription="slide" aria-label="${i + 1} of ${slideOrder.length}"${i === slideIdx ? "" : ' aria-hidden="true"'}><img ${i === slideIdx ? "src" : "data-src"}="/photos/${f}" alt="${esc(alt)}" style="object-position:${pos}"${i === slideIdx ? "" : ' fetchpriority="low"'}></div>`; }).join("")}</div>
     <div class="slide-ctl"><button class="slide-play" data-act="slidePause" aria-pressed="${slidePaused}">${slidePaused ? "Play" : "Pause"}</button>${slideOrder.map((_, i) => `<button class="slide-dot" data-act="slideGo" data-i="${i}" aria-label="Show photo ${i + 1}"${i === slideIdx ? ' aria-current="true"' : ""}></button>`).join("")}</div>
   </section>`; };
+  // Only the photo on show is downloaded with the page; each next one is fetched shortly before its turn
+  // (saves about 600 KB per page on mobile data).
+  function loadSlide(j) {
+    const imgs = document.querySelectorAll(".slideshow .slide img"), img = imgs[(j + imgs.length) % (imgs.length || 1)];
+    if (img && img.dataset.src) { img.src = img.dataset.src; img.removeAttribute("data-src"); }
+  }
   function showSlide(i) {
     slideIdx = (i + slideOrder.length) % slideOrder.length;
     const box = document.querySelector(".slideshow"); if (!box) return;
+    loadSlide(slideIdx); loadSlide(slideIdx + 1);
     box.querySelector(".slides").style.transform = `translateX(-${slideIdx * 100}%)`;
     box.querySelectorAll(".slide").forEach((s, j) => (j === slideIdx ? s.removeAttribute("aria-hidden") : s.setAttribute("aria-hidden", "true")));
     box.querySelectorAll(".slide-dot").forEach((d, j) => (j === slideIdx ? d.setAttribute("aria-current", "true") : d.removeAttribute("aria-current")));
   }
   setInterval(() => { if (!slidePaused && !document.hidden) showSlide(slideIdx + 1); }, 5000);
+  // Fetch the next photo once the page has settled, so it's ready when the slideshow moves on.
+  new MutationObserver(() => { if (document.querySelector(".slideshow img[data-src]")) setTimeout(() => loadSlide(slideIdx + 1), 2500); }).observe(document.getElementById("main"), { childList: true });
   const UNITS = [
     { key: "training", brand: "Afrimetrica Academy", title: "Data, research and executive training", text: "Classroom, live online and in-house courses in data and research skills, monitoring and evaluation, and executive programmes in strategy, leadership, governance, finance and projects.", points: ["Executive and technical programmes", "In-house training for your organisation", "Certificates of completion"], cta: "Explore training" },
     { key: "surveys", brand: "Afrimetrica Surveys", title: "Survey tools", text: "Build questionnaires, collect responses online or face to face, and analyse them with built-in statistics and AI.", points: ["Word, PDF and Excel upload", "Paid participant panel", "Analysis and Excel reports"], cta: "Start a survey" },
@@ -3075,7 +3098,7 @@ ${richSummary(st, rows)}`;
     </section>
     <section class="stack">
       <div class="row wrap" style="justify-content:space-between;align-items:flex-end"><div class="section-head"><span class="eyebrow gold">Afrimetrica Academy</span><h2 class="h2xl">Upcoming courses</h2></div><a class="btn" href="#training">All courses</a></div>
-      ${up.length ? `<div class="course-grid">${up.map(({ c, s }) => courseCard(c, s)).join("")}</div>` : `<div class="empty"><h2>New course dates are being finalised</h2><p class="muted">Tell us what you'd like to learn and we'll let you know when registration opens.</p><a class="btn primary" href="#training">Register your interest</a></div>`}
+      ${up.length ? `<div class="course-grid">${up.map(({ c, s }) => courseCard(c, s)).join("")}</div>` : `<div class="empty"><h2>Choose a course and a city</h2><p class="muted">Dates are set for each venue. Pick a course from the catalogue, tell us the city or the online option you prefer, and we'll send you the dates and fees. Any course can also run in-house for your team.</p><div class="row wrap"><a class="btn primary" href="#training/finder">Find a course</a><a class="btn" href="#training/venues">Training venues</a></div></div>`}
     </section>
     <section class="split">
       <div class="stack"><div class="section-head"><span class="eyebrow gold">Knowledge Hub</span><h2 class="h2xl">Free guides for better research</h2></div><p class="muted">Practical advice on questionnaire design, sample size, scales and monitoring and evaluation, plus ready-made survey templates.</p><a class="btn primary" href="#resources" style="align-self:flex-start">Browse resources</a></div>
@@ -3114,7 +3137,6 @@ ${richSummary(st, rows)}`;
   }
   function abTeam() {
     return `${abCrumbs("Our team")}<div class="page-head"><div><span class="eyebrow gold">Our team</span><h1>The people behind Afrimetrica</h1><p class="muted" style="max-width:66ch">A core team of trainers, researchers, analysts and consultants, supported by an associate network of specialists and field staff across English-speaking Africa.</p></div></div>
-      <section class="card"><h2>Leadership and faculty</h2><p class="muted">Profiles of our leadership, faculty, analysts and consultants will be published here soon.</p></section>
       <section class="card"><h2>Join us</h2><p class="muted">We work with independent consultants, trainers, analysts, enumerators and field supervisors.</p><div class="row wrap"><a class="btn primary" href="#consultancy/work-with-us">Join the associate network</a><a class="btn" href="#contact/careers">Careers</a></div></section>`;
   }
   function abOrganisation() {
@@ -4043,7 +4065,7 @@ ${richSummary(st, rows)}`;
         <section class="card"><h2>Quality</h2><ul class="ticks small"><li><div><b>Fit-for-purpose methods</b><span>The simplest design that can answer your question credibly.</span></div></li><li><div><b>Checked results</b><span>Analysis is reviewed before anything is reported.</span></div></li><li><div><b>Honest findings</b><span>We report what the evidence shows, including what didn't work.</span></div></li></ul></section>
         <section class="card"><h2>Ethics and data protection</h2><ul class="ticks small"><li><div><b>Informed consent</b><span>Participants know what they are agreeing to and can stop at any time.</span></div></li><li><div><b>Ethics approval</b><span>We seek approval from the relevant committees where a study needs it.</span></div></li><li><div><b>Safeguarding</b><span>Extra care with children and vulnerable groups.</span></div></li><li><div><b>Data protection</b><span>Personal data handled in line with the law, including Ghana's Data Protection Act, 2012.</span></div></li></ul></section>
       </div>
-      <section class="card"><h2>Our team</h2><p class="muted">A core team of researchers and analysts, supported by an associate network of specialists and field staff across English-speaking Africa. Profiles will be published soon.</p><a class="btn" href="#consultancy/work-with-us" style="align-self:flex-start">Join our associate network</a></section>`;
+      <section class="card"><h2>Our team</h2><p class="muted">A core team of researchers and analysts, supported by an associate network of specialists and field staff across English-speaking Africa.</p><a class="btn" href="#consultancy/work-with-us" style="align-self:flex-start">Join our associate network</a></section>`;
   }
   function coWorkWithUs() {
     return `${coCrumbs(["", "Work with us"])}<div class="page-head"><div><span class="eyebrow gold">Work with us</span><h1>Join our associate network</h1><p class="muted" style="max-width:70ch">We work with independent consultants, researchers, trainers, data analysts, enumerators and field supervisors across English-speaking Africa. Tell us about your skills and where you work.</p></div></div>
@@ -4066,7 +4088,8 @@ ${richSummary(st, rows)}`;
   }
   // ---- Resources (#resources/<part>) and Contact (#contact/<part>) sections, with their own menus ----
   const subLinks = (base, items, cur) => items.map(([k, label]) => `<a href="#${base}${k ? "/" + k : ""}"${cur === k || (k && cur.startsWith(k + "/")) ? ' aria-current="page"' : ""}>${label}</a>`).join("");
-  const RES_MENU = [["", "Overview"], ["articles", "Articles and guides"], ["case-studies", "Case studies"], ["testimonials", "Testimonials"], ["press", "Press releases"], ["videos", "Videos"], ["catalogues", "Catalogues and brochures"]];
+  // Case studies and Videos are left out of the menu (and the sitemap) until they have real content; their pages still open.
+  const RES_MENU = [["", "Overview"], ["articles", "Articles and guides"], ["testimonials", "Testimonials"], ["press", "Press releases"], ["catalogues", "Catalogues and brochures"]];
   const CONTACT_MENU = [["", "Contact us"], ["hotel", "Hotel reservation"], ["careers", "Careers"], ["mailing-list", "Mailing list"]];
   const resNav = () => `<div class="subnav-inner"><span class="subnav-label">Knowledge Hub</span><div class="subnav-links">${subLinks("resources", RES_MENU, S.res || "")}</div></div>`;
   const ctNav = () => `<div class="subnav-inner"><span class="subnav-label">Contact</span><div class="subnav-links">${subLinks("contact", CONTACT_MENU, S.ct || "")}<a href="#training/finder">Find training</a></div></div>`;
