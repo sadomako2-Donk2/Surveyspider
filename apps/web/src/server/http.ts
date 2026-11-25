@@ -61,8 +61,16 @@ export function cookie(req: Request, name: string, value: string, maxAgeSeconds:
   return `${name}=${encodeURIComponent(value)}; Path=${path}; HttpOnly; SameSite=Lax; Max-Age=${maxAgeSeconds}${isHttps(req) ? "; Secure" : ""}`;
 }
 
-export const clientIp = (req: Request) =>
-  (req.headers.get("x-forwarded-for") ?? req.headers.get("x-real-ip") ?? "").split(",")[0]!.trim() || "unknown";
+/**
+ * The visitor's address, for rate limits. Cloudflare (in front of Render) sets CF-Connecting-IP itself, so a
+ * visitor can't fake it; otherwise the first X-Forwarded-For entry, which can be faked: that is why sign-in also
+ * has a per-email limit that doesn't depend on the address.
+ */
+export const clientIp = (req: Request) => {
+  const cf = (req.headers.get("cf-connecting-ip") ?? "").trim();
+  if (/^[0-9a-fA-F:.]{3,45}$/.test(cf)) return cf;
+  return (req.headers.get("x-forwarded-for") ?? req.headers.get("x-real-ip") ?? "").split(",")[0]!.trim() || "unknown";
+};
 
 /** Requests that change something must come from our own pages (or from a non-browser client with no Origin). */
 export function crossSite(req: Request): boolean {

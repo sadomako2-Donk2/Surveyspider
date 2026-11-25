@@ -134,7 +134,11 @@ export const login = handle(async (req, db) => {
   const b = await readJson(req);
   const email = cleanEmail(b.email);
   if (!validEmail(email)) return fail(400, "invalid_argument", "Enter a valid email address.");
-  if (await tooMany(db, `auth|${clientIp(req)}|${email}`, 10, 15 * 60e3))
+  // Per visitor and email, and per email from anywhere (so changing address doesn't allow more guesses).
+  if (
+    (await tooMany(db, `auth|${clientIp(req)}|${email}`, 10, 15 * 60e3)) ||
+    (await tooMany(db, `auth-email|${email}`, 30, 15 * 60e3))
+  )
     return TOO_MANY("Too many attempts. Wait 15 minutes and try again.");
   const user = await db.user.findUnique({ where: { email } });
   if (user && !user.passwordHash)

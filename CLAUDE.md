@@ -39,4 +39,5 @@ Phase 2 (`cd apps/web`):
 - Section content (training catalogue, analytics, consultancy, about) is in `apps/web/src/content/sections.json`, generated from the live site by `scripts/phase1/extract-content.mjs`; legal wording is in `src/content/legal.ts`; menus in `src/content/menus.ts`.
 - Never run `prisma migrate reset` or `db push` against a shared or production database. Production uses `npm run db:deploy` only.
 - Rules that Prisma can't express (partial unique index, triggers, CHECKs) live in the SQL of the migration files; add new ones the same way and test them in `tests/db/`.
+- Security headers (CSP, HSTS, Permissions-Policy...) are in `src/lib/security-headers.ts`, applied in `next.config.ts`; keep them in step with `server.mjs` in Phase 1. Never add outside script sources: bundle libraries instead.
 - CI (`.github/workflows/ci.yml`) runs all of these plus the Phase 1 tests on every push to `main` or `phase-2` and on pull requests.

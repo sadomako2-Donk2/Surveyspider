@@ -16,6 +16,26 @@ async function signUpAndConfirm(page: Page, email: string, next: string) {
   await expect(page.getByRole("heading", { name: /all set/ })).toBeVisible();
 }
 const found = (page: Page) => page.locator("ol.found > li");
+// Uploads use the PDF and Word readers (and the PDF worker): the content security policy must not block them.
+let cspBlocked: string[] = [];
+test.beforeEach(async ({ page }) => {
+  cspBlocked = [];
+  await page.addInitScript(() =>
+    document.addEventListener("securitypolicyviolation", (e) =>
+      console.log(
+        `CSP-BLOCKED ${e.violatedDirective} ${e.blockedURI} ${e.sourceFile}:${e.lineNumber}:${e.columnNumber} ${e.sample}`,
+      ),
+    ),
+  );
+  page.on("console", (m) => {
+    // ExcelJS's bundled is-generator-function probes for eval inside try/catch and carries on without it; the
+    // download is still checked exactly below. Loading files (scripts, the PDF worker) must never be blocked.
+    if (m.text().startsWith("CSP-BLOCKED") && !m.text().startsWith("CSP-BLOCKED script-src eval "))
+      cspBlocked.push(m.text());
+  });
+});
+test.afterEach(() => expect(cspBlocked).toEqual([]));
+
 const upload = (page: Page, file: string) => page.getByLabel("Choose a questionnaire file").setInputFiles(file);
 
 test("a Word questionnaire becomes a draft survey, and its Excel download comes back exactly", async ({

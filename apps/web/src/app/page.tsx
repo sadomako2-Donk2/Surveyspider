@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CourseCard } from "@/components/academy/CourseCard";
 import { Band, Ticks } from "@/components/site/blocks";
+import { JsonLd } from "@/components/site/JsonLd";
 import { Photo } from "@/components/site/Photo";
 import { Slideshow } from "@/components/site/Slideshow";
 import { slidesStartingWith } from "@/content/photos";
@@ -45,7 +46,7 @@ export default async function Home() {
   };
   return (
     <main id="main" className="wrap stack xl">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(org) }} />
+      <JsonLd data={org} />
       <section className="hero solo">
         <div>
           <h1 className="display">

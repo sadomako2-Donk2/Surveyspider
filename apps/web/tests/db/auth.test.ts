@@ -156,6 +156,20 @@ describe("sign up and sign in", () => {
     expect(limited).toBe(true);
   });
 
+  it("limits guesses per account even when the address keeps changing", async () => {
+    const D = browser("10.0.1.1");
+    let limited = false;
+    for (let i = 0; i < 32 && !limited; i++)
+      limited =
+        (
+          await D.call(login, {
+            body: { email: "target@example.com", password: `guess ${i}` },
+            headers: { "X-Forwarded-For": `198.51.100.${i}` },
+          })
+        ).status === 429;
+    expect(limited).toBe(true);
+  });
+
   it("signs out and forgets the session", async () => {
     const A = browser("10.0.0.6");
     await A.call(login, { body: { email: "a@example.com", password: "correct horse 1" } });
