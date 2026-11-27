@@ -21,8 +21,8 @@ describe("initials", () => {
 });
 
 describe("leadership team", () => {
-  it("lists the four leadership roles in order", async () => {
+  it("lists the five leadership roles in order", async () => {
     const { LEADERSHIP } = await import("@/content/team");
-    expect(LEADERSHIP.map((l) => l.abbr)).toEqual(["CEO", "BDM", "FD", "COO"]);
+    expect(LEADERSHIP.map((l) => l.abbr)).toEqual(["CEO", "BD", "FIN", "PHC", "OPS"]);
   });
 });

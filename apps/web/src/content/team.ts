@@ -75,7 +75,8 @@ export interface LeadershipRole {
 
 export const LEADERSHIP: LeadershipRole[] = [
   { role: "Chief Executive Officer", abbr: "CEO" },
-  { role: "Business Development Manager", abbr: "BDM" },
-  { role: "Finance Director", abbr: "FD" },
-  { role: "Chief Operating Officer", abbr: "COO" },
+  { role: "Director, Business Development", abbr: "BD" },
+  { role: "Director, Finance", abbr: "FIN" },
+  { role: "Director, People and Human Capital", abbr: "PHC" },
+  { role: "Director, Operations", abbr: "OPS" },
 ];
