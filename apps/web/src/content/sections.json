@@ -191,79 +191,128 @@
   "venues": [
     {
       "country": "Ghana",
-      "cities": ["Accra", "Kumasi", "Tamale", "Takoradi", "Sunyani"]
+      "cities": ["Accra", "Kumasi", "Tamale", "Takoradi", "Sunyani"],
+      "region": "Africa"
     },
     {
       "country": "Nigeria",
-      "cities": ["Lagos", "Abuja"]
+      "cities": ["Lagos", "Abuja"],
+      "region": "Africa"
     },
     {
       "country": "Kenya",
-      "cities": ["Nairobi", "Mombasa"]
+      "cities": ["Nairobi", "Mombasa"],
+      "region": "Africa"
     },
     {
       "country": "Uganda",
-      "cities": ["Kampala"]
+      "cities": ["Kampala"],
+      "region": "Africa"
     },
     {
       "country": "Tanzania",
-      "cities": ["Dar es Salaam", "Arusha"]
+      "cities": ["Dar es Salaam", "Arusha"],
+      "region": "Africa"
     },
     {
       "country": "Rwanda",
-      "cities": ["Kigali"]
+      "cities": ["Kigali"],
+      "region": "Africa"
     },
     {
       "country": "South Africa",
-      "cities": ["Johannesburg", "Cape Town"]
+      "cities": ["Johannesburg", "Cape Town"],
+      "region": "Africa"
     },
     {
       "country": "Zambia",
-      "cities": ["Lusaka"]
+      "cities": ["Lusaka"],
+      "region": "Africa"
     },
     {
       "country": "Zimbabwe",
-      "cities": ["Harare"]
+      "cities": ["Harare"],
+      "region": "Africa"
     },
     {
       "country": "Botswana",
-      "cities": ["Gaborone"]
+      "cities": ["Gaborone"],
+      "region": "Africa"
     },
     {
       "country": "Namibia",
-      "cities": ["Windhoek"]
+      "cities": ["Windhoek"],
+      "region": "Africa"
     },
     {
       "country": "Malawi",
-      "cities": ["Lilongwe"]
+      "cities": ["Lilongwe"],
+      "region": "Africa"
     },
     {
       "country": "Sierra Leone",
-      "cities": ["Freetown"]
+      "cities": ["Freetown"],
+      "region": "Africa"
     },
     {
       "country": "Liberia",
-      "cities": ["Monrovia"]
+      "cities": ["Monrovia"],
+      "region": "Africa"
     },
     {
       "country": "The Gambia",
-      "cities": ["Banjul"]
+      "cities": ["Banjul"],
+      "region": "Africa"
     },
     {
       "country": "Eswatini",
-      "cities": ["Mbabane"]
+      "cities": ["Mbabane"],
+      "region": "Africa"
     },
     {
       "country": "Lesotho",
-      "cities": ["Maseru"]
+      "cities": ["Maseru"],
+      "region": "Africa"
     },
     {
       "country": "Mauritius",
-      "cities": ["Port Louis"]
+      "cities": ["Port Louis"],
+      "region": "Africa"
     },
     {
       "country": "South Sudan",
-      "cities": ["Juba"]
+      "cities": ["Juba"],
+      "region": "Africa"
+    },
+    {
+      "country": "United Kingdom",
+      "cities": ["London", "Birmingham", "Leeds", "Belfast"],
+      "region": "International"
+    },
+    {
+      "country": "Republic of Ireland",
+      "cities": ["Dublin"],
+      "region": "International"
+    },
+    {
+      "country": "Netherlands",
+      "cities": ["Amsterdam"],
+      "region": "International"
+    },
+    {
+      "country": "France",
+      "cities": ["Paris"],
+      "region": "International"
+    },
+    {
+      "country": "Singapore",
+      "cities": ["Singapore"],
+      "region": "International"
+    },
+    {
+      "country": "United States",
+      "cities": ["San Diego, California"],
+      "region": "International"
     }
   ],
   "courses": [

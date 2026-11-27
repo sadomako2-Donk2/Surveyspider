@@ -51,7 +51,17 @@ export const SUBJECTS = data.subjects as Record<string, string>;
 export const SUBJECT_INTRO = data.subjectIntro as Record<string, string>;
 export const GROUPS = data.groups as { id: string; name: string; subjects: string[] }[];
 export const FORMATS = data.formats as string[];
-export const VENUES = data.venues as { country: string; cities: string[] }[];
+export const VENUES = data.venues as { country: string; cities: string[]; region: "Africa" | "International" }[];
+/** Venues grouped for display: Africa first, then international venues. */
+export const VENUE_REGIONS = (["Africa", "International"] as const).map(
+  (region) => [region, VENUES.filter((v) => v.region === region)] as const,
+);
+/** "the United Kingdom", "Ghana": for "in ..." phrases. */
+export const inCountry = (c: string) =>
+  ["United Kingdom", "Republic of Ireland", "Netherlands", "United States"].includes(c) ? `the ${c}` : c;
+/** "Accra, Ghana"; a city-state is just its name ("Singapore"). */
+export const venueCity = (city: string, countryName: string) =>
+  city === countryName ? city : `${city}, ${countryName}`;
 export const COURSES = data.courses as unknown as Course[];
 export const NEW_COURSES = data.newCourses as string[];
 export const AN_SERVICES = data.analytics.services as AnService[];
@@ -79,7 +89,7 @@ export const coursesInSubject = (k: string) => COURSES.filter((c) => c.cat === k
 export const coursesInGroup = (id: string) => COURSES.filter((c) => group(id)?.subjects.includes(c.cat));
 export const course = (id: string) => COURSES.find((c) => c.id === id);
 export const country = (s: string) => VENUES.find((v) => slug(v.country) === s);
-export const VENUE_CITIES = VENUES.flatMap((v) => v.cities.map((c) => `${c}, ${v.country}`));
+export const VENUE_CITIES = VENUES.flatMap((v) => v.cities.map((c) => venueCity(c, v.country)));
 export const anService = (id: string) => AN_SERVICES.find((x) => x.id === id);
 export const anSector = (id: string) => AN_SECTORS.find((x) => x.id === id);
 export const coService = (id: string) => CO_SERVICES.find((x) => x.id === id);

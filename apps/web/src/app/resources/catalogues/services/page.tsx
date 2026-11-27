@@ -23,8 +23,8 @@ export default function ServicesBrochure() {
           <span className="eyebrow">Afrimetrica</span>
           <h1>Analytics and consultancy services</h1>
           <p className="muted">
-            Data, research and executive training, analysis and advice for organisations, governments and NGOs across
-            Africa.
+            Data, research and executive training, analysis and advice for organisations, governments and NGOs in Africa
+            and around the world.
           </p>
         </header>
         {(

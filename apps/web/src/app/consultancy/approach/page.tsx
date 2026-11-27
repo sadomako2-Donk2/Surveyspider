@@ -55,8 +55,8 @@ export default function Approach() {
       <section className="card">
         <h2>Our team</h2>
         <p className="muted">
-          A core team of researchers and analysts, supported by an associate network of specialists and field staff
-          across English-speaking Africa. Profiles will be published soon.
+          A core team of researchers and analysts, supported by an associate network of specialists and field staff in
+          Africa and around the world.
         </p>
         <p>
           <Link className="btn" href="/consultancy/work-with-us">

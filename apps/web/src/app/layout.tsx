@@ -8,7 +8,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: { default: SITE.name, template: `%s · ${SITE.name}` },
   description:
-    "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.",
+    "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs in Africa and around the world.",
   metadataBase: new URL(siteUrl()),
   openGraph: {
     siteName: SITE.name,
@@ -47,7 +47,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <b>{SITE.name}</b> · Data, Research and Executive Training
           <br />
           <span className="hint">
-            {SITE.tagline} Training, data and advice for organisations, governments and NGOs across Africa.
+            {SITE.tagline} Training, data and advice for organisations, governments and NGOs in Africa and around the
+            world.
           </span>
           <br />
           <span className="hint">

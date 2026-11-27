@@ -2,7 +2,7 @@ import { siteUrl } from "@/lib/url";
 
 // Structured data for search engines (schema.org). Kept to facts that are on the page.
 const DESCRIPTION =
-  "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.";
+  "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs in Africa and around the world.";
 
 export function organizationLd(base = siteUrl()) {
   return {

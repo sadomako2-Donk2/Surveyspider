@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AreaCards, Crumbs, Head } from "@/components/site/sections";
 import { TrainingAsk } from "@/components/training/TrainingAsk";
-import { VENUES, country, slug } from "@/content/sections";
+import { VENUES, country, inCountry, slug, venueCity } from "@/content/sections";
 
 type P = { params: Promise<{ country: string }> };
 export const generateStaticParams = () => VENUES.map((v) => ({ country: slug(v.country) }));
@@ -11,8 +11,8 @@ export async function generateMetadata({ params }: P): Promise<Metadata> {
   const v = country((await params).country);
   return v
     ? {
-        title: `Training courses in ${v.country}`,
-        description: `Classroom training in ${v.cities.join(", ")}, or in-house at your organisation in ${v.country}.`,
+        title: `Training courses in ${inCountry(v.country)}`,
+        description: `Classroom training in ${v.cities.join(", ")}, or in-house at your organisation in ${inCountry(v.country)}.`,
         alternates: { canonical: `/training/venue/${slug(v.country)}` },
       }
     : {};
@@ -31,13 +31,17 @@ export default async function Venue({ params }: P) {
           ["", v.country],
         ]}
       />
-      <Head eyebrow="Training venue" title={`Training courses in ${v.country}`}>
+      <Head eyebrow="Training venue" title={`Training courses in ${inCountry(v.country)}`}>
         Every course in our catalogue can run as a classroom course in {cities}, or in-house at your organisation in{" "}
-        {v.country}. Choose a city to find courses, then ask us for dates and fees.
+        {inCountry(v.country)}. Choose a city to find courses, then ask us for dates and fees.
       </Head>
       <div className="venue-grid">
         {v.cities.map((c) => (
-          <Link key={c} className="venue" href={`/training/finder?venue=${encodeURIComponent(`${c}, ${v.country}`)}`}>
+          <Link
+            key={c}
+            className="venue"
+            href={`/training/finder?venue=${encodeURIComponent(venueCity(c, v.country))}`}
+          >
             <b>{c}</b>
             <span>Find courses in {c} →</span>
           </Link>
@@ -48,8 +52,8 @@ export default async function Venue({ params }: P) {
         <AreaCards />
       </section>
       <TrainingAsk
-        title={`Ask about training in ${v.country}`}
-        message={`Preferred venue: ${v.cities[0]}, ${v.country}\nCourse: \nNumber of participants: `}
+        title={`Ask about training in ${inCountry(v.country)}`}
+        message={`Preferred venue: ${venueCity(v.cities[0]!, v.country)}\nCourse: \nNumber of participants: `}
       />
     </main>
   );

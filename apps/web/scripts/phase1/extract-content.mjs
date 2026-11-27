@@ -30,7 +30,11 @@ const out = {
   subjectIntro: ctx.SUBJECT_INTRO,
   groups: ctx.GROUPS.map(([id, name, subjects]) => ({ id, name, subjects })),
   formats: ctx.CAT_FORMATS,
-  venues: ctx.VENUES.map(([country, cities]) => ({ country, cities })),
+  venues: ctx.VENUES.map(([country, cities, region]) => ({
+    country,
+    cities,
+    region: region === "intl" ? "International" : "Africa",
+  })),
   courses: ctx.CATALOGUE,
   newCourses: ctx.NEW_IDS,
   analytics: {

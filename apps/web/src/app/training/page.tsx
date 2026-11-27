@@ -14,7 +14,7 @@ import { courseCardView } from "@/server/academy/view";
 export const metadata: Metadata = {
   title: "Data, research and executive training",
   description:
-    "Afrimetrica Academy: practical data, research and executive training for organisations, governments and NGOs, in the classroom across English-speaking Africa, live online or in-house.",
+    "Afrimetrica Academy: practical data, research and executive training for organisations, governments and NGOs, in the classroom in Africa and around the world, live online or in-house.",
   alternates: { canonical: "/training" },
 };
 export const dynamic = "force-dynamic"; // dates and seats change as people register

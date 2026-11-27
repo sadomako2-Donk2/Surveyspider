@@ -18,7 +18,7 @@ export default function Careers() {
         ]}
       />
       <Head eyebrow="Careers" title="Careers at Afrimetrica">
-        We&apos;re building a team of researchers, analysts, trainers and field staff across English-speaking Africa.
+        We&apos;re building a team of researchers, analysts, trainers and field staff in Africa and around the world.
       </Head>
       <div className="split">
         <section className="card">

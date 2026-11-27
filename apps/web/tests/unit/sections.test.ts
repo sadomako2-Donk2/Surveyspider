@@ -60,3 +60,27 @@ describe("menus", () => {
     }
   });
 });
+
+describe("training venues", () => {
+  it("groups venues into Africa and International, with the international ones the live site lists", async () => {
+    const { VENUE_REGIONS } = await import("@/content/sections");
+    const intl = VENUE_REGIONS.find(([r]) => r === "International")![1].map((v) => v.country);
+    expect(intl).toEqual([
+      "United Kingdom",
+      "Republic of Ireland",
+      "Netherlands",
+      "France",
+      "Singapore",
+      "United States",
+    ]);
+    expect(VENUE_REGIONS.find(([r]) => r === "Africa")![1].length).toBeGreaterThan(15);
+  });
+  it("words countries and cities naturally", async () => {
+    const { inCountry, venueCity, VENUE_CITIES } = await import("@/content/sections");
+    expect(inCountry("United Kingdom")).toBe("the United Kingdom");
+    expect(inCountry("Ghana")).toBe("Ghana");
+    expect(venueCity("Singapore", "Singapore")).toBe("Singapore");
+    expect(VENUE_CITIES).toContain("Belfast, United Kingdom");
+    expect(VENUE_CITIES).toContain("San Diego, California, United States");
+  });
+});

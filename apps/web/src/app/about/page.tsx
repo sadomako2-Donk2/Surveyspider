@@ -6,7 +6,7 @@ import { slidesStartingWith } from "@/content/photos";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Afrimetrica trains leaders and teams, collects and analyses data, and advises organisations, governments and NGOs across Africa.",
+    "Afrimetrica trains leaders and teams, collects and analyses data, and advises organisations, governments and NGOs in Africa and around the world.",
   alternates: { canonical: "/about" },
 };
 
@@ -15,9 +15,9 @@ export default function About() {
     <main id="main" className="wrap stack xl">
       <Head eyebrow="About Afrimetrica" title="Data, research and executive training for better decisions">
         Afrimetrica trains leaders and teams, collects and analyses data, and advises organisations, governments and
-        NGOs across Africa. Our courses range from research methods and statistics to strategy, leadership and
-        governance. Every course is practical, grounded in evidence and built around the decisions participants make at
-        work.
+        NGOs in Africa and around the world. Our courses range from research methods and statistics to strategy,
+        leadership and governance. Every course is practical, grounded in evidence and built around the decisions
+        participants make at work.
       </Head>
       <Slideshow slides={slidesStartingWith("about")} />
       <LinkCards

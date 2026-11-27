@@ -21,7 +21,7 @@ export default function Team() {
       />
       <Head eyebrow="Our team" title="The people behind Afrimetrica">
         A core team of trainers, researchers, analysts and consultants, supported by an associate network of specialists
-        and field staff across English-speaking Africa.
+        and field staff in Africa and around the world.
       </Head>
       {TEAM.length > 0 && (
         <section className="stack" aria-labelledby="team-h">

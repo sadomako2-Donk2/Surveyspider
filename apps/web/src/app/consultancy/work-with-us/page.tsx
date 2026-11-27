@@ -19,8 +19,8 @@ export default function WorkWithUs() {
         ]}
       />
       <Head eyebrow="Work with us" title="Join our associate network">
-        We work with independent consultants, researchers, trainers, data analysts, enumerators and field supervisors
-        across English-speaking Africa. Tell us about your skills and where you work.
+        We work with independent consultants, researchers, trainers, data analysts, enumerators and field supervisors in
+        Africa and around the world. Tell us about your skills and where you work.
       </Head>
       <div className="split">
         <EnquiryForm

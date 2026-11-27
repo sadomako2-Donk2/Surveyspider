@@ -16,7 +16,7 @@ import { courseCardView } from "@/server/academy/view";
 export const metadata: Metadata = {
   title: { absolute: `${SITE.name} — Data, Research and Executive Training` },
   description:
-    "Afrimetrica helps organisations, governments and NGOs make better decisions: data, research and executive training, survey tools, data analysis and consultancy across Africa.",
+    "Afrimetrica helps organisations, governments and NGOs make better decisions: data, research and executive training, survey tools, data analysis and consultancy in Africa and around the world.",
   alternates: { canonical: "/" },
 };
 
@@ -55,7 +55,7 @@ export default async function Home() {
           <p className="lede">
             Afrimetrica helps organisations, governments and NGOs make better decisions and deliver results. We train
             leaders and teams in data, research and management, collect and analyse data, and advise on strategy,
-            research and evaluation, across Africa.
+            research and evaluation, in Africa and around the world.
           </p>
           <div className="ctas">
             <Link className="btn gold big" href="/training">

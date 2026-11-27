@@ -23,9 +23,9 @@ export default function TrainingCatalogue() {
           <span className="eyebrow">Afrimetrica Academy</span>
           <h1>Training course catalogue</h1>
           <p className="muted">
-            Data, research and executive training. Every course runs in the classroom in our venues across
-            English-speaking Africa, live online or in-house. Ask us for dates and fees. Participants receive a
-            certificate of completion (not an accredited qualification).
+            Data, research and executive training. Every course runs in the classroom in our venues in Africa and around
+            the world, live online or in-house. Ask us for dates and fees. Participants receive a certificate of
+            completion (not an accredited qualification).
           </p>
         </header>
         {GROUPS.map((g) => (
