@@ -63,3 +63,19 @@ export const initials = (name: string) =>
     .slice(0, 2)
     .join("")
     .toUpperCase();
+
+/** Leadership roles: shown by title now; add name, photo and bio as they are confirmed (the card then becomes a full profile). */
+export interface LeadershipRole {
+  role: string;
+  abbr: string;
+  name?: string;
+  photo?: string; // under public/team/
+  bio?: string;
+}
+
+export const LEADERSHIP: LeadershipRole[] = [
+  { role: "Chief Executive Officer", abbr: "CEO" },
+  { role: "Business Development Manager", abbr: "BDM" },
+  { role: "Finance Director", abbr: "FD" },
+  { role: "Chief Operating Officer", abbr: "COO" },
+];

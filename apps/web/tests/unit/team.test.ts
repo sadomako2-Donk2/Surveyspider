@@ -19,3 +19,10 @@ describe("initials", () => {
     expect(initials("Irene Chu, PhD")).toBe("IC");
   });
 });
+
+describe("leadership team", () => {
+  it("lists the four leadership roles in order", async () => {
+    const { LEADERSHIP } = await import("@/content/team");
+    expect(LEADERSHIP.map((l) => l.abbr)).toEqual(["CEO", "BDM", "FD", "COO"]);
+  });
+});

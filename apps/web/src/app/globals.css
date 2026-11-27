@@ -2258,3 +2258,46 @@ body {
     font-size: 2.1rem;
   }
 }
+.leader-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+.leader-role {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+.leader-role .person-initials {
+  width: 120px;
+  height: 120px;
+  font-size: 2rem;
+}
+.leader-role h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+@media (max-width: 900px) {
+  .leader-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 420px) {
+  .leader-role {
+    padding: 18px 12px;
+  }
+  .leader-role .person-initials {
+    width: 96px;
+    height: 96px;
+    font-size: 1.6rem;
+  }
+  .leader-role h3 {
+    font-size: 0.95rem;
+  }
+}
