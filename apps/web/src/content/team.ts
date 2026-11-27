@@ -17,4 +17,11 @@ export const TEAM: TeamMember[] = [
     photo: "veselina-stoyanova.webp",
     bio: "Veselina Stoyanova, PhD, is a Corporate Strategy Consultant at Afrimetrica and Associate Professor at the University of Birmingham. She specialises in strategic transformation, organisational capabilities, sustainability, stakeholder engagement and international business. Her expertise combines academic research with practical consulting to help organisations navigate complexity, strengthen competitiveness and deliver sustainable growth.",
   },
+  {
+    id: "hayford-amegbe",
+    name: "Hayford Amegbe, PhD",
+    role: "Consultant, Marketing Analytics",
+    photo: "hayford-amegbe.webp",
+    bio: "Hayford Amegbe, PhD, is a Marketing Analytics Consultant at Afrimetrica and Associate Professor at Rabat Business School. He specialises in customer loyalty and satisfaction, branding, technology adoption, social media, SMEs and entrepreneurship. He holds a PhD in Marketing from Durban University of Technology, South Africa, and an MBA from Maastricht School of Management, and his research has been published in international journals including Technological Forecasting and Social Change and the International Journal of Bank Marketing.",
+  },
 ];
