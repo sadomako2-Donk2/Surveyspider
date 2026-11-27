@@ -29,6 +29,6 @@ export const TEAM: TeamMember[] = [
     name: "Samuel Adomako, PhD",
     role: "Consultant, Data Analytics",
     photo: "samuel-adomako.webp",
-    bio: "Samuel Adomako, PhD, is a Data Analytics Consultant at Afrimetrica and Professor of Entrepreneurship and Innovation at Birmingham Business School, University of Birmingham. His research on entrepreneurship, innovation and sustainability in African and emerging economies has over 11,200 citations, and he was recognised among the world's top 2% of scientists in 2023–2025.",
+    bio: "Samuel Adomako, PhD, is a Data Analytics Consultant at Afrimetrica and Professor of Entrepreneurship and Innovation at Birmingham Business School, University of Birmingham. His research on entrepreneurship, innovation and sustainability in African and emerging economies has over 11,200 citations, and he was recognised among the world's top 2% of scientists in 2022–2026.",
   },
 ];
