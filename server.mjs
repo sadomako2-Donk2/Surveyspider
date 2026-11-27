@@ -40,7 +40,7 @@ const GOOGLE_VERIFY = (process.env.GOOGLE_SITE_VERIFICATION || "").trim().replac
 // Bing Webmaster Tools works the same way (BING_SITE_VERIFICATION); Bing also feeds DuckDuckGo and Yahoo.
 const BING_VERIFY = (process.env.BING_SITE_VERIFICATION || "").trim().replace(/^.*content="([^"]+)".*$/s, "$1");
 const SITE_VERIFY = (/^[A-Za-z0-9_-]{10,100}$/.test(GOOGLE_VERIFY) ? `<meta name="google-site-verification" content="${GOOGLE_VERIFY}">` : "") + (/^[A-Za-z0-9]{10,100}$/.test(BING_VERIFY) ? `<meta name="msvalidate.01" content="${BING_VERIFY}">` : "");
-const SHELL_HEAD = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa."><link rel="icon" type="image/svg+xml" href="/icon.svg">${SITE_VERIFY}<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>`;
+const SHELL_HEAD = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs in Africa and around the world."><link rel="icon" type="image/svg+xml" href="/icon.svg">${SITE_VERIFY}<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>`;
 const PAGE = SHELL_HEAD + readFileSync(path.join(here, "public", "index.html"), "utf8") + "</body></html>";
 const ICON = readFileSync(path.join(here, "public", "icon.svg"));
 // Browser libraries served from this site rather than a CDN (see public/vendor/README.md). Only these exact names.
@@ -51,7 +51,7 @@ const PAGES = new Map((existsSync(path.join(here, "public", "pages.json")) ? JSO
 const PUBLIC_SECTIONS = /^\/(about|training|surveys|analytics|consultancy|resources|contact|privacy|terms|pricing|paper-survey)(\/[a-z0-9-]+)*$/;
 const SOCIAL = existsSync(path.join(here, "public", "social.jpg")) ? readFileSync(path.join(here, "public", "social.jpg")) : null;
 const DEFAULT_TITLE = "Afrimetrica — Data, Research and Executive Training";
-const DEFAULT_DESC = "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.";
+const DEFAULT_DESC = "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs in Africa and around the world.";
 const attr = (x) => String(x).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const shorten = (t, n = 160) => { t = String(t || "").replace(/\s+/g, " ").trim(); if (t.length <= n) return t; const cut = t.slice(0, n - 1); return cut.slice(0, cut.lastIndexOf(" ") > 80 ? cut.lastIndexOf(" ") : cut.length).replace(/[,;:.\s]+$/, "") + "…"; };
 // The page with its own title, description, canonical address, social preview and structured data.

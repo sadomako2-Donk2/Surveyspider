@@ -1050,11 +1050,11 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
     const msg = S.notice || (S.mode === "demo" ? "Demo mode: everything you create is saved in this browser only. Open the published page while signed in to claude.ai to share data with other people." : "") || (S.stale ? "Can't reach the saved data yet. What you see may be out of date." : "");
     b.hidden = !msg; b.textContent = msg;
     if (!msg && unverified()) { b.hidden = false; b.innerHTML = `<b>Confirm your email address.</b> We sent a link to ${esc(S.user.email)}. You can browse and save drafts now; confirm to launch surveys, take paid studies and use AI. <button type="button" class="linkbtn" data-act="resendVerify">Send it again</button>`; }
-    $("#foot").innerHTML = `<div class="foot-inner"><div><img class="foot-logo" src="/photos/logo-full.webp" width="216" height="72" alt="Afrimetrica: Data, Research, Executive Training"><br><b>Afrimetrica</b> · Data, Research and Executive Training<br><span class="hint">Plan. Analyse. Lead. Training, data and advice for organisations, governments and NGOs across Africa.</span><br><span class="hint"><a href="#privacy">Privacy notice</a> · <a href="#terms">Terms of use</a></span></div><div class="hint">Afrimetrica Surveys platform fee ${Math.round(FEE * 100)}% of participant rewards. ${S.mode === "live" ? (API ? "Survey answers are stored on Afrimetrica's server and shown only to the survey's owner." : "Data is shared with everyone who can open this page.") : S.mode === "demo" ? "Demo data stays in this browser." : "Connecting…"}</div></div>`;
+    $("#foot").innerHTML = `<div class="foot-inner"><div><img class="foot-logo" src="/photos/logo-full.webp" width="216" height="72" alt="Afrimetrica: Data, Research, Executive Training"><br><b>Afrimetrica</b> · Data, Research and Executive Training<br><span class="hint">Plan. Analyse. Lead. Training, data and advice for organisations, governments and NGOs in Africa and around the world.</span><br><span class="hint"><a href="#privacy">Privacy notice</a> · <a href="#terms">Terms of use</a></span></div><div class="hint">Afrimetrica Surveys platform fee ${Math.round(FEE * 100)}% of participant rewards. ${S.mode === "live" ? (API ? "Survey answers are stored on Afrimetrica's server and shown only to the survey's owner." : "Data is shared with everyone who can open this page.") : S.mode === "demo" ? "Demo data stays in this browser." : "Connecting…"}</div></div>`;
   }
   // Each page gets its own browser-tab title and description (used when people bookmark or share it).
   const SITE_TITLE = "Afrimetrica — Data, Research and Executive Training";
-  const SITE_DESC = "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs across Africa.";
+  const SITE_DESC = "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs in Africa and around the world.";
   // A description made only from what is on the page: its opening line; for course lists whose opening line is just
   // a count ("3 courses, in the classroom..."), the course names; for pages without an opening line, the first paragraph.
   function pageDescription(heading, lead) {
@@ -1062,7 +1062,7 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
     let d = lead ? clean(lead.textContent) : "";
     if (/^\d+ (subjects?|courses?)\b/i.test(d)) {
       const names = [...new Set([...document.querySelectorAll('#main a[href*="training/course/"]')].map((a) => clean(a.innerText.split("\n")[0])).filter(Boolean))];
-      if (names.length) d = `${heading}: ${names.slice(0, 4).join("; ")}${names.length > 4 ? " and more" : ""}. In the classroom, live online or in-house, across English-speaking Africa.`;
+      if (names.length) d = `${heading}: ${names.slice(0, 4).join("; ")}${names.length > 4 ? " and more" : ""}. In the classroom, live online or in-house, in Africa and around the world.`;
     } else if (!d) {
       const p = [...document.querySelectorAll("#main p")].map((x) => clean(x.textContent)).find((t) => t.length >= 40);
       if (p && heading) d = `${heading}: ${p}`;
@@ -3130,7 +3130,7 @@ ${richSummary(st, rows)}`;
   const AB_UNITS = [["Organisation", "Afrimetrica — Data, Research and Executive Training", ""], ["Training", "Afrimetrica Academy (data, research and executive training)", "#training"], ["Survey software", "Afrimetrica Surveys", "#surveys"], ["Analytics", "Afrimetrica Analytics", "#analytics"], ["Consultancy", "Afrimetrica Consulting", "#consultancy"], ["Research resources", "Afrimetrica Knowledge Hub", "#resources"]];
   const abValues = () => `<ul class="ticks small">${AB_VALUES.map(([t, d]) => `<li><div><b>${esc(t)}</b><span>${esc(d)}</span></div></li>`).join("")}</ul>`;
   function abOverview() {
-    return `<div class="page-head"><div><span class="eyebrow gold">About Afrimetrica</span><h1>Data, research and executive training for better decisions</h1><p class="muted" style="max-width:66ch">Afrimetrica trains leaders and teams, collects and analyses data, and advises organisations, governments and NGOs across Africa. Our courses range from research methods and statistics to strategy, leadership and governance. Every course is practical, grounded in evidence and built around the decisions participants make at work.</p></div></div>
+    return `<div class="page-head"><div><span class="eyebrow gold">About Afrimetrica</span><h1>Data, research and executive training for better decisions</h1><p class="muted" style="max-width:66ch">Afrimetrica trains leaders and teams, collects and analyses data, and advises organisations, governments and NGOs in Africa and around the world. Our courses range from research methods and statistics to strategy, leadership and governance. Every course is practical, grounded in evidence and built around the decisions participants make at work.</p></div></div>
       ${slideshow("about")}
       <div class="area-grid">${ABOUT_MENU.slice(1).map(([k, label]) => `<a class="card area-card" href="#about/${k}"><b>${esc(label)}</b><span class="hint">${esc({ mission: "Why we exist and what we stand for", vision: "The future we are working towards", team: "The people behind Afrimetrica", organisation: "Our training, survey, analytics, consultancy and resources units", certificates: "What our certificates of completion mean" }[k])}</span></a>`).join("")}</div>`;
   }
@@ -3153,7 +3153,7 @@ ${richSummary(st, rows)}`;
   ];
   const teamCard = (t) => `<article class="person" id="team-${t.id}"><img src="/photos/${t.photo}" alt="Portrait of ${esc(t.name.split(",")[0])}" width="150" height="150" loading="lazy" decoding="async"><div><h3>${esc(t.name)}</h3><p class="person-role">${esc(t.role)}</p><p class="muted">${esc(t.bio)}</p></div></article>`;
   function abTeam() {
-    return `${abCrumbs("Our team")}<div class="page-head"><div><span class="eyebrow gold">Our team</span><h1>The people behind Afrimetrica</h1><p class="muted" style="max-width:66ch">A core team of trainers, researchers, analysts and consultants, supported by an associate network of specialists and field staff across English-speaking Africa.</p></div></div>
+    return `${abCrumbs("Our team")}<div class="page-head"><div><span class="eyebrow gold">Our team</span><h1>The people behind Afrimetrica</h1><p class="muted" style="max-width:66ch">A core team of trainers, researchers, analysts and consultants, supported by an associate network of specialists and field staff in Africa and around the world.</p></div></div>
       ${TEAM.length ? `<section class="stack" aria-labelledby="teamH"><h2 id="teamH">Leadership and faculty</h2><div class="team-grid">${TEAM.map(teamCard).join("")}</div></section>` : ""}
       <section class="card"><h2>Join us</h2><p class="muted">We work with independent consultants, trainers, analysts, enumerators and field supervisors.</p><div class="row wrap"><a class="btn primary" href="#consultancy/work-with-us">Join the associate network</a><a class="btn" href="#contact/careers">Careers</a></div></section>`;
   }
@@ -3243,8 +3243,14 @@ ${richSummary(st, rows)}`;
     ["Zimbabwe", ["Harare"]], ["Botswana", ["Gaborone"]], ["Namibia", ["Windhoek"]], ["Malawi", ["Lilongwe"]],
     ["Sierra Leone", ["Freetown"]], ["Liberia", ["Monrovia"]], ["The Gambia", ["Banjul"]], ["Eswatini", ["Mbabane"]],
     ["Lesotho", ["Maseru"]], ["Mauritius", ["Port Louis"]], ["South Sudan", ["Juba"]],
+    // International venues (the third item marks the region; Africa when absent)
+    ["United Kingdom", ["London", "Birmingham", "Leeds", "Belfast"], "intl"], ["Republic of Ireland", ["Dublin"], "intl"], ["Netherlands", ["Amsterdam"], "intl"],
+    ["France", ["Paris"], "intl"], ["Singapore", ["Singapore"], "intl"], ["United States", ["San Diego, California"], "intl"],
   ];
-  const VENUE_CITIES = VENUES.flatMap(([country, cities]) => cities.map((c) => `${c}, ${country}`));
+  // "in the United Kingdom", "in Ghana"
+  const inCountry = (c) => (["United Kingdom", "Republic of Ireland", "Netherlands", "United States"].includes(c) ? "the " + c : c);
+  const VENUE_REGIONS = [["Africa", VENUES.filter((v) => !v[2])], ["International", VENUES.filter((v) => v[2] === "intl")]];
+  const VENUE_CITIES = VENUES.flatMap(([country, cities]) => cities.map((c) => (c === country ? c : `${c}, ${country}`)));
   // [id, category, title, days, level, summary, objectives, who should attend, outline: [day title, topics]]
   const CATALOGUE = [
     ["rd-applied", "design", "Applied Research Design and Methods", 5, "Foundation", "Turn a broad question into a sound, feasible study: from problem statement to design, sampling and analysis plan.",
@@ -3746,15 +3752,15 @@ ${richSummary(st, rows)}`;
       ${askBlock(`Ask about ${catName(k)} training`, "")}`;
   }
   function trVenues() {
-    return `${crumbs(["", "Training venues"])}<div class="feature">${sidePhoto("venuesCity")}<div class="page-head"><div><span class="eyebrow gold">Training venues</span><h1>Where we train</h1><p class="muted" style="max-width:70ch">Classroom courses can run in these cities across English-speaking Africa. Dates are set for each venue: ask for the dates and fees for the course and city you want, learn live online, or bring any course to your own premises.</p></div></div></div>
-      <div class="venue-grid">${VENUES.map(([country, cities]) => `<a class="venue" href="#training/venue/${slug(country)}"><b>${esc(country)}</b><span>${esc(cities.join(" · "))}</span></a>`).join("")}</div>`;
+    return `${crumbs(["", "Training venues"])}<div class="feature">${sidePhoto("venuesCity")}<div class="page-head"><div><span class="eyebrow gold">Training venues</span><h1>Where we train</h1><p class="muted" style="max-width:70ch">Classroom courses can run in these cities in Africa, Europe, Asia and North America. Dates are set for each venue: ask for the dates and fees for the course and city you want, learn live online, or bring any course to your own premises.</p></div></div></div>
+      ${VENUE_REGIONS.map(([region, list]) => `<section class="stack" aria-labelledby="vr-${slug(region)}"><h2 id="vr-${slug(region)}">${region}</h2><div class="venue-grid">${list.map(([country, cities]) => `<a class="venue" href="#training/venue/${slug(country)}"><b>${esc(country)}</b><span>${esc(cities.join(" · "))}</span></a>`).join("")}</div></section>`).join("")}`;
   }
   function trVenue(s) {
     const [country, cities] = countryOf(s);
-    return `${crumbs(["#training/venues", "Training venues"], ["", country])}<div class="page-head"><div><span class="eyebrow gold">Training venue</span><h1>Training courses in ${esc(country)}</h1><p class="muted" style="max-width:70ch">Every course in our catalogue can run as a classroom course in ${esc(cities.join(", ").replace(/, ([^,]*)$/, " and $1"))}, or in-house at your organisation in ${esc(country)}. Choose a city to find courses, then ask us for dates and fees.</p></div></div>
-      <div class="venue-grid">${cities.map((c) => `<button class="venue venue-btn" data-act="catVenue" data-v="${esc(`${c}, ${country}`)}"><b>${esc(c)}</b><span>Find courses in ${esc(c)} →</span></button>`).join("")}</div>
+    return `${crumbs(["#training/venues", "Training venues"], ["", country])}<div class="page-head"><div><span class="eyebrow gold">Training venue</span><h1>Training courses in ${esc(inCountry(country))}</h1><p class="muted" style="max-width:70ch">Every course in our catalogue can run as a classroom course in ${esc(cities.join(", ").replace(/, ([^,]*)$/, " and $1"))}, or in-house at your organisation in ${esc(inCountry(country))}. Choose a city to find courses, then ask us for dates and fees.</p></div></div>
+      <div class="venue-grid">${cities.map((c) => `<button class="venue venue-btn" data-act="catVenue" data-v="${esc(c === country ? c : `${c}, ${country}`)}"><b>${esc(c)}</b><span>Find courses in ${esc(c)} →</span></button>`).join("")}</div>
       <section class="stack"><h2>Browse by subject area</h2>${areaCards()}</section>
-      ${askBlock(`Ask about training in ${country}`, `Preferred venue: ${cities[0]}, ${country}\nCourse: \nNumber of participants: `)}`;
+      ${askBlock(`Ask about training in ${inCountry(country)}`, `Preferred venue: ${cities[0]}, ${country}\nCourse: \nNumber of participants: `)}`;
   }
   function trSectors() {
     const subs = groupOf(SECTOR_GROUP)[2];
@@ -4083,10 +4089,10 @@ ${richSummary(st, rows)}`;
         <section class="card"><h2>Quality</h2><ul class="ticks small"><li><div><b>Fit-for-purpose methods</b><span>The simplest design that can answer your question credibly.</span></div></li><li><div><b>Checked results</b><span>Analysis is reviewed before anything is reported.</span></div></li><li><div><b>Honest findings</b><span>We report what the evidence shows, including what didn't work.</span></div></li></ul></section>
         <section class="card"><h2>Ethics and data protection</h2><ul class="ticks small"><li><div><b>Informed consent</b><span>Participants know what they are agreeing to and can stop at any time.</span></div></li><li><div><b>Ethics approval</b><span>We seek approval from the relevant committees where a study needs it.</span></div></li><li><div><b>Safeguarding</b><span>Extra care with children and vulnerable groups.</span></div></li><li><div><b>Data protection</b><span>Personal data handled in line with the law, including Ghana's Data Protection Act, 2012.</span></div></li></ul></section>
       </div>
-      <section class="card"><h2>Our team</h2><p class="muted">A core team of researchers and analysts, supported by an associate network of specialists and field staff across English-speaking Africa.</p><a class="btn" href="#consultancy/work-with-us" style="align-self:flex-start">Join our associate network</a></section>`;
+      <section class="card"><h2>Our team</h2><p class="muted">A core team of researchers and analysts, supported by an associate network of specialists and field staff in Africa and around the world.</p><a class="btn" href="#consultancy/work-with-us" style="align-self:flex-start">Join our associate network</a></section>`;
   }
   function coWorkWithUs() {
-    return `${coCrumbs(["", "Work with us"])}<div class="page-head"><div><span class="eyebrow gold">Work with us</span><h1>Join our associate network</h1><p class="muted" style="max-width:70ch">We work with independent consultants, researchers, trainers, data analysts, enumerators and field supervisors across English-speaking Africa. Tell us about your skills and where you work.</p></div></div>
+    return `${coCrumbs(["", "Work with us"])}<div class="page-head"><div><span class="eyebrow gold">Work with us</span><h1>Join our associate network</h1><p class="muted" style="max-width:70ch">We work with independent consultants, researchers, trainers, data analysts, enumerators and field supervisors in Africa and around the world. Tell us about your skills and where you work.</p></div></div>
       <div class="split">${enquiryForm("contact", { title: "Tell us about yourself", intro: "Share your expertise, languages and locations. We'll keep your details on file and contact you when a suitable assignment comes up.", messageLabel: "Your skills, experience and locations", placeholder: "e.g. M&E consultant, 8 years' experience, based in Kampala; English and Luganda; available for evaluations in East Africa.", message: "I'd like to join the associate network.\nRole (consultant, trainer, analyst, enumerator, supervisor): \nExperience: \nLocation and languages: " })}
         <section class="card"><h2>Who we look for</h2><ul class="ticks small"><li><div><span>Researchers and evaluators</span></div></li><li><div><span>Trainers for Afrimetrica Academy courses</span></div></li><li><div><span>Data analysts and statisticians</span></div></li><li><div><span>Enumerators, supervisors and field coordinators</span></div></li><li><div><span>Sector specialists, such as health, education, agriculture and finance</span></div></li></ul><p class="hint">Please don't send CVs or ID documents yet. We'll ask for them when there's a suitable assignment.</p></section>
       </div>`;
@@ -4146,12 +4152,12 @@ ${richSummary(st, rows)}`;
   }
   const printBar = (back) => `<div class="row wrap no-print"><a class="btn small ghost" href="${back}">← Catalogues and brochures</a><button class="btn small primary" data-act="printPage">Print or save as PDF</button></div>`;
   function resTrainingCatalogue() {
-    return `${printBar("#resources/catalogues")}<article class="printable"><header class="print-head"><span class="eyebrow gold">Afrimetrica Academy</span><h1>Training course catalogue</h1><p class="muted">Data, research and executive training. Every course runs in the classroom in our venues across English-speaking Africa, live online or in-house. Ask us for dates and fees. Participants receive a certificate of completion (not an accredited qualification).</p></header>
+    return `${printBar("#resources/catalogues")}<article class="printable"><header class="print-head"><span class="eyebrow gold">Afrimetrica Academy</span><h1>Training course catalogue</h1><p class="muted">Data, research and executive training. Every course runs in the classroom in our venues in Africa and around the world, live online or in-house. Ask us for dates and fees. Participants receive a certificate of completion (not an accredited qualification).</p></header>
       ${GROUPS.map(([g, name, subs]) => { const list = CATALOGUE.filter((c) => subs.includes(c.cat)); return `<section class="print-group"><h2>${esc(name)}</h2><div class="table-wrap" tabindex="0"><table class="print-table"><thead><tr><th>Course</th><th>Subject</th><th>Days</th><th>Level</th></tr></thead><tbody>${list.map((c) => `<tr><td>${esc(c.title)}</td><td>${esc(catName(c.cat))}</td><td class="n">${c.days}</td><td>${esc(c.level)}</td></tr>`).join("")}</tbody></table></div></section>`; }).join("")}
       <p class="hint">Venues: ${esc(VENUES.map(([country, cities]) => `${country} (${cities.join(", ")})`).join("; "))}.</p></article>`;
   }
   function resServicesBrochure() {
-    return `${printBar("#resources/catalogues")}<article class="printable"><header class="print-head"><span class="eyebrow gold">Afrimetrica</span><h1>Analytics and consultancy services</h1><p class="muted">Data, research and executive training, analysis and advice for organisations, governments and NGOs across Africa.</p></header>
+    return `${printBar("#resources/catalogues")}<article class="printable"><header class="print-head"><span class="eyebrow gold">Afrimetrica</span><h1>Analytics and consultancy services</h1><p class="muted">Data, research and executive training, analysis and advice for organisations, governments and NGOs in Africa and around the world.</p></header>
       <section class="print-group"><h2>Analytics</h2>${AN_SERVICES.map((x) => `<h3>${esc(x.name)}</h3><p>${esc(x.summary)}</p>`).join("")}</section>
       <section class="print-group"><h2>Consultancy</h2>${CO_SERVICES.map((x) => `<h3>${esc(x.name)}</h3><p>${esc(x.summary)}</p>`).join("")}</section></article>`;
   }
@@ -4161,7 +4167,7 @@ ${richSummary(st, rows)}`;
         <section class="card"><h2>Good to know</h2><ul class="ticks small"><li><div><span>Ask as early as you can: hotels near popular venues fill up.</span></div></li><li><div><span>Tell us about any accessibility or dietary needs.</span></div></li><li><div><span>For in-house courses, the training takes place at your premises.</span></div></li></ul><a class="btn" href="#training/venues" style="align-self:flex-start">See training venues</a></section></div>`;
   }
   function ctCareers() {
-    return `${ctCrumbs("Careers")}${pageHead("Careers", "Careers at Afrimetrica", "We're building a team of researchers, analysts, trainers and field staff across English-speaking Africa.")}
+    return `${ctCrumbs("Careers")}${pageHead("Careers", "Careers at Afrimetrica", "We're building a team of researchers, analysts, trainers and field staff in Africa and around the world.")}
       <div class="split"><section class="card"><h2>Current vacancies</h2><p class="muted">There are no advertised vacancies at the moment. When there are, they will be listed here.</p></section>
         <section class="card"><h2>Work with us as an associate</h2><p class="muted">We regularly work with independent consultants, trainers, data analysts, enumerators and field supervisors. Join our associate network and we'll contact you when a suitable assignment comes up.</p><a class="btn primary" href="#consultancy/work-with-us" style="align-self:flex-start">Join the associate network</a></section></div>`;
   }
