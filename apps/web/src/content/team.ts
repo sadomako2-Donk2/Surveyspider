@@ -36,6 +36,6 @@ export const TEAM: TeamMember[] = [
     name: "Irene Chu, PhD",
     role: "Consultant, Corporate ESG and Sustainability",
     photo: "irene-chu.webp",
-    bio: "Irene Chu, PhD, is a Corporate ESG and Sustainability Consultant at Afrimetrica and Senior Lecturer in International Management at Newcastle University Business School. Her research on ethics, sustainability and entrepreneurship appears in journals including the Journal of Business Ethics, and she is Associate Editor of Business Strategy and the Environment.",
+    bio: "Irene Chu, PhD, is a Corporate ESG and Sustainability Consultant at Afrimetrica, where she advises and trains corporate clients on ESG, sustainability and ethics. She is Senior Lecturer in International Management at Newcastle University Business School and Associate Editor of Business Strategy and the Environment, and her research appears in journals including the Journal of Business Ethics.",
   },
 ];
