@@ -648,6 +648,12 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
 @media (max-width: 560px) { .person { grid-template-columns: 1fr; padding: 18px; } .person img { width: 120px; height: 120px; } }
 .person-initials { width: 150px; height: 150px; border-radius: 14px; border-bottom: 3px solid var(--gold); background: #010e3a; color: var(--gold-hi, #f2d27e); display: grid; place-items: center; font: 700 2.6rem/1 var(--font-display); letter-spacing: 0.04em; }
 @media (max-width: 560px) { .person-initials { width: 120px; height: 120px; font-size: 2.1rem; } }
+.leader-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.leader-role { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 24px 20px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+.leader-role .person-initials { width: 120px; height: 120px; font-size: 2rem; }
+.leader-role h3 { margin: 0; font-size: 1.05rem; }
+@media (max-width: 900px) { .leader-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px) { .leader-role { padding: 18px 12px; } .leader-role .person-initials { width: 96px; height: 96px; font-size: 1.6rem; } .leader-role h3 { font-size: 0.95rem; } }
 </style>
 
 <header class="topbar gutter">
@@ -3161,12 +3167,22 @@ ${richSummary(st, rows)}`;
     { id: "emmanuel-amoah", name: "Emmanuel Amoah, MBA, ACCA", role: "Consultant, Route to Market", photo: "",
       bio: "Emmanuel Amoah, MBA, ACCA, is a Route to Market Consultant at Afrimetrica with over 20 years' experience in multinational corporations across Africa, including Coca-Cola and Promasidor. He advises companies on their route to market and has trained more than 1,000 delegates in route-to-market strategy and market surveys." },
   ];
+  // Leadership team: roles are shown now; add name, photo and bio as they are confirmed (the card then becomes a full profile).
+  const LEADERSHIP = [
+    { role: "Chief Executive Officer", abbr: "CEO", name: "", photo: "", bio: "" },
+    { role: "Business Development Manager", abbr: "BDM", name: "", photo: "", bio: "" },
+    { role: "Finance Director", abbr: "FD", name: "", photo: "", bio: "" },
+    { role: "Chief Operating Officer", abbr: "COO", name: "", photo: "", bio: "" },
+  ];
+  const leaderCard = (l) => l.name ? teamCard({ id: slug(l.name), name: l.name, role: l.role, photo: l.photo, bio: l.bio })
+    : `<article class="leader-role"><div class="person-initials" aria-hidden="true">${esc(l.abbr)}</div><h3>${esc(l.role)}</h3></article>`;
   // Without a photo yet, a profile shows the person's initials.
   const initials = (n) => n.split(",")[0].split(/\s+/).filter(Boolean).map((w) => w[0]).slice(0, 2).join("").toUpperCase();
   const teamCard = (t) => `<article class="person" id="team-${t.id}">${t.photo ? `<img src="/photos/${t.photo}" alt="Portrait of ${esc(t.name.split(",")[0])}" width="150" height="150" loading="lazy" decoding="async">` : `<div class="person-initials" aria-hidden="true">${esc(initials(t.name))}</div>`}<div><h3>${esc(t.name)}</h3><p class="person-role">${esc(t.role)}</p><p class="muted">${esc(t.bio)}</p></div></article>`;
   function abTeam() {
     return `${abCrumbs("Our team")}<div class="page-head"><div><span class="eyebrow gold">Our team</span><h1>The people behind Afrimetrica</h1><p class="muted" style="max-width:66ch">A core team of trainers, researchers, analysts and consultants, supported by an associate network of specialists and field staff in Africa and around the world.</p></div></div>
-      ${TEAM.length ? `<section class="stack" aria-labelledby="teamH"><h2 id="teamH">Leadership and faculty</h2><div class="team-grid">${TEAM.map(teamCard).join("")}</div></section>` : ""}
+      <section class="stack" aria-labelledby="leadH"><h2 id="leadH">Leadership team</h2><div class="${LEADERSHIP.some((l) => l.name) ? "team-grid" : "leader-grid"}">${LEADERSHIP.map(leaderCard).join("")}</div></section>
+      ${TEAM.length ? `<section class="stack" aria-labelledby="teamH"><h2 id="teamH">Ad hoc consultants</h2><div class="team-grid">${TEAM.map(teamCard).join("")}</div></section>` : ""}
       <section class="card"><h2>Join us</h2><p class="muted">We work with independent consultants, trainers, analysts, enumerators and field supervisors.</p><div class="row wrap"><a class="btn primary" href="#consultancy/work-with-us">Join the associate network</a><a class="btn" href="#contact/careers">Careers</a></div></section>`;
   }
   function abOrganisation() {
