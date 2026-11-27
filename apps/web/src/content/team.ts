@@ -31,4 +31,11 @@ export const TEAM: TeamMember[] = [
     photo: "samuel-adomako.webp",
     bio: "Samuel Adomako, PhD, is a Data Analytics Consultant at Afrimetrica and Professor of Entrepreneurship and Innovation at Birmingham Business School, University of Birmingham. His research on entrepreneurship, innovation and sustainability in African and emerging economies has over 11,200 citations, and he was recognised among the world's top 2% of scientists in 2022–2026.",
   },
+  {
+    id: "irene-chu",
+    name: "Irene Chu, PhD",
+    role: "Consultant, Corporate ESG and Sustainability",
+    photo: "irene-chu.webp",
+    bio: "Irene Chu, PhD, is a Corporate ESG and Sustainability Consultant at Afrimetrica and Senior Lecturer in International Management at Newcastle University Business School. Her research on ethics, sustainability and entrepreneurship appears in journals including the Journal of Business Ethics, and she is Associate Editor of Business Strategy and the Environment.",
+  },
 ];
