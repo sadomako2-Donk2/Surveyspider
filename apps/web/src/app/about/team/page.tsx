@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Crumbs, Head } from "@/components/site/sections";
-import { TEAM } from "@/content/team";
+import { TEAM, initials } from "@/content/team";
 
 export const metadata: Metadata = {
   title: "Our team",
@@ -29,7 +29,18 @@ export default function Team() {
           <div className="team-grid">
             {TEAM.map((t) => (
               <article key={t.id} className="person" id={`team-${t.id}`}>
-                <Image src={`/team/${t.photo}`} alt={`Portrait of ${t.name.split(",")[0]}`} width={150} height={150} />
+                {t.photo ? (
+                  <Image
+                    src={`/team/${t.photo}`}
+                    alt={`Portrait of ${t.name.split(",")[0]}`}
+                    width={150}
+                    height={150}
+                  />
+                ) : (
+                  <div className="person-initials" aria-hidden="true">
+                    {initials(t.name)}
+                  </div>
+                )}
                 <div>
                   <h3>{t.name}</h3>
                   <p className="person-role">{t.role}</p>

@@ -5,7 +5,7 @@ export interface TeamMember {
   id: string;
   name: string;
   role: string;
-  photo: string; // under public/team/
+  photo?: string; // under public/team/; without one, the profile shows initials
   bio: string;
 }
 
@@ -45,4 +45,21 @@ export const TEAM: TeamMember[] = [
     photo: "mujtaba-ahsan.webp",
     bio: "Mujtaba Ahsan, PhD, is an AI and Data Science Consultant at Afrimetrica and Professor of Management at the Fowler College of Business, San Diego State University. His research on entrepreneurship, international business and innovation appears in journals including the Academy of Management Review and Entrepreneurship Theory and Practice. He holds a PhD in Management from the University of Wisconsin-Milwaukee.",
   },
+  {
+    id: "emmanuel-amoah",
+    name: "Emmanuel Amoah, MBA, ACCA",
+    role: "Consultant, Route to Market",
+    bio: "Emmanuel Amoah, MBA, ACCA, is a Route to Market Consultant at Afrimetrica with over 20 years' experience in multinational corporations across Africa, including Coca-Cola and Promasidor. He advises companies on their route to market and has trained more than 1,000 delegates in route-to-market strategy and market surveys.",
+  },
 ];
+
+/** "Emmanuel Amoah, MBA" -> "EA" */
+export const initials = (name: string) =>
+  name
+    .split(",")[0]!
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
