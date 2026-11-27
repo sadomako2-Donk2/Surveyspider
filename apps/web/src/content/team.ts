@@ -24,4 +24,11 @@ export const TEAM: TeamMember[] = [
     photo: "hayford-amegbe.webp",
     bio: "Hayford Amegbe, PhD, is a Marketing Analytics Consultant at Afrimetrica and Associate Professor at Rabat Business School. He specialises in customer loyalty and satisfaction, branding, technology adoption, social media, SMEs and entrepreneurship. He holds a PhD in Marketing from Durban University of Technology, South Africa, and an MBA from Maastricht School of Management, and his research has been published in international journals including Technological Forecasting and Social Change and the International Journal of Bank Marketing.",
   },
+  {
+    id: "samuel-adomako",
+    name: "Samuel Adomako, PhD",
+    role: "Consultant, Data Analytics",
+    photo: "samuel-adomako.webp",
+    bio: "Samuel Adomako, PhD, is a Data Analytics Consultant at Afrimetrica and Professor of Entrepreneurship and Innovation at Birmingham Business School, University of Birmingham. His research on entrepreneurship, innovation and sustainability in African and emerging economies has over 11,200 citations, and he was recognised among the world's top 2% of scientists in 2023–2025.",
+  },
 ];
