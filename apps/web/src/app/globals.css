@@ -2188,3 +2188,53 @@ body {
     padding-block: 32px;
   }
 }
+
+/* ---------- team profiles (matches the live site) ---------- */
+.team-grid {
+  display: grid;
+  gap: 16px;
+}
+.person {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px;
+}
+.person img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 14px;
+  border-bottom: 3px solid var(--gold);
+  display: block;
+  filter: grayscale(1);
+}
+.person h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+.person-role {
+  margin: 4px 0 10px;
+  color: var(--gold-ink);
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+}
+.person .muted {
+  max-width: 75ch;
+  margin: 0;
+}
+@media (max-width: 560px) {
+  .person {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+  .person img {
+    width: 120px;
+    height: 120px;
+  }
+}

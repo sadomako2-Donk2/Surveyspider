@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Crumbs, Head } from "@/components/site/sections";
+import { TEAM } from "@/content/team";
 
 export const metadata: Metadata = {
   title: "Our team",
@@ -21,12 +23,23 @@ export default function Team() {
         A core team of trainers, researchers, analysts and consultants, supported by an associate network of specialists
         and field staff across English-speaking Africa.
       </Head>
-      <section className="card">
-        <h2>Leadership and faculty</h2>
-        <p className="muted">
-          Profiles of our leadership, faculty, analysts and consultants will be published here soon.
-        </p>
-      </section>
+      {TEAM.length > 0 && (
+        <section className="stack" aria-labelledby="team-h">
+          <h2 id="team-h">Leadership and faculty</h2>
+          <div className="team-grid">
+            {TEAM.map((t) => (
+              <article key={t.id} className="person" id={`team-${t.id}`}>
+                <Image src={`/team/${t.photo}`} alt={`Portrait of ${t.name.split(",")[0]}`} width={150} height={150} />
+                <div>
+                  <h3>{t.name}</h3>
+                  <p className="person-role">{t.role}</p>
+                  <p className="muted">{t.bio}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
       <section className="card">
         <h2>Join us</h2>
         <p className="muted">
