@@ -38,4 +38,11 @@ export const TEAM: TeamMember[] = [
     photo: "irene-chu.webp",
     bio: "Irene Chu, PhD, is a Corporate ESG and Sustainability Consultant at Afrimetrica, where she advises and trains corporate clients on ESG, sustainability and ethics. She is Senior Lecturer in International Management at Newcastle University Business School and Associate Editor of Business Strategy and the Environment, and her research appears in journals including the Journal of Business Ethics.",
   },
+  {
+    id: "mujtaba-ahsan",
+    name: "Mujtaba Ahsan, PhD",
+    role: "Consultant, AI and Data Science",
+    photo: "mujtaba-ahsan.webp",
+    bio: "Mujtaba Ahsan, PhD, is an AI and Data Science Consultant at Afrimetrica and Professor of Management at the Fowler College of Business, San Diego State University. His research on entrepreneurship, international business and innovation appears in journals including the Academy of Management Review and Entrepreneurship Theory and Practice. He holds a PhD in Management from the University of Wisconsin-Milwaukee.",
+  },
 ];
