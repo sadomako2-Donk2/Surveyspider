@@ -648,11 +648,10 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
 @media (max-width: 560px) { .person { grid-template-columns: 1fr; padding: 18px; } .person img { width: 120px; height: 120px; } }
 .person-initials { width: 150px; height: 150px; border-radius: 14px; border-bottom: 3px solid var(--gold); background: #010e3a; color: var(--gold-hi, #f2d27e); display: grid; place-items: center; font: 700 2.6rem/1 var(--font-display); letter-spacing: 0.04em; }
 @media (max-width: 560px) { .person-initials { width: 120px; height: 120px; font-size: 2.1rem; } }
-.leader-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.leader-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; }
 .leader-role { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 24px 20px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
 .leader-role .person-initials { width: 120px; height: 120px; font-size: 2rem; }
 .leader-role h3 { margin: 0; font-size: 1.05rem; }
-@media (max-width: 900px) { .leader-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 420px) { .leader-role { padding: 18px 12px; } .leader-role .person-initials { width: 96px; height: 96px; font-size: 1.6rem; } .leader-role h3 { font-size: 0.95rem; } }
 </style>
 
@@ -3170,9 +3169,10 @@ ${richSummary(st, rows)}`;
   // Leadership team: roles are shown now; add name, photo and bio as they are confirmed (the card then becomes a full profile).
   const LEADERSHIP = [
     { role: "Chief Executive Officer", abbr: "CEO", name: "", photo: "", bio: "" },
-    { role: "Business Development Manager", abbr: "BDM", name: "", photo: "", bio: "" },
-    { role: "Finance Director", abbr: "FD", name: "", photo: "", bio: "" },
-    { role: "Chief Operating Officer", abbr: "COO", name: "", photo: "", bio: "" },
+    { role: "Director, Business Development", abbr: "BD", name: "", photo: "", bio: "" },
+    { role: "Director, Finance", abbr: "FIN", name: "", photo: "", bio: "" },
+    { role: "Director, People and Human Capital", abbr: "PHC", name: "", photo: "", bio: "" },
+    { role: "Director, Operations", abbr: "OPS", name: "", photo: "", bio: "" },
   ];
   const leaderCard = (l) => l.name ? teamCard({ id: slug(l.name), name: l.name, role: l.role, photo: l.photo, bio: l.bio })
     : `<article class="leader-role"><div class="person-initials" aria-hidden="true">${esc(l.abbr)}</div><h3>${esc(l.role)}</h3></article>`;
