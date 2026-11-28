@@ -24,6 +24,8 @@ Phase 1: a single Node.js service (`server.mjs`) plus a single-page front end (`
 
 - Survey share links: owner opens a link in My surveys › Share (`study.link.on`); respondents answer at `/s/<id>` via `GET/POST /api/public/<id>` without an account (one per browser, consent required, rate-limited, unpaid, `source: "link"`). Link responses never count toward paid places (`usedSlots`). Tests in `tests/api.test.mjs` ("share links").
 
+- Questionnaire upload: the reader is between `/*IMPORT-START*/` and `/*IMPORT-END*/` in `public/index.html` (rated statements ending in scale numbers, sections, legends, contact blocks, gaps as `\t`), tested in `tests/import.test.mjs` with synthetic fixtures. Questions can carry `section: {title, text, sub}`; consecutive rating/likert questions on the same scale are shown as a grid (`qList`/`qGrid`); `display: "dropdown"` shows a single choice as a list. Analysis ignores these display fields.
+
 ## Commands
 - `npm test` — 20 statistics checks + 147 API checks. Must pass before pushing.
 - `npm start` — runs on port 10000.

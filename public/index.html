@@ -200,6 +200,7 @@ details summary { cursor: pointer; font-size: 0.88rem; font-weight: 500; }
 .take { max-width: 720px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
 .take fieldset.card legend { float: left; width: 100%; padding: 0; margin-bottom: 12px; font-weight: 600; font-size: 1rem; color: var(--ink); }
 .take fieldset.card legend + * { clear: both; }
+.take:has(.mx) { max-width: 960px; } /* surveys with grids get room for the statements */
 .opts { display: flex; flex-direction: column; gap: 6px; }
 .opt { flex-direction: row; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); font-weight: 400; font-size: 0.95rem; cursor: pointer; }
 .opt:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
@@ -517,6 +518,42 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
 .hero-photo img, .intro-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius-l, 18px); display: block; background: var(--surface); box-shadow: var(--shadow-1, 0 1px 3px rgba(14,29,58,.12)); }
 .img-note { font-size: .75rem; color: var(--muted); }
 .slide-note:empty { display: none; }
+/* survey sections and grids (matrix questions) */
+.q-section { padding: 18px 4px 2px; display: grid; gap: 6px; }
+.q-section h2 { font-size: 1.15rem; margin: 0; }
+.q-section h3 { font-size: 1rem; margin: 0; }
+.q-section p { margin: 0; max-width: 75ch; }
+.mx { display: grid; gap: 0; padding: 8px 20px 12px; }
+.mx-head, .mx-row { display: grid; grid-template-columns: minmax(240px, 1fr) repeat(var(--n), minmax(40px, 60px)); align-items: center; column-gap: 4px; }
+.mx-head { position: sticky; top: calc(var(--header-h, 70px) + 4px); background: var(--surface); z-index: 1; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.mx-h { display: grid; justify-items: center; text-align: center; gap: 2px; font-size: .85rem; }
+.mx-h small { font-size: .7rem; color: var(--muted); line-height: 1.2; }
+.mx-h-word b { font-weight: 600; font-size: .75rem; line-height: 1.2; }
+.mx-row { padding: 8px 0; border-bottom: 1px solid var(--line); }
+.mx.words .mx-head, .mx.words .mx-row { grid-template-columns: minmax(160px, 1fr) repeat(var(--n), minmax(56px, 96px)); }
+.mx-row:last-child { border-bottom: 0; }
+.mx-q { padding-right: 12px; font-size: .95rem; }
+.mx-opts { display: contents; }
+.mx-opt { display: grid; place-items: center; min-height: 40px; cursor: pointer; border-radius: 8px; }
+.mx-opt:hover { background: var(--bg); }
+.mx-opt input { width: 20px; height: 20px; margin: 0; }
+.mx-num, .mx-ends { display: none; }
+.found-sec { list-style: none; padding: 10px 0 2px; }
+.q-sec-edit { display: grid; gap: 8px; padding: 10px 12px; border-left: 3px solid var(--gold); background: var(--bg); border-radius: 8px; }
+@media (max-width: 760px) {
+  .mx { padding: 4px 14px 10px; }
+  .mx-head { display: none; }
+  .mx-row { display: block; padding: 12px 0; }
+  .mx-q { padding: 0 0 8px; }
+  .mx-opts { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 4px; }
+  .mx-opt { border: 1px solid var(--line); min-height: 44px; gap: 2px; padding: 4px 2px; }
+  .mx-num { display: block; font-size: .8rem; line-height: 1.1; text-align: center; word-break: break-word; }
+  .mx-ends { display: flex; justify-content: space-between; font-size: .72rem; color: var(--muted); margin-top: 4px; gap: 8px; }
+  .mx-ends span:last-child { text-align: right; }
+  .mx.words .mx-opts { grid-template-columns: 1fr; }
+  .mx.words .mx-opt { grid-auto-flow: column; justify-content: start; gap: 10px; padding: 8px 12px; }
+  .mx.words .mx-num { text-align: left; font-size: .9rem; }
+}
 /* survey share links */
 .share-panel { grid-column: 1 / -1; width: 100%; border-top: 1px solid var(--line); padding-top: 14px; margin-top: 4px; gap: 10px; }
 .share-panel h3 { margin: 0; font-size: 1rem; }
@@ -793,18 +830,24 @@ html { scroll-padding-top: calc(var(--header-h, 110px) + 16px); }
   const OCCUPATIONS = ["Student", "Employed full-time", "Employed part-time", "Self-employed / business owner", "Looking for work", "Retired", "Homemaker"];
   const GENDERS = ["Woman", "Man", "Non-binary", "Prefer not to say"];
   const QTYPES = { single: "Multiple choice", multi: "Checkboxes", rating: "Rating scale", likert: "Likert scale", text: "Short text", number: "Number" };
-  const SCALES = [[1, 5], [1, 7], [1, 9], [1, 10], [0, 10]];
+  const SCALES = [[1, 3], [1, 4], [1, 5], [1, 6], [1, 7], [1, 9], [1, 10], [0, 5], [0, 10]];
   const LIKERT = {
     agree5: ["Agreement · 5 points", ["Strongly disagree", "Disagree", "Neither agree nor disagree", "Agree", "Strongly agree"]],
+    agree4: ["Agreement · 4 points (no middle)", ["Strongly disagree", "Disagree", "Agree", "Strongly agree"]],
+    agree6: ["Agreement · 6 points (no middle)", ["Strongly disagree", "Disagree", "Slightly disagree", "Slightly agree", "Agree", "Strongly agree"]],
     agree7: ["Agreement · 7 points", ["Strongly disagree", "Disagree", "Somewhat disagree", "Neither agree nor disagree", "Somewhat agree", "Agree", "Strongly agree"]],
     sat5: ["Satisfaction · 5 points", ["Very dissatisfied", "Dissatisfied", "Neutral", "Satisfied", "Very satisfied"]],
+    sat4: ["Satisfaction · 4 points (no middle)", ["Very dissatisfied", "Dissatisfied", "Satisfied", "Very satisfied"]],
     sat7: ["Satisfaction · 7 points", ["Very dissatisfied", "Dissatisfied", "Somewhat dissatisfied", "Neutral", "Somewhat satisfied", "Satisfied", "Very satisfied"]],
     freq5: ["Frequency · 5 points", ["Never", "Rarely", "Sometimes", "Often", "Always"]],
     freq7: ["Frequency · 7 points", ["Never", "Very rarely", "Rarely", "Sometimes", "Often", "Very often", "Always"]],
+    freq4: ["Frequency · 4 points", ["Never", "Sometimes", "Often", "Always"]],
     likely5: ["Likelihood · 5 points", ["Very unlikely", "Unlikely", "Neither likely nor unlikely", "Likely", "Very likely"]],
     imp5: ["Importance · 5 points", ["Not at all important", "Slightly important", "Moderately important", "Very important", "Extremely important"]],
     qual5: ["Quality · 5 points", ["Very poor", "Poor", "Fair", "Good", "Excellent"]],
-    easy5: ["Ease · 5 points", ["Very difficult", "Difficult", "Neither easy nor difficult", "Easy", "Very easy"]]
+    easy5: ["Ease · 5 points", ["Very difficult", "Difficult", "Neither easy nor difficult", "Easy", "Very easy"]],
+    extent5: ["Extent · 5 points", ["Not at all", "To a small extent", "To a moderate extent", "To a large extent", "To a very large extent"]],
+    yesno3: ["Yes / No / Not sure", ["No", "Not sure", "Yes"]]
   };
   const LIKERT_WORDS = /(agree|disagree|satisf|neutral|never|rarely|sometimes|often|always|likely|important|poor|fair|good|excellent|neither|difficult|easy)/i;
   const defScale = () => ({ min: 1, max: 5, minLabel: "Lowest", maxLabel: "Highest" });
@@ -1113,7 +1156,16 @@ html { scroll-padding-top: calc(var(--header-h, 110px) + 16px); }
     const done = new Set(myResponses().map((r) => r.studyId));
     return S.studies.filter((s) => s.status === "live" && !done.has(s.id) && usedSlots(s.id) < s.target);
   }
-  const takeQuestions = (st) => { const qs = [...st.questions]; if (st.attention) qs.splice(Math.ceil(qs.length / 2), 0, ATTN); return qs; };
+  const takeQuestions = (st) => {
+    const qs = [...st.questions];
+    if (st.attention) {
+      // near the middle, but between blocks: never inside a grid of same-scale questions
+      const breaks = qs.map((q, i) => i).filter((i) => i > 0 && (scaleSig(qs[i]) === null || scaleSig(qs[i]) !== scaleSig(qs[i - 1]) || (qs[i].section && (qs[i].section.title || qs[i].section.text || qs[i].section.sub))));
+      const mid = Math.ceil(qs.length / 2), at = breaks.length ? breaks.reduce((a, b) => (Math.abs(b - mid) < Math.abs(a - mid) ? b : a)) : mid;
+      qs.splice(at, 0, ATTN);
+    }
+    return qs;
+  };
 
   // ---------- render shell ----------
   function isTyping() { const a = document.activeElement; return !!(a && $("#main").contains(a) && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)); }
@@ -1443,7 +1495,8 @@ html { scroll-padding-top: calc(var(--header-h, 110px) + 16px); }
         const mn = +sc.min === 0 ? 0 : 1, mx = Math.min(10, Math.max(2, Math.round(+sc.max) || 5));
         scale = { min: mn, max: mx, minLabel: String(sc.minLabel || "").slice(0, 60), maxLabel: String(sc.maxLabel || "").slice(0, 60) };
       }
-      return { type: ty, text: String(q.text || "").trim().slice(0, 500), options, required: q.required !== false, scale };
+      const sec = q.section && typeof q.section === "object" ? { title: String(q.section.title || "").slice(0, 160), text: String(q.section.text || "").slice(0, 1000) } : null;
+      return { type: ty, text: String(q.text || "").trim().slice(0, 500), options, required: q.required !== false, scale, ...(sec && (sec.title || sec.text) ? { section: sec } : {}) };
     }).filter((q) => q.text);
   }
   const AI_TYPES = `- "type" is one of: "single" (choose one), "multi" (choose all that apply), "rating" (numbered scale), "likert" (labelled scale such as Strongly disagree … Strongly agree), "number", "text" (open answer).
@@ -1802,6 +1855,7 @@ ${richSummary(st, rows)}`;
           <label for="f-desc">Description participants will see<textarea id="f-desc" data-f="description" rows="3" maxlength="800" placeholder="What the study is about and how answers will be used">${esc(d.description)}</textarea></label>
         </section>
         ${d.questions.map(qCard).join("")}
+        <p class="hint">Questions next to each other with the same scale are shown to respondents as one grid, like a matrix table. Add a section heading to start a new block.</p>
         <div class="card add-q"><h3>Add a question</h3><div class="row wrap">${Object.entries(QTYPES).map(([k, v]) => `<button class="btn small" data-act="addq" data-type="${k}">+ ${v}</button>`).join("")}</div></div>
       </div>
       <aside class="stack side">
@@ -1844,13 +1898,15 @@ ${richSummary(st, rows)}`;
           <button class="btn small danger" data-act="qdel" data-i="${i}" ${n === 1 ? "disabled" : ""}>Remove</button>
         </div>
       </div>
+      ${q.section ? `<div class="q-sec-edit"><label for="q-${q.id}-st">Section heading above this question<input id="q-${q.id}-st" data-q="${i}" data-k="secTitle" value="${esc(q.section.title || "")}" maxlength="160" placeholder="e.g. Section II: About your team"></label>${q.section.sub ? `<label for="q-${q.id}-ss">Sub-heading<input id="q-${q.id}-ss" data-q="${i}" data-k="secSub" value="${esc(q.section.sub)}" maxlength="160"></label>` : ""}<label for="q-${q.id}-sx">Instructions (optional)<textarea id="q-${q.id}-sx" data-q="${i}" data-k="secText" rows="2" maxlength="1000">${esc(q.section.text || "")}</textarea></label><button class="btn small ghost" data-act="qsecDel" data-i="${i}">Remove section heading</button></div>` : ""}
       <input id="q-${q.id}-text" data-q="${i}" data-k="text" value="${esc(q.text)}" placeholder="Type your question" aria-label="Question ${i + 1} text">
       ${q.type === "likert" ? `<label for="q-${q.id}-lp">Scale<select id="q-${q.id}-lp" data-q="${i}" data-k="likertPreset">${Object.entries(LIKERT).map(([k, [name]]) => `<option value="${k}"${k === lkKey ? " selected" : ""}>${name}</option>`).join("")}<option value=""${lkKey ? "" : " selected"}>Custom labels</option></select></label>` : ""}
       ${choice ? `<label for="q-${q.id}-opts">${q.type === "likert" ? "Scale labels, lowest to highest, one per line" : "Answer options, one per line"}<textarea id="q-${q.id}-opts" data-q="${i}" data-k="options" rows="${Math.max(3, q.options.length)}">${esc(q.options.join("\n"))}</textarea></label>` : ""}
       ${q.type === "likert" ? `<p class="hint">Scored 1 to ${q.options.length} from the first label to the last. Results show the average score and the top-2 box.</p>` : ""}
       ${q.type === "rating" ? ratingEditor(q, i) : ""}
       ${q.type === "number" ? `<p class="hint">Results show the average, median and range.</p>` : ""}
-      <label class="inline" for="q-${q.id}-req"><input type="checkbox" id="q-${q.id}-req" data-q="${i}" data-k="required" ${q.required ? "checked" : ""}>Required</label>
+      ${q.type === "single" ? `<label class="inline" for="q-${q.id}-dd"><input type="checkbox" id="q-${q.id}-dd" data-q="${i}" data-k="dropdown" ${q.display === "dropdown" ? "checked" : ""}>Show as a dropdown list (good for long lists)</label>` : ""}
+      <div class="row wrap" style="gap:12px;align-items:center"><label class="inline" for="q-${q.id}-req"><input type="checkbox" id="q-${q.id}-req" data-q="${i}" data-k="required" ${q.required ? "checked" : ""}>Required</label>${q.section ? "" : `<button class="btn small ghost" data-act="qsecAdd" data-i="${i}">+ Section heading above</button>`}</div>
     </article>`;
   }
   function ratingEditor(q, i) {
@@ -1957,7 +2013,7 @@ ${richSummary(st, rows)}`;
     return `<div class="take">
       <header class="card"><span class="eyebrow">Survey</span><h1>${esc(st.title)}</h1>${st.description ? `<p class="muted">${esc(st.description)}</p>` : ""}<div class="meta-row"><span>About ${int(st.minutes)} min</span><span>${qs.length} question${qs.length === 1 ? "" : "s"}</span></div></header>
       <form id="respondForm" class="stack" novalidate>
-        ${qs.map(qField).join("")}
+        ${qList(qs)}
         <fieldset class="card"><legend>Your consent</legend><label class="inline" for="respondConsent"><input type="checkbox" id="respondConsent" name="consent" required> I agree to take part. My answers will be shared with the person or organisation that created this survey.</label>
         <p class="hint">Afrimetrica stores the answers for the survey's owner and doesn't use them for anything else. Please don't include names or contact details unless the survey asks for them. See our <a href="#privacy">privacy notice</a>.</p></fieldset>
         <div id="respondErr"></div>
@@ -2046,16 +2102,54 @@ ${richSummary(st, rows)}`;
       <div><button class="btn small ghost" data-act="leave">← Back to studies</button></div>
       <header class="card"><span class="eyebrow">Study</span><h1>${esc(st.title)}</h1><p class="muted">${esc(st.description)}</p><div class="meta-row"><span>About ${st.minutes} min</span><span>${money(st.reward)} reward</span><span>${qs.length} questions</span></div></header>
       <form id="takeForm" class="stack" novalidate>
-        ${qs.map(qField).join("")}
+        ${qList(qs)}
         <div id="takeErr"></div>
         <button class="btn primary big" type="submit">Submit answers</button>
       </form></div>`;
+  }
+  // A survey's questions as shown to respondents: section headings, and consecutive questions on the same
+  // scale shown together as a grid (statements down the side, scale points across), like a matrix table.
+  const scaleSig = (q) => (q.type === "rating" ? (() => { const s = scaleOf(q); return `r:${s.min}-${s.max}:${s.minLabel}:${s.maxLabel}`; })() : q.type === "likert" && q.options.length >= 2 ? "l:" + q.options.join("|") : null);
+  function qList(qs) {
+    let out = "", i = 0;
+    while (i < qs.length) {
+      const q = qs[i];
+      if (q.section && (q.section.title || q.section.text || q.section.sub)) out += `<div class="q-section">${q.section.title ? `<h2>${esc(q.section.title)}</h2>` : ""}${q.section.sub ? `<h3>${esc(q.section.sub)}</h3>` : ""}${q.section.text ? `<p class="muted">${esc(q.section.text)}</p>` : ""}</div>`;
+      const sig = scaleSig(q);
+      let j = i + 1;
+      if (sig) while (j < qs.length && scaleSig(qs[j]) === sig && !(qs[j].section && (qs[j].section.title || qs[j].section.text || qs[j].section.sub))) j++;
+      if (sig && j - i >= 2) out += qGrid(qs.slice(i, j), i);
+      else { out += qField(q, i); j = i + 1; }
+      i = j;
+    }
+    return out;
+  }
+  function qGrid(group, start) {
+    const q0 = group[0];
+    let pts;
+    if (q0.type === "rating") {
+      const s = scaleOf(q0); pts = [];
+      for (let k = s.min; k <= s.max && pts.length < 11; k++) pts.push({ value: String(k), head: String(k), sub: k === s.min ? s.minLabel : k === s.max ? s.maxLabel : "", aria: `${k}${k === s.min && s.minLabel ? " – " + s.minLabel : k === s.max && s.maxLabel ? " – " + s.maxLabel : ""}` });
+    } else pts = q0.options.map((o, k) => ({ value: o, head: o, sub: "", aria: o, n: k + 1 }));
+    const numeric = q0.type === "rating";
+    const head = `<div class="mx-head" aria-hidden="true"><span></span>${pts.map((p) => `<span class="mx-h${numeric ? "" : " mx-h-word"}"><b>${esc(p.head)}</b>${p.sub ? `<small>${esc(p.sub)}</small>` : ""}</span>`).join("")}</div>`;
+    const ends = numeric && (pts[0].sub || pts[pts.length - 1].sub) ? `<div class="mx-ends" aria-hidden="true"><span>${esc(pts[0].sub)}</span><span>${esc(pts[pts.length - 1].sub)}</span></div>` : "";
+    const rows = group.map((q, k) => {
+      const id = "mx-" + q.id, name = "a_" + q.id;
+      return `<div class="mx-row" role="radiogroup" aria-labelledby="${id}"${q.required ? ' aria-required="true"' : ""}>
+        <div class="mx-q" id="${id}">${start + k + 1}. ${esc(q.text)}${q.required ? ` <span class="req" aria-hidden="true">*</span>` : ""}</div>
+        <div class="mx-opts">${pts.map((p, j) => `<label class="mx-opt" for="${name}-${j}"><input type="radio" id="${name}-${j}" name="${name}" value="${esc(p.value)}" aria-label="${esc(p.aria)}"><span class="mx-num" aria-hidden="true">${esc(numeric ? p.head : p.head)}</span></label>`).join("")}</div>${ends}
+      </div>`;
+    }).join("");
+    return `<fieldset class="card mx${numeric ? "" : " words"}" style="--n:${pts.length}" aria-label="Questions ${start + 1} to ${start + group.length}${numeric && pts[0].sub ? `, rated from ${esc(pts[0].aria)} to ${esc(pts[pts.length - 1].aria)}` : ""}">${head}${rows}</fieldset>`;
   }
   function qField(q, i) {
     const name = "a_" + q.id;
     const legend = `<legend>${i + 1}. ${esc(q.text)}${q.required ? ` <span class="req" aria-label="required">*</span>` : ""}</legend>`;
     let body = "";
-    if (q.type === "single" || q.type === "multi") {
+    if (q.type === "single" && q.display === "dropdown") {
+      body = `<select id="${name}" name="${name}" aria-label="Your answer"><option value="">Choose…</option>${q.options.map((o) => `<option>${esc(o)}</option>`).join("")}</select>`;
+    } else if (q.type === "single" || q.type === "multi") {
       const t = q.type === "single" ? "radio" : "checkbox";
       body = `<div class="opts">${q.options.map((o, j) => `<label class="opt" for="${name}-${j}"><input type="${t}" id="${name}-${j}" name="${name}" value="${esc(o)}">${esc(o)}</label>`).join("")}</div>`;
     } else if (q.type === "rating") {
@@ -4912,6 +5006,8 @@ ${richSummary(st, rows)}`;
         else if (k === "smin" || k === "smax") q.scale = { ...scaleOf(q), [k === "smin" ? "min" : "max"]: t.value === "" ? "" : Math.round(+t.value) };
         else if (k === "slo") q.scale = { ...scaleOf(q), minLabel: t.value };
         else if (k === "shi") q.scale = { ...scaleOf(q), maxLabel: t.value };
+        else if (k === "dropdown") { if (t.checked) q.display = "dropdown"; else delete q.display; }
+        else if (k === "secTitle" || k === "secText" || k === "secSub") { q.section = { ...(q.section || {}), [k === "secTitle" ? "title" : k === "secText" ? "text" : "sub"]: t.value }; }
         else if (k === "likertPreset") { if (t.value && LIKERT[t.value]) { q.options = [...LIKERT[t.value][1]]; render(); } }
         saveDraftLocal(); return;
       }
@@ -5011,6 +5107,8 @@ ${richSummary(st, rows)}`;
       case "newstudy": S.draft = null; ls.del("cohortly-draft"); break;
       case "addq": S.draft.questions.push(mkQ(b.dataset.type, "", b.dataset.type === "single" || b.dataset.type === "multi" ? ["Option 1", "Option 2"] : [])); saveDraftLocal(); render(); break;
       case "qdel": S.draft.questions.splice(+b.dataset.i, 1); saveDraftLocal(); render(); break;
+      case "qsecAdd": S.draft.questions[+b.dataset.i].section = { title: "", text: "" }; saveDraftLocal(); render(); { const el = document.getElementById(`q-${S.draft.questions[+b.dataset.i].id}-st`); if (el) el.focus(); } break;
+      case "qsecDel": delete S.draft.questions[+b.dataset.i].section; saveDraftLocal(); render(); break;
       case "qmove": { const i = +b.dataset.i, j = i + +b.dataset.d, qs = S.draft.questions; [qs[i], qs[j]] = [qs[j], qs[i]]; saveDraftLocal(); render(); break; }
       case "savedraft": saveStudy("draft"); break;
       case "launch": saveStudy("live"); break;
@@ -5200,7 +5298,7 @@ ${richSummary(st, rows)}`;
     return `<section class="card">${head}
       <dl class="kv"><dt>Title</dt><dd>${esc(im.title)}</dd>${im.description ? `<dt>Intro</dt><dd>${esc(im.description)}</dd>` : ""}</dl>
       ${actions}
-      <ol class="found">${im.questions.map((q, i) => `<li><span class="q-num">Q${i + 1}</span><div><div>${esc(q.text)}</div>${q.options.length ? `<div class="opts-mini">${q.options.map((o) => `<span>${esc(o)}</span>`).join("")}</div>` : ""}</div><span class="pill">${esc(typeLabel(q))}</span></li>`).join("")}</ol>
+      <ol class="found">${im.questions.map((q, i) => `${q.section && (q.section.title || q.section.sub) ? `<li class="found-sec"><b>${esc(q.section.title || "")}${q.section.title && q.section.sub ? " · " : ""}${esc(q.section.sub || "")}</b></li>` : ""}<li><span class="q-num">Q${i + 1}</span><div><div>${esc(q.text)}</div>${q.options.length ? `<div class="opts-mini">${q.options.map((o) => `<span>${esc(o)}</span>`).join("")}</div>` : ""}</div><span class="pill">${esc(typeLabel(q))}${q.type === "rating" && q.scale && q.scale.minLabel ? ` · ${esc(q.scale.minLabel)} → ${esc(q.scale.maxLabel)}` : ""}</span></li>`).join("")}</ol>
       <p class="hint">You can fix any question type, wording or option in the next step.</p>
       ${actions}</section>`;
   }
@@ -5224,8 +5322,15 @@ ${richSummary(st, rows)}`;
         lines = [];
         for (let p = 1; p <= Math.min(pdf.numPages, 60); p++) {
           const tc = await (await pdf.getPage(p)).getTextContent();
-          let line = "";
-          for (const it of tc.items) { line += it.str; if (it.hasEOL) { lines.push(line); line = ""; } }
+          let line = "", endX = null, y = null;
+          for (const it of tc.items) {
+            const x = it.transform[4], iy = it.transform[5];
+            if (line && y != null && Math.abs(iy - y) > 3) { lines.push(line); line = ""; endX = null; }
+            if (!it.str.trim()) { line += it.str; if (it.hasEOL) { lines.push(line); line = ""; endX = null; } continue; } // spaces don't move the gap measure
+            if (line && endX != null && x - endX > 12) line += "\t";
+            line += it.str; endX = x + (it.width || 0); y = iy;
+            if (it.hasEOL) { lines.push(line); line = ""; endX = null; }
+          }
           if (line) lines.push(line);
         }
         if (lines.join("").replace(/\s/g, "").length < 20) { S.imp = { status: "error", file: name, error: "This PDF looks like a scanned image, so it has no text to read. Upload the original Word file or paste the questions instead." }; render(); return; }
@@ -5275,12 +5380,54 @@ ${richSummary(st, rows)}`;
     return out;
   }
 
+  /*IMPORT-START*/
+  // Reads a questionnaire's text lines (from Word, PDF, Excel or plain text) into survey questions.
+  // Line markers from the file readers: \u0001 numbered list item, \u0002 bullet or sub-item, \u0003 heading;
+  // "\t" marks a gap between pieces of text on the same line (table cells, tab stops, wide spaces in PDFs).
+  // Tested in tests/import.test.mjs.
   const RX_NUM = /^\s*(?:Q(?:uestion)?\s*)?(\d{1,3})\s*[.):\-]\s*(.+)$/i;
   const RX_QN = /^\s*Q(?:uestion)?\s*(\d{1,3})\s+(.+)$/i;
   const RX_OPT = /^\s*(?:\(?[a-hA-H][).\]]|\((?:i|ii|iii|iv|v|vi|vii|viii)\)|(?:i|ii|iii|iv|v|vi|vii|viii)\)|[•●○◦▪■□☐❑◻▢⬜◯\-–—*·]|\[\s?\]|\(\s?\)|o(?=\s))\s*(.+)$/;
   const BOXES = /[□☐❑◻▢⬜○◯]/;
-  const cleanQ = (t) => t.replace(/\s*[_.]{3,}\s*$/, "").replace(/\s+/g, " ").trim();
-  const cleanOpt = (t) => t.replace(/[□☐❑◻▢⬜○◯]/g, "").replace(/^\s*(?:\(?[a-hA-H][).\]]|[•●◦▪■\-–—*·])\s+/, "").replace(/\s*[_.]{3,}\s*$/, "").replace(/[:\s]+$/, "").replace(/\s+/g, " ").trim();
+  // Section headings ("SECTION II: ...", "PART B", "Section 3 - About you").
+  const RX_SECTION = /^(?:section|part)\s+(?:[ivxlc]+|\d{1,2}|[a-h])\b\s*[:.\-–—]?\s*/i;
+  // Instructions that introduce a block of questions rather than asking one.
+  const RX_INSTRUCT = /(to what extent|please (?:circle|tick|indicate|select|rate|mark|choose|read|answer)|the following statements|using the (?:following )?scale|where 1 (?:is|=|means)|tick (?:the|one)|circle (?:the|one))/i;
+  // Lines that are never questions: contact details, serial numbers, page numbers.
+  const RX_EMAIL = /[\w.+-]+@[\w-]+(?:\.[\w-]+)+/;
+  const RX_NOISE = /^(?:(?:tel|tel\.|telephone|phone|mobile|cell|fax|e-?mail|website|web|p\.?\s?o\.?\s?box)\s*[:.]|serial\s*(?:no|number|#)|questionnaire\s*(?:no|number|code)|page\s*\d+(?:\s*(?:of|\/)\s*\d+)?$|\d+\s*(?:of|\/)\s*\d+$)/i;
+  const RX_PHONE = /(?:\+\d[\d\s().-]{7,}\d|\(\d{2,4}\)\s?\d{3,}[\s-]?\d{3,})/;
+  const RX_TITLE_DEGREE = /,\s*(?:ph\.?\s?d|dphil|mba|msc|ma|bsc|prof\.?)\b/i;
+  // Closing lines ("This ends the questionnaire. Thank you…").
+  const RX_CLOSING = /(this (?:ends|concludes) the (?:questionnaire|survey)|end of (?:the )?(?:questionnaire|survey)|thank you (?:very much )?for (?:your )?(?:time|participation|taking part|completing))/i;
+  // A line that ends with a scale run such as "1 2 3 4 5 6 7".
+  const RX_SCALE_END = /^(.*?)(?:^|\s)((?:\d{1,2}[ \t]+){2,10}\d{1,2})\s*$/;
+  // Words used in scale legends ("I strongly disagree … I neither agree nor disagree … I strongly agree").
+  const LEGEND_WORD = /^(?:i|strongly|disagree|agree|neither|nor|neutral|somewhat|slightly|moderately|mildly|completely|totally|very|not|at|all|extremely|fairly|quite|satisfied|dissatisfied|unsatisfied|likely|unlikely|important|unimportant|never|always|rarely|seldom|often|sometimes|undecided|unsure|no|opinion|nor|and|or|to|=|-|–|—|\d{1,2}|\d{1,2}=|\(\d{1,2}\))$/i;
+  const cleanQ = (t) => t.replace(/\t+/g, " ").replace(/\s*[_.…]{3,}.*$/, "").replace(/\s*…+\s*$/, "").replace(/\s+/g, " ").trim();
+  const cleanOpt = (t) => t.replace(/[□☐❑◻▢⬜○◯]/g, "").replace(/^\s*(?:\(?[a-hA-H][).\]]|[•●◦▪■\-–—*·])\s+/, "").replace(/\s*[_.…]{3,}\s*$/, "").replace(/[:,;\s]+$/, "").replace(/\s+/g, " ").trim();
+  const scaleRun = (s) => {
+    const ns = s.trim().split(/\s+/).map(Number);
+    if (ns.length < 3 || ns.length > 11 || !(ns[0] === 0 || ns[0] === 1)) return null;
+    return ns.every((v, j) => j === 0 || v === ns[j - 1] + 1) && ns[ns.length - 1] <= 10 ? { min: ns[0], max: ns[ns.length - 1] } : null;
+  };
+  // End labels for a numbered scale, from the legend text near it.
+  function legendLabels(text) {
+    const t = " " + text.toLowerCase().replace(/\s+/g, " ") + " ";
+    const pairs = [
+      [/strongly disagree/, /strongly agree/, "Strongly disagree", "Strongly agree"],
+      [/(very|completely|extremely) dissatisfied/, /(very|completely|extremely) satisfied/, "Very dissatisfied", "Very satisfied"],
+      [/(very|extremely) unlikely/, /(very|extremely) likely/, "Very unlikely", "Very likely"],
+      [/not at all important|very unimportant/, /(very|extremely) important/, "Not at all important", "Very important"],
+      [/\bnever\b/, /\balways\b/, "Never", "Always"],
+      [/\bdisagree\b/, /\bagree\b/, "Disagree", "Agree"],
+    ];
+    if (/strongly/.test(t) && /\bdisagree\b/.test(t) && /\bagree\b/.test(t.replace(/\bdisagree\b/g, " "))) return { minLabel: "Strongly disagree", maxLabel: "Strongly agree" };
+    for (const [lo, hi, a, b] of pairs) if (lo.test(t) && hi.test(t.replace(lo, " "))) return { minLabel: a, maxLabel: b };
+    const m1 = t.match(/\b[01]\s*=\s*([a-z][a-z ]{2,40}?)(?=[,;)]|\s\d|\s*$)/), m2 = t.match(/\b(?:[3-9]|10)\s*=\s*([a-z][a-z ]{2,40}?)(?=[,;)]|\s*$)/);
+    if (m1 && m2) { const cap = (x) => x.trim().replace(/^./, (c) => c.toUpperCase()); return { minLabel: cap(m1[1]), maxLabel: cap(m2[1]) }; }
+    return null;
+  }
   function inferType(q) {
     const t = q.text.toLowerCase(), o = q.options;
     if (o.length >= 2) {
@@ -5296,28 +5443,122 @@ ${richSummary(st, rows)}`;
     const r = t.match(/\b([01])\s*(?:-|–|to)\s*(\d{1,2})\b/);
     if (r && /(scale|rate|rating|how likely|how satisfied|recommend|agree)/.test(t) && +r[2] >= 2 && +r[2] <= 10) { q.scale = { min: +r[1], max: +r[2] }; return "rating"; }
     if (/(on a scale|\brate\b|\brating\b)/.test(t)) return "rating";
-    if (/\b(how many|how much|how old|your age|what is your age|number of|in years|amount)\b/.test(t) || /^age\b/.test(t)) return "number";
+    if (/\b(how many|how much|how old|how long|your age|what is your age|number of|in years|amount)\b/.test(t) || /^(your )?age\b/.test(t)) return "number";
     return "text";
   }
   function parseQuestionnaire(raw, fallbackTitle) {
-    const cleaned = raw.map((l) => String(l).replace(/[ \t ]+/g, " ").trim()).filter((l) => l.replace(/[\u0001-\u0003]/g, "").trim());
+    // 1. Tidy each line, keeping "\t" as a separator, and split lines that run two things together.
+    const tidy = (l) => String(l).replace(/[\u00a0\u2007\u202f]/g, " ").replace(/[_.…]{3,}/g, " ").replace(/ {4,}/g, "\t").replace(/ *\t[\t ]*/g, "\t").replace(/ {2,}/g, " ").replace(/^\t+|\t+$/g, "").trim();
+    let cleaned = [];
+    for (const l of raw.map(tidy)) {
+      if (!l.replace(/[\u0001-\u0003\t]/g, "").trim()) continue;
+      // "… 1 2 3 4 5 6 7 SECTION II: …" and "…? years months 5. What is …" become two lines.
+      const parts = l.split(/\s+(?=(?:SECTION|PART|Section|Part)\s+(?:[IVXLC]+|\d{1,2}|[A-H])\b\s*[:.\-–—])/);
+      for (let p of parts) {
+        const m = p.match(/^(.*\?[^?]{0,40}?)\s+(\d{1,3}[.)]\s+[A-Z].*)$/);
+        if (m) cleaned.push(m[1], m[2]); else cleaned.push(p);
+      }
+    }
+    // Closing lines: keep the text before them, drop the rest of that line.
+    { let closing = false, started = false; cleaned = cleaned.map((l) => {
+      const m = started ? l.match(RX_CLOSING) : null;
+      if (!started && (/\?/.test(l) || RX_NUM.test(l.replace(/^[\u0001-\u0003]/, "")) || RX_SCALE_END.test(l.replace(/\t/g, " ")) || l[0] === "\u0001")) started = true;
+      if (m) { closing = true; return l.slice(0, m.index).trim(); }
+      if (closing && !/\?/.test(l) && !RX_NUM.test(l) && !RX_SECTION.test(l) && l.length < 80) return "";
+      closing = false; return l;
+    }).filter((l) => l.replace(/[\u0001-\u0003\t]/g, "").trim()); }
     const bare = (l) => /^\d{1,2}$/.test(l);
-    // Drop page numbers ("Page 2", "2 of 5", or a lone number), but keep runs of bare numbers: those are scale options (1 2 3 4 5).
-    const lines = cleaned.filter((l, i) => {
-      if (/^[\u0001-\u0003]?page\s*\d+(\s*(of|\/)\s*\d+)?$/i.test(l) || /^\d+\s*(of|\/)\s*\d+$/i.test(l)) return false;
-      if (bare(l)) return bare(cleaned[i - 1] || "") || bare(cleaned[i + 1] || "");
-      return true;
-    });
+    const lines = cleaned.filter((l, i) => (bare(l) ? bare(cleaned[i - 1] || "") || bare(cleaned[i + 1] || "") : true));
+
+    // 2. Walk the lines.
     const qs = [], pre = [];
-    let cur = null, lastN = 0;
-    const startQ = (text) => { cur = { text: cleanQ(text), options: [] }; qs.push(cur); };
-    const addOpt = (text) => { const o = cleanOpt(text); if (o && cur.options.length < 30 && !cur.options.includes(o)) cur.options.push(o); };
-    const optionLike = (text) => cur && text.length < 90 && !/\?\s*$/.test(text) && (cur.options.length > 0 || /[?:]\s*$/.test(cur.text) || /\((please )?(select|tick|choose|check|circle)/i.test(cur.text));
+    let cur = null, lastN = 0, section = null, scaleMode = false, labels = null, pending = "", contact = false, legendBuf = "";
+    const newQ = (q) => { if (section) { q.section = { title: section.title, text: section.text.join(" ").slice(0, 1000), ...(section.sub ? { sub: section.sub } : {}) }; section = null; } qs.push(q); cur = q; return q; };
+    const startQ = (text) => { const m = String(text).match(/^\s*(?:Q(?:uestion)?\s*)?(\d{1,3})\s*[.)]\s+(.+)$/i); if (m) lastN = +m[1]; return newQ({ text: cleanQ(m ? m[2] : text), options: [] }); };
+    const addOpt = (text) => { const o = cleanOpt(text); if (o && cur.options.length < 40 && !cur.options.includes(o)) cur.options.push(o); };
+    const optionLike = (text) => cur && !cur.fixed && text.length < 90 && !/\?\s*$/.test(text) && (cur.options.length > 0 || /[?:]\s*$/.test(cur.text) || /\((please )?(select|tick|choose|check|circle)/i.test(cur.text));
+    const scaleItem = (text, sc) => {
+      const t = cleanQ(text).replace(/^\d{1,3}\s*[.)]\s*/, "").replace(/^[a-z]\)\s*/i, "");
+      if (t.length < 2) return;
+      newQ({ text: t, options: [], fixed: true, type: "rating", scale: { min: sc.min, max: sc.max, ...(labels || { minLabel: "", maxLabel: "" }) } });
+    };
+    let lastScale = { min: 1, max: 5 };
+    const flushPending = () => { if (pending && scaleMode && pending.length > 12) scaleItem(pending, lastScale); pending = ""; };
+    const beginSection = (title) => { flushPending(); section = { title: cleanQ(title), text: [] }; scaleMode = false; cur = null; contact = false; };
+    const isContact = (l) => RX_EMAIL.test(l) || RX_PHONE.test(l) || RX_NOISE.test(l) || RX_TITLE_DEGREE.test(l);
+    const isLegend = (l) => { const w = l.replace(/[,.;:()]/g, " ").split(/\s+/).filter(Boolean); return w.length > 0 && w.length <= 14 && w.every((x) => LEGEND_WORD.test(x)) && /(agree|satisf|likely|important|never|always|neutral|strongly|neither)/i.test(l); };
+    const upperShare = (l) => { const letters = l.replace(/[^A-Za-z]/g, ""); return letters.length ? letters.replace(/[^A-Z]/g, "").length / letters.length : 0; };
+
     for (let line of lines) {
       let kind = "";
       if (line[0] === "\u0001") { kind = "num"; line = line.slice(1).trim(); }
       else if (line[0] === "\u0002") { kind = "bullet"; line = line.slice(1).trim(); }
-      else if (line[0] === "\u0003") { if (!qs.length) pre.push(line.slice(1).trim()); continue; }
+      else if (line[0] === "\u0003") { kind = "heading"; line = line.slice(1).trim(); }
+      const flat = line.replace(/\t/g, " ");
+
+      // Contact details and serial numbers: never questions or options. Short lines right after them
+      // (an institution, a city) belong to the same block.
+      if (isContact(flat)) { contact = RX_EMAIL.test(flat) || RX_PHONE.test(flat) || RX_TITLE_DEGREE.test(flat); continue; }
+      if (contact) {
+        if (upperShare(flat) < 0.6 && flat.length < 60 && !/\?/.test(flat) && !RX_SCALE_END.test(flat) && !RX_SECTION.test(flat) && !RX_NUM.test(flat) && !isLegend(flat)) continue;
+        contact = false;
+      }
+      // Section headings.
+      if (RX_SECTION.test(flat) || (kind === "heading" && qs.length) || (flat.length >= 8 && flat.length <= 140 && upperShare(flat) > 0.85 && !/\?\s*$/.test(flat) && !RX_SCALE_END.test(flat) && /[A-Z]{3}/.test(flat) && (qs.length || pending || scaleMode))) {
+        if (!qs.length && !RX_SECTION.test(flat) && kind !== "heading") { pre.push(flat); continue; }
+        beginSection(flat);
+        continue;
+      }
+      if (kind === "heading") { pre.push(flat); continue; }
+      // Scale legends: remember the end labels, never show them as options.
+      if (isLegend(flat) && !(cur && !cur.fixed && /[?:]\s*$/.test(cur.text) && !cur.options.length) && !(cur && !cur.fixed && cur.options.length && cur.options.every((x) => LIKERT_WORDS.test(x)))) { legendBuf = (legendBuf + " " + flat).trim(); labels = legendLabels(legendBuf) || labels; scaleMode = true; continue; }
+      legendBuf = "";
+      // Instructions for a block of questions.
+      if (RX_INSTRUCT.test(flat) && !/\?\s*$/.test(flat) && !RX_SCALE_END.test(flat)) {
+        if (!qs.length && !section && !pending) { pre.push(flat); continue; }
+        flushPending();
+        if (!section) section = { title: "", text: [] };
+        section.text.push(cleanQ(flat));
+        labels = legendLabels(flat) || labels;
+        if (/(agree|statement|scale|circle|rate)/i.test(flat)) scaleMode = true;
+        continue;
+      }
+      // Statements rated on a numbered scale: "In this firm we … 1 2 3 4 5 6 7" (possibly wrapped over lines).
+      const se = flat.match(RX_SCALE_END), run = se && scaleRun(se[2]);
+      if (run && !/\?\s*$/.test(se[1]) && (se[1].trim() || pending)) {
+        const t = se[1].trim();
+        // a new sentence after a finished one: the finished one was an item whose numbers were lost
+        if (pending && t && /[.!]\s*$/.test(pending) && /^[A-Z]/.test(t)) flushPending();
+        lastScale = run; scaleMode = true;
+        scaleItem((pending + " " + t).trim(), run); pending = "";
+        continue;
+      }
+      if (run && !se[1].trim()) { continue; } // a lone "1 2 3 4 5" line with nothing waiting
+      if (scaleMode && kind !== "num" && !/\?\s*$/.test(flat) && !/[:]\s*$/.test(flat) && !/\t/.test(line)) {
+        // inside a block of rated statements: collect wrapped text until its numbers arrive
+        if (pending && /[.!]\s*$/.test(pending) && /^[A-Z]/.test(flat)) flushPending();
+        else if (!pending && flat.length < 60 && !/[.!]\s*$/.test(flat) && /^[A-Z][^.]*$/.test(flat) && upperShare(flat) < 0.85 && (!cur || cur.fixed) && flat.split(/\s+/).length <= 6) {
+          // a short title inside a block of statements ("Preparing Employees for Change") is a sub-heading
+          if (section) section.sub = cleanQ(flat); else section = { title: "", text: [], sub: cleanQ(flat) };
+          continue;
+        }
+        pending = (pending + " " + flat).trim();
+        continue;
+      }
+      flushPending();
+      if (scaleMode && (/\?\s*$/.test(flat) || /:\s*$/.test(flat) || /\t/.test(line) || kind === "num")) scaleMode = false;
+
+      // Tab-separated pieces: "Your gender:\tFemale\tMale", "Company size\tLess than 100\t101–200".
+      if (/\t/.test(line)) {
+        const parts = line.split("\t").map((x) => x.trim()).filter(Boolean);
+        const head = parts[0], rest = parts.slice(1);
+        const numbered = RX_NUM.test(head) && !/^\d+\s*[-–]\s*\d/.test(head);
+        if (cur && !cur.fixed && cur.options.length && !/[?:]\s*$/.test(head) && !numbered && parts.every((x) => x.length <= 80)) { parts.forEach(addOpt); continue; }
+        const headQ = head.length <= 160 && (/[?:]\s*$/.test(head) || numbered || (rest.length >= 2 && head.length <= 60 && rest.every((x) => x.length <= 70)));
+        if (rest.length && rest.every((x) => x.length <= 80) && headQ) { const m = head.match(RX_NUM) || head.match(RX_QN); if (m) lastN = +m[1]; startQ(m ? m[2] : head); rest.forEach(addOpt); continue; }
+        if (cur && !cur.fixed && parts.every((x) => x.length <= 80) && cur.options.length) { parts.forEach(addOpt); continue; }
+        line = parts.join(" ");
+      }
       // "Do you smoke? ☐ Yes ☐ No" → question + inline options
       if (BOXES.test(line)) {
         const parts = line.split(BOXES).map((s) => s.trim());
@@ -5328,36 +5569,45 @@ ${richSummary(st, rows)}`;
           continue;
         }
       }
-      if (kind === "bullet") { if (cur) addOpt(line); else pre.push(line); continue; }
+      // "Your gender: Female Male" (single words after a colon) → question + options
+      { const m = line.match(/^(.{3,80}?):\s+((?:[A-Z][a-z]+\s+){1,5}[A-Z][a-z]+)$/); if (m) { startQ(m[1] + ":"); m[2].split(/\s+/).forEach(addOpt); continue; } }
+      if (kind === "bullet") { if (cur && !cur.fixed) addOpt(line); else if (!qs.length) pre.push(line); continue; }
       if (kind === "num") {
         const asOption = cur && !/\?/.test(line) && line.length < 60 && optionLike(line) && (!cur.options.length || cur.optSrc === "num");
         if (asOption) { addOpt(line); cur.optSrc = "num"; } else startQ(line);
         continue;
       }
-      if (bare(line)) { if (cur) addOpt(line); continue; }
+      if (bare(line)) { if (cur && !cur.fixed) addOpt(line); continue; }
       const m = line.match(RX_NUM) || line.match(RX_QN);
       if (m && !/^\d+\s*[.)]\s*\d/.test(line)) {
         const n = +m[1];
-        if (!cur || n === lastN + 1 || /\?\s*$/.test(m[2]) || !optionLike(m[2])) { startQ(m[2]); lastN = n; }
+        if (!cur || cur.fixed || n === lastN + 1 || /\?\s*$/.test(m[2]) || !optionLike(m[2])) { startQ(m[2]); lastN = n; }
         else addOpt(m[2]);
         continue;
       }
       const o = line.match(RX_OPT);
-      if (o && cur) { addOpt(o[1]); continue; }
-      if (/\?\s*$/.test(line) && line.length > 8) { startQ(line); continue; }
-      if (cur) {
+      if (o && cur && !cur.fixed) { addOpt(o[1]); continue; }
+      if (/\?/.test(line) && line.length > 8 && !(cur && !cur.fixed && optionLike(line) && line.length < 40)) { startQ(line); continue; }
+      if (cur && !cur.fixed) {
         const scaleWord = line.length < 45 && !/\?/.test(line) && LIKERT_WORDS.test(line);
         if ((optionLike(line) || scaleWord) && line.length < 70 && !/\.\s*$/.test(line)) addOpt(line);
-        else if (!cur.options.length && cur.text.length < 400) cur.text = cleanQ(cur.text + " " + line);
+        else if (!cur.options.length && cur.text.length < 400 && line.length < 200) cur.text = cleanQ(cur.text + " " + line);
         continue;
       }
-      pre.push(line);
+      if (!qs.length) pre.push(flat);
     }
-    const questions = qs.filter((q) => q.text.length > 2).slice(0, 150).map((q) => { const type = inferType(q); return { type, text: q.text.slice(0, 500), options: q.options, required: true, scale: q.scale }; });
-    const t = pre.find((l) => l.length <= 120) || fallbackTitle;
-    const description = pre.filter((l) => l !== t).join(" ").slice(0, 600);
-    return { title: t.slice(0, 120), description, questions };
+    flushPending();
+    const questions = qs.filter((q) => q.text.length > 2).slice(0, 300).map((q) => {
+      const type = q.type || inferType(q);
+      const out = { type, text: q.text.slice(0, 500), options: q.options, required: true, scale: q.scale };
+      if (q.section && (q.section.title || q.section.text || q.section.sub)) out.section = q.section;
+      return out;
+    });
+    const t = pre.find((l) => l.length <= 120 && !RX_INSTRUCT.test(l)) || fallbackTitle;
+    const description = pre.filter((l) => l !== t).join(" ").replace(/\s+/g, " ").trim().slice(0, 3000);
+    return { title: cleanQ(t).slice(0, 120), description, questions };
   }
+  /*IMPORT-END*/
 
   async function readWithAI() {
     const im = S.imp;
@@ -5374,8 +5624,10 @@ Rules:
 - For "likert", put the scale labels in "options" from lowest to highest.
 - For "rating", add "scale": {"min": 0 or 1, "max": a whole number from 2 to 10, "minLabel": "label of the lowest point, or empty", "maxLabel": "label of the highest point, or empty"}.
 - A grid or matrix (several statements rated on the same scale) becomes one question per statement, each with the same scale.
-- Skip headings, instructions, consent text, thank-you notes, and questions asking for a name, email, phone number or address.
-- "title" is the questionnaire's title. "description" is one or two sentences from its introduction, or "".
+- A numbered scale printed after a statement (for example "1 2 3 4 5 6 7") makes that statement a "rating" question; take the end labels from the scale's legend (for example "Strongly disagree" and "Strongly agree").
+- When a question starts a new section, add "section": {"title": "the section heading as written", "text": "the section's instructions, or empty"} to that question only.
+- Skip consent text, thank-you notes, researchers' names and contact details, serial numbers, and questions asking for a name, email, phone number or address.
+- "title" is the questionnaire's title. "description" is its introduction to respondents, as written (up to about 400 words), or "".
 
 Document:
 """
@@ -5384,7 +5636,7 @@ ${im.text.slice(0, 60000)}
     try {
       const r = await SAMPLE.json(prompt, { signal: aiCtl.signal });
       const qs = normAIQs(r && r.questions);
-      S.imp = { ...prev, status: "ready", method: "ai", title: String(r.title || prev.title || "").slice(0, 120) || prev.title, description: String(r.description || "").slice(0, 600), questions: qs };
+      S.imp = { ...prev, status: "ready", method: "ai", title: String(r.title || prev.title || "").slice(0, 120) || prev.title, description: String(r.description || "").slice(0, 3000), questions: qs };
     } catch (e) {
       const code = e && e.code;
       S.imp = { ...prev, status: "ready" };
@@ -5399,7 +5651,7 @@ ${im.text.slice(0, 60000)}
     const im = S.imp;
     const d = draftFromTemplate(null);
     d.title = im.title || ""; d.description = im.description || "";
-    d.questions = im.questions.map((q) => ({ ...mkQ(q.type, q.text, q.options, q.scale), required: q.required !== false }));
+    d.questions = im.questions.map((q) => ({ ...mkQ(q.type, q.text, q.options, q.scale), required: q.required !== false, ...(q.section ? { section: { ...q.section } } : {}), ...(q.type === "single" && q.options.length > 12 ? { display: "dropdown" } : {}) }));
     d.minutes = Math.max(2, Math.round(d.questions.length * 0.6));
     d.reward = Math.ceil((MIN_HOURLY * 1.25 * d.minutes / 60) * 20) / 20;
     S.draft = d; saveDraftLocal();
