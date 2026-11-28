@@ -3161,6 +3161,8 @@ ${richSummary(st, rows)}`;
     organisation: ["orgDiscussion", "orgPresentation", "orgMeeting", "orgLaptop"],
     // Our mission: photos supplied by Afrimetrica for this page.
     mission: ["missionMeeting", "missionTraining", "missionSpeaker", "missionAudience"],
+    // Our vision: African cities and evidence-led teamwork, from photos already on the site.
+    vision: ["skyline", "missionMeeting", "waterfront", "district"],
     // Insights: AI illustrations of data and research work (owner's request).
     insights: ["dataIntel", "analyticsAI", "digital", "trainingAI"],
   };
@@ -3355,9 +3357,9 @@ ${richSummary(st, rows)}`;
       <section class="card"><h2>What we stand for</h2>${abValues()}</section>`;
   }
   function abVision() {
-    return `${abCrumbs("Our vision")}<div><div class="stack"><div class="page-head"><div><span class="eyebrow gold">Our vision</span><h1>The future we are working towards</h1></div></div>
-      <section class="card statement"><p>${esc(AB_VISION)}</p></section></div></div>
-      <section class="card"><h2>How we get there</h2><ul class="ticks small"><li><div><b>Data</b><span>Reliable analysis and intelligence through our Data &amp; Intelligence practice.</span></div></li><li><div><b>Evidence</b><span>Credible research, surveys and evaluations through our Research &amp; Evaluation practice.</span></div></li><li><div><b>Advice</b><span>Evidence-based policy, strategy and investment advice through our Strategy &amp; Advisory practice.</span></div></li><li><div><b>Skills</b><span>Practical programmes for leaders and teams through our Executive Education practice.</span></div></li><li><div><b>Tools</b><span>Survey and data tools through our Digital Solutions practice.</span></div></li><li><div><b>Knowledge</b><span>Free guides and resources for everyone through Afrimetrica Insights.</span></div></li></ul></section>`;
+    return `${abCrumbs("Our vision")}${introMedia(`<div class="stack intro-text"><div class="page-head"><div><span class="eyebrow gold">Our vision</span><h1>The future we are working towards</h1></div></div>
+      <section class="card statement"><p>${esc(AB_VISION)}</p></section>
+      <section class="card"><h2>How we get there</h2><ul class="ticks small"><li><div><b>Data</b><span>Reliable analysis and intelligence through our Data &amp; Intelligence practice.</span></div></li><li><div><b>Evidence</b><span>Credible research, surveys and evaluations through our Research &amp; Evaluation practice.</span></div></li><li><div><b>Advice</b><span>Evidence-based policy, strategy and investment advice through our Strategy &amp; Advisory practice.</span></div></li><li><div><b>Skills</b><span>Practical programmes for leaders and teams through our Executive Education practice.</span></div></li><li><div><b>Tools</b><span>Survey and data tools through our Digital Solutions practice.</span></div></li><li><div><b>Knowledge</b><span>Free guides and resources for everyone through Afrimetrica Insights.</span></div></li></ul></section></div>`, "vision")}`;
   }
   // ================= OUR PEOPLE: profile data (the site's content model for people) =================
   // Wording and photos are supplied and approved by Afrimetrica; photos are shown in black and white.
