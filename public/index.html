@@ -1089,7 +1089,7 @@ html { scroll-padding-top: calc(var(--header-h, 110px) + 16px); }
     if (k === "surveys") return [["Afrimetrica Surveys", SURVEY_NAV.map(([x, l]) => L(`#${x}`, l))]];
     if (k === "analytics") return [["Services", AN_SERVICES.map((x) => L(`#analytics/service/${x.id}`, x.name))], ["Sectors", AN_SECTORS.map((x) => L(`#analytics/sector/${x.id}`, x.name))], ["More", [L("#analytics", "Overview"), L("#analytics/tools", "Tools we use"), L("#analytics/how-we-work", "How we work"), L("#analytics/data-security", "Data security"), L("#analytics/request", "Request analysis")]]];
     if (k === "consultancy") return [["Services", CO_SERVICES.map((x) => L(`#consultancy/service/${x.id}`, x.name))], ["Sectors", CO_SECTORS.map((x) => L(`#consultancy/sector/${x.id}`, x.name))], ["More", [L("#consultancy", "Overview"), L("#consultancy/approach", "Our approach"), L("#paper-survey", "Fieldwork quote"), L("#consultancy/work-with-us", "Work with us"), L("#consultancy/request", "Request a proposal")]]];
-    if (k === "practices") return [["What we do", [L("#practices", "Overview"), ...PRACTICES.map((x) => L(`#practices/${x.id}`, x.name))]], ["Services", [L("#practices/data-intelligence", "Data analysis services"), L("#consultancy", "Research and advisory services"), L("#paper-survey", "Fieldwork quote")]]];
+    if (k === "practices") return [["What We Do", [L("#practices", "Overview"), ...PRACTICES.map((x) => L(`#practices/${x.id}`, x.name))]], ["Services", [L("#practices/data-intelligence", "Data analysis services"), L("#consultancy", "Research and advisory services"), L("#paper-survey", "Fieldwork quote")]]];
     if (k === "resources") return [["Insights", RES_MENU.map(([x, l]) => L(`#resources${x ? "/" + x : ""}`, l))]];
     if (k === "account") return [["My Account", [...ACCOUNT_MENU.map(([x, l]) => L(`#account${x ? "/" + x : ""}`, l)), ...(S.isOwner ? [L("#business", "Admin area")] : [])]]];
     if (k === "contact") return [["Contact", [...CONTACT_MENU.map(([x, l]) => L(`#contact${x ? "/" + x : ""}`, l)), L("#training/finder", "Find training")]]];
@@ -3040,7 +3040,7 @@ ${richSummary(st, rows)}`;
   // ================= AFRIMETRICA: institution pages, Academy, enquiries, account, admin =================
   // Main menu. Analytics and Consultancy pages keep their addresses and sit under Practices (Data & Intelligence,
   // Research & Evaluation, Strategy & Advisory); Training is the Executive Education practice; Resources is Insights.
-  const TOPNAV = [["home", "Home"], ["about", "About"], ["practices", "What we do"], ["training", "Executive Education"], ["surveys", "Surveys"], ["resources", "Insights"], ["contact", "Contact"], ["account", "My Account"]];
+  const TOPNAV = [["home", "Home"], ["about", "About"], ["practices", "What We Do"], ["training", "Executive Education"], ["surveys", "Surveys"], ["resources", "Insights"], ["contact", "Contact"], ["account", "My Account"]];
   const SURVEY_NAV = [["surveys", "Overview"], ["create", "Create"], ["import", "Upload"], ["paper-survey", "Paper surveys"], ["studies", "My surveys"], ["results", "Analyze"], ["panel", "Take surveys"], ["pricing", "Plans"]];
   const ROUTES = new Set([...TOPNAV.map(([k]) => k), ...SURVEY_NAV.map(([k]) => k), "analytics", "consultancy", "signin", "business", "privacy", "terms"]);
   const CUR = { USD: "US$", GHS: "GH₵", GBP: "£", EUR: "€" };
@@ -3203,7 +3203,7 @@ ${richSummary(st, rows)}`;
     </section>
     ${slideshow("home")}
     <section class="stack">
-      <div class="section-head"><span class="eyebrow gold">What we do</span><h2 class="h2xl">Five practices, one firm</h2></div>
+      <div class="section-head"><span class="eyebrow gold">What We Do</span><h2 class="h2xl">Five practices, one firm</h2></div>
       ${practiceCards()}
     </section>
     <section class="stack" aria-labelledby="audH">
@@ -3243,7 +3243,7 @@ ${richSummary(st, rows)}`;
     return `<div class="page-head"><div><span class="eyebrow gold">About Afrimetrica</span><h1>An independent, Africa-focused professional services firm</h1><p class="muted" style="max-width:70ch">Afrimetrica is an independent, multidisciplinary professional services firm specialising in data intelligence, research, strategic advisory and executive education, supported by digital solutions.</p></div></div>
       <section class="prose stack" style="gap:12px"><p>We work with governments, businesses, development institutions and civil society organisations to generate credible evidence, solve complex problems, strengthen institutional capabilities and enable better decisions across Africa.</p><p>Through our five practices and our network of researchers, analysts, advisers and executive faculty, we combine analytical rigour, practical tools and knowledge of the contexts our clients work in.</p></section>
       ${slideshow("about")}
-      <section class="stack" aria-labelledby="abPrH"><h2 id="abPrH">What we do</h2>${practiceCards()}</section>
+      <section class="stack" aria-labelledby="abPrH"><h2 id="abPrH">What We Do</h2>${practiceCards()}</section>
       <div class="area-grid">${ABOUT_MENU.slice(1).map(([k, label]) => `<a class="card area-card" href="#about/${k}"><b>${esc(label)}</b><span class="hint">${esc({ team: "The specialists behind Afrimetrica", approach: "How we run assignments, check quality and protect data", organisation: "Our five practices and how they fit together", mission: "Why we exist and what we stand for", vision: "The future we are working towards", certificates: "What our certificates of completion mean" }[k])}</span></a>`).join("")}</div>`;
   }
   function abMission() {
@@ -4098,7 +4098,7 @@ ${richSummary(st, rows)}`;
     if (m === "an-sectors") panel = `<div class="tr-panel-grid">${AN_SECTORS.map((x) => `<a href="#analytics/sector/${x.id}"><b>${esc(x.name)}</b><span>${esc(x.summary)}</span></a>`).join("")}</div>`;
     return `<div class="subnav-inner"><span class="subnav-label">Data &amp; Intelligence</span><div class="subnav-links tr-links">${links}</div></div>${panel ? `<div class="tr-panel" id="trPanel" role="region" aria-label="${m === "an-services" ? "Analytics services" : "Sectors"}"><div class="tr-panel-inner">${panel}</div></div>` : ""}`;
   }
-  const anCrumbs = (...items) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#practices">What we do</a> › <a href="#practices/data-intelligence">Data &amp; Intelligence</a>${items.map(([href, label]) => (href ? ` › <a href="${href}">${esc(label)}</a>` : ` › <span>${esc(label)}</span>`)).join("")}</nav>`;
+  const anCrumbs = (...items) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#practices">What We Do</a> › <a href="#practices/data-intelligence">Data &amp; Intelligence</a>${items.map(([href, label]) => (href ? ` › <a href="${href}">${esc(label)}</a>` : ` › <span>${esc(label)}</span>`)).join("")}</nav>`;
   const anServiceCards = (ids) => `<div class="area-grid">${(ids || AN_SERVICES.map((x) => x.id)).map(anService).map((x) => `<a class="card area-card" href="#analytics/service/${x.id}"><b>${esc(x.name)}</b><span class="hint">${esc(x.summary)}</span></a>`).join("")}</div>`;
   const anForm = (title, message) => enquiryForm("analytics", { title, intro: "Describe your data and what you need to know. We'll reply with an approach, a timeline and a quote.", services: ANALYTICS_SERVICES, budget: true, messageLabel: "Your data and questions", placeholder: "e.g. 1,200 household survey responses in Excel; we need prevalence estimates by region and a regression on food security.", message });
   const anSteps = `<ol class="steps"><li>You tell us your questions and describe your data. Share it securely when we're ready to start.</li><li>We agree an analysis plan, a timeline and a fixed price.</li><li>We clean and analyse the data and check the results.</li><li>You receive tables, charts and a plain-language summary, and we walk you through them.</li></ol>`;
@@ -4213,7 +4213,7 @@ ${richSummary(st, rows)}`;
     if (m === "co-sectors") panel = `<div class="tr-panel-grid">${CO_SECTORS.map((x) => `<a href="#consultancy/sector/${x.id}"><b>${esc(x.name)}</b><span>${esc(x.summary)}</span></a>`).join("")}</div>`;
     return `<div class="subnav-inner"><span class="subnav-label">Research &amp; Advisory</span><div class="subnav-links tr-links">${links}</div></div>${panel ? `<div class="tr-panel" id="trPanel" role="region" aria-label="${m === "co-services" ? "Consultancy services" : "Sectors"}"><div class="tr-panel-inner">${panel}</div></div>` : ""}`;
   }
-  const coCrumbs = (...items) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#practices">What we do</a> › <a href="#consultancy">Research &amp; Advisory</a>${items.map(([href, label]) => (href ? ` › <a href="${href}">${esc(label)}</a>` : ` › <span>${esc(label)}</span>`)).join("")}</nav>`;
+  const coCrumbs = (...items) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#practices">What We Do</a> › <a href="#consultancy">Research &amp; Advisory</a>${items.map(([href, label]) => (href ? ` › <a href="${href}">${esc(label)}</a>` : ` › <span>${esc(label)}</span>`)).join("")}</nav>`;
   const coServiceCards = (ids) => `<div class="area-grid">${(ids || CO_SERVICES.map((x) => x.id)).map(coService).map((x) => `<a class="card area-card" href="#consultancy/service/${x.id}"><b>${esc(x.name)}</b><span class="hint">${esc(x.summary)}</span></a>`).join("")}</div>`;
   const coForm = (title, message) => enquiryForm("consultancy", { title, intro: "Tell us about your project. We'll reply within two working days to arrange a call.", services: CONSULT_SERVICES, budget: true, messageLabel: "About your project", placeholder: "Objectives, target population, locations, deadlines and any terms of reference.", message });
   const coPhases = `<ol class="steps"><li><b>Inception.</b> We agree the questions, scope, methods, timeline and budget, usually in an inception report.</li><li><b>Design.</b> Sampling, tools, ethics approvals and consent procedures.</li><li><b>Data collection.</b> Trained teams, digital tools and daily quality checks.</li><li><b>Analysis.</b> Rigorous analysis, checked before anything is reported.</li><li><b>Reporting and learning.</b> Clear reports, briefs and a presentation, with recommendations you can act on.</li></ol>`;
@@ -4304,12 +4304,12 @@ ${richSummary(st, rows)}`;
   // Which practice each consultancy service belongs to (all analytics services sit in Data & Intelligence).
   const coPractice = (id) => PRACTICES.find((p) => (p.co || []).includes(id)) || PRACTICES[1];
   const PRACTICE_MENU = [["", "Overview"], ...PRACTICES.map((x) => [x.id, x.name])];
-  const prNav = () => `<div class="subnav-inner"><span class="subnav-label">What we do</span><div class="subnav-links">${subLinks("practices", PRACTICE_MENU, S.pr || "")}</div></div>`;
-  const prCrumbs = (label) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#practices">What we do</a> › <span>${esc(label)}</span></nav>`;
+  const prNav = () => `<div class="subnav-inner"><span class="subnav-label">What We Do</span><div class="subnav-links">${subLinks("practices", PRACTICE_MENU, S.pr || "")}</div></div>`;
+  const prCrumbs = (label) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#practices">What We Do</a> › <span>${esc(label)}</span></nav>`;
   const practiceCards = () => `<div class="practice-grid">${PRACTICES.map((x, i) => `<a class="card practice-card" href="#practices/${x.id}"><span class="practice-num" aria-hidden="true">0${i + 1}</span><b>${esc(x.name)}</b><span class="hint">${esc(x.short)}</span></a>`).join("")}</div>`;
   const tickList = (items) => `<ul class="ticks small">${items.map((q) => `<li><div><span>${esc(q)}</span></div></li>`).join("")}</ul>`;
   function prOverview() {
-    return `<div class="page-head"><div><span class="eyebrow gold">What we do</span><h1>Five practices, one firm</h1><p class="muted" style="max-width:70ch">Afrimetrica brings data, research, advice and learning together. Each practice has its own specialists and methods, and they work together on larger assignments, from collecting the evidence to acting on it.</p></div></div>
+    return `<div class="page-head"><div><span class="eyebrow gold">What We Do</span><h1>Five practices, one firm</h1><p class="muted" style="max-width:70ch">Afrimetrica brings data, research, advice and learning together. Each practice has its own specialists and methods, and they work together on larger assignments, from collecting the evidence to acting on it.</p></div></div>
       ${practiceCards()}
       <section class="stack" aria-labelledby="flowH"><div class="section-head"><span class="eyebrow gold">How the practices work together</span><h2 id="flowH" class="h2xl">From evidence to decisions</h2></div>
         <ol class="flow">${[["Collect", "Research & Evaluation designs studies and gathers data; Digital Solutions provides the survey platform.", ["research-evaluation", "digital-solutions"]], ["Analyse", "Data & Intelligence turns data into reliable, clearly explained evidence.", ["data-intelligence"]], ["Advise", "Strategy & Advisory helps leaders decide and act on the evidence.", ["strategy-advisory"]], ["Build capability", "Executive Education develops the skills to sustain the work.", ["executive-education"]]].map(([t, d, ids]) => `<li><b>${esc(t)}</b><span>${esc(d)}</span><span class="flow-links">${ids.map((id) => `<a href="#practices/${id}">${esc(practice(id).name)}</a>`).join(" · ")}</span></li>`).join("")}</ol>
@@ -4322,8 +4322,8 @@ ${richSummary(st, rows)}`;
     const deliver = [...new Set(svc.flatMap(([, s]) => s.deliverables))].slice(0, 6);
     const sectors = x.sectors === "an" ? AN_SECTORS.map((s) => [`#analytics/sector/${s.id}`, s.name]) : CO_SECTORS.map((s) => [`#consultancy/sector/${s.id}`, s.name]);
     const form = x.sectors === "an" ? anForm(`Discuss a ${x.name} project`, `Practice: ${x.name}\n`) : coForm(`Discuss a ${x.name} project`, `Practice: ${x.name}\nOur organisation and project: \nTimeline and location: `);
-    return `${prCrumbs(x.name)}<div class="page-head"><div><span class="eyebrow gold">What we do</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.problem)}</p></div></div>
-      <section class="stack" aria-labelledby="prSvcH"><div class="section-head"><span class="eyebrow gold">What we do</span><h2 id="prSvcH" class="h2xl">Services</h2></div><div class="area-grid">${svc.map(([href, s]) => `<a class="card area-card" href="${href}"><b>${esc(s.name)}</b><span class="hint">${esc(s.summary)}</span></a>`).join("")}</div></section>
+    return `${prCrumbs(x.name)}<div class="page-head"><div><span class="eyebrow gold">What We Do</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.problem)}</p></div></div>
+      <section class="stack" aria-labelledby="prSvcH"><div class="section-head"><span class="eyebrow gold">What We Do</span><h2 id="prSvcH" class="h2xl">Services</h2></div><div class="area-grid">${svc.map(([href, s]) => `<a class="card area-card" href="${href}"><b>${esc(s.name)}</b><span class="hint">${esc(s.summary)}</span></a>`).join("")}</div></section>
       <div class="split">
         <section class="card"><h2>Typical deliverables</h2>${tickList(deliver)}</section>
         <section class="card"><h2>Sectors</h2><nav class="sub-jump" aria-label="${esc(x.name)} sectors">${sectors.map(([href, n]) => `<a href="${href}">${esc(n)}</a>`).join("")}</nav>${x.more.length ? `<h3>More</h3><ul class="ticks small">${x.more.map(([href, l]) => `<li><div><a href="${href}">${esc(l)}</a></div></li>`).join("")}</ul>` : ""}</section>
@@ -4334,7 +4334,7 @@ ${richSummary(st, rows)}`;
   }
   function prExecEd() {
     const x = practice("executive-education");
-    return `${prCrumbs(x.name)}<div class="page-head"><div><span class="eyebrow gold">What we do</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.problem)} ${esc(x.short)}</p></div></div>
+    return `${prCrumbs(x.name)}<div class="page-head"><div><span class="eyebrow gold">What We Do</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.problem)} ${esc(x.short)}</p></div></div>
       <div class="split">
         <section class="card"><h2>What we offer</h2>${tickList([`${CATALOGUE.length} courses in ${GROUPS.length} subject areas, from research methods and data to leadership, strategy, finance and governance`, `Classroom courses in ${VENUES.filter((v) => !v[2]).length} African countries, with further venues in Europe, North America and Asia`, "Live online courses taught in short daily sessions", "In-house programmes tailored to your organisation, sector and data", "Certificates of completion for participants who attend and complete a course"])}<p class="hint">Certificates of completion are not accredited qualifications.</p></section>
         <section class="card"><h2>Subject areas</h2><nav class="sub-jump" aria-label="Subject areas">${GROUPS.map(([g, name]) => `<a href="#training/area/${g}">${esc(name)}</a>`).join("")}</nav></section>
@@ -4343,7 +4343,7 @@ ${richSummary(st, rows)}`;
   }
   function prDigital() {
     const x = practice("digital-solutions");
-    return `${prCrumbs(x.name)}<div class="page-head"><div><span class="eyebrow gold">What we do</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.problem)} ${esc(x.short)}</p></div></div>
+    return `${prCrumbs(x.name)}<div class="page-head"><div><span class="eyebrow gold">What We Do</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.problem)} ${esc(x.short)}</p></div></div>
       <div class="split">
         <section class="card"><h2>Available now</h2>${tickList(["Build questionnaires online, or upload them from Word, PDF or Excel", "Collect responses online, through our participant panel, or face to face with our field teams", "Built-in analysis: charts, group comparisons, statistical tests and Excel exports", "AI-assisted question checks and insight reports, grounded in your own responses", "Clear plans and prices, with answers visible only to the survey's owner"])}</section>
         <section class="card"><h2>Start here</h2><ul class="ticks small"><li><div><a href="#surveys">Afrimetrica Surveys overview</a></div></li><li><div><a href="#create">Create a survey</a></div></li><li><div><a href="#import">Upload a questionnaire</a></div></li><li><div><a href="#paper-survey">Price face-to-face fieldwork</a></div></li><li><div><a href="#pricing">Plans and prices</a></div></li></ul></section>
