@@ -32,6 +32,8 @@ while (queue.length) {
   if (k.startsWith("training/subject/") && info.courses.length === 1) entry.canonical = info.courses[0];
   // The approach page appears under both About and Research & Advisory; About is the main one.
   if (k === "consultancy/approach") entry.canonical = "/about/approach";
+  // About and Executive Education both explain certificates of completion; the Executive Education page is the fuller one.
+  if (k === "about/certificates") entry.canonical = "/training/certificates";
   seen.set(k, entry);
   for (const l of info.links) { const n = keyOf(l); if (n !== null && !seen.has(n)) queue.push(n); }
 }

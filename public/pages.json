@@ -21,7 +21,8 @@
   "path": "/about/certificates",
   "title": "Certificates of completion | Afrimetrica",
   "description": "Certificates of completion: Afrimetrica Executive Education issues certificates of completion. They confirm that a participant attended and completed a course, and show the course title, its length, the dates and the venue (or \"live online\").",
-  "h1": "Certificates of completion"
+  "h1": "Certificates of completion",
+  "canonical": "/training/certificates"
  },
  {
   "path": "/about/mission",

@@ -97,9 +97,10 @@ for (const id of ["data-intelligence", "research-evaluation", "strategy-advisory
 }
 check("the home page uses the new positioning", /<title>Afrimetrica — Data, Research, Advisory and Executive Education<\/title>/.test(homeHtml) && homeHtml.includes('<meta name="description" content="An independent, Africa-focused professional services firm specialising in data intelligence, research, strategic advisory and executive education'));
 const pageSrc = readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
-check("the main menu has Practices, Executive Education and Insights", pageSrc.includes('["practices", "Practices"], ["training", "Executive Education"]') && pageSrc.includes('["resources", "Insights"]'));
+check("the main menu has Our Practices, Executive Education and Insights", pageSrc.includes('["practices", "Our Practices"], ["training", "Executive Education"]') && pageSrc.includes('["resources", "Insights"]'));
 check("old unit names are gone from the pages", !/Afrimetrica (Consulting|Analytics|Academy)|Knowledge Hub/.test(pageSrc));
 check("the approach page under Research & Advisory points to About", (await (await fetch(base + "/consultancy/approach")).text()).includes('<link rel="canonical" href="https://surveyspider.test/about/approach">'));
+check("the certificates page under About points search engines to the Executive Education one", (await (await fetch(base + "/about/certificates")).text()).includes('<link rel="canonical" href="https://surveyspider.test/training/certificates">') && !smText.includes("<loc>https://surveyspider.test/about/certificates</loc>"));
 check("old addresses still open (no page removed)", (await fetch(base + "/analytics/service/statistics")).status === 200 && (await fetch(base + "/consultancy/service/policy")).status === 200 && (await fetch(base + "/about/team")).status === 200);
 check("production pages are indexable", !(await fetch(base + "/")).headers.get("x-robots-tag") && !homeHtml.includes('content="noindex'));
 process.env.NOINDEX = "1";
