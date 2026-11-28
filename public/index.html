@@ -5472,23 +5472,33 @@ ${richSummary(st, rows)}`;
 
     // 2. Walk the lines.
     const qs = [], pre = [];
-    let cur = null, lastN = 0, section = null, scaleMode = false, labels = null, pending = "", contact = false, legendBuf = "";
+    let cur = null, lastN = 0, section = null, scaleMode = false, labels = null, pending = "", contact = false, legendBuf = "", instrOpen = false;
     const newQ = (q) => { if (section) { q.section = { title: section.title, text: section.text.join(" ").slice(0, 1000), ...(section.sub ? { sub: section.sub } : {}) }; section = null; } qs.push(q); cur = q; return q; };
     const startQ = (text) => { const m = String(text).match(/^\s*(?:Q(?:uestion)?\s*)?(\d{1,3})\s*[.)]\s+(.+)$/i); if (m) lastN = +m[1]; return newQ({ text: cleanQ(m ? m[2] : text), options: [] }); };
     const addOpt = (text) => { const o = cleanOpt(text); if (o && cur.options.length < 40 && !cur.options.includes(o)) cur.options.push(o); };
     const optionLike = (text) => cur && !cur.fixed && text.length < 90 && !/\?\s*$/.test(text) && (cur.options.length > 0 || /[?:]\s*$/.test(cur.text) || /\((please )?(select|tick|choose|check|circle)/i.test(cur.text));
     const scaleItem = (text, sc) => {
-      const t = cleanQ(text).replace(/^\d{1,3}\s*[.)]\s*/, "").replace(/^[a-z]\)\s*/i, "");
+      let t = cleanQ(text);
+      const sub = t.match(/^([A-Z][^.?!:\d]{2,60}?)\s+\d{1,2}\s*[.)]\s+([A-Z].*)$/);
+      if (sub && sub[1].split(/\s+/).length <= 7) { if (section) section.sub = sub[1].trim(); else section = { title: "", text: [], sub: sub[1].trim() }; t = sub[2]; }
+      t = t.replace(/^\d{1,3}\s*[.)]\s*/, "").replace(/^[a-z]\)\s*/i, "");
       if (t.length < 2) return;
       newQ({ text: t, options: [], fixed: true, type: "rating", scale: { min: sc.min, max: sc.max, ...(labels || { minLabel: "", maxLabel: "" }) } });
     };
     let lastScale = { min: 1, max: 5 };
-    const flushPending = () => { if (pending && scaleMode && pending.length > 12) scaleItem(pending, lastScale); pending = ""; };
+    // "Preparing Employees for Change": a few capitalised words with no full stop read as a title, not a statement
+    const isTitle = (t) => { const w = t.trim().split(/\s+/); return w.length <= 7 && !/[.!?:,;]\s*$/.test(t) && w.every((x) => /^[A-Z&(]/.test(x) || /^(?:and|or|of|for|the|to|in|on|at|with|a|an)$/.test(x)); };
+    const flushPending = () => {
+      if (pending && scaleMode && isTitle(pending)) { if (section) section.sub = cleanQ(pending); else section = { title: "", text: [], sub: cleanQ(pending) }; }
+      else if (pending && scaleMode && pending.length > 12) scaleItem(pending, lastScale);
+      pending = "";
+    };
     const beginSection = (title) => { flushPending(); section = { title: cleanQ(title), text: [] }; scaleMode = false; cur = null; contact = false; };
     const isContact = (l) => RX_EMAIL.test(l) || RX_PHONE.test(l) || RX_NOISE.test(l) || RX_TITLE_DEGREE.test(l);
     const isLegend = (l) => { const w = l.replace(/[,.;:()]/g, " ").split(/\s+/).filter(Boolean); return w.length > 0 && w.length <= 14 && w.every((x) => LEGEND_WORD.test(x)) && /(agree|satisf|likely|important|never|always|neutral|strongly|neither)/i.test(l); };
     const upperShare = (l) => { const letters = l.replace(/[^A-Za-z]/g, ""); return letters.length ? letters.replace(/[^A-Z]/g, "").length / letters.length : 0; };
 
+    let subOpen = false;
     for (let line of lines) {
       let kind = "";
       if (line[0] === "\u0001") { kind = "num"; line = line.slice(1).trim(); }
@@ -5503,6 +5513,12 @@ ${richSummary(st, rows)}`;
         if (upperShare(flat) < 0.6 && flat.length < 60 && !/\?/.test(flat) && !RX_SCALE_END.test(flat) && !RX_SECTION.test(flat) && !RX_NUM.test(flat) && !isLegend(flat)) continue;
         contact = false;
       }
+      // The rest of an instruction that wrapped onto this line.
+      if (instrOpen && section && section.text.length && /^[a-z(]/.test(flat) && !RX_SCALE_END.test(flat)) {
+        section.text[section.text.length - 1] = cleanQ(section.text[section.text.length - 1] + " " + flat);
+        instrOpen = !/[.!?:]\s*$/.test(flat); continue;
+      }
+      instrOpen = false;
       // Section headings.
       if (RX_SECTION.test(flat) || (kind === "heading" && qs.length) || (flat.length >= 8 && flat.length <= 140 && upperShare(flat) > 0.85 && !/\?\s*$/.test(flat) && !RX_SCALE_END.test(flat) && /[A-Z]{3}/.test(flat) && (qs.length || pending || scaleMode))) {
         if (!qs.length && !RX_SECTION.test(flat) && kind !== "heading") { pre.push(flat); continue; }
@@ -5511,46 +5527,51 @@ ${richSummary(st, rows)}`;
       }
       if (kind === "heading") { pre.push(flat); continue; }
       // Scale legends: remember the end labels, never show them as options.
-      if (isLegend(flat) && !(cur && !cur.fixed && /[?:]\s*$/.test(cur.text) && !cur.options.length) && !(cur && !cur.fixed && cur.options.length && cur.options.every((x) => LIKERT_WORDS.test(x)))) { legendBuf = (legendBuf + " " + flat).trim(); labels = legendLabels(legendBuf) || labels; scaleMode = true; continue; }
+      const legendPiece = !isLegend(flat) && (legendBuf || section || scaleMode) && !pending && (() => { const w = flat.replace(/[,.;:()]/g, " ").split(/\s+/).filter(Boolean); return w.length && w.length <= 3 && w.every((x) => LEGEND_WORD.test(x)); })();
+      if ((isLegend(flat) || legendPiece) && !(cur && !cur.fixed && /[?:]\s*$/.test(cur.text) && !cur.options.length) && !(cur && !cur.fixed && cur.options.length && cur.options.every((x) => LIKERT_WORDS.test(x)))) { legendBuf = (legendBuf + " " + flat).trim(); labels = legendLabels(legendBuf) || labels; scaleMode = true; continue; }
       legendBuf = "";
       // Instructions for a block of questions.
       if (RX_INSTRUCT.test(flat) && !/\?\s*$/.test(flat) && !RX_SCALE_END.test(flat)) {
         if (!qs.length && !section && !pending) { pre.push(flat); continue; }
         flushPending();
         if (!section) section = { title: "", text: [] };
-        section.text.push(cleanQ(flat));
+        section.text.push(cleanQ(flat)); instrOpen = !/[.!?:]\s*$/.test(flat);
         labels = legendLabels(flat) || labels;
         if (/(agree|statement|scale|circle|rate)/i.test(flat)) scaleMode = true;
         continue;
       }
       // Statements rated on a numbered scale: "In this firm we … 1 2 3 4 5 6 7" (possibly wrapped over lines).
       const se = flat.match(RX_SCALE_END), run = se && scaleRun(se[2]);
+      if (run || !scaleMode) subOpen = false;
       if (run && !/\?\s*$/.test(se[1]) && (se[1].trim() || pending)) {
         const t = se[1].trim();
         // a new sentence after a finished one: the finished one was an item whose numbers were lost
-        if (pending && t && /[.!]\s*$/.test(pending) && /^[A-Z]/.test(t)) flushPending();
+        if (pending && t && (/[.!]\s*$/.test(pending) && /^[A-Z]/.test(t) || /^\d{1,2}\s*[.)]\s+\S/.test(t))) flushPending();
         lastScale = run; scaleMode = true;
         scaleItem((pending + " " + t).trim(), run); pending = "";
         continue;
       }
       if (run && !se[1].trim()) { continue; } // a lone "1 2 3 4 5" line with nothing waiting
-      if (scaleMode && kind !== "num" && !/\?\s*$/.test(flat) && !/[:]\s*$/.test(flat) && !/\t/.test(line)) {
+      const optRow = /\t/.test(line) && /[?:]\s*$/.test(line.split("\t")[0].trim());
+      if (scaleMode && !/\?\s*$/.test(flat) && !/[:]\s*$/.test(flat) && !optRow) {
         // inside a block of rated statements: collect wrapped text until its numbers arrive
-        if (pending && /[.!]\s*$/.test(pending) && /^[A-Z]/.test(flat)) flushPending();
+        if (pending && (/[.!]\s*$/.test(pending) && /^[A-Z]/.test(flat) || /^\d{1,2}\s*[.)]\s+\S/.test(flat))) flushPending();
+        else if (subOpen && !pending && flat.length < 40 && isTitle(flat) && section && section.sub && isTitle(section.sub + " " + flat)) { section.sub = cleanQ(section.sub + " " + flat); continue; }
         else if (!pending && flat.length < 60 && !/[.!]\s*$/.test(flat) && /^[A-Z][^.]*$/.test(flat) && upperShare(flat) < 0.85 && (!cur || cur.fixed) && flat.split(/\s+/).length <= 6) {
           // a short title inside a block of statements ("Preparing Employees for Change") is a sub-heading
-          if (section) section.sub = cleanQ(flat); else section = { title: "", text: [], sub: cleanQ(flat) };
-          continue;
+          if (section) section.sub = subOpen && section.sub ? cleanQ(section.sub + " " + flat) : cleanQ(flat); else section = { title: "", text: [], sub: cleanQ(flat) };
+          subOpen = true; continue;
         }
         pending = (pending + " " + flat).trim();
         continue;
       }
       flushPending();
-      if (scaleMode && (/\?\s*$/.test(flat) || /:\s*$/.test(flat) || /\t/.test(line) || kind === "num")) scaleMode = false;
+      if (scaleMode && (/\?\s*$/.test(flat) || /:\s*$/.test(flat) || optRow)) scaleMode = false;
 
       // Tab-separated pieces: "Your gender:\tFemale\tMale", "Company size\tLess than 100\t101–200".
       if (/\t/.test(line)) {
         const parts = line.split("\t").map((x) => x.trim()).filter(Boolean);
+        if (parts.length > 1 && /^(?:Q(?:uestion)?\s*)?\d{1,3}\s*[.):]?$/i.test(parts[0])) parts.splice(0, 2, parts[0] + " " + parts[1]); // "1." in its own column
         const head = parts[0], rest = parts.slice(1);
         const numbered = RX_NUM.test(head) && !/^\d+\s*[-–]\s*\d/.test(head);
         if (cur && !cur.fixed && cur.options.length && !/[?:]\s*$/.test(head) && !numbered && parts.every((x) => x.length <= 80)) { parts.forEach(addOpt); continue; }

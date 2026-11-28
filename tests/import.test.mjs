@@ -101,5 +101,31 @@ check("legend pieces on separate lines give the end labels and no sub-heading", 
 check("wide gaps between options split them", pdf.questions[2].text === "Ownership structure:" && pdf.questions[2].options.join("|") === "State owned|Non-state owned", pdf.questions[2]);
 check("a closing sentence wrapped onto the next line is dropped", pdf.questions[3].text === "Your age?" && pdf.questions.length === 4, pdf.questions.slice(3));
 
+// --- statements numbered in their own column, wrapped with the numbers on the second line (as in a real upload) ---
+const T = "\t1\t2\t3\t4\t5\t6\t7";
+const cols = parseQuestionnaire(["SURVEY OF FIRMS", "Thank you for taking part.",
+  "SECTION II: REGARDING YOUR STRATEGIC CHANGE CAPABILITY",
+  "To what extent do you agree or disagree with the following statements relating how your firm", "prepare employees for change. Please circle the number that best", "represents your opinion.",
+  "I strongly\tI neither agree\tI strongly", "disagree\tnor disagree\tagree",
+  "Preparing Employees for Change\t1.\tIn this firm we ccommunicate the change vision across our firm" + T,
+  "2.\tIn this firm we eexplain the reasons for making the change and its benefits", "for our firm" + T,
+  "3.\tIn this firm we showcase to our employees how the change can potentially", "benefit them" + T,
+  "4.\tIn this firm we are responsive to employees' questions/concerns regarding", "the change" + T,
+  "5.\tIn this firm we involve employees in planning the change" + T,
+  "SECTION III: ABOUT YOU", "1.\tYour gender:\tFemale\tMale"], "file");
+const cq = cols.questions, crated = cq.filter((q) => q.type === "rating");
+check("numbered statements in a column: every statement gets the 1–7 scale", crated.length === 5 && crated.every((q) => q.scale.max === 7 && q.scale.minLabel === "Strongly disagree"), cq.map((q) => [q.type, q.text]));
+check("numbered statements: wrapped halves are joined, numbers removed", crated[1] && crated[1].text === "In this firm we eexplain the reasons for making the change and its benefits for our firm" && crated[2].text === "In this firm we showcase to our employees how the change can potentially benefit them" && crated[3].text === "In this firm we are responsive to employees' questions/concerns regarding the change", crated.map((q) => q.text));
+check("an instruction wrapped over lines stays one instruction", /best represents your opinion\.$/.test(crated[0].section.text) && !cq.some((q) => /represents your opinion/.test(q.text)), crated[0].section);
+check("a sub-heading on the same line as statement 1 is separated", crated[0].section.sub === "Preparing Employees for Change" && crated[0].text === "In this firm we ccommunicate the change vision across our firm", crated[0]);
+check("after the statements, the next section reads normally", cq[cq.length - 1].text === "Your gender:" && cq[cq.length - 1].options.join("|") === "Female|Male", cq[cq.length - 1]);
+
+// --- a PDF that gives the legend and a sub-heading one word or cell at a time ---
+const pieces = parseQuestionnaire(["SURVEY OF FIRMS", "Thank you for taking part.", "SECTION II: ABOUT CHANGE", "To what extent do you agree or disagree with the following statements.",
+  "I", "strongly", "disagree", "I neither", "agree", "nor disagree", "I", "strongly", "agree", "Preparing", "Employees for", "Change",
+  "1.\tIn this firm we communicate the change vision" + T, "2.\tIn this firm we explain the reasons for the change and its", "benefits" + T], "file");
+check("a legend given word by word gives the labels and no question", pieces.questions.length === 2 && pieces.questions[0].scale.minLabel === "Strongly disagree", pieces.questions.map((q) => q.text));
+check("a sub-heading wrapped over three lines is kept whole", pieces.questions[0].section.sub === "Preparing Employees for Change", pieces.questions[0].section);
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
