@@ -3040,7 +3040,7 @@ ${richSummary(st, rows)}`;
   // ================= AFRIMETRICA: institution pages, Academy, enquiries, account, admin =================
   // Main menu. Analytics and Consultancy pages keep their addresses and sit under Practices (Data & Intelligence,
   // Research & Evaluation, Strategy & Advisory); Training is the Executive Education practice; Resources is Insights.
-  const TOPNAV = [["home", "Home"], ["about", "About"], ["practices", "What We Do"], ["training", "Executive Education"], ["surveys", "Surveys"], ["resources", "Insights"], ["contact", "Contact"], ["account", "My Account"]];
+  const TOPNAV = [["home", "Home"], ["about", "About Us"], ["practices", "What We Do"], ["training", "Executive Education"], ["surveys", "Surveys"], ["resources", "Insights"], ["contact", "Contact"], ["account", "My Account"]];
   const SURVEY_NAV = [["surveys", "Overview"], ["create", "Create"], ["import", "Upload"], ["paper-survey", "Paper surveys"], ["studies", "My surveys"], ["results", "Analyze"], ["panel", "Take surveys"], ["pricing", "Plans"]];
   const ROUTES = new Set([...TOPNAV.map(([k]) => k), ...SURVEY_NAV.map(([k]) => k), "analytics", "consultancy", "signin", "business", "privacy", "terms"]);
   const CUR = { USD: "US$", GHS: "GH₵", GBP: "£", EUR: "€" };
@@ -3234,7 +3234,7 @@ ${richSummary(st, rows)}`;
   const ACCOUNT_MENU = [["", "Overview"], ["courses", "My courses"], ["surveys", "My surveys"], ["enquiries", "My enquiries"], ["profile", "My profile"]];
   const accNav = () => `<div class="subnav-inner"><span class="subnav-label">My Account</span><div class="subnav-links">${subLinks("account", ACCOUNT_MENU, S.acc || "")}${S.isOwner ? `<a href="#business">Admin area</a>` : ""}</div></div>`;
   const abNav = () => `<div class="subnav-inner"><span class="subnav-label">About Afrimetrica</span><div class="subnav-links">${subLinks("about", ABOUT_MENU, S.ab || "")}</div></div>`;
-  const abCrumbs = (label) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#about">About</a> › <span>${esc(label)}</span></nav>`;
+  const abCrumbs = (label) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#about">About Us</a> › <span>${esc(label)}</span></nav>`;
   const AB_MISSION = "To help governments, businesses, development institutions and civil society organisations make better decisions and deliver results, by providing reliable data, credible research and practical advice, and by building their people's skills.";
   const AB_VISION = "An Africa where every organisation, government and NGO has the data, evidence and skilled people it needs to make good decisions and deliver results.";
   const AB_VALUES = [["Rigour", "Methods and advice that are sound, transparent and honestly reported."], ["Practicality", "Training and solutions that work in real organisations, field conditions and budgets."], ["Evidence-led leadership", "Helping leaders use data and evidence to set priorities and make decisions."], ["Ethics and data protection", "Respect for participants, informed consent and careful handling of personal data."], ["Building capacity", "Leaving people and organisations more skilled, and more independent, than we found them."]];
