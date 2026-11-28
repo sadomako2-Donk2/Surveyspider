@@ -54,9 +54,9 @@ export const TEAM: TeamMember[] = [
   {
     id: "stephen-kehinde-medase",
     name: "Stephen Kehinde Medase, PhD",
-    role: "Analyst",
+    role: "Analyst, Market Intelligence",
     photo: "stephen-kehinde-medase.webp",
-    bio: "Stephen Kehinde Medase, PhD, is an Analyst at Afrimetrica and Senior Research Associate at the University of Johannesburg. He holds an MSc and PhD from Friedrich Schiller University Jena, Germany, and researches entrepreneurship, innovation and firm growth, publishing in journals including the Journal of Innovation & Knowledge.",
+    bio: "Stephen Kehinde Medase, PhD, is a Market Intelligence Analyst at Afrimetrica and Senior Research Associate at the University of Johannesburg. He holds an MSc and PhD from Friedrich Schiller University Jena, Germany, and researches entrepreneurship, innovation and firm growth, publishing in journals including the Journal of Innovation & Knowledge.",
   },
 ];
 
