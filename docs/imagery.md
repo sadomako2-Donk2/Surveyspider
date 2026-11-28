@@ -8,7 +8,7 @@ Rules followed:
 - No image shows or implies Afrimetrica staff, clients, participants, projects or offices. No alt text names anyone.
 - Each image appears on one page, except P05, which is used on two pages of the same practice (Research & Evaluation and its Fieldwork service).
 - Desktop: text and image side by side, about 50/50, 4:3 images. Under 860 px: text first, then the image (16:10).
-- Slideshows (owner's request): each page's image slot cycles through the photos every 5 seconds, starting with that page's own picture. There is a Pause button; it starts paused for people who ask for reduced motion; only the photo on show is downloaded with the page. About and Contact cycle through real photos only. Screenshots (Digital Solutions, Surveys) stay still. No overlays.
+- Slideshows (owner's request): every image slot on the public pages cycles through its photos every 5 seconds, starting with that section's own picture. There is a Pause button; it starts paused for people who ask for reduced motion; only the photo on show is downloaded with the page. About and Contact cycle through real photos only. Screenshots (Digital Solutions, Surveys) stay still. No overlays.
 
 ## Manifest
 
@@ -46,18 +46,24 @@ The screenshots were taken from a local copy of the site with a throwaway accoun
 
 ## All guide pictures in use (owner's request)
 
-The owner asked for all 20 pictures (P01–P19 and the Memorial Park photo) to be used. Each page's slideshow (`SLIDE_SETS` in `public/index.html`) shows:
+The owner asked for all 20 pictures (P01–P19 and the Memorial Park photo) to be used, and for every picture to be a slideshow. Each slideshow is a set in `SLIDE_SETS` (`public/index.html`); each has its own Pause button and starts paused for people who ask for reduced motion.
 
-| Slideshow (page) | Photos, in order |
+| Slideshow (page, place) | Photos, in order |
 |---|---|
-| Home | P01, P02, P08, P07, P19 |
-| About Us | Memorial Park (drummers), P13, P18, Memorial Park (monument) |
-| Contact | Memorial Park (monument), P07, P18, P19, Memorial Park (drummers) |
+| Home, hero | P01, P02, P08, P07, P19 |
+| About Us, opening | Memorial Park (drummers), P13, P18, Memorial Park (monument) |
+| Contact, opening | Memorial Park (monument), P07, P18, P19, Memorial Park (drummers) |
+| Executive Education tab, opening | P03, P11, P12, P13 |
+| Executive Education tab, in-house training | training-executive, P16, P02 |
+| Training venues | Memorial Park (monument), P18, P07, P19 |
 | Executive Education practice | P03, P11, P12, training-executive |
-| Data & Intelligence | P04, P14, analytics-team |
+| Data & Intelligence, opening / how we work | P04, P14, P09 / analytics-team, P17, P15 |
 | Research & Evaluation | P05, P15, consultancy-workshop |
+| Fieldwork service | P05, consultancy-workshop, P15 |
+| Research & Advisory hub, sectors | consultancy-workshop, P06, P05, P16 |
 | Strategy & Advisory | P06, P16, P17, P10 |
 | Digital Solutions | builder screenshot, results screenshot, P09 |
+| Surveys | results screenshot, builder screenshot |
 
 Notes:
 - P08 and P10 were marked "do not publish" in the guide; they are used at the owner's request, captioned "Illustrative image", and P10 never appears on Our People or beside profiles.

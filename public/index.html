@@ -513,10 +513,12 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
 .hero-photo img, .intro-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius-l, 18px); display: block; background: var(--surface); box-shadow: var(--shadow-1, 0 1px 3px rgba(14,29,58,.12)); }
 .img-note { font-size: .75rem; color: var(--muted); }
 .slide-note:empty { display: none; }
+.side-photo.slideshow { margin: 0; }
+.wide-shot .slide-box { aspect-ratio: 16 / 9; border: 1px solid var(--line); }
 .slide-box { position: relative; overflow: hidden; border-radius: var(--radius-l, 18px); aspect-ratio: 4 / 3; background: var(--surface); box-shadow: var(--shadow-1, 0 1px 3px rgba(14,29,58,.12)); }
 .slideshow .slides { display: flex; height: 100%; transition: transform .8s ease; }
 .slideshow .slide { flex: 0 0 100%; height: 100%; }
-.hero-photo.slideshow .slide img, .intro-photo.slideshow .slide img { width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; display: block; border-radius: 0; box-shadow: none; }
+.slideshow .slide img { width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; display: block; border-radius: 0; box-shadow: none; }
 .slide-ctl { position: absolute; left: 50%; transform: translateX(-50%); bottom: 10px; display: flex; align-items: center; gap: 0; background: rgba(14,29,58,.62); border-radius: 999px; padding: 3px 8px 3px 3px; width: max-content; max-width: calc(100% - 16px); }
 .slide-ctl button { border: 0; cursor: pointer; }
 .slide-dot { width: 24px; height: 24px; border-radius: 50%; background: transparent; display: grid; place-items: center; padding: 0; }
@@ -568,7 +570,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
 .tr-panel-grid a span { color: var(--muted); font-size: .82rem; }
 .crumbs { font-size: .85rem; color: var(--muted); }
 .crumbs a { color: var(--muted); }
-.quick-find { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; }
+.quick-find { display: flex; flex-direction: row; flex-wrap: wrap; gap: 12px; align-items: end; }
 .quick-find label { flex: 1 1 320px; }
 .area-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
 .area-card { display: grid; gap: 6px; text-decoration: none; color: var(--ink); border-left: 3px solid var(--gold); }
@@ -1271,7 +1273,7 @@ html { scroll-padding-top: calc(var(--header-h, 110px) + 16px); }
         <div class="rm-rec"><b>Recommendation</b>Add a 30-minute workplace practice task to each module, then re-survey in 6 weeks.</div>
       </div>
     </section>
-    ${pic("shotResults", "wide-shot")}
+    ${slideshow("surveysShots", "wide-shot", false)}
     <section class="stats" aria-label="Platform activity">
       <div class="stat"><span class="v">${int(live)}</span><span class="l">Surveys open now</span></div>
       <div class="stat"><span class="v">${int(S.responses.length)}</span><span class="l">Responses collected</span></div>
@@ -3094,63 +3096,69 @@ ${richSummary(st, rows)}`;
     shotBuilder: ["screen-builder.webp", "Screenshot of the Afrimetrica Surveys questionnaire builder, showing a sample questionnaire", "top left", "Screenshot of Afrimetrica Surveys with sample data", true],
     shotResults: ["screen-results.webp", "Screenshot of Afrimetrica Surveys results, with charts for a sample survey", "top left", "Screenshot of Afrimetrica Surveys with sample data", true],
   };
-  // One image in a figure. Large images get a 640px copy for phones; the first image on a page loads straight away.
-  const pic = (k, cls = "side-photo", first = false) => {
-    const [f, alt, pos, rights, small] = PHOTO[k], src = `/photos/${f}`;
-    const set = small ? ` srcset="${src.replace(".webp", "-640.webp")} 640w, ${src} 1200w" sizes="${cls === "wide-shot" ? "(max-width: 992px) calc(100vw - 32px), 960px" : "(max-width: 860px) calc(100vw - 32px), 600px"}"` : "";
-    const note = rights.startsWith("AI") ? `<figcaption class="img-note">Illustrative image</figcaption>` : rights.startsWith("Screenshot") ? `<figcaption class="img-note">Afrimetrica Surveys, shown with sample data</figcaption>` : "";
-    return `<figure class="${cls}"><img src="${src}"${set} alt="${esc(alt)}" ${first ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" style="object-position:${pos}">${note}</figure>`;
-  };
-  const sidePhoto = (k, cls) => pic(k, cls);
-  // A page introduction with its image: text on the left, image on the right; text first on small screens.
-  // Slideshows in each page's image slot: the page's own picture first, then the others in a fixed order.
-  // About and Contact show real photographs only (no AI illustrations, no screenshots).
-  // Which photos each slideshow shows (the first is the page's own picture). Every photo is used, mostly once.
-  // About and Contact show real photographs only; P10 (AI) never appears beside people's profiles.
+  // Every picture on the public pages is a slideshow. Each set lists its photos in order; the first is that
+  // section's own picture. About, Contact and Training venues show real photographs only; P10 (AI) never
+  // appears beside people's profiles.
   const SLIDE_SETS = {
     hero: ["hero", "team2", "district", "waterfront", "highRise"],
     about: ["about", "groupPres", "skyline", "venuesCity"],
-    venuesCity: ["venuesCity", "waterfront", "skyline", "highRise", "about"],
+    contact: ["venuesCity", "waterfront", "skyline", "highRise", "about"],
+    venues: ["venuesCity", "skyline", "waterfront", "highRise"],
+    trainingIntro: ["execEd", "meeting", "whiteboard", "groupPres"],
+    trainingSide: ["trainingExec", "laptopMeeting", "team2"],
     execEd: ["execEd", "meeting", "whiteboard", "trainingExec"],
-    dataIntel: ["dataIntel", "pieCharts", "analyticsTeam"],
+    dataIntel: ["dataIntel", "pieCharts", "digital"],
+    dataIntelSide: ["analyticsTeam", "fourColleagues", "papers"],
     research: ["research", "papers", "coWorkshop"],
+    fieldwork: ["research", "coWorkshop", "papers"],
+    consultancySide: ["coWorkshop", "advisory", "research", "laptopMeeting"],
     advisory: ["advisory", "laptopMeeting", "fourColleagues", "execGroup"],
     shotBuilder: ["shotBuilder", "shotResults", "digital"],
+    surveysShots: ["shotResults", "shotBuilder"],
   };
+  // The slideshow that stands in for each photo placed beside a section.
+  const SIDE_SET = { trainingExec: "trainingSide", venuesCity: "venues", analyticsTeam: "dataIntelSide", coWorkshop: "consultancySide", research: "fieldwork" };
   const slideNote = (k) => { const r = PHOTO[k][3]; return r.startsWith("AI") ? "Illustrative image" : r.startsWith("Screenshot") ? "Afrimetrica Surveys, shown with sample data" : ""; };
-  let slideOrder = [], slideIdx = 0, slideFirst = "", slidePaused = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
-  const slideshow = (k, cls = "intro-photo") => {
-    const order = SLIDE_SETS[k] || [k];
-    if (k !== slideFirst) { slideFirst = k; slideIdx = 0; }
-    slideOrder = order;
+  // Each slideshow keeps its own position and its own Pause button. They start paused for people who ask their
+  // device to reduce motion.
+  const reduceMotion = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+  const slideState = {}, slideSt = (name) => slideState[name] || (slideState[name] = { i: 0, paused: reduceMotion });
+  let slideView = "";
+  const slideshow = (name, cls = "intro-photo", first = true) => {
+    const order = SLIDE_SETS[name], st = slideSt(name);
+    if (slideView !== S.view + "/" + (location.pathname || "")) { slideView = S.view + "/" + (location.pathname || ""); for (const k in slideState) slideState[k].i = 0; }
+    const wide = cls === "wide-shot", sizes = wide ? "(max-width: 992px) calc(100vw - 32px), 960px" : "(max-width: 860px) calc(100vw - 32px), 600px";
     const slides = order.map((x, i) => {
-      const [f, alt, pos, , small] = PHOTO[x], src = `/photos/${f}`, on = i === slideIdx;
-      const set = small ? ` ${on ? "srcset" : "data-srcset"}="${src.replace(".webp", "-640.webp")} 640w, ${src} 1200w" sizes="(max-width: 860px) calc(100vw - 32px), 600px"` : "";
-      return `<div class="slide" role="group" aria-roledescription="slide" aria-label="${i + 1} of ${order.length}"${on ? "" : ' aria-hidden="true"'}><img ${on ? "src" : "data-src"}="${src}"${set} alt="${esc(alt)}" decoding="async"${i === 0 ? ' fetchpriority="high"' : ""} style="object-position:${pos}"></div>`;
+      const [f, alt, pos, , small] = PHOTO[x], src = `/photos/${f}`, on = i === st.i;
+      const set = small ? ` ${on ? "srcset" : "data-srcset"}="${src.replace(".webp", "-640.webp")} 640w, ${src} 1200w" sizes="${sizes}"` : "";
+      const prio = on ? (first ? ' fetchpriority="high"' : ' loading="lazy"') : "";
+      return `<div class="slide" role="group" aria-roledescription="slide" aria-label="${i + 1} of ${order.length}"${on ? "" : ' aria-hidden="true"'}><img ${on ? "src" : "data-src"}="${src}"${set} alt="${esc(alt)}" decoding="async"${prio} style="object-position:${pos}"></div>`;
     }).join("");
-    return `<figure class="${cls} slideshow" aria-roledescription="carousel" aria-label="Photos"><div class="slide-box"><div class="slides" style="transform:translateX(-${slideIdx * 100}%)">${slides}</div>
-      <div class="slide-ctl"><button class="slide-play" data-act="slidePause" aria-pressed="${slidePaused}">${slidePaused ? "Play" : "Pause"}</button>${order.map((_, i) => `<button class="slide-dot" data-act="slideGo" data-i="${i}" aria-label="Show photo ${i + 1}"${i === slideIdx ? ' aria-current="true"' : ""}></button>`).join("")}</div></div>
-      <figcaption class="img-note slide-note">${slideNote(order[slideIdx])}</figcaption></figure>`;
+    return `<figure class="${cls} slideshow" data-show="${name}" aria-roledescription="carousel" aria-label="Photos"><div class="slide-box"><div class="slides" style="transform:translateX(-${st.i * 100}%)">${slides}</div>
+      <div class="slide-ctl"><button class="slide-play" data-act="slidePause" data-show="${name}" aria-pressed="${st.paused}">${st.paused ? "Play" : "Pause"}</button>${order.map((_, i) => `<button class="slide-dot" data-act="slideGo" data-show="${name}" data-i="${i}" aria-label="Show photo ${i + 1}"${i === st.i ? ' aria-current="true"' : ""}></button>`).join("")}</div></div>
+      <figcaption class="img-note slide-note">${slideNote(order[st.i])}</figcaption></figure>`;
   };
+  const sidePhoto = (k, cls = "side-photo") => slideshow(SIDE_SET[k], cls, false);
+  const slideBox = (name) => document.querySelector(`.slideshow[data-show="${name}"]`);
   // Only the photo on show is downloaded with the page; the next one is fetched shortly before its turn.
-  function loadSlide(j) {
-    const imgs = document.querySelectorAll(".slideshow .slide img"), img = imgs[(j + imgs.length) % (imgs.length || 1)];
+  function loadSlide(box, j) {
+    const imgs = box.querySelectorAll(".slide img"), img = imgs[(j + imgs.length) % (imgs.length || 1)];
     if (img && img.dataset.src) { if (img.dataset.srcset) { img.srcset = img.dataset.srcset; img.removeAttribute("data-srcset"); } img.src = img.dataset.src; img.removeAttribute("data-src"); }
   }
-  function showSlide(i) {
-    const box = document.querySelector(".slideshow"); if (!box || !slideOrder.length) return;
-    slideIdx = (i + slideOrder.length) % slideOrder.length;
-    loadSlide(slideIdx); loadSlide(slideIdx + 1);
-    box.querySelector(".slides").style.transform = `translateX(-${slideIdx * 100}%)`;
-    box.querySelectorAll(".slide").forEach((s, j) => (j === slideIdx ? s.removeAttribute("aria-hidden") : s.setAttribute("aria-hidden", "true")));
-    box.querySelectorAll(".slide-dot").forEach((d, j) => (j === slideIdx ? d.setAttribute("aria-current", "true") : d.removeAttribute("aria-current")));
-    box.querySelector(".slide-note").textContent = slideNote(slideOrder[slideIdx]);
+  function showSlide(name, i) {
+    const box = slideBox(name), order = SLIDE_SETS[name]; if (!box || !order) return;
+    const st = slideSt(name); st.i = (i + order.length) % order.length;
+    loadSlide(box, st.i); loadSlide(box, st.i + 1);
+    box.querySelector(".slides").style.transform = `translateX(-${st.i * 100}%)`;
+    box.querySelectorAll(".slide").forEach((s, j) => (j === st.i ? s.removeAttribute("aria-hidden") : s.setAttribute("aria-hidden", "true")));
+    box.querySelectorAll(".slide-dot").forEach((d, j) => (j === st.i ? d.setAttribute("aria-current", "true") : d.removeAttribute("aria-current")));
+    box.querySelector(".slide-note").textContent = slideNote(order[st.i]);
   }
-  setInterval(() => { if (!slidePaused && !document.hidden && document.querySelector(".slideshow")) showSlide(slideIdx + 1); }, 5000);
-  new MutationObserver(() => { if (document.querySelector(".slideshow img[data-src]")) setTimeout(() => loadSlide(slideIdx + 1), 2500); }).observe(document.getElementById("main"), { childList: true });
+  setInterval(() => { if (document.hidden) return; document.querySelectorAll(".slideshow").forEach((box) => { const st = slideSt(box.dataset.show); if (!st.paused) showSlide(box.dataset.show, st.i + 1); }); }, 5000);
+  new MutationObserver(() => { if (document.querySelector(".slideshow img[data-src]")) setTimeout(() => document.querySelectorAll(".slideshow").forEach((box) => loadSlide(box, slideSt(box.dataset.show).i + 1)), 2500); }).observe(document.getElementById("main"), { childList: true });
   // A page introduction with its image: text on the left, image on the right; text first on small screens.
   // Pages with a set in SLIDE_SETS get a slideshow.
-  const introMedia = (head, k) => `<div class="intro-media">${head}${SLIDE_SETS[k] ? slideshow(k, "intro-photo") : pic(k, "intro-photo", true)}</div>`;
+  const introMedia = (head, k) => `<div class="intro-media">${head}${slideshow(k, "intro-photo")}</div>`;
   const AUDIENCES = [
     ["Governments and public institutions", "Policy research, evaluations, data systems and training for ministries, agencies and local government."],
     ["Businesses and investors", "Market intelligence, feasibility studies, analytics and executive programmes."],
@@ -3935,7 +3943,7 @@ ${richSummary(st, rows)}`;
   }
   function trLanding() {
     const pub = S.courses.filter((c) => c.status === "published").sort((a, b) => ((upcoming(a)[0] || {}).start || "9").localeCompare((upcoming(b)[0] || {}).start || "9"));
-    return `<div class="page-head"><div><span class="eyebrow gold">Executive Education · Plan. Analyse. Lead.</span><h1>Executive education and professional training</h1><p style="max-width:70ch;font-size:1.12rem;font-weight:500;margin:10px 0 6px">Practical programmes that strengthen the skills of leaders and teams in government, business, development institutions and civil society.</p><p class="muted" style="max-width:70ch">Build skills in research design, surveys, statistics, monitoring and evaluation, dashboards and market research, alongside executive programmes in strategy and strategic planning, leadership, governance, finance and project management. Join a classroom course in a city near you, learn live online, or bring any course to your organisation, tailored to your sector and your team.</p></div></div>
+    return `${introMedia(`<div class="page-head"><div><span class="eyebrow gold">Executive Education · Plan. Analyse. Lead.</span><h1>Executive education and professional training</h1><p style="max-width:70ch;font-size:1.12rem;font-weight:500;margin:10px 0 6px">Practical programmes that strengthen the skills of leaders and teams in government, business, development institutions and civil society.</p><p class="muted" style="max-width:70ch">Build skills in research design, surveys, statistics, monitoring and evaluation, dashboards and market research, alongside executive programmes in strategy and strategic planning, leadership, governance, finance and project management. Join a classroom course in a city near you, learn live online, or bring any course to your organisation, tailored to your sector and your team.</p></div></div>`, "trainingIntro")}
       <form class="card quick-find" data-act-form="catQuick" role="search"><label for="catQuickQ">Search ${CATALOGUE.length} courses<input id="catQuickQ" type="search" placeholder="e.g. strategy, Power BI, monitoring and evaluation"></label><button class="btn primary" type="submit">Find courses</button></form>
       <section class="stack" aria-labelledby="areasH"><div class="section-head"><span class="eyebrow gold">Courses</span><h2 id="areasH" class="h2xl">Start with a subject area</h2></div>${areaCards()}</section>
       <section class="feature" aria-labelledby="execH">${sidePhoto("trainingExec")}<div class="stack"><div class="section-head"><span class="eyebrow gold">Executive and in-house training</span><h2 id="execH" class="h2xl">Programmes for leaders and their teams</h2></div><p class="muted">Strategy, leadership, governance, finance and data skills for senior teams, run at your premises or at a venue near you, and tailored to your sector, your data and your goals.</p><ul class="ticks small"><li><div><span>Designed around the decisions your team makes</span></div></li><li><div><span>Your own cases and data in the exercises</span></div></li><li><div><span>Classroom, live online or a mix of both</span></div></li></ul><div class="row wrap"><a class="btn primary" href="#training/area/leadership">Executive courses</a><button class="btn" data-act="scrollToId" data-t="catEnquiry">Ask about in-house training</button></div></div></section>
@@ -4561,7 +4569,7 @@ ${richSummary(st, rows)}`;
     const st = S.settings || {}, wa = String(st.whatsapp || "").replace(/[^\d]/g, "");
     const item = (label, val) => `<div class="contact-item"><span class="hint">${label}</span>${val}</div>`;
     const details = [st.email ? item("Email", `<span class="row wrap" style="gap:8px"><b class="sel">${esc(st.email)}</b><button class="btn small ghost" data-act="copyText" data-v="${esc(st.email)}">Copy</button></span>`) : "", st.phone ? item("Phone", `<b class="sel">${esc(st.phone)}</b>`) : "", wa ? item("WhatsApp", `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Message us on WhatsApp</a>`) : "", st.address ? item("Office", `<span class="sel" style="white-space:pre-line">${esc(st.address)}</span>`) : "", st.hours ? item("Hours", esc(st.hours)) : "", st.linkedin ? item("LinkedIn", `<a href="${esc(st.linkedin)}" target="_blank" rel="noopener">Follow Afrimetrica</a>`) : ""].join("");
-    return `${introMedia(`<div class="page-head"><div><span class="eyebrow gold">Contact</span><h1>Contact us</h1><p class="muted" style="max-width:66ch">Tell us about your question, project or programme. We reply to every enquiry within two working days and, where it helps, arrange a call to agree the scope.</p></div></div>`, "venuesCity")}
+    return `${introMedia(`<div class="page-head"><div><span class="eyebrow gold">Contact</span><h1>Contact us</h1><p class="muted" style="max-width:66ch">Tell us about your question, project or programme. We reply to every enquiry within two working days and, where it helps, arrange a call to agree the scope.</p></div></div>`, "contact")}
       <div class="split">
         ${enquiryForm("contact", { title: "Send us a message", subject: true, messageLabel: "Your message" })}
         <section class="card"><h2>Contact details</h2>${details || `<p class="muted">Use the form and we'll reply by email.</p>`}
@@ -4879,8 +4887,8 @@ ${richSummary(st, rows)}`;
       case "regCancel": S.regFor = null; render(); break;
       case "enrCancel": { const x = S.enrollments.find((e2) => e2.id === id); if (x) await save(() => backend.patchPriv("enrollments", x, "cancelled"), "Registration cancelled."); break; }
       case "tplXl": exportSurveyXlsx(draftFromTemplate(b.dataset.key)); break;
-      case "slideGo": showSlide(+b.dataset.i); break;
-      case "slidePause": slidePaused = !slidePaused; b.textContent = slidePaused ? "Play" : "Pause"; b.setAttribute("aria-pressed", String(slidePaused)); break;
+      case "slideGo": showSlide(b.dataset.show, +b.dataset.i); break;
+      case "slidePause": { const st = slideSt(b.dataset.show); st.paused = !st.paused; b.textContent = st.paused ? "Play" : "Pause"; b.setAttribute("aria-pressed", String(st.paused)); break; }
       case "copyText": try { await navigator.clipboard.writeText(b.dataset.v); toast("Copied."); } catch (_) { toast("Couldn't copy. Select the text instead."); } break;
       case "resendVerifyAcct": resendVerify(b); break;
       case "admTab": S.admTab = b.dataset.k; S.courseEdit = null; S.confirmDel = null; render(); break;
