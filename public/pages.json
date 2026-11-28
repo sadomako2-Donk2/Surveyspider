@@ -49,12 +49,6 @@
   "h1": "The future we are working towards"
  },
  {
-  "path": "/analytics",
-  "title": "Data analysis you can rely on | Afrimetrica",
-  "description": "Send us your data and your questions. Our analysts clean it, analyse it with the right methods and give organisations, governments and NGOs results they can explain, defend and act on.",
-  "h1": "Data analysis you can rely on"
- },
- {
   "path": "/analytics/data-security",
   "title": "How we protect your data | Afrimetrica",
   "description": "Your data stays yours. We handle it carefully and in line with data protection law, including Ghana's Data Protection Act, 2012 (Act 843).",
@@ -177,7 +171,7 @@
  {
   "path": "/consultancy",
   "title": "Research, evaluation and advisory services | Afrimetrica",
-  "description": "From a single questionnaire review to a full multi-site study or a new strategic plan, we design, run and report work that stands up to scrutiny, for organisations, governments and NGOs.",
+  "description": "From a single questionnaire review to a full multi-site study or a new strategic plan, we design, run and report work that stands up to scrutiny, for governments, businesses, development institutions and civil society organisations.",
   "h1": "Research, evaluation and advisory services"
  },
  {
@@ -297,9 +291,9 @@
  },
  {
   "path": "/contact",
-  "title": "Get in touch | Afrimetrica",
-  "description": "Questions about our practices, an executive programme, a survey or a project? Send us a message and we'll reply within two working days.",
-  "h1": "Get in touch"
+  "title": "Contact us | Afrimetrica",
+  "description": "Tell us about your question, project or programme. We reply to every enquiry within two working days and, where it helps, arrange a call to agree the scope.",
+  "h1": "Contact us"
  },
  {
   "path": "/contact/careers",
@@ -380,12 +374,6 @@
   "h1": "Insights for better research"
  },
  {
-  "path": "/resources/articles",
-  "title": "Articles and guides | Afrimetrica",
-  "description": "Practical, free guides on research methods, surveys and evaluation, written by our team.",
-  "h1": "Articles and guides"
- },
- {
   "path": "/resources/articles/me",
   "title": "Planning monitoring and evaluation | Afrimetrica",
   "description": "From theory of change to indicators, baselines and learning.",
@@ -441,9 +429,9 @@
  },
  {
   "path": "/surveys",
-  "title": "Ask better questions. Get answers you can act on. | Afrimetrica",
-  "description": "Afrimetrica Surveys drafts your survey with AI, finds the right people to answer it, and turns every response into findings and recommendations your team can use.",
-  "h1": "Ask better questions. Get answers you can act on."
+  "title": "Survey tools for reliable evidence. | Afrimetrica",
+  "description": "Afrimetrica Surveys is our platform for designing questionnaires, collecting responses online or face to face, and analysing results with built-in statistics. AI assistance helps draft and check questions and summarise findings from your own data.",
+  "h1": "Survey tools for reliable evidence."
  },
  {
   "path": "/terms",
@@ -454,7 +442,7 @@
  {
   "path": "/training",
   "title": "Executive education and professional training | Afrimetrica",
-  "description": "Practical training that helps organisations, governments and NGOs make better decisions and deliver results.",
+  "description": "Practical programmes that strengthen the skills of leaders and teams in government, business, development institutions and civil society.",
   "h1": "Executive education and professional training"
  },
  {
@@ -1607,7 +1595,7 @@
  {
   "path": "/training/subject/strategy",
   "title": "Strategy and Strategic Planning training courses | Afrimetrica",
-  "description": "Envision, plan and lead: practical courses that strengthen executives' skills in strategy and strategic planning, so organisations, governments and NGOs can set clear priorities and turn them into results.",
+  "description": "Envision, plan and lead: practical courses that strengthen executives' skills in strategy and strategic planning, so governments, businesses and development institutions can set clear priorities and turn them into results.",
   "h1": "Strategy and Strategic Planning training courses",
   "canonical": "/training/course/ls-strategy"
  },

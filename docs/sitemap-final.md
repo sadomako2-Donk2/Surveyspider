@@ -1,4 +1,4 @@
-# Final sitemap (223 URLs)
+# Final sitemap (221 URLs)
 
 The live `/sitemap.xml` is built from `public/pages.json`; it lists these addresses at https://www.afrimetrica.com.
 
@@ -9,7 +9,6 @@ The live `/sitemap.xml` is built from `public/pages.json`; it lists these addres
 - /about/organisation
 - /about/team
 - /about/vision
-- /analytics
 - /analytics/data-security
 - /analytics/how-we-work
 - /analytics/request
@@ -63,7 +62,6 @@ The live `/sitemap.xml` is built from `public/pages.json`; it lists these addres
 - /pricing
 - /privacy
 - /resources
-- /resources/articles
 - /resources/articles/me
 - /resources/articles/questions
 - /resources/articles/sample

@@ -7,7 +7,7 @@ Companion files: `docs/route-audit.md` (every route, with purpose, content, prac
 
 | Type | Count | Notes |
 |---|---|---|
-| Public pages | 293 | All open at real addresses. 223 are listed in the sitemap; 70 point search engines to a fuller page (68 one-course subjects, the approach page under Research & Advisory, the certificates page under About) |
+| Public pages | 293 | All open at real addresses. 221 are listed in the sitemap (after the two merges); 70 point search engines to a fuller page (68 one-course subjects, the approach page under Research & Advisory, the certificates page under About) |
 | Hidden public pages | 2 | `/resources/case-studies`, `/resources/videos`: not linked, not in the sitemap, noindex |
 | App pages | 8 groups | Survey builder, upload, my surveys, results, take surveys, sign-in, My Account (5 pages), admin area |
 | Aliases | 3 kinds | `#paper-to-pen`, `#library`, and any old `#page` link: each opens the right page |
@@ -38,23 +38,26 @@ Journeys retained and tested: course search (finder), course registration and en
 | `/about/approach` and `/consultancy/approach` | 100% | Merge: search engines pointed to `/about/approach` (done earlier) |
 | `/about/certificates` and `/training/certificates` | 47%, same title | Merge: search engines pointed to `/training/certificates` (**new in this branch**) |
 | 68 one-course subject pages and their course pages | Most text | Merge: search engines pointed to the course (done earlier) |
-| `/analytics` and `/practices/data-intelligence` | 53% | **Decision needed**: keep both (current), or make the practice page the main one and permanently redirect `/analytics` to it |
-| `/resources` and `/resources/articles` | 79% | **Decision needed**: the articles page repeats the guides listed on the Insights overview. Keep, or redirect to `/resources` |
+| `/analytics` and `/practices/data-intelligence` | 53% | **Merged (decision 28 Nov)**: the how-we-work steps, photo and survey-analysis note moved to the practice page; `/analytics` permanently redirects (301) to `/practices/data-intelligence`; links, breadcrumbs and menus updated |
+| `/resources` and `/resources/articles` | 79% | **Redirected (decision 28 Nov)**: `/resources/articles` permanently redirects (301) to `/resources`; the four guide articles keep their own addresses; menu item removed |
 | `/consultancy` and the Research & Evaluation / Strategy & Advisory pages | 27–40% | Retain: `/consultancy` is the hub for both practices |
 | `/resources/case-studies`, `/resources/videos` | Placeholders | Obsolete until content exists: retained hidden |
 | Venue, sector and subject pages | Shared template text | Not duplicates: each has its own subject; retain |
 
 ## 4. Migration mapping
 
-No URL changed, so no permanent redirects were needed. `/about/team` is preserved. Changes are to labels, breadcrumbs and canonical addresses only:
+Two pages were merged with permanent redirects; every other URL is unchanged and `/about/team` is preserved. Internal links, breadcrumbs, menus, canonical addresses and the sitemap were updated:
 
 | URL | Before | After |
 |---|---|---|
 | Main menu | Practices | Our Practices |
 | Breadcrumbs on practice, analytics and consultancy pages | Practices › … | Our practices › … |
 | `/about/certificates` | Listed in the sitemap | Canonical → `/training/certificates`; not in the sitemap; still opens |
+| `/analytics` | Data analysis hub | **301 → `/practices/data-intelligence`** (query strings kept; old `#analytics` links redirect in the browser) |
+| `/resources/articles` | Guides list | **301 → `/resources`** (guide articles unchanged) |
+| Analytics breadcrumbs and "Overview" links | → `/analytics` | → `/practices/data-intelligence` |
 | Everything else | — | Unchanged (see `docs/route-audit.md`) |
 
 ## 5. Tests
 
-`npm test`: 20 statistics checks and 162 API checks passed (new: certificates canonical; menu label). Browser checks: see the release notes.
+`npm test`: 20 statistics checks and 166 API checks passed (new: certificates canonical; menu label; three redirect checks; merged pages out of the sitemap). Browser checks: see the release notes.

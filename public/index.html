@@ -1032,7 +1032,7 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
     if (k === "surveys") return [["Afrimetrica Surveys", SURVEY_NAV.map(([x, l]) => L(`#${x}`, l))]];
     if (k === "analytics") return [["Services", AN_SERVICES.map((x) => L(`#analytics/service/${x.id}`, x.name))], ["Sectors", AN_SECTORS.map((x) => L(`#analytics/sector/${x.id}`, x.name))], ["More", [L("#analytics", "Overview"), L("#analytics/tools", "Tools we use"), L("#analytics/how-we-work", "How we work"), L("#analytics/data-security", "Data security"), L("#analytics/request", "Request analysis")]]];
     if (k === "consultancy") return [["Services", CO_SERVICES.map((x) => L(`#consultancy/service/${x.id}`, x.name))], ["Sectors", CO_SECTORS.map((x) => L(`#consultancy/sector/${x.id}`, x.name))], ["More", [L("#consultancy", "Overview"), L("#consultancy/approach", "Our approach"), L("#paper-survey", "Fieldwork quote"), L("#consultancy/work-with-us", "Work with us"), L("#consultancy/request", "Request a proposal")]]];
-    if (k === "practices") return [["Our practices", [L("#practices", "All our practices"), ...PRACTICES.map((x) => L(`#practices/${x.id}`, x.name))]], ["Services", [L("#analytics", "Data analysis services"), L("#consultancy", "Research and advisory services"), L("#paper-survey", "Fieldwork quote")]]];
+    if (k === "practices") return [["Our practices", [L("#practices", "All our practices"), ...PRACTICES.map((x) => L(`#practices/${x.id}`, x.name))]], ["Services", [L("#practices/data-intelligence", "Data analysis services"), L("#consultancy", "Research and advisory services"), L("#paper-survey", "Fieldwork quote")]]];
     if (k === "resources") return [["Insights", RES_MENU.map(([x, l]) => L(`#resources${x ? "/" + x : ""}`, l))]];
     if (k === "account") return [["My Account", [...ACCOUNT_MENU.map(([x, l]) => L(`#account${x ? "/" + x : ""}`, l)), ...(S.isOwner ? [L("#business", "Admin area")] : [])]]];
     if (k === "contact") return [["Contact", [...CONTACT_MENU.map(([x, l]) => L(`#contact${x ? "/" + x : ""}`, l)), L("#training/finder", "Find training")]]];
@@ -1074,7 +1074,7 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
     const msg = S.notice || (S.mode === "demo" ? "Demo mode: everything you create is saved in this browser only. Open the published page while signed in to claude.ai to share data with other people." : "") || (S.stale ? "Can't reach the saved data yet. What you see may be out of date." : "");
     b.hidden = !msg; b.textContent = msg;
     if (!msg && unverified()) { b.hidden = false; b.innerHTML = `<b>Confirm your email address.</b> We sent a link to ${esc(S.user.email)}. You can browse and save drafts now; confirm to launch surveys, take paid studies and use AI. <button type="button" class="linkbtn" data-act="resendVerify">Send it again</button>`; }
-    $("#foot").innerHTML = `<div class="foot-inner"><div><img class="foot-logo" src="/photos/logo-full.webp" width="216" height="72" alt="Afrimetrica: Data, Research, Advisory, Executive Education"><br><b>Afrimetrica</b> · Data. Research. Advisory. Executive Education.<br><span class="hint">An independent, Africa-focused professional services firm specialising in data intelligence, research, strategic advisory and executive education.</span><br><span class="hint"><a href="#privacy">Privacy notice</a> · <a href="#terms">Terms of use</a></span></div><div class="hint">Afrimetrica Surveys platform fee ${Math.round(FEE * 100)}% of participant rewards. ${S.mode === "live" ? (API ? "Survey answers are stored on Afrimetrica's server and shown only to the survey's owner." : "Data is shared with everyone who can open this page.") : S.mode === "demo" ? "Demo data stays in this browser." : "Connecting…"}</div></div>`;
+    $("#foot").innerHTML = `<div class="foot-inner"><div><img class="foot-logo" src="/photos/logo-full.webp" width="216" height="72" alt="Afrimetrica: Data, Research, Advisory, Executive Education"><br><b>Afrimetrica</b> · Data. Research. Advisory. Executive Education.<br><span class="hint">An independent, Africa-focused professional services firm specialising in data intelligence, research, strategic advisory and executive education.</span><br><span class="hint">${PRACTICES.map((x) => `<a href="#practices/${x.id}">${esc(x.name)}</a>`).join(" · ")}</span><br><span class="hint"><a href="#about/team">Our people</a> · <a href="#resources">Insights</a> · <a href="#contact">Contact</a> · <a href="#privacy">Privacy notice</a> · <a href="#terms">Terms of use</a></span></div><div class="hint">Afrimetrica Surveys platform fee ${Math.round(FEE * 100)}% of participant rewards. ${S.mode === "live" ? (API ? "Survey answers are stored on Afrimetrica's server and shown only to the survey's owner." : "Data is shared with everyone who can open this page.") : S.mode === "demo" ? "Demo data stays in this browser." : "Connecting…"}</div></div>`;
   }
   // Each page gets its own browser-tab title and description (used when people bookmark or share it).
   const SITE_TITLE = "Afrimetrica — Data, Research, Advisory and Executive Education";
@@ -1126,8 +1126,11 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
     for (const a of all) { const c = cleanPath(a.getAttribute("href").slice(1)); if (c) a.setAttribute("href", c); }
   }
   function onNavigate() { closeNavDrop(true); route(); render(); window.scrollTo(0, 0); if (API) refreshServer().then(softRender).catch(() => {}); }
+  // Pages merged into others (the server also answers these addresses with a permanent redirect).
+  const MERGED = { analytics: "practices/data-intelligence", "resources/articles": "resources" };
   function route() {
     let h = routeKey();
+    if (MERGED[h]) { h = MERGED[h]; history.replaceState(history.state, "", "/" + h + location.search); }
     { const c = cleanPath(h === "paper-to-pen" ? "paper-survey" : h === "library" ? "resources" : h); if (c && location.hash) history.replaceState(history.state, "", c + location.search); }
     if (h === "paper-to-pen") h = "paper-survey"; // old links keep working
     // Training has its own pages: #training/<part>[/<item>]
@@ -1187,9 +1190,9 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
     return `
     <section class="hero2">
       <div>
-        <span class="eyebrow gold">Surveys · Participants · AI insights</span>
-        <h1>Ask better questions. <span class="gold-text">Get answers you can act on.</span></h1>
-        <p class="lede">Afrimetrica Surveys drafts your survey with AI, finds the right people to answer it, and turns every response into findings and recommendations your team can use.</p>
+        <span class="eyebrow gold">Digital Solutions · Afrimetrica Surveys</span>
+        <h1>Survey tools for <span class="gold-text">reliable evidence.</span></h1>
+        <p class="lede">Afrimetrica Surveys is our platform for designing questionnaires, collecting responses online or face to face, and analysing results with built-in statistics. AI assistance helps draft and check questions and summarise findings from your own data.</p>
         <form class="ai-box" id="heroForm">
           <label for="heroGoal">What do you want to find out?</label>
           <textarea id="heroGoal" rows="2" maxlength="800" placeholder="e.g. Why are managers not finishing our leadership course, and what would help them?">${esc(S.gen.goal || "")}</textarea>
@@ -3139,6 +3142,12 @@ ${richSummary(st, rows)}`;
       <div class="section-head"><span class="eyebrow gold">Who we serve</span><h2 id="audH" class="h2xl">Evidence and skills for decision-makers</h2></div>
       <div class="audience-grid">${AUDIENCES.map(([t, d]) => `<div class="audience"><b>${esc(t)}</b><span class="hint">${esc(d)}</span></div>`).join("")}</div>
     </section>
+    <section class="split" aria-labelledby="expH">
+      <div class="stack"><div class="section-head"><span class="eyebrow gold">Our expertise</span><h2 id="expH" class="h2xl">Academic depth, practical experience</h2></div>
+        <p class="muted">Our expert network brings together academics and practitioners in strategy, data science, marketing analytics, sustainability, economics and route-to-market. Members hold appointments at the University of Birmingham, Newcastle University, Rabat Business School, San Diego State University and the University of Johannesburg.</p>
+        <a class="btn" href="#about/team" style="align-self:flex-start">Meet our people</a></div>
+      <ul class="ticks small">${[`${CATALOGUE.length} executive and professional courses in ${GROUPS.length} subject areas`, `Classroom venues in ${VENUES.filter((v) => !v[2]).length} African countries, with further venues in Europe, North America and Asia`, "Our own survey platform, with built-in statistical analysis and Excel reporting", "Published methods for quality assurance, ethics and data protection"].map((t) => `<li><div><span>${esc(t)}</span></div></li>`).join("")}</ul>
+    </section>
     <section class="stack">
       <div class="row wrap" style="justify-content:space-between;align-items:flex-end"><div class="section-head"><span class="eyebrow gold">Executive Education</span><h2 class="h2xl">Upcoming courses</h2></div><a class="btn" href="#training">All courses</a></div>
       ${up.length ? `<div class="course-grid">${up.map(({ c, s }) => courseCard(c, s)).join("")}</div>` : `<div class="empty"><h2>Choose a course and a city</h2><p class="muted">Dates are set for each venue. Pick a course from the catalogue, tell us the city or the online option you prefer, and we'll send you the dates and fees. Any course can also run in-house for your team.</p><div class="row wrap"><a class="btn primary" href="#training/finder">Find a course</a><a class="btn" href="#training/venues">Training venues</a></div></div>`}
@@ -3148,8 +3157,8 @@ ${richSummary(st, rows)}`;
       <div class="stack" style="gap:10px">${GUIDES.slice(0, 3).map((g) => `<a class="card guide-link" href="#resources/articles/${g.id}"><b>${esc(g.title)}</b><span class="hint">${esc(g.summary)} · ${g.minutes} min read</span></a>`).join("")}</div>
     </section>
     <section class="band">
-      <div class="stack" style="gap:10px"><span class="eyebrow">Research &amp; Advisory</span><h2>Planning a study, an evaluation or a strategy?</h2><p>Tell us what you need to find out or decide. We can help with design, fieldwork, analysis, advice or the whole project.</p></div>
-      <div class="band-list"><a class="band-item" href="#consultancy"><b>Discuss a project</b><span>Research design, M&amp;E and commissioned studies</span></a><a class="band-item" href="#paper-survey"><b>Get a fieldwork quote</b><span>Face-to-face interviews, priced instantly</span></a><a class="band-item" href="#analytics"><b>Request data analysis</b><span>Statistics, dashboards and reports</span></a><a class="band-item" href="#training"><b>Train your team</b><span>In-house workshops on research methods</span></a></div>
+      <div class="stack" style="gap:10px"><span class="eyebrow">Work with us</span><h2>Tell us what you need to decide</h2><p>Describe the question, the decision or the skills gap. We will propose the right combination of research, analysis, advice and training, with a clear scope, timeline and price.</p></div>
+      <div class="band-list"><a class="band-item" href="#consultancy"><b>Discuss a project</b><span>Research design, M&amp;E and commissioned studies</span></a><a class="band-item" href="#paper-survey"><b>Get a fieldwork quote</b><span>Face-to-face interviews, priced instantly</span></a><a class="band-item" href="#practices/data-intelligence"><b>Request data analysis</b><span>Statistics, dashboards and reports</span></a><a class="band-item" href="#training"><b>Train your team</b><span>In-house workshops on research methods</span></a></div>
     </section>`;
   }
   // ---- About section: its own menu and pages (#about/<part>) ----
@@ -3294,7 +3303,7 @@ ${richSummary(st, rows)}`;
   };
   // Short introductions shown when a subject is chosen.
   const SUBJECT_INTRO = {
-    strategy: "Envision, plan and lead: practical courses that strengthen executives' skills in strategy and strategic planning, so organisations, governments and NGOs can set clear priorities and turn them into results.",
+    strategy: "Envision, plan and lead: practical courses that strengthen executives' skills in strategy and strategic planning, so governments, businesses and development institutions can set clear priorities and turn them into results.",
   };
   const GROUPS = [
     ["research", "Research, Monitoring and Evaluation", ["design", "survey", "field", "stats", "qual", "mel", "market", "writing"]],
@@ -3796,7 +3805,7 @@ ${richSummary(st, rows)}`;
   }
   function trLanding() {
     const pub = S.courses.filter((c) => c.status === "published").sort((a, b) => ((upcoming(a)[0] || {}).start || "9").localeCompare((upcoming(b)[0] || {}).start || "9"));
-    return `<div class="page-head"><div><span class="eyebrow gold">Executive Education · Plan. Analyse. Lead.</span><h1>Executive education and professional training</h1><p style="max-width:70ch;font-size:1.12rem;font-weight:500;margin:10px 0 6px">Practical training that helps organisations, governments and NGOs make better decisions and deliver results.</p><p class="muted" style="max-width:70ch">Build skills in research design, surveys, statistics, monitoring and evaluation, dashboards and market research, alongside executive programmes in strategy and strategic planning, leadership, governance, finance and project management. Join a classroom course in a city near you, learn live online, or bring any course to your organisation, tailored to your sector and your team.</p></div></div>
+    return `<div class="page-head"><div><span class="eyebrow gold">Executive Education · Plan. Analyse. Lead.</span><h1>Executive education and professional training</h1><p style="max-width:70ch;font-size:1.12rem;font-weight:500;margin:10px 0 6px">Practical programmes that strengthen the skills of leaders and teams in government, business, development institutions and civil society.</p><p class="muted" style="max-width:70ch">Build skills in research design, surveys, statistics, monitoring and evaluation, dashboards and market research, alongside executive programmes in strategy and strategic planning, leadership, governance, finance and project management. Join a classroom course in a city near you, learn live online, or bring any course to your organisation, tailored to your sector and your team.</p></div></div>
       ${slideshow("training")}
       <form class="card quick-find" data-act-form="catQuick" role="search"><label for="catQuickQ">Search ${CATALOGUE.length} courses<input id="catQuickQ" type="search" placeholder="e.g. strategy, Power BI, monitoring and evaluation"></label><button class="btn primary" type="submit">Find courses</button></form>
       <section class="stack" aria-labelledby="areasH"><div class="section-head"><span class="eyebrow gold">Courses</span><h2 id="areasH" class="h2xl">Start with a subject area</h2></div>${areaCards()}</section>
@@ -3999,18 +4008,18 @@ ${richSummary(st, rows)}`;
     const t = S.an || "", m = S.trMenu;
     const cur = (k) => (t === k || t.startsWith(k + "/") ? ' aria-current="page"' : "");
     const menu = (k, label, active) => `<button type="button" class="tr-menu-btn" data-act="trMenu" data-k="${k}" aria-expanded="${m === k}" aria-controls="trPanel"${active ? ' aria-current="page"' : ""}>${label} <span aria-hidden="true">▾</span></button>`;
-    const links = `<a href="#analytics"${t === "" ? ' aria-current="page"' : ""}>Overview</a>${menu("an-services", "Services", t.startsWith("service/"))}${menu("an-sectors", "Sectors", t.startsWith("sector/"))}<a href="#analytics/tools"${cur("tools")}>Tools we use</a><a href="#analytics/how-we-work"${cur("how-we-work")}>How we work</a><a href="#analytics/data-security"${cur("data-security")}>Data security</a><a href="#analytics/request"${cur("request")}><span class="new-badge cta-badge">Request analysis</span></a>`;
+    const links = `<a href="#practices/data-intelligence"${t === "" ? ' aria-current="page"' : ""}>Overview</a>${menu("an-services", "Services", t.startsWith("service/"))}${menu("an-sectors", "Sectors", t.startsWith("sector/"))}<a href="#analytics/tools"${cur("tools")}>Tools we use</a><a href="#analytics/how-we-work"${cur("how-we-work")}>How we work</a><a href="#analytics/data-security"${cur("data-security")}>Data security</a><a href="#analytics/request"${cur("request")}><span class="new-badge cta-badge">Request analysis</span></a>`;
     let panel = "";
     if (m === "an-services") panel = `<div class="tr-panel-grid">${AN_SERVICES.map((x) => `<a href="#analytics/service/${x.id}"><b>${esc(x.name)}</b><span>${esc(x.summary)}</span></a>`).join("")}</div>`;
     if (m === "an-sectors") panel = `<div class="tr-panel-grid">${AN_SECTORS.map((x) => `<a href="#analytics/sector/${x.id}"><b>${esc(x.name)}</b><span>${esc(x.summary)}</span></a>`).join("")}</div>`;
     return `<div class="subnav-inner"><span class="subnav-label">Data &amp; Intelligence</span><div class="subnav-links tr-links">${links}</div></div>${panel ? `<div class="tr-panel" id="trPanel" role="region" aria-label="${m === "an-services" ? "Analytics services" : "Sectors"}"><div class="tr-panel-inner">${panel}</div></div>` : ""}`;
   }
-  const anCrumbs = (...items) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#practices">Our practices</a> › <a href="#analytics">Data &amp; Intelligence</a>${items.map(([href, label]) => (href ? ` › <a href="${href}">${esc(label)}</a>` : ` › <span>${esc(label)}</span>`)).join("")}</nav>`;
+  const anCrumbs = (...items) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#practices">Our practices</a> › <a href="#practices/data-intelligence">Data &amp; Intelligence</a>${items.map(([href, label]) => (href ? ` › <a href="${href}">${esc(label)}</a>` : ` › <span>${esc(label)}</span>`)).join("")}</nav>`;
   const anServiceCards = (ids) => `<div class="area-grid">${(ids || AN_SERVICES.map((x) => x.id)).map(anService).map((x) => `<a class="card area-card" href="#analytics/service/${x.id}"><b>${esc(x.name)}</b><span class="hint">${esc(x.summary)}</span></a>`).join("")}</div>`;
   const anForm = (title, message) => enquiryForm("analytics", { title, intro: "Describe your data and what you need to know. We'll reply with an approach, a timeline and a quote.", services: ANALYTICS_SERVICES, budget: true, messageLabel: "Your data and questions", placeholder: "e.g. 1,200 household survey responses in Excel; we need prevalence estimates by region and a regression on food security.", message });
   const anSteps = `<ol class="steps"><li>You tell us your questions and describe your data. Share it securely when we're ready to start.</li><li>We agree an analysis plan, a timeline and a fixed price.</li><li>We clean and analyse the data and check the results.</li><li>You receive tables, charts and a plain-language summary, and we walk you through them.</li></ol>`;
   function anLanding() {
-    return `<div class="page-head"><div><span class="eyebrow gold">Data &amp; Intelligence</span><h1>Data analysis you can rely on</h1><p class="muted" style="max-width:70ch">Send us your data and your questions. Our analysts clean it, analyse it with the right methods and give organisations, governments and NGOs results they can explain, defend and act on.</p></div></div>
+    return `<div class="page-head"><div><span class="eyebrow gold">Data &amp; Intelligence</span><h1>Data analysis you can rely on</h1><p class="muted" style="max-width:70ch">Send us your data and your questions. Our analysts clean it, analyse it with the right methods and give governments, businesses, development institutions and civil society organisations results they can explain, defend and act on.</p></div></div>
       ${slideshow("analytics")}
       <section class="stack" aria-labelledby="anSvcH"><div class="section-head"><span class="eyebrow gold">Services</span><h2 id="anSvcH" class="h2xl">What we can do with your data</h2></div>${anServiceCards()}</section>
       <div class="feature">${sidePhoto("analyticsTeam")}<section class="stack" aria-labelledby="anSecH"><div class="section-head"><span class="eyebrow gold">Sectors</span><h2 id="anSecH" class="h2xl">Analysis for your sector</h2></div><nav class="sub-jump" aria-label="Sectors">${AN_SECTORS.map((x) => `<a href="#analytics/sector/${x.id}">${esc(x.name)}</a>`).join("")}</nav></section></div>
@@ -4021,7 +4030,7 @@ ${richSummary(st, rows)}`;
   }
   function anServicePage(x) {
     const courses = x.courses.map(catCourse).filter(Boolean);
-    return `${anCrumbs(["", x.name])}<div class="page-head"><div><span class="eyebrow gold">Data &amp; Intelligence</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.summary)}</p></div></div>
+    return `${anCrumbs(["", x.name])}<div class="page-head"><div><span class="eyebrow gold">Data &amp; Intelligence</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.summary)}</p><p class="hint">Part of our <a href="#practices/data-intelligence">Data &amp; Intelligence</a> practice.</p></div></div>
       <div class="split">
         <section class="card"><h2>Questions we help you answer</h2><ul class="ticks small">${x.questions.map((q) => `<li><div><span>${esc(q)}</span></div></li>`).join("")}</ul><h3>Methods</h3><p class="muted">${esc(x.methods)}</p></section>
         <section class="card"><h2>What you receive</h2><ul class="ticks small">${x.deliverables.map((q) => `<li><div><span>${esc(q)}</span></div></li>`).join("")}</ul><h3>How it works</h3>${anSteps}</section>
@@ -4125,7 +4134,7 @@ ${richSummary(st, rows)}`;
   const coForm = (title, message) => enquiryForm("consultancy", { title, intro: "Tell us about your project. We'll reply within two working days to arrange a call.", services: CONSULT_SERVICES, budget: true, messageLabel: "About your project", placeholder: "Objectives, target population, locations, deadlines and any terms of reference.", message });
   const coPhases = `<ol class="steps"><li><b>Inception.</b> We agree the questions, scope, methods, timeline and budget, usually in an inception report.</li><li><b>Design.</b> Sampling, tools, ethics approvals and consent procedures.</li><li><b>Data collection.</b> Trained teams, digital tools and daily quality checks.</li><li><b>Analysis.</b> Rigorous analysis, checked before anything is reported.</li><li><b>Reporting and learning.</b> Clear reports, briefs and a presentation, with recommendations you can act on.</li></ol>`;
   function coLanding() {
-    return `<div class="page-head"><div><span class="eyebrow gold">Research &amp; Advisory</span><h1>Research, evaluation and advisory services</h1><p class="muted" style="max-width:70ch">From a single questionnaire review to a full multi-site study or a new strategic plan, we design, run and report work that stands up to scrutiny, for organisations, governments and NGOs.</p></div></div>
+    return `<div class="page-head"><div><span class="eyebrow gold">Research &amp; Advisory</span><h1>Research, evaluation and advisory services</h1><p class="muted" style="max-width:70ch">From a single questionnaire review to a full multi-site study or a new strategic plan, we design, run and report work that stands up to scrutiny, for governments, businesses, development institutions and civil society organisations.</p></div></div>
       ${slideshow("consultancy")}
       <section class="stack" aria-labelledby="coSvcH"><div class="section-head"><span class="eyebrow gold">Services</span><h2 id="coSvcH" class="h2xl">How we can help</h2></div>${coServiceCards()}</section>
       <div class="feature">${sidePhoto("coWorkshop")}<section class="stack" aria-labelledby="coSecH"><div class="section-head"><span class="eyebrow gold">Sectors</span><h2 id="coSecH" class="h2xl">Who we work with</h2></div><nav class="sub-jump" aria-label="Sectors">${CO_SECTORS.map((x) => `<a href="#consultancy/sector/${x.id}">${esc(x.name)}</a>`).join("")}</nav></section></div>
@@ -4136,7 +4145,7 @@ ${richSummary(st, rows)}`;
   }
   function coServicePage(x) {
     const courses = x.courses.map(catCourse).filter(Boolean), an = x.analytics.map(anService).filter(Boolean);
-    return `${coCrumbs(["", x.name])}<div class="page-head"><div><span class="eyebrow gold">${esc(coPractice(x.id).name)}</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.summary)}</p></div></div>
+    return `${coCrumbs(["", x.name])}<div class="page-head"><div><span class="eyebrow gold">${esc(coPractice(x.id).name)}</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.summary)}</p><p class="hint">Part of our <a href="#practices/${coPractice(x.id).id}">${esc(coPractice(x.id).name)}</a> practice.</p></div></div>
       <div class="split">
         <section class="card"><h2>When this helps</h2><ul class="ticks small">${x.when.map((q) => `<li><div><span>${esc(q)}</span></div></li>`).join("")}</ul></section>
         <section class="card"><h2>What you receive</h2><ul class="ticks small">${x.deliverables.map((q) => `<li><div><span>${esc(q)}</span></div></li>`).join("")}</ul></section>
@@ -4192,15 +4201,15 @@ ${richSummary(st, rows)}`;
   const PRACTICES = [
     { id: "data-intelligence", name: "Data & Intelligence", short: "Statistical analysis, survey analysis, dashboards, data management, and predictive and qualitative analysis.",
       problem: "Organisations hold more data than ever, but it is often incomplete, scattered or hard to interpret. Decisions need figures that are accurate, clearly explained and fit for purpose.",
-      an: ["statistics", "survey", "mel", "dashboards", "data", "market", "predictive", "qualitative"], co: [], sectors: "an",
+      an: ["statistics", "survey", "mel", "dashboards", "data", "market", "predictive", "qualitative"], co: [], sectors: "an", guides: ["sample", "scales", "questions"],
       more: [["#analytics/tools", "Tools we use"], ["#analytics/how-we-work", "How we work"], ["#analytics/data-security", "How we protect your data"]] },
     { id: "research-evaluation", name: "Research & Evaluation", short: "Research design, surveys and fieldwork, monitoring and evaluation, independent evaluations and commissioned studies.",
       problem: "Programmes, policies and investments need evidence that stands up to scrutiny: what is happening, for whom, and whether it is working.",
-      an: [], co: ["design", "fieldwork", "mel", "evaluations", "reports"], sectors: "co",
+      an: [], co: ["design", "fieldwork", "mel", "evaluations", "reports"], sectors: "co", guides: ["questions", "sample", "me"],
       more: [["#paper-survey", "Get a fieldwork quote"], ["#consultancy/approach", "Our approach"], ["#consultancy/work-with-us", "Join our expert network"]] },
     { id: "strategy-advisory", name: "Strategy & Advisory", short: "Policy research, strategy and organisational development, and feasibility studies.",
       problem: "Leaders face decisions about policy, strategy, organisation and investment where the stakes are high and the evidence is often incomplete.",
-      an: [], co: ["policy", "strategy", "feasibility"], sectors: "co",
+      an: [], co: ["policy", "strategy", "feasibility"], sectors: "co", guides: ["me"],
       more: [["#consultancy/approach", "Our approach"], ["#training/area/leadership", "Executive programmes in leadership and strategy"]] },
     { id: "executive-education", name: "Executive Education", short: "Executive programmes, professional training and in-house capacity building, in the classroom, live online or at your premises.",
       problem: "Teams need practical skills in data, research, leadership and management that they can apply at work straight away." },
@@ -4232,7 +4241,8 @@ ${richSummary(st, rows)}`;
         <section class="card"><h2>Typical deliverables</h2>${tickList(deliver)}</section>
         <section class="card"><h2>Sectors</h2><nav class="sub-jump" aria-label="${esc(x.name)} sectors">${sectors.map(([href, n]) => `<a href="${href}">${esc(n)}</a>`).join("")}</nav>${x.more.length ? `<h3>More</h3><ul class="ticks small">${x.more.map(([href, l]) => `<li><div><a href="${href}">${esc(l)}</a></div></li>`).join("")}</ul>` : ""}</section>
       </div>
-      <section class="stack" aria-labelledby="prInsH"><div class="section-head"><span class="eyebrow gold">Insights</span><h2 id="prInsH">Related guides</h2></div><div class="stack" style="gap:10px">${GUIDES.slice(0, 3).map((g) => `<a class="card guide-link" href="#resources/articles/${g.id}"><b>${esc(g.title)}</b><span class="hint">${esc(g.summary)} · ${g.minutes} min read</span></a>`).join("")}</div></section>
+      ${x.id === "data-intelligence" ? `<div class="feature">${sidePhoto("analyticsTeam")}<section class="card"><h2>How we work</h2>${anSteps}<p><a href="#analytics/how-we-work">More about how we work</a> · <a href="#analytics/data-security">How we protect your data</a></p><h3>Collecting data with Afrimetrica Surveys?</h3><p class="muted">Every survey run on Afrimetrica Surveys includes built-in analysis: charts, group comparisons, key drivers, statistical tests, AI-assisted reports and Excel exports.</p><a class="btn" href="#results" style="align-self:flex-start">Open Analyse</a></section></div>` : `<section class="card"><h2>How we work</h2>${coPhases}<p><a href="#about/approach">More about our approach</a></p></section>`}
+      <section class="stack" aria-labelledby="prInsH"><div class="section-head"><span class="eyebrow gold">Insights</span><h2 id="prInsH">Related guides</h2></div><div class="stack" style="gap:10px">${(x.guides || []).map((id) => GUIDES.find((g) => g.id === id)).filter(Boolean).map((g) => `<a class="card guide-link" href="#resources/articles/${g.id}"><b>${esc(g.title)}</b><span class="hint">${esc(g.summary)} · ${g.minutes} min read</span></a>`).join("")}</div></section>
       <div>${form}</div>`;
   }
   function prExecEd() {
@@ -4263,7 +4273,7 @@ ${richSummary(st, rows)}`;
   // ---- Resources (#resources/<part>) and Contact (#contact/<part>) sections, with their own menus ----
   const subLinks = (base, items, cur) => items.map(([k, label]) => `<a href="#${base}${k ? "/" + k : ""}"${cur === k || (k && cur.startsWith(k + "/")) ? ' aria-current="page"' : ""}>${label}</a>`).join("");
   // Case studies and Videos are left out of the menu (and the sitemap) until they have real content; their pages still open.
-  const RES_MENU = [["", "Overview"], ["articles", "Articles and guides"], ["testimonials", "Testimonials"], ["press", "Press releases"], ["catalogues", "Catalogues and brochures"]];
+  const RES_MENU = [["", "Overview"], ["testimonials", "Testimonials"], ["press", "Press releases"], ["catalogues", "Catalogues and brochures"]];
   const CONTACT_MENU = [["", "Contact us"], ["hotel", "Hotel reservation"], ["careers", "Careers"], ["mailing-list", "Mailing list"]];
   const resNav = () => `<div class="subnav-inner"><span class="subnav-label">Insights</span><div class="subnav-links">${subLinks("resources", RES_MENU, S.res || "")}</div></div>`;
   const ctNav = () => `<div class="subnav-inner"><span class="subnav-label">Contact</span><div class="subnav-links">${subLinks("contact", CONTACT_MENU, S.ct || "")}<a href="#training/finder">Find training</a></div></div>`;
@@ -4277,7 +4287,7 @@ ${richSummary(st, rows)}`;
   function resCaseStudies() {
     return `${resCrumbs("Case studies")}${pageHead("Case studies", "Case studies", "Short accounts of projects we have delivered: the question, what we did, and what changed.")}
       <section class="card"><h2>Coming soon</h2><p class="muted">We publish a case study only when the work is complete and the client has agreed to it being shared. The first ones will appear here.</p><p class="muted">Each case study will cover the client's challenge, the methods we used, what we delivered and the difference it made.</p>
-        <div class="row wrap"><a class="btn primary" href="#consultancy">Our consultancy services</a><a class="btn" href="#analytics">Our analytics services</a></div></section>`;
+        <div class="row wrap"><a class="btn primary" href="#consultancy">Our consultancy services</a><a class="btn" href="#practices/data-intelligence">Our analytics services</a></div></section>`;
   }
   function resTestimonials() {
     return `${resCrumbs("Testimonials")}${pageHead("Testimonials", "What participants and clients say", "")}
@@ -4291,7 +4301,7 @@ ${richSummary(st, rows)}`;
   }
   function resVideos() {
     return `${resCrumbs("Videos")}${pageHead("Videos", "Videos", "Short tutorials on research methods and data analysis, and previews of our courses.")}
-      <section class="card"><h2>Coming soon</h2><p class="muted">Our first videos will be published here. In the meantime, our written guides cover the same ground.</p><a class="btn primary" href="#resources/articles" style="align-self:flex-start">Read the guides</a></section>`;
+      <section class="card"><h2>Coming soon</h2><p class="muted">Our first videos will be published here. In the meantime, our written guides cover the same ground.</p><a class="btn primary" href="#resources" style="align-self:flex-start">Read the guides</a></section>`;
   }
   function resCatalogues() {
     return `${resCrumbs("Catalogues and brochures")}${pageHead("Catalogues and brochures", "Catalogues and brochures", "Print or save as PDF to share with colleagues and decision-makers.")}
@@ -4406,7 +4416,7 @@ ${richSummary(st, rows)}`;
   }
   function guideView(g) {
     const table = `<div class="table-wrap" tabindex="0"><table><thead><tr><th>Margin of error</th><th>Responses needed</th></tr></thead><tbody>${[10, 5, 3, 2].map((m) => `<tr><td>±${m}%</td><td class="n">${int(sampleN(1.96, m / 100, 0))}</td></tr>`).join("")}</tbody></table></div>`;
-    return `<div><a class="btn small ghost" href="#resources/articles">← Articles and guides</a></div>
+    return `<div><a class="btn small ghost" href="#resources">← Articles and guides</a></div>
       <article class="card prose guide"><span class="eyebrow gold">Afrimetrica Insights · ${g.minutes} min read</span><h1>${esc(g.title)}</h1><p class="lede-sm">${esc(g.summary)}</p>
         ${g.sections.map(([h, p]) => `<h2>${esc(h)}</h2>${p === "__SAMPLE_TABLE__" ? table + `<p class="hint">For a yes/no style result, assuming a 50% split, which gives the largest (safest) number.</p>` : `<p>${esc(p)}</p>`}`).join("")}
         <div class="row wrap" style="margin-top:8px"><a class="btn primary" href="#create">Build a survey</a><a class="btn" href="#training">See our courses</a></div></article>`;
@@ -4419,7 +4429,7 @@ ${richSummary(st, rows)}`;
     const st = S.settings || {}, wa = String(st.whatsapp || "").replace(/[^\d]/g, "");
     const item = (label, val) => `<div class="contact-item"><span class="hint">${label}</span>${val}</div>`;
     const details = [st.email ? item("Email", `<span class="row wrap" style="gap:8px"><b class="sel">${esc(st.email)}</b><button class="btn small ghost" data-act="copyText" data-v="${esc(st.email)}">Copy</button></span>`) : "", st.phone ? item("Phone", `<b class="sel">${esc(st.phone)}</b>`) : "", wa ? item("WhatsApp", `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Message us on WhatsApp</a>`) : "", st.address ? item("Office", `<span class="sel" style="white-space:pre-line">${esc(st.address)}</span>`) : "", st.hours ? item("Hours", esc(st.hours)) : "", st.linkedin ? item("LinkedIn", `<a href="${esc(st.linkedin)}" target="_blank" rel="noopener">Follow Afrimetrica</a>`) : ""].join("");
-    return `<div class="page-head"><div><span class="eyebrow gold">Contact</span><h1>Get in touch</h1><p class="muted" style="max-width:66ch">Questions about our practices, an executive programme, a survey or a project? Send us a message and we'll reply within two working days.</p></div></div>
+    return `<div class="page-head"><div><span class="eyebrow gold">Contact</span><h1>Contact us</h1><p class="muted" style="max-width:66ch">Tell us about your question, project or programme. We reply to every enquiry within two working days and, where it helps, arrange a call to agree the scope.</p></div></div>
       <div class="split">
         ${enquiryForm("contact", { title: "Send us a message", subject: true, messageLabel: "Your message" })}
         <section class="card"><h2>Contact details</h2>${details || `<p class="muted">Use the form and we'll reply by email.</p>`}
@@ -4435,7 +4445,7 @@ ${richSummary(st, rows)}`;
     const enq = S.enquiries.filter((e) => e.requesterId === S.uid).sort((a, b) => b.createdAt - a.createdAt);
     const fw = S.fieldwork.filter((f) => f.requesterId === S.uid);
     const mine = myStudies();
-    const sec = { courses: `<section class="card"><div class="qmeta"><h2>My courses</h2><a class="btn small" href="#training">Browse courses</a></div>`, surveys: `<section class="card"><div class="qmeta"><h2>My surveys</h2><a class="btn small" href="#studies">Open My surveys</a></div><p class="muted">${mine.length ? `${mine.length} survey${mine.length === 1 ? "" : "s"}: ${mine.filter((x) => x.status === "live").length} live, ${mine.filter((x) => x.status === "draft").length} draft.` : "You haven't created a survey yet."}</p><div class="row wrap"><a class="btn small primary" href="#create">Create a survey</a><a class="btn small" href="#panel">Take paid surveys</a></div></section>`, enquiries: `<section class="card"><h2>My enquiries</h2>${enq.length || fw.length ? `<div class="table-wrap" tabindex="0"><table><thead><tr><th>Date</th><th>About</th><th>Status</th></tr></thead><tbody>${enq.map((e) => `<tr><td class="n">${fmtDate(e.createdAt)}</td><td>${esc({ analytics: "Data analysis", consultancy: "Consultancy", contact: "General", training: "Training" }[e.type] || e.type)}${e.details && e.details.service ? ` · ${esc(e.details.service)}` : ""}</td><td><span class="pill">${st[e.status] || e.status}</span></td></tr>`).join("")}${fw.map((f) => `<tr><td class="n">${fmtDate(f.createdAt)}</td><td>Paper survey fieldwork · ${esc(f.ref || "")}</td><td><span class="pill">${esc({ new: "Received", contacted: "We've been in touch", quoted: "Final quote sent", won: "Agreed", lost: "Closed" }[f.status] || f.status)}</span></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No enquiries yet. Ask us about <a href="#consultancy">consultancy</a>, <a href="#analytics">analysis</a> or <a href="#training">training</a>.</p>`}</section>`, profile: `<section class="card"><h2>Profile</h2>${API ? `<dl class="kv"><dt>Name</dt><dd>${esc(u.name || "—")}</dd><dt>Email</dt><dd>${esc(u.email)}</dd><dt>Sign-in</dt><dd>${u.google ? "Google" : "Email and password"}</dd><dt>Email</dt><dd>${unverified() ? `<span class="warn">Not confirmed</span> <button class="linkbtn" data-act="resendVerifyAcct">Send link again</button>` : "Confirmed"}</dd></dl><div><button class="btn small ghost" data-act="signout">Sign out</button></div>` : `<p class="muted">On claude.ai, Afrimetrica uses your Claude account.</p>`}</section>`, participant: `<section class="card"><h2>Participant profile</h2><p class="muted">${S.profile ? `${esc(S.profile.age)} · ${esc(S.profile.gender)} · ${esc(S.profile.country)} · ${esc(S.profile.occupation)}` : "Set up a short profile to take paid surveys."}</p><a class="btn small" href="#panel" style="align-self:flex-start">${S.profile ? "Studies and earnings" : "Set up profile"}</a></section>` };
+    const sec = { courses: `<section class="card"><div class="qmeta"><h2>My courses</h2><a class="btn small" href="#training">Browse courses</a></div>`, surveys: `<section class="card"><div class="qmeta"><h2>My surveys</h2><a class="btn small" href="#studies">Open My surveys</a></div><p class="muted">${mine.length ? `${mine.length} survey${mine.length === 1 ? "" : "s"}: ${mine.filter((x) => x.status === "live").length} live, ${mine.filter((x) => x.status === "draft").length} draft.` : "You haven't created a survey yet."}</p><div class="row wrap"><a class="btn small primary" href="#create">Create a survey</a><a class="btn small" href="#panel">Take paid surveys</a></div></section>`, enquiries: `<section class="card"><h2>My enquiries</h2>${enq.length || fw.length ? `<div class="table-wrap" tabindex="0"><table><thead><tr><th>Date</th><th>About</th><th>Status</th></tr></thead><tbody>${enq.map((e) => `<tr><td class="n">${fmtDate(e.createdAt)}</td><td>${esc({ analytics: "Data analysis", consultancy: "Consultancy", contact: "General", training: "Training" }[e.type] || e.type)}${e.details && e.details.service ? ` · ${esc(e.details.service)}` : ""}</td><td><span class="pill">${st[e.status] || e.status}</span></td></tr>`).join("")}${fw.map((f) => `<tr><td class="n">${fmtDate(f.createdAt)}</td><td>Paper survey fieldwork · ${esc(f.ref || "")}</td><td><span class="pill">${esc({ new: "Received", contacted: "We've been in touch", quoted: "Final quote sent", won: "Agreed", lost: "Closed" }[f.status] || f.status)}</span></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No enquiries yet. Ask us about <a href="#consultancy">consultancy</a>, <a href="#practices/data-intelligence">analysis</a> or <a href="#training">training</a>.</p>`}</section>`, profile: `<section class="card"><h2>Profile</h2>${API ? `<dl class="kv"><dt>Name</dt><dd>${esc(u.name || "—")}</dd><dt>Email</dt><dd>${esc(u.email)}</dd><dt>Sign-in</dt><dd>${u.google ? "Google" : "Email and password"}</dd><dt>Email</dt><dd>${unverified() ? `<span class="warn">Not confirmed</span> <button class="linkbtn" data-act="resendVerifyAcct">Send link again</button>` : "Confirmed"}</dd></dl><div><button class="btn small ghost" data-act="signout">Sign out</button></div>` : `<p class="muted">On claude.ai, Afrimetrica uses your Claude account.</p>`}</section>`, participant: `<section class="card"><h2>Participant profile</h2><p class="muted">${S.profile ? `${esc(S.profile.age)} · ${esc(S.profile.gender)} · ${esc(S.profile.country)} · ${esc(S.profile.occupation)}` : "Set up a short profile to take paid surveys."}</p><a class="btn small" href="#panel" style="align-self:flex-start">${S.profile ? "Studies and earnings" : "Set up profile"}</a></section>` };
     const part = (S.acc || "").split("/")[0];
     const head = `<div class="page-head"><div><span class="eyebrow gold">My Account</span><h1>${API ? `Hello${firstName(u) ? ", " + esc(firstName(u)) : ""}` : "Your account"}</h1></div>${S.isOwner ? `<a class="btn gold" href="#business">Open admin area</a>` : ""}</div>`;
     if (part === "courses") return head + sec.courses;

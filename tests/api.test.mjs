@@ -101,6 +101,11 @@ check("the main menu has Our Practices, Executive Education and Insights", pageS
 check("old unit names are gone from the pages", !/Afrimetrica (Consulting|Analytics|Academy)|Knowledge Hub/.test(pageSrc));
 check("the approach page under Research & Advisory points to About", (await (await fetch(base + "/consultancy/approach")).text()).includes('<link rel="canonical" href="https://surveyspider.test/about/approach">'));
 check("the certificates page under About points search engines to the Executive Education one", (await (await fetch(base + "/about/certificates")).text()).includes('<link rel="canonical" href="https://surveyspider.test/training/certificates">') && !smText.includes("<loc>https://surveyspider.test/about/certificates</loc>"));
+for (const [from, to] of [["/analytics", "/practices/data-intelligence"], ["/analytics/", "/practices/data-intelligence"], ["/resources/articles", "/resources"]]) {
+  const r = await fetch(base + from + "?utm=x", { redirect: "manual" });
+  check(`merged page ${from} permanently redirects to ${to}`, r.status === 301 && r.headers.get("location") === to + "?utm=x");
+}
+check("merged pages are not in the sitemap, their replacements are", !smText.includes("<loc>https://surveyspider.test/analytics</loc>") && !smText.includes("<loc>https://surveyspider.test/resources/articles</loc>") && smText.includes("<loc>https://surveyspider.test/resources</loc>") && (await fetch(base + "/resources/articles/sample")).status === 200);
 check("old addresses still open (no page removed)", (await fetch(base + "/analytics/service/statistics")).status === 200 && (await fetch(base + "/consultancy/service/policy")).status === 200 && (await fetch(base + "/about/team")).status === 200);
 check("production pages are indexable", !(await fetch(base + "/")).headers.get("x-robots-tag") && !homeHtml.includes('content="noindex'));
 process.env.NOINDEX = "1";

@@ -51,6 +51,8 @@ const PAGES = new Map((existsSync(path.join(here, "public", "pages.json")) ? JSO
 const PUBLIC_SECTIONS = /^\/(about|practices|training|surveys|analytics|consultancy|resources|contact|privacy|terms|pricing|paper-survey)(\/[a-z0-9-]+)*$/;
 // NOINDEX=1 marks a staging copy: robots.txt blocks everything and every page says noindex. Read per request.
 const staging = () => process.env.NOINDEX === "1";
+// Merged pages (see docs/navigation-audit.md): old address → the page that replaced it.
+const MERGED_PAGES = { "/analytics": "/practices/data-intelligence", "/resources/articles": "/resources" };
 const SOCIAL = existsSync(path.join(here, "public", "social.jpg")) ? readFileSync(path.join(here, "public", "social.jpg")) : null;
 const DEFAULT_TITLE = "Afrimetrica — Data, Research, Advisory and Executive Education";
 const DEFAULT_DESC = "An independent, Africa-focused professional services firm specialising in data intelligence, research, strategic advisory and executive education.";
@@ -671,6 +673,8 @@ export const server = http.createServer(async (req, res) => {
     if (url.pathname.startsWith("/vendor/") && VENDOR.has(url.pathname.slice(8))) { res.writeHead(200, { "Content-Type": "text/javascript; charset=utf-8", "Cache-Control": "public, max-age=86400" }); return res.end(VENDOR.get(url.pathname.slice(8))); }
     if (url.pathname === "/icon.svg") { res.writeHead(200, { "Content-Type": "image/svg+xml", "Cache-Control": "public, max-age=86400" }); return res.end(ICON); }
     if (req.method === "GET" && (url.pathname === "/" || url.pathname === "/index.html")) { res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache" }); return res.end(pageHtml(PAGES.get("/") || { path: "/" }, baseUrl(req), true)); }
+    // Pages merged into others: permanent redirects, keeping any query string.
+    if ((req.method === "GET" || req.method === "HEAD") && MERGED_PAGES[url.pathname.replace(/\/+$/, "")]) { res.writeHead(301, { Location: MERGED_PAGES[url.pathname.replace(/\/+$/, "")] + url.search }); return res.end(); }
     if (req.method === "GET" && url.pathname.length > 1 && url.pathname.endsWith("/") && PAGES.has(url.pathname.replace(/\/+$/, ""))) { res.writeHead(301, { Location: url.pathname.replace(/\/+$/, "") + url.search }); return res.end(); }
     if (req.method === "GET" && PUBLIC_SECTIONS.test(url.pathname)) {
       // A public page: known ones are listed for search engines; others still open in the app but aren't indexed.
