@@ -355,8 +355,13 @@ function readBody(req, limit = 1_000_000) {
 }
 const isObj = (v) => v && typeof v === "object" && !Array.isArray(v);
 const okId = (s) => typeof s === "string" && /^[A-Za-z0-9_.~:@+-]{1,120}$/.test(s);
-const usedSlots = (sid) => Object.values(db.responses).filter((r) => r.studyId === sid && r.status !== "rejected").length;
-const stub = (r) => ({ id: "h" + sha(r.id).slice(0, 16), studyId: r.studyId, status: r.status });
+const usedSlots = (sid) => Object.values(db.responses).filter((r) => r.studyId === sid && r.status !== "rejected" && r.source !== "link").length;
+// Share links: a survey's owner can open a link anyone can answer without an account (one response per browser).
+// Link responses are unpaid, don't use the paid panel's places, and are capped per survey.
+const LINK_CAP = 5000;
+const linkOpen = (st) => !!(st && st.status === "live" && st.link && st.link.on);
+const linkCount = (sid) => Object.values(db.responses).filter((r) => r.studyId === sid && r.source === "link").length;
+const stub = (r) => ({ id: "h" + sha(r.id).slice(0, 16), studyId: r.studyId, status: r.status, ...(r.source === "link" ? { source: "link" } : {}) });
 // What a site administrator sees of other people's responses: counts, rewards and dates for the business view,
 // never the answers, demographics or the participant's account id.
 const adminStub = (r) => ({ ...stub(r), reward: r.reward, test: !!r.test, createdAt: r.createdAt, participantId: "p_" + sha(String(r.participantId)).slice(0, 12) });
@@ -478,6 +483,39 @@ async function handleApi(req, res, url) {
     const enrollments = Object.values(db.enrollments).filter((x) => me.isAdmin || x.userId === uid);
     const enquiries = Object.values(db.enquiries).filter((x) => me.isAdmin || x.requesterId === uid);
     return send(res, 200, { studies, responses, actions, fieldwork, courses, enrollments, enquiries, settings: db.settings || {}, profile: db.profiles[uid] || null, ai: !!client });
+  }
+
+  if (kind === "public" && okId(id)) {
+    const st = db.studies[id], uidDone = () => !!db.responses[`${id}-${uid}`];
+    if (m === "GET") {
+      if (!linkOpen(st)) return fail(res, st && st.status !== "draft" ? 410 : 404, "not_found", st && st.status !== "draft" ? "This survey is no longer taking responses." : "We couldn't find this survey. Check the link you were sent.");
+      return send(res, 200, { survey: { id, title: st.title, description: st.description || "", minutes: st.minutes, attention: !!st.attention, questions: st.questions }, done: uidDone() });
+    }
+    if (m === "POST") {
+      const ip = clientIp(req);
+      if (tooMany("link-ip|" + ip, 60, 3600e3) || tooMany("link-ip-survey|" + ip + "|" + id, 15, 3600e3)) return fail(res, 429, "rate_limited", "Too many responses from this connection. Please try again later.");
+      const b = await readBody(req, 100_000);
+      if (!linkOpen(st)) return fail(res, 409, "invalid_argument", "This survey is no longer taking responses.");
+      if (!isObj(b) || !isObj(b.answers) || b.consent !== true) return fail(res, 400, "invalid_argument", "That isn't a valid response.");
+      if (uidDone()) return fail(res, 409, "invalid_argument", "You have already answered this survey. Thank you.");
+      if (linkCount(id) >= LINK_CAP) return fail(res, 409, "invalid_argument", "This survey has reached its response limit.");
+      // Keep only answers to this survey's questions, in the expected shapes and lengths.
+      const qs = new Map(st.questions.filter(isObj).map((q) => [q.id, q])), answers = {};
+      for (const [k, v] of Object.entries(b.answers)) {
+        if (!qs.has(k)) continue;
+        if (typeof v === "string" && v.trim()) answers[k] = v.slice(0, 2000);
+        else if (typeof v === "number" && Number.isFinite(v)) answers[k] = v;
+        else if (Array.isArray(v)) { const a = v.filter((x) => typeof x === "string").slice(0, 50).map((x) => x.slice(0, 500)); if (a.length) answers[k] = a; }
+      }
+      const missing = [...qs.values()].filter((q) => q.required && answers[q.id] === undefined);
+      if (missing.length) return fail(res, 400, "invalid_argument", "Please answer all the required questions.");
+      const dur = Math.max(0, Math.min(86400, Number(b.durationSec) || 0));
+      const passed = !st.attention || b.attention === "Purple", speeder = dur < (Number(st.minutes) || 1) * 60 * 0.3;
+      const rid = `${id}-${uid}`, now = Date.now();
+      db.responses[rid] = { id: rid, studyId: id, ownerId: st.ownerId, participantId: uid, answers, passedAttention: passed, speeder, status: passed && !speeder ? "approved" : "flagged",
+        reward: 0, durationSec: Math.round(dur), source: "link", consentAt: now, test: st.ownerId === uid, createdAt: now };
+      persist(); return send(res, 200, { ok: true });
+    }
   }
 
   if (kind === "studies" && okId(id)) {
@@ -680,6 +718,11 @@ export const server = http.createServer(async (req, res) => {
     // Pages merged into others: permanent redirects, keeping any query string.
     if ((req.method === "GET" || req.method === "HEAD") && MERGED_PAGES[url.pathname.replace(/\/+$/, "")]) { res.writeHead(301, { Location: MERGED_PAGES[url.pathname.replace(/\/+$/, "")] + url.search }); return res.end(); }
     if (req.method === "GET" && url.pathname.length > 1 && url.pathname.endsWith("/") && PAGES.has(url.pathname.replace(/\/+$/, ""))) { res.writeHead(301, { Location: url.pathname.replace(/\/+$/, "") + url.search }); return res.end(); }
+    if (req.method === "GET" && /^\/s\/[A-Za-z0-9_-]{1,120}$/.test(url.pathname)) {
+      const st = db.studies[url.pathname.slice(3)], open = linkOpen(st);
+      res.writeHead(open ? 200 : 404, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache", "X-Robots-Tag": "noindex" });
+      return res.end(pageHtml(open ? { path: url.pathname, title: `${st.title} | Afrimetrica Surveys`, description: st.description || "Please take a few minutes to answer this survey." } : { path: url.pathname, title: "Survey | Afrimetrica Surveys" }, baseUrl(req), false));
+    }
     if (req.method === "GET" && PUBLIC_SECTIONS.test(url.pathname)) {
       // A public page: known ones are listed for search engines; others still open in the app but aren't indexed.
       const known = PAGES.has(url.pathname);

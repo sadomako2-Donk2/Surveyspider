@@ -517,6 +517,13 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
 .hero-photo img, .intro-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius-l, 18px); display: block; background: var(--surface); box-shadow: var(--shadow-1, 0 1px 3px rgba(14,29,58,.12)); }
 .img-note { font-size: .75rem; color: var(--muted); }
 .slide-note:empty { display: none; }
+/* survey share links */
+.share-panel { grid-column: 1 / -1; width: 100%; border-top: 1px solid var(--line); padding-top: 14px; margin-top: 4px; gap: 10px; }
+.share-panel h3 { margin: 0; font-size: 1rem; }
+.share-link { display: flex; gap: 8px; flex-wrap: wrap; }
+.share-link input { flex: 1 1 280px; min-width: 0; }
+.share-to { gap: 6px; align-items: center; }
+.respond-brand { text-align: center; margin-top: 8px; }
 .side-photo.slideshow { margin: 0; }
 .wide-shot .slide-box { aspect-ratio: 16 / 9; border: 1px solid var(--line); }
 .slide-box { position: relative; overflow: hidden; border-radius: var(--radius-l, 18px); aspect-ratio: 4 / 3; background: var(--surface); box-shadow: var(--shadow-1, 0 1px 3px rgba(14,29,58,.12)); }
@@ -1006,7 +1013,7 @@ html { scroll-padding-top: calc(var(--header-h, 110px) + 16px); }
     if (!API) { el.innerHTML = ""; return; }
     if (!S.user) { el.innerHTML = S.view === "signin" ? "" : `<a class="btn small primary" href="#signin" data-act="goSignin" data-m="signin">Sign in</a>`; return; }
     const u = S.user, ini = ((u.name || u.email).trim().split(/\s+/).map((w) => w[0]).join("").slice(0, 2) || "?").toUpperCase();
-    el.innerHTML = `<details class="acct-menu"><summary aria-label="Account menu"><span class="avatar" aria-hidden="true">${esc(ini)}</span><span class="acct-name">${esc(firstName(u))}</span></summary>
+    el.innerHTML = `<details class="acct-menu"><summary><span class="avatar" aria-hidden="true">${esc(ini)}</span><span class="acct-name">${esc(firstName(u))}</span><span class="sr-only">: account menu</span></summary>
       <div class="acct-pop"><b>${esc(u.name || "Your account")}</b><span class="hint">${esc(u.email)}</span><span class="hint">${u.google ? "Signed in with Google" : "Email and password"}${S.isOwner ? " · site owner" : ""}</span>${unverified() ? `<span class="hint warn">Email not confirmed yet</span>` : ""}<a class="btn small ghost" href="#account">My Account</a>${S.isOwner ? `<a class="btn small ghost" href="#business">Admin area</a>` : ""}<button class="btn small" data-act="signout">Sign out</button></div></details>`;
   }
   const GOOGLE_G = `<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>`;
@@ -1089,7 +1096,8 @@ html { scroll-padding-top: calc(var(--header-h, 110px) + 16px); }
   // ---------- derived data ----------
   const studyById = (id) => S.studies.find((s) => s.id === id);
   const respFor = (id) => S.responses.filter((r) => r.studyId === id);
-  const usedSlots = (id) => respFor(id).filter((r) => r.status !== "rejected").length;
+  const usedSlots = (id) => respFor(id).filter((r) => r.status !== "rejected" && r.source !== "link").length;
+  const linkResponses = (id) => respFor(id).filter((r) => r.source === "link").length;
   const myStudies = () => S.studies.filter((s) => s.ownerId === S.uid).sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
   const myResponses = () => S.responses.filter((r) => r.participantId === S.uid);
   const hourly = (st) => (st.minutes > 0 ? st.reward / (st.minutes / 60) : 0);
@@ -1195,7 +1203,7 @@ html { scroll-padding-top: calc(var(--header-h, 110px) + 16px); }
   function render() {
     pending = false;
     renderTabs();
-    const v = { privacy: viewPrivacy, terms: viewTerms, signin: viewSignin, home: viewHome, about: viewAbout, training: viewTraining, surveys: viewSurveys, practices: viewPractices, analytics: viewAnalyticsSvc, consultancy: viewConsult, resources: viewResources, contact: viewContact, account: viewAccount, pricing: viewPricing, import: viewImport, "paper-survey": viewF2F, create: viewCreate, studies: viewStudies, panel: viewPanel, results: viewResults, business: viewBusiness }[S.view] || viewHome;
+    const v = { privacy: viewPrivacy, terms: viewTerms, signin: viewSignin, home: viewHome, about: viewAbout, training: viewTraining, surveys: viewSurveys, practices: viewPractices, analytics: viewAnalyticsSvc, consultancy: viewConsult, resources: viewResources, contact: viewContact, account: viewAccount, pricing: viewPricing, import: viewImport, "paper-survey": viewF2F, create: viewCreate, studies: viewStudies, panel: viewPanel, respond: viewRespond, results: viewResults, business: viewBusiness }[S.view] || viewHome;
     $("#main").innerHTML = v();
     if (S.view === "create" && S.draft) updateCost();
     setPageMeta();
@@ -1208,6 +1216,7 @@ html { scroll-padding-top: calc(var(--header-h, 110px) + 16px); }
     const h = location.hash.replace("#", ""), first = h.split("/")[0];
     if (h && (ROUTES.has(first) || first === "paper-to-pen" || first === "library")) return h;
     const p = decodeURIComponent(location.pathname).replace(/^\/+|\/+$/g, "");
+    if (/^s\/[A-Za-z0-9_-]{1,120}$/.test(p)) return "respond/" + p.slice(2);
     return p && CLEAN.has(p.split("/")[0]) ? p : "";
   }
   // Turns #links to public pages into real addresses (run on everything added to the page).
@@ -1223,7 +1232,12 @@ html { scroll-padding-top: calc(var(--header-h, 110px) + 16px); }
     let h = routeKey();
     if (MERGED[h]) { h = MERGED[h]; history.replaceState(history.state, "", "/" + h + location.search); }
     { const c = cleanPath(h === "paper-to-pen" ? "paper-survey" : h === "library" ? "resources" : h); if (c && location.hash) history.replaceState(history.state, "", c + location.search); }
+    // An app page (#studies, #results...) opened from a public page's address: show its own address, not the old page's.
+    { const hh = location.hash.replace("#", ""); if (hh && ROUTES.has(hh.split("/")[0]) && !cleanPath(hh) && location.pathname !== "/") history.replaceState(history.state, "", "/" + location.search + location.hash); }
     if (h === "paper-to-pen") h = "paper-survey"; // old links keep working
+    // A survey's share link: /s/<id>
+    const rsPart = h.startsWith("respond/") ? h.slice(8) : "";
+    if (rsPart) { h = "respond"; if (!S.pub || S.pub.id !== rsPart) S.pub = { id: rsPart }; }
     // Training has its own pages: #training/<part>[/<item>]
     const trPart = h.startsWith("training/") ? h.slice(9) : "";
     if (trPart) h = "training";
@@ -1901,16 +1915,79 @@ ${richSummary(st, rows)}`;
       const del = S.confirmDel === s.id ? `<button class="btn small danger" data-act="del" data-id="${s.id}">Confirm delete</button><button class="btn small ghost" data-act="canceldel">Keep</button>` : `<button class="btn small ghost danger" data-act="askdel" data-id="${s.id}">Delete</button>`;
       const actions = s.status === "draft"
         ? `<button class="btn small" data-act="edit" data-id="${s.id}">Edit</button><button class="btn small ghost" data-act="xlSurvey" data-id="${s.id}">Excel</button>${del}`
-        : `<button class="btn small primary" data-act="results" data-id="${s.id}">Results</button>${s.status === "live" ? `<button class="btn small" data-act="close" data-id="${s.id}">Close</button>` : `<button class="btn small" data-act="reopen" data-id="${s.id}">Reopen</button>`}<button class="btn small ghost" data-act="copy" data-id="${s.id}">Duplicate</button><button class="btn small ghost" data-act="xlSurvey" data-id="${s.id}">Excel</button>`;
+        : `<button class="btn small primary" data-act="results" data-id="${s.id}">Results</button>${s.status === "live" ? `<button class="btn small${S.shareOpen === s.id ? " primary" : ""}" data-act="share" data-id="${s.id}" aria-expanded="${S.shareOpen === s.id}">Share</button><button class="btn small" data-act="close" data-id="${s.id}">Close</button>` : `<button class="btn small" data-act="reopen" data-id="${s.id}">Reopen</button>`}<button class="btn small ghost" data-act="copy" data-id="${s.id}">Duplicate</button><button class="btn small ghost" data-act="xlSurvey" data-id="${s.id}">Excel</button>`;
       return `<article class="card study">
         <div class="study-info">
           <div class="study-title"><h2>${esc(s.title || "Untitled study")}</h2>${pill}${s.library ? `<span class="pill live">In library</span>` : ""}</div>
-          <div class="meta-row"><span>${int(used)} / ${int(s.target)} responses</span><span>${s.questions.length} questions</span><span>${s.minutes} min</span><span>${money(s.reward)} each</span><span>Budget ${money(cost)}</span></div>
+          <div class="meta-row"><span>${int(used)} / ${int(s.target)} responses</span>${s.link && s.link.on || linkResponses(s.id) ? `<span>${int(linkResponses(s.id))} via link</span>` : ""}<span>${s.questions.length} questions</span><span>${s.minutes} min</span><span>${money(s.reward)} each</span><span>Budget ${money(cost)}</span></div>
           ${s.status !== "draft" ? `<div class="progress" aria-hidden="true"><i style="width:${Math.min(100, pct(used, s.target))}%"></i></div>` : ""}
         </div>
         <div class="row wrap">${actions}</div>
+        ${S.shareOpen === s.id && s.status === "live" ? sharePanel(s) : ""}
       </article>`;
     }).join("")}</div>`;
+  }
+
+  // ---------- SHARE LINKS ----------
+  // Like a web-link collector: the owner opens a link anyone can answer without an account (one response per
+  // browser). Link responses are free and don't use the paid panel's places; the owner can close the link at any time.
+  const surveyLink = (s) => location.origin + "/s/" + encodeURIComponent(s.id);
+  function sharePanel(s) {
+    if (!API) return `<div class="share-panel"><p class="muted">Share links work on the live site, where responses are stored on Afrimetrica's server.</p></div>`;
+    if (!(s.link && s.link.on)) return `<div class="share-panel stack"><h3>Share a link to this survey</h3><p class="muted">Create a link you can send to your own customers, staff or members. Anyone with the link can answer without an account, once per device. Link responses are free and don't use your paid places.</p><div><button class="btn primary" data-act="linkOn" data-id="${s.id}">Create share link</button></div></div>`;
+    const url = surveyLink(s), msg = `Please take a few minutes to answer this survey: ${s.title}`;
+    const enc = encodeURIComponent, out = (href, label) => `<a class="btn small" href="${href}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+    return `<div class="share-panel stack"><h3>Share a link to this survey</h3>
+      <div class="share-link"><label for="shareUrl-${s.id}" class="sr-only">Survey link</label><input id="shareUrl-${s.id}" value="${esc(url)}" readonly><button class="btn primary" data-act="copyText" data-v="${esc(url)}">Copy link</button></div>
+      <div class="row wrap share-to"><span class="hint">Share by</span>${out(`https://wa.me/?text=${enc(msg + " " + url)}`, "WhatsApp")}${out(`mailto:?subject=${enc(s.title)}&body=${enc(msg + "\n\n" + url)}`, "Email")}${out(`https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}`, "LinkedIn")}${out(`https://www.facebook.com/sharer/sharer.php?u=${enc(url)}`, "Facebook")}${out(`https://twitter.com/intent/tweet?text=${enc(msg)}&url=${enc(url)}`, "X")}${navigator.share ? `<button class="btn small" data-act="shareNative" data-id="${s.id}">More…</button>` : ""}</div>
+      <p class="hint">${int(linkResponses(s.id))} response${linkResponses(s.id) === 1 ? "" : "s"} through this link so far. Answers appear in Analyze with your other responses, and only you can see them.</p>
+      <div class="row wrap"><a class="btn small ghost" href="${esc(url)}" target="_blank" rel="noopener">Open the survey</a><button class="btn small ghost danger" data-act="linkOff" data-id="${s.id}">Close the link</button></div></div>`;
+  }
+  // The page people reach from a share link: the survey's questions, a consent line and a thank-you.
+  function viewRespond() {
+    const P = S.pub || {};
+    if (!API) return `<div class="empty"><h2>Survey links work on the live site</h2></div>`;
+    if (!P.loaded && !P.loading) { P.loading = true; api("GET", "/api/public/" + encodeURIComponent(P.id)).then((j) => Object.assign(P, { loaded: true, loading: false, survey: j.survey, done: j.done, start: Date.now() })).catch((e) => Object.assign(P, { loaded: true, loading: false, error: e.message || "We couldn't open this survey." })).then(render); }
+    if (!P.loaded) return loading();
+    const brand = `<p class="hint respond-brand">Survey hosted on Afrimetrica Surveys</p>`;
+    if (P.error) return `<div class="take"><div class="empty"><h1>Survey not available</h1><p class="muted">${esc(P.error)}</p></div>${brand}</div>`;
+    const st = P.survey;
+    if (P.sent || P.done) return `<div class="take"><div class="card done"><span class="eyebrow">${esc(st.title)}</span><h1>Thank you</h1><p class="muted">${P.sent ? "Your answers were sent." : "You have already answered this survey from this device."} You can close this page.</p></div>${brand}</div>`;
+    const qs = takeQuestions(st);
+    return `<div class="take">
+      <header class="card"><span class="eyebrow">Survey</span><h1>${esc(st.title)}</h1>${st.description ? `<p class="muted">${esc(st.description)}</p>` : ""}<div class="meta-row"><span>About ${int(st.minutes)} min</span><span>${qs.length} question${qs.length === 1 ? "" : "s"}</span></div></header>
+      <form id="respondForm" class="stack" novalidate>
+        ${qs.map(qField).join("")}
+        <fieldset class="card"><legend>Your consent</legend><label class="inline" for="respondConsent"><input type="checkbox" id="respondConsent" name="consent" required> I agree to take part. My answers will be shared with the person or organisation that created this survey.</label>
+        <p class="hint">Afrimetrica stores the answers for the survey's owner and doesn't use them for anything else. Please don't include names or contact details unless the survey asks for them. See our <a href="#privacy">privacy notice</a>.</p></fieldset>
+        <div id="respondErr"></div>
+        <button class="btn primary big" type="submit">Submit answers</button>
+      </form>${brand}</div>`;
+  }
+  // Reads a survey form's answers (used by panel studies and share links). Returns { ans, missing }.
+  function readAnswers(form, qs) {
+    const fd = new FormData(form), ans = {}, missing = [];
+    qs.forEach((q, i) => {
+      const name = "a_" + q.id; let v;
+      if (q.type === "multi") v = fd.getAll(name);
+      else if (q.type === "rating") v = fd.get(name) ? +fd.get(name) : null;
+      else if (q.type === "number") { const raw = String(fd.get(name) || "").trim(); v = raw === "" || isNaN(+raw) ? null : +raw; }
+      else v = fd.get(name) ? String(fd.get(name)).trim() : null;
+      const empty = v == null || v === "" || (Array.isArray(v) && !v.length);
+      if (q.required && empty) missing.push(i + 1);
+      if (!empty) ans[q.id] = v;
+    });
+    return { ans, missing };
+  }
+  async function submitRespond(form) {
+    const P = S.pub, st = P && P.survey; if (!st) return;
+    const { ans, missing } = readAnswers(form, takeQuestions(st)), err = $("#respondErr");
+    if (missing.length) { err.innerHTML = `<div class="errs" role="alert">Please answer question${missing.length > 1 ? "s" : ""} ${missing.join(", ")}.</div>`; return; }
+    if (!form.querySelector("#respondConsent").checked) { err.innerHTML = `<div class="errs" role="alert">Please tick the consent box to send your answers.</div>`; return; }
+    const attention = ans.attn; delete ans.attn;
+    const btn = form.querySelector('button[type="submit"]'); btn.disabled = true;
+    try { await api("POST", "/api/public/" + encodeURIComponent(st.id), { answers: ans, attention, consent: true, durationSec: Math.round((Date.now() - P.start) / 1000) }); P.sent = true; render(); window.scrollTo(0, 0); }
+    catch (e) { btn.disabled = false; err.innerHTML = `<div class="errs" role="alert">${esc(e.message || "Your answers couldn't be sent. Please try again.")}</div>`; }
   }
 
   // ---------- PANEL ----------
@@ -2111,7 +2188,7 @@ ${richSummary(st, rows)}`;
     const showFilter = S.anTab !== "quality" && S.anTab !== "actions";
     return head(picker) + `
       <section class="kpis">
-        ${kpi(`${int(usedSlots(st.id))}<span class="muted" style="font-size:1rem"> / ${int(st.target)}</span>`, "Responses")}
+        ${linkResponses(st.id) ? kpi(`${int(usedSlots(st.id) + linkResponses(st.id))}`, `Responses (${int(usedSlots(st.id))} / ${int(st.target)} panel, ${int(linkResponses(st.id))} via link)`) : kpi(`${int(usedSlots(st.id))}<span class="muted" style="font-size:1rem"> / ${int(st.target)}</span>`, "Responses")}
         ${kpi(int(approved.length), "Approved")}
         ${kpi(int(flagged.length), "Waiting for review")}
         ${kpi(mmss(median(base.map((r) => r.durationSec))), "Median time")}
@@ -3074,7 +3151,7 @@ ${richSummary(st, rows)}`;
   // Research & Evaluation, Strategy & Advisory); Training is the Executive Education practice; Resources is Insights.
   const TOPNAV = [["home", "Home"], ["about", "About Us"], ["practices", "What We Do"], ["training", "Executive Education"], ["surveys", "Surveys"], ["resources", "Insights"], ["contact", "Contact"], ["account", "My Account"]];
   const SURVEY_NAV = [["surveys", "Overview"], ["create", "Create"], ["import", "Upload"], ["paper-survey", "Paper surveys"], ["studies", "My surveys"], ["results", "Analyze"], ["panel", "Take surveys"], ["pricing", "Plans"]];
-  const ROUTES = new Set([...TOPNAV.map(([k]) => k), ...SURVEY_NAV.map(([k]) => k), "analytics", "consultancy", "signin", "business", "privacy", "terms"]);
+  const ROUTES = new Set([...TOPNAV.map(([k]) => k), ...SURVEY_NAV.map(([k]) => k), "analytics", "consultancy", "signin", "business", "privacy", "terms", "respond"]);
   const CUR = { USD: "US$", GHS: "GH₵", GBP: "£", EUR: "€" };
   const fee = (x, c) => (+x > 0 ? (CUR[c] || "") + (+x).toLocaleString("en-US", { maximumFractionDigits: 2 }) : "Free");
   const fmtDay = (d) => (d ? new Date(d + "T12:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : "Date to be confirmed");
@@ -4875,6 +4952,7 @@ ${richSummary(st, rows)}`;
   main.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (e.target.id === "takeForm") return submitTake(e.target);
+    if (e.target.id === "respondForm") return submitRespond(e.target);
     if (e.target.id === "heroForm") { const g = ($("#heroGoal").value || "").trim(); if (SAMPLE) generateSurvey(g, "", 10); else { S.gen = { status: "idle", goal: g }; go("create"); } return; }
     if (e.target.id === "askForm") { runAsk(($("#askQ").value || "").trim()); return; }
     if (e.target.id === "chatForm") { const q = ($("#chatQ").value || "").trim(); if (q) runChat(q); return; }
@@ -4935,11 +5013,15 @@ ${richSummary(st, rows)}`;
       case "savedraft": saveStudy("draft"); break;
       case "launch": saveStudy("live"); break;
       case "edit": S.draft = clone(st); saveDraftLocal(); go("create"); break;
-      case "copy": { const c = clone(st); Object.assign(c, { id: newId("s"), title: st.title + " (copy)", status: "draft" }); ["library", "launchedAt", "createdAt", "ownerId"].forEach((k) => delete c[k]); c.questions.forEach((q) => (q.id = newId("q"))); S.draft = c; saveDraftLocal(); go("create"); break; }
+      case "copy": { const c = clone(st); Object.assign(c, { id: newId("s"), title: st.title + " (copy)", status: "draft" }); ["library", "launchedAt", "createdAt", "ownerId", "link"].forEach((k) => delete c[k]); c.questions.forEach((q) => (q.id = newId("q"))); S.draft = c; saveDraftLocal(); go("create"); break; }
       case "askdel": S.confirmDel = id; render(); break;
       case "canceldel": S.confirmDel = null; render(); break;
       case "del": S.confirmDel = null; await save(() => backend.delStudy(id), "Draft deleted."); break;
       case "close": await save(() => backend.putStudy({ ...clone(st), status: "closed", updatedAt: Date.now() }), "Study closed. No new responses will be accepted."); break;
+      case "share": S.shareOpen = S.shareOpen === id ? null : id; render(); break;
+      case "linkOn": await save(() => backend.putStudy({ ...clone(st), link: { on: true, at: Date.now() }, updatedAt: Date.now() }), "Share link created. Copy it or share it below."); break;
+      case "linkOff": await save(() => backend.putStudy({ ...clone(st), link: { ...(st.link || {}), on: false }, updatedAt: Date.now() }), "Link closed. It no longer accepts responses."); break;
+      case "shareNative": try { await navigator.share({ title: st.title, text: `Please take a few minutes to answer this survey: ${st.title}`, url: surveyLink(st) }); } catch (_) {} break;
       case "reopen": await save(() => backend.putStudy({ ...clone(st), status: "live", updatedAt: Date.now() }), "Study reopened."); break;
       case "results": S.resultsId = id; go("results"); break;
       case "take": if (API && !S.user) { requireSignIn("Sign in to take surveys and get paid."); break; } if (unverified()) { toast(`Confirm your email first. We sent a link to ${S.user.email}.`); break; } S.taking = id; S.takeStart = Date.now(); render(); window.scrollTo(0, 0); break;

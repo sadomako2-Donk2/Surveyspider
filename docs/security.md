@@ -11,6 +11,7 @@
 - Security headers on every response: Content-Security-Policy (scripts only from this site), Strict-Transport-Security (https, 1 year), X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy (no camera, microphone, location), Cross-Origin-Opener-Policy.
 - Browser libraries (Excel, Word and PDF readers) are served from `/vendor/` on this site, not from CDNs (`public/vendor/README.md`).
 - Rate limits use Cloudflare's CF-Connecting-IP when present; sign-in also has a per-email limit, so changing address doesn't allow more password guesses. Repeated wrong admin codes lock that visitor out for an hour.
+- Survey share links (`/s/<id>`, `/api/public/<id>`): off until the owner opens them, and closed again with the survey or by the owner. Anyone with the link can answer without an account, once per browser; each response needs ticked consent (time recorded as `consentAt`). Only answers to the survey's own questions are stored, with length limits; 15 responses per hour per connection per survey, 60 per hour per connection overall, at most 5,000 link responses per survey. Link responses are unpaid, don't use the paid panel's places, and only the survey's owner sees their answers. Link pages are never indexed.
 - HTTPS certificate (Google Trust Services, via Render/Cloudflare) renews automatically.
 
 ## Owner checklist (accounts outside the code)

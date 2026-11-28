@@ -22,6 +22,8 @@ Phase 1: a single Node.js service (`server.mjs`) plus a single-page front end (`
 
 - Images: `PHOTO` in `public/index.html` (file, alt, crop, rights status); manifest and licence rules in `docs/imagery.md`. Never publish reference-only or unlicensed images; AI images are uncaptioned (owner's decision) and must never be presented as real staff, clients or projects.
 
+- Survey share links: owner opens a link in My surveys › Share (`study.link.on`); respondents answer at `/s/<id>` via `GET/POST /api/public/<id>` without an account (one per browser, consent required, rate-limited, unpaid, `source: "link"`). Link responses never count toward paid places (`usedSlots`). Tests in `tests/api.test.mjs` ("share links").
+
 ## Commands
 - `npm test` — 20 statistics checks + 147 API checks. Must pass before pushing.
 - `npm start` — runs on port 10000.

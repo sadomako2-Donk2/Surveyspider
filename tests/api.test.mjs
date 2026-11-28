@@ -296,6 +296,37 @@ check("administrators can set contact details", (await Boss.call("PUT", "/api/se
 const st1 = (await C.call("GET", "/api/data")).json.settings;
 check("contact details are public and unsafe links are dropped", st1.email === "info@afrimetrica.test" && !st1.linkedin);
 
+// --- share links: anyone with a live survey's link can answer without an account ---
+{
+  const tok = (n) => n.toString(16).padStart(48, "0");
+  const anon = async (n, method, url, body) => { const r = await fetch(base + url, { method, headers: { "Content-Type": "application/json", "X-Client-Token": tok(n) }, body: body === undefined ? undefined : JSON.stringify(body) }); return { status: r.status, json: await r.json().catch(() => null) }; };
+  const ls = { ...study, id: "s9", title: "Link <survey>", description: "Tell us what you think.", target: 1, questions: [{ id: "q1", type: "single", text: "Pick", options: ["A", "B"], required: true }, { id: "q2", type: "text", text: "Why?", required: false }] };
+  await A.call("PUT", "/api/studies/s9", ls);
+  check("a survey's link is closed until the owner opens it", (await anon(1, "GET", "/api/public/s9")).status === 410 && (await fetch(base + "/s/s9")).status === 404);
+  check("only the owner can open the link", (await B.call("PUT", "/api/studies/s9", { ...ls, link: { on: true } })).status === 403);
+  await A.call("PUT", "/api/studies/s9", { ...ls, link: { on: true } });
+  const pub = await anon(1, "GET", "/api/public/s9");
+  check("an open link shows the survey's questions but not its owner or settings", pub.status === 200 && pub.json.survey.title === "Link <survey>" && pub.json.survey.questions.length === 2 && !JSON.stringify(pub.json).includes(meA.uid) && pub.json.survey.reward === undefined && pub.json.done === false);
+  const sp = await fetch(base + "/s/s9"), spHtml = await sp.text();
+  check("the link's page opens, isn't indexed, and previews the survey's title safely", sp.status === 200 && /noindex/.test(sp.headers.get("x-robots-tag") || "") && spHtml.includes("<title>Link &lt;survey&gt; | Afrimetrica Surveys</title>") && !spHtml.includes("Link <survey>"));
+  check("an unknown survey link is not found", (await anon(1, "GET", "/api/public/nope")).status === 404 && (await fetch(base + "/s/nope")).status === 404);
+  check("a response needs the respondent's consent", (await anon(1, "POST", "/api/public/s9", { answers: { q1: "A" } })).status === 400);
+  check("required questions must be answered", (await anon(1, "POST", "/api/public/s9", { answers: { q2: "x" }, consent: true })).status === 400);
+  check("anyone with the link can answer without an account", (await anon(1, "POST", "/api/public/s9", { answers: { q1: "A", q2: "Because", junk: "drop me" }, consent: true, durationSec: 120 })).status === 200);
+  check("answering twice from the same browser is refused", (await anon(1, "POST", "/api/public/s9", { answers: { q1: "B" }, consent: true })).status === 409 && (await anon(1, "GET", "/api/public/s9")).json.done === true);
+  await anon(2, "POST", "/api/public/s9", { answers: { q1: "B" }, consent: true, durationSec: 120 });
+  const mine = (await A.call("GET", "/api/data")).json.responses.filter((r) => r.studyId === "s9");
+  check("the owner sees link responses, marked as unpaid link responses with consent recorded", mine.length === 2 && mine.every((r) => r.source === "link" && r.reward === 0 && r.consentAt) && mine.some((r) => r.answers.q2 === "Because") && mine.every((r) => !("junk" in r.answers)));
+  check("other people don't see link answers", (await C.call("GET", "/api/data")).json.responses.filter((r) => r.studyId === "s9").every((r) => r.answers === undefined && r.source === "link"));
+  check("link responses don't use up the paid panel's places", (await B.call("PUT", `/api/responses/s9-${meB.uid}`, { studyId: "s9", answers: { q1: "A" } })).status === 200);
+  await A.call("PUT", "/api/studies/s9", { ...ls, link: { on: false } });
+  check("closing the link stops new responses", (await anon(3, "POST", "/api/public/s9", { answers: { q1: "A" }, consent: true })).status === 409 && (await anon(3, "GET", "/api/public/s9")).status === 410);
+  await A.call("PUT", "/api/studies/s9", { ...ls, link: { on: true } });
+  let limited = false; for (let n = 10; n < 30; n++) if ((await anon(n, "POST", "/api/public/s9", { answers: { q1: "A" }, consent: true, durationSec: 120 })).status === 429) { limited = true; break; }
+  check("many responses from one connection are rate-limited", limited);
+  await A.call("DELETE", "/api/studies/s9");
+}
+
 // --- privacy: administrators don't read other people's survey answers ---
 const bossData = (await Boss.call("GET", "/api/data")).json;
 const others = bossData.responses.filter((r) => r.studyId === "s1");
