@@ -15,7 +15,7 @@ Rules followed:
 | Page (route) | Component / section | Asset | Source / licence | Status |
 |---|---|---|---|---|
 | `/` | Home hero, right of headline | `p01-homepage-collaboration.webp` (P01) | Placement guide, embedded image | AI illustration; fallback until R05 is licensed |
-| `/about` | About overview, beside opening copy | `about.webp` | Supplied by Afrimetrica | Real photo; licence to confirm |
+| `/about` | About overview, beside opening copy | `about-memorial-park.webp` (Kwame Nkrumah Memorial Park, Accra) | Supplied by Afrimetrica | Real photo; licence to confirm; 460 px wide, so a larger original would look sharper |
 | `/about/vision` | Vision | none (photo removed) | n/a | Text-led, as the guide requires |
 | `/about/mission` | Mission | none | n/a | Text-led, unchanged |
 | `/about/approach` | Our approach | none | n/a | R20 not licensed; text-led, unchanged |
@@ -39,6 +39,7 @@ The screenshots were taken from a local copy of the site with a throwaway accoun
 | File | Was used on | Why |
 |---|---|---|
 | `home.webp`, `training.webp`, `surveys.webp`, `consultancy.webp`, `analytics.webp` | Slideshows on Home, About, Training, Surveys, Analytics, Research & Advisory | AI images repeated on every page in autoplay slideshows; replaced by one image per section |
+| `about.webp` (aerial view of a town) | About overview | Replaced at the owner's request by the Memorial Park photo |
 | `fieldwork-team.webp` | Fieldwork service, Research & Advisory card | Replaced by P05 (the guide's research illustration) |
 | `vision-city.webp` | Our vision | Guide: Mission and Vision stay text-led |
 
