@@ -37,6 +37,10 @@ The screenshots were taken from a local copy of the site with a throwaway accoun
 
 ## Removed
 
+- P19 (high-rise buildings with a company's branding) was taken out of all slideshows at the owner's request, and its files deleted.
+- The earlier AI photos (home, training, surveys, analytics, consultancy, fieldwork-team) were brought back at the owner's request: on the Home slideshow and in their own sections' slideshows (Executive Education tab, Data & Intelligence, Research & Evaluation, Fieldwork, Strategy & Advisory).
+
+
 | File | Was used on | Why |
 |---|---|---|
 | `home.webp`, `training.webp`, `surveys.webp`, `consultancy.webp`, `analytics.webp` | Slideshows on Home, About, Training, Surveys, Analytics, Research & Advisory | AI images repeated on every page in autoplay slideshows; replaced by one image per section |
@@ -50,12 +54,12 @@ The owner asked for all 20 pictures (P01–P19 and the Memorial Park photo) to b
 
 | Slideshow (page, place) | Photos, in order |
 |---|---|
-| Home, hero | P01, P02, P08, P07, P19 |
+| Home, hero | P01, then the earlier AI photos (home, training, surveys, analytics, consultancy), P02, P08, P07 |
 | About Us, opening | Memorial Park (drummers), P13, P18, Memorial Park (monument) |
-| Contact, opening | Memorial Park (monument), P07, P18, P19, Memorial Park (drummers) |
+| Contact, opening | Memorial Park (monument), P07, P18, Memorial Park (drummers) |
 | Executive Education tab, opening | P03, P11, P12, P13 |
 | Executive Education tab, in-house training | training-executive, P16, P02 |
-| Training venues | Memorial Park (monument), P18, P07, P19 |
+| Training venues | Memorial Park (monument), P18, P07 |
 | Executive Education practice | P03, P11, P12, training-executive |
 | Data & Intelligence, opening / how we work | P04, P14, P09 / analytics-team, P17, P15 |
 | Research & Evaluation | P05, P15, consultancy-workshop |
