@@ -653,6 +653,12 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
 .leader-role .person-initials { width: 120px; height: 120px; font-size: 2rem; }
 .leader-role h3 { margin: 0; font-size: 1.05rem; }
 @media (max-width: 420px) { .leader-role { padding: 18px 12px; } .leader-role .person-initials { width: 96px; height: 96px; font-size: 1.6rem; } .leader-role h3 { font-size: 0.95rem; } }
+/* two profiles side by side on wider screens */
+@media (min-width: 900px) {
+  .team-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .team-grid .person { grid-template-columns: 120px minmax(0, 1fr); gap: 18px; padding: 20px; }
+  .team-grid .person img, .team-grid .person .person-initials { width: 120px; height: 120px; font-size: 2rem; }
+}
 </style>
 
 <header class="topbar gutter">
@@ -3165,6 +3171,8 @@ ${richSummary(st, rows)}`;
       bio: "Mujtaba Ahsan, PhD, is an AI and Data Science Consultant at Afrimetrica and Professor of Management at the Fowler College of Business, San Diego State University. His research on entrepreneurship, international business and innovation appears in journals including the Academy of Management Review and Entrepreneurship Theory and Practice. He holds a PhD in Management from the University of Wisconsin-Milwaukee." },
     { id: "emmanuel-amoah", name: "Emmanuel Amoah, MBA, ACCA", role: "Consultant, Route to Market", photo: "",
       bio: "Emmanuel Amoah, MBA, ACCA, is a Route to Market Consultant at Afrimetrica with over 20 years' experience in multinational corporations across Africa, including Coca-Cola and Promasidor. He advises companies on their route to market and has trained more than 1,000 delegates in route-to-market strategy and market surveys." },
+    { id: "stephen-kehinde-medase", name: "Stephen Kehinde Medase, PhD", role: "Analyst", photo: "team-stephen-kehinde-medase.webp",
+      bio: "Stephen Kehinde Medase, PhD, is an Analyst at Afrimetrica and Senior Research Associate at the University of Johannesburg. He holds an MSc and PhD from Friedrich Schiller University Jena, Germany, and researches entrepreneurship, innovation and firm growth, publishing in journals including the Journal of Innovation & Knowledge." },
   ];
   // Leadership team: roles are shown now; add name, photo and bio as they are confirmed (the card then becomes a full profile).
   const LEADERSHIP = [
