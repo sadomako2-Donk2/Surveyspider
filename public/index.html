@@ -511,6 +511,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
 .intro-text { gap: 14px; }
 .intro-text .intro-lead { font-size: 1.12rem; font-weight: 500; line-height: 1.55; color: var(--ink, inherit); }
 .intro-text .ticks { margin: 2px 0; }
+.intro-text .h-small { font-size: 1rem; margin: 6px 0 0; }
 .intro-media .page-head { align-items: flex-start; }
 .hero-photo, .intro-photo { margin: 0; display: grid; gap: 6px; }
 .hero-photo img, .intro-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius-l, 18px); display: block; background: var(--surface); box-shadow: var(--shadow-1, 0 1px 3px rgba(14,29,58,.12)); }
@@ -3146,6 +3147,10 @@ ${richSummary(st, rows)}`;
     advisory: ["advisory", "consultancyAI", "laptopMeeting", "fourColleagues", "execGroup"],
     shotBuilder: ["shotBuilder", "shotResults", "digital"],
     surveysShots: ["shotResults", "shotBuilder"],
+    // Our approach: AI illustrations following an assignment (planning, fieldwork, interviews, analysis, reporting).
+    approach: ["homeAI", "fieldworkAI", "surveysAI", "analyticsAI", "consultancyAI"],
+    // Insights: AI illustrations of data and research work (owner's request).
+    insights: ["dataIntel", "analyticsAI", "digital", "trainingAI"],
   };
   // The slideshow that stands in for each photo placed beside a section.
   const SIDE_SET = { trainingExec: "trainingSide", venuesCity: "venues", analyticsTeam: "dataIntelSide", coWorkshop: "consultancySide", research: "fieldwork" };
@@ -4348,8 +4353,8 @@ ${richSummary(st, rows)}`;
     return `${coCrumbs(["", "Our approach"])}${approachBody()}`;
   }
   function approachBody() {
-    return `<div class="page-head"><div><span class="eyebrow gold">Our approach</span><h1>Independent, rigorous and practical</h1><p class="muted" style="max-width:70ch">Every assignment follows the same disciplined path, adapted to your questions, budget and context.</p></div></div>
-      <section class="card"><h2>How an assignment runs</h2>${coPhases}</section>
+    return `${introMedia(`<div class="stack intro-text"><div class="page-head"><div><span class="eyebrow gold">Our approach</span><h1>Independent, rigorous and practical</h1><p class="muted" style="max-width:70ch">Every assignment follows the same disciplined path, adapted to your questions, budget and context.</p></div></div>
+      <section class="card"><h2>How an assignment runs</h2>${coPhases}</section></div>`, "approach")}
       <div class="split">
         <section class="card"><h2>Quality</h2><ul class="ticks small"><li><div><b>Fit-for-purpose methods</b><span>The simplest design that can answer your question credibly.</span></div></li><li><div><b>Checked results</b><span>Analysis is reviewed before anything is reported.</span></div></li><li><div><b>Honest findings</b><span>We report what the evidence shows, including what didn't work.</span></div></li></ul></section>
         <section class="card"><h2>Ethics and data protection</h2><ul class="ticks small"><li><div><b>Informed consent</b><span>Participants know what they are agreeing to and can stop at any time.</span></div></li><li><div><b>Ethics approval</b><span>We seek approval from the relevant committees where a study needs it.</span></div></li><li><div><b>Safeguarding</b><span>Extra care with children and vulnerable groups.</span></div></li><li><div><b>Data protection</b><span>Personal data handled in line with the law, including Ghana's Data Protection Act, 2012.</span></div></li></ul></section>
@@ -4622,17 +4627,17 @@ ${richSummary(st, rows)}`;
     if (part === "videos") return resVideos();
     if (part === "catalogues") return arg === "training" ? resTrainingCatalogue() : arg === "services" ? resServicesBrochure() : resCatalogues();
     const tpl = Object.entries(TEMPLATES);
-    return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Insights</span><h1>Insights for better research</h1><p class="muted" style="max-width:66ch">Free guides, a sample size calculator, ready-made survey templates, published findings and links to open data.</p></div></div>
-      <section class="stack"><h2>Guides</h2>${guideCards()}</section>
+    return `${introMedia(`<div class="stack intro-text"><div class="page-head"><div><span class="eyebrow gold">Afrimetrica Insights</span><h1>Insights for better research</h1><p class="muted" style="max-width:66ch">Free guides, a sample size calculator, ready-made survey templates, published findings and links to open data.</p></div></div><div class="stack" style="gap:8px"><h2 class="h-small">On this page</h2><div class="row wrap">${[["Sample size calculator", "sampleCalc"], ["Survey templates", "resTemplates"], ["Published findings and open data", "resLibrary"]].map(([l, id], n) => `<button class="btn${n ? "" : " primary"}" data-act="scrollToId" data-t="${id}">${l}</button>`).join("")}</div></div>
+      <section class="stack" id="resGuides" style="gap:10px"><h2 class="h-small">Guides</h2>${GUIDES.map((g) => `<a class="card guide-link" href="#resources/articles/${g.id}"><b>${esc(g.title)}</b><span class="hint">${esc(g.summary)} · ${g.minutes} min read</span></a>`).join("")}</section></div>`, "insights")}
       <section class="card" id="sampleCalc"><div><h2>Sample size calculator</h2><p class="muted">How many completed responses you need for a given margin of error.</p></div>
         <div class="grid4"><label for="sc-conf">Confidence<select id="sc-conf"><option value="1.645">90%</option><option value="1.96" selected>95%</option><option value="2.576">99%</option></select></label>
         <label for="sc-moe">Margin of error (±%)<input id="sc-moe" type="number" min="1" max="20" step="0.5" value="5"></label>
         <label for="sc-pop">Population (blank = large)<input id="sc-pop" type="number" min="1" step="1" placeholder="e.g. 3000"></label>
         <label for="sc-rr">Expected response rate (%)<input id="sc-rr" type="number" min="1" max="100" step="1" value="100"></label></div>
         <div class="calc-out" id="sc-out" aria-live="polite">${calcSample()}</div></section>
-      <section class="stack"><h2>Survey templates</h2><p class="muted">Download as Excel to adapt offline, or open directly in Afrimetrica Surveys.</p>
+      <section class="stack" id="resTemplates"><h2>Survey templates</h2><p class="muted">Download as Excel to adapt offline, or open directly in Afrimetrica Surveys.</p>
         <div class="course-grid">${tpl.map(([k, t]) => `<article class="card"><h3>${esc(t.name)}</h3><p class="muted">${esc(t.blurb)}</p><span class="hint">${t.questions.length} questions</span><div class="row wrap"><button class="btn small" data-act="tplXl" data-key="${k}">Download Excel</button><button class="btn small ghost" data-act="tpl" data-key="${k}">Use in Afrimetrica Surveys</button></div></article>`).join("")}</div></section>
-      <section class="stack"><h2>Published findings and open data</h2>${libraryBody()}</section>`;
+      <section class="stack" id="resLibrary"><h2>Published findings and open data</h2>${libraryBody()}</section>`;
   }
   function calcSample() {
     const g = (id, d) => { const el = $(id); return el ? el.value : d; };

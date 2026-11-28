@@ -68,6 +68,8 @@ The owner asked for all 20 pictures (P01–P19 and the Memorial Park photo) to b
 | Strategy & Advisory | P06, P16, P17, P10 |
 | Digital Solutions | builder screenshot, results screenshot, P09 |
 | Surveys | results screenshot, builder screenshot |
+| Our approach (About Us and Research & Advisory) | AI photos: home, fieldwork-team, surveys, analytics, consultancy (owner's request) |
+| Insights overview | AI photos: P04, analytics, P09, training (owner's request) |
 
 Notes:
 - P08 and P10 were marked "do not publish" in the guide; they are used at the owner's request, no longer captioned, and P10 never appears on Our People or beside profiles.
