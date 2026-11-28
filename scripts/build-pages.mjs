@@ -6,7 +6,7 @@ import { writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 const { chromium } = createRequire(import.meta.url)("playwright"); // the pre-installed Playwright
 
-export const PUBLIC = new Set(["home", "about", "training", "surveys", "analytics", "consultancy", "resources", "contact", "privacy", "terms", "pricing", "paper-survey"]);
+export const PUBLIC = new Set(["home", "about", "practices", "training", "surveys", "analytics", "consultancy", "resources", "contact", "privacy", "terms", "pricing", "paper-survey"]);
 const base = process.argv[2] || "http://localhost:10000";
 const keyOf = (href) => {
   const h = href.replace(/^.*?#/, "").replace(/^\//, "").replace(/\/+$/, "");
@@ -30,6 +30,8 @@ while (queue.length) {
   const entry = { path: "/" + k, title: info.title, description: info.description, h1: info.h1 };
   // A subject with a single course mostly repeats that course's page: point search engines to the course instead.
   if (k.startsWith("training/subject/") && info.courses.length === 1) entry.canonical = info.courses[0];
+  // The approach page appears under both About and Research & Advisory; About is the main one.
+  if (k === "consultancy/approach") entry.canonical = "/about/approach";
   seen.set(k, entry);
   for (const l of info.links) { const n = keyOf(l); if (n !== null && !seen.has(n)) queue.push(n); }
 }

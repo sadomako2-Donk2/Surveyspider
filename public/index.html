@@ -1,4 +1,4 @@
-<title>Afrimetrica — Data, Research and Executive Training</title>
+<title>Afrimetrica — Data, Research, Advisory and Executive Education</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -439,7 +439,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
   .brand .wm small { display: none; }
   .brand .wm b { font-size: 1.05rem; }
 }
-/* Afrimetrica: survey sub-navigation, institution pages, Academy, Knowledge Hub */
+/* Afrimetrica: survey sub-navigation, institution pages, Academy, Insights */
 .subnav { background: var(--bg); border-bottom: 1px solid var(--line); }
 .subnav-inner { max-width: 1180px; margin: 0 auto; display: flex; align-items: center; gap: 14px; padding-block: 6px; min-width: 0; }
 .subnav-label { font-family: var(--font-display); font-weight: 700; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-ink); white-space: nowrap; }
@@ -543,7 +543,7 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
 .tr-menu-btn:hover, .tr-menu-btn[aria-expanded="true"] { color: var(--ink); background: var(--surface); }
 .tr-menu-btn[aria-current="page"] { color: var(--ink); background: var(--surface); box-shadow: inset 0 -2px 0 var(--gold); }
 .tr-menu-btn span { font-size: .7rem; color: var(--bad); }
-.new-badge { background: var(--bad); color: #fff; font-weight: 700; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 5px; }
+.new-badge { background: #b83a2e; color: #fff; font-weight: 700; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 5px; }
 .tr-panel { position: absolute; left: 0; right: 0; top: 100%; z-index: 30; background: var(--surface); border-bottom: 1px solid var(--line); box-shadow: 0 12px 24px rgba(14, 29, 58, .12); max-height: 70vh; overflow-y: auto; }
 .tr-panel-inner { max-width: 1180px; margin: 0 auto; padding: 14px 16px 18px; }
 .tr-panel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 4px 16px; }
@@ -659,6 +659,16 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
   .team-grid .person { grid-template-columns: 120px minmax(0, 1fr); gap: 18px; padding: 20px; }
   .team-grid .person img, .team-grid .person .person-initials { width: 120px; height: 120px; font-size: 2rem; }
 }
+
+/* practices */
+.practice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+.practice-card { display: flex; flex-direction: column; gap: 8px; text-decoration: none; color: var(--ink); border-top: 3px solid var(--gold); }
+.practice-card b { font-family: var(--font-display); font-size: 1.08rem; }
+.practice-card:hover { border-color: var(--gold); box-shadow: 0 8px 22px rgba(14, 29, 58, 0.1); }
+.practice-num { font-family: var(--font-display); font-weight: 800; color: var(--gold-ink); font-size: 0.85rem; letter-spacing: 0.1em; }
+.audience-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.audience { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+.audience b { display: block; margin-bottom: 4px; }
 </style>
 
 <header class="topbar gutter">
@@ -1022,7 +1032,8 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
     if (k === "surveys") return [["Afrimetrica Surveys", SURVEY_NAV.map(([x, l]) => L(`#${x}`, l))]];
     if (k === "analytics") return [["Services", AN_SERVICES.map((x) => L(`#analytics/service/${x.id}`, x.name))], ["Sectors", AN_SECTORS.map((x) => L(`#analytics/sector/${x.id}`, x.name))], ["More", [L("#analytics", "Overview"), L("#analytics/tools", "Tools we use"), L("#analytics/how-we-work", "How we work"), L("#analytics/data-security", "Data security"), L("#analytics/request", "Request analysis")]]];
     if (k === "consultancy") return [["Services", CO_SERVICES.map((x) => L(`#consultancy/service/${x.id}`, x.name))], ["Sectors", CO_SECTORS.map((x) => L(`#consultancy/sector/${x.id}`, x.name))], ["More", [L("#consultancy", "Overview"), L("#consultancy/approach", "Our approach"), L("#paper-survey", "Fieldwork quote"), L("#consultancy/work-with-us", "Work with us"), L("#consultancy/request", "Request a proposal")]]];
-    if (k === "resources") return [["Knowledge Hub", RES_MENU.map(([x, l]) => L(`#resources${x ? "/" + x : ""}`, l))]];
+    if (k === "practices") return [["Our practices", [L("#practices", "All practices"), ...PRACTICES.map((x) => L(`#practices/${x.id}`, x.name))]], ["Services", [L("#analytics", "Data analysis services"), L("#consultancy", "Research and advisory services"), L("#paper-survey", "Fieldwork quote")]]];
+    if (k === "resources") return [["Insights", RES_MENU.map(([x, l]) => L(`#resources${x ? "/" + x : ""}`, l))]];
     if (k === "account") return [["My Account", [...ACCOUNT_MENU.map(([x, l]) => L(`#account${x ? "/" + x : ""}`, l)), ...(S.isOwner ? [L("#business", "Admin area")] : [])]]];
     if (k === "contact") return [["Contact", [...CONTACT_MENU.map(([x, l]) => L(`#contact${x ? "/" + x : ""}`, l)), L("#training/finder", "Find training")]]];
     return null;
@@ -1050,10 +1061,10 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
     const avail = S.profile ? openStudies().filter((s) => eligible(s, S.profile)).length : 0;
     renderAcct();
     const inSurveys = SURVEY_NAV.some(([k]) => k === S.view);
-    const top = inSurveys ? "surveys" : S.view === "business" || S.view === "signin" ? "account" : S.view;
+    const top = inSurveys ? "surveys" : S.view === "business" || S.view === "signin" ? "account" : S.view === "analytics" || S.view === "consultancy" ? "practices" : S.view;
     $("#tabs").innerHTML = TOPNAV.map(([k, v]) => `<a href="#${k}"${top === k ? ' aria-current="page"' : ""}${navDropGroups(k) ? ` data-drop="${k}"` : ""}>${v}</a>`).join("");
     const sub = $("#subnav");
-    const sectionNav = { account: accNav, about: abNav, training: trNav, analytics: anNav, consultancy: coNav, resources: resNav, contact: ctNav }[S.view];
+    const sectionNav = { account: accNav, about: abNav, practices: prNav, training: trNav, analytics: anNav, consultancy: coNav, resources: resNav, contact: ctNav }[S.view];
     if (sectionNav) { sub.hidden = false; sub.innerHTML = sectionNav(); }
     else {
     sub.hidden = !inSurveys;
@@ -1063,11 +1074,11 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
     const msg = S.notice || (S.mode === "demo" ? "Demo mode: everything you create is saved in this browser only. Open the published page while signed in to claude.ai to share data with other people." : "") || (S.stale ? "Can't reach the saved data yet. What you see may be out of date." : "");
     b.hidden = !msg; b.textContent = msg;
     if (!msg && unverified()) { b.hidden = false; b.innerHTML = `<b>Confirm your email address.</b> We sent a link to ${esc(S.user.email)}. You can browse and save drafts now; confirm to launch surveys, take paid studies and use AI. <button type="button" class="linkbtn" data-act="resendVerify">Send it again</button>`; }
-    $("#foot").innerHTML = `<div class="foot-inner"><div><img class="foot-logo" src="/photos/logo-full.webp" width="216" height="72" alt="Afrimetrica: Data, Research, Executive Training"><br><b>Afrimetrica</b> · Data, Research and Executive Training<br><span class="hint">Plan. Analyse. Lead. Training, data and advice for organisations, governments and NGOs in Africa and around the world.</span><br><span class="hint"><a href="#privacy">Privacy notice</a> · <a href="#terms">Terms of use</a></span></div><div class="hint">Afrimetrica Surveys platform fee ${Math.round(FEE * 100)}% of participant rewards. ${S.mode === "live" ? (API ? "Survey answers are stored on Afrimetrica's server and shown only to the survey's owner." : "Data is shared with everyone who can open this page.") : S.mode === "demo" ? "Demo data stays in this browser." : "Connecting…"}</div></div>`;
+    $("#foot").innerHTML = `<div class="foot-inner"><div><img class="foot-logo" src="/photos/logo-full.webp" width="216" height="72" alt="Afrimetrica: Data, Research, Executive Training"><br><b>Afrimetrica</b> · Data. Research. Advisory. Executive Education.<br><span class="hint">An independent, Africa-focused professional services firm specialising in data intelligence, research, strategic advisory and executive education.</span><br><span class="hint"><a href="#privacy">Privacy notice</a> · <a href="#terms">Terms of use</a></span></div><div class="hint">Afrimetrica Surveys platform fee ${Math.round(FEE * 100)}% of participant rewards. ${S.mode === "live" ? (API ? "Survey answers are stored on Afrimetrica's server and shown only to the survey's owner." : "Data is shared with everyone who can open this page.") : S.mode === "demo" ? "Demo data stays in this browser." : "Connecting…"}</div></div>`;
   }
   // Each page gets its own browser-tab title and description (used when people bookmark or share it).
-  const SITE_TITLE = "Afrimetrica — Data, Research and Executive Training";
-  const SITE_DESC = "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs in Africa and around the world.";
+  const SITE_TITLE = "Afrimetrica — Data, Research, Advisory and Executive Education";
+  const SITE_DESC = "An independent, Africa-focused professional services firm specialising in data intelligence, research, strategic advisory and executive education.";
   // A description made only from what is on the page: its opening line; for course lists whose opening line is just
   // a count ("3 courses, in the classroom..."), the course names; for pages without an opening line, the first paragraph.
   function pageDescription(heading, lead) {
@@ -1093,14 +1104,14 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
   function render() {
     pending = false;
     renderTabs();
-    const v = { privacy: viewPrivacy, terms: viewTerms, signin: viewSignin, home: viewHome, about: viewAbout, training: viewTraining, surveys: viewSurveys, analytics: viewAnalyticsSvc, consultancy: viewConsult, resources: viewResources, contact: viewContact, account: viewAccount, pricing: viewPricing, import: viewImport, "paper-survey": viewF2F, create: viewCreate, studies: viewStudies, panel: viewPanel, results: viewResults, business: viewBusiness }[S.view] || viewHome;
+    const v = { privacy: viewPrivacy, terms: viewTerms, signin: viewSignin, home: viewHome, about: viewAbout, training: viewTraining, surveys: viewSurveys, practices: viewPractices, analytics: viewAnalyticsSvc, consultancy: viewConsult, resources: viewResources, contact: viewContact, account: viewAccount, pricing: viewPricing, import: viewImport, "paper-survey": viewF2F, create: viewCreate, studies: viewStudies, panel: viewPanel, results: viewResults, business: viewBusiness }[S.view] || viewHome;
     $("#main").innerHTML = v();
     if (S.view === "create" && S.draft) updateCost();
     setPageMeta();
   }
   // Public pages have real addresses (/training/course/x) so search engines can list each one; old #links still work.
   // App pages (create, my surveys, account...) keep #addresses. public/pages.json lists the public pages for the server.
-  const CLEAN = new Set(["home", "about", "training", "surveys", "analytics", "consultancy", "resources", "contact", "privacy", "terms", "pricing", "paper-survey"]);
+  const CLEAN = new Set(["home", "about", "practices", "training", "surveys", "analytics", "consultancy", "resources", "contact", "privacy", "terms", "pricing", "paper-survey"]);
   const cleanPath = (k) => (CLEAN.has(k.split("/")[0]) ? "/" + (k === "home" ? "" : k) : null);
   function routeKey() {
     const h = location.hash.replace("#", ""), first = h.split("/")[0];
@@ -1122,6 +1133,10 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
     // Training has its own pages: #training/<part>[/<item>]
     const trPart = h.startsWith("training/") ? h.slice(9) : "";
     if (trPart) h = "training";
+    // Practices: #practices/<id>
+    const prPart = h.startsWith("practices/") ? h.slice(10) : "";
+    if (prPart) h = "practices";
+    S.pr = h === "practices" ? prPart : "";
     // Analytics also has its own pages: #analytics/<part>[/<item>]
     const anPart = h.startsWith("analytics/") ? h.slice(10) : "";
     if (anPart) h = "analytics";
@@ -2962,9 +2977,11 @@ ${richSummary(st, rows)}`;
   }
 
   // ================= AFRIMETRICA: institution pages, Academy, enquiries, account, admin =================
-  const TOPNAV = [["home", "Home"], ["about", "About"], ["training", "Training"], ["surveys", "Surveys"], ["analytics", "Analytics"], ["consultancy", "Consultancy"], ["resources", "Resources"], ["contact", "Contact"], ["account", "My Account"]];
+  // Main menu. Analytics and Consultancy pages keep their addresses and sit under Practices (Data & Intelligence,
+  // Research & Evaluation, Strategy & Advisory); Training is the Executive Education practice; Resources is Insights.
+  const TOPNAV = [["home", "Home"], ["about", "About"], ["practices", "Practices"], ["training", "Executive Education"], ["surveys", "Surveys"], ["resources", "Insights"], ["contact", "Contact"], ["account", "My Account"]];
   const SURVEY_NAV = [["surveys", "Overview"], ["create", "Create"], ["import", "Upload"], ["paper-survey", "Paper surveys"], ["studies", "My surveys"], ["results", "Analyze"], ["panel", "Take surveys"], ["pricing", "Plans"]];
-  const ROUTES = new Set([...TOPNAV.map(([k]) => k), ...SURVEY_NAV.map(([k]) => k), "signin", "business", "privacy", "terms"]);
+  const ROUTES = new Set([...TOPNAV.map(([k]) => k), ...SURVEY_NAV.map(([k]) => k), "analytics", "consultancy", "signin", "business", "privacy", "terms"]);
   const CUR = { USD: "US$", GHS: "GH₵", GBP: "£", EUR: "€" };
   const fee = (x, c) => (+x > 0 ? (CUR[c] || "") + (+x).toLocaleString("en-US", { maximumFractionDigits: 2 }) : "Free");
   const fmtDay = (d) => (d ? new Date(d + "T12:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : "Date to be confirmed");
@@ -3018,11 +3035,11 @@ ${richSummary(st, rows)}`;
   setInterval(() => { if (!slidePaused && !document.hidden) showSlide(slideIdx + 1); }, 5000);
   // Fetch the next photo once the page has settled, so it's ready when the slideshow moves on.
   new MutationObserver(() => { if (document.querySelector(".slideshow img[data-src]")) setTimeout(() => loadSlide(slideIdx + 1), 2500); }).observe(document.getElementById("main"), { childList: true });
-  const UNITS = [
-    { key: "training", brand: "Afrimetrica Academy", title: "Data, research and executive training", text: "Classroom, live online and in-house courses in data and research skills, monitoring and evaluation, and executive programmes in strategy, leadership, governance, finance and projects.", points: ["Executive and technical programmes", "In-house training for your organisation", "Certificates of completion"], cta: "Explore training" },
-    { key: "surveys", brand: "Afrimetrica Surveys", title: "Survey tools", text: "Build questionnaires, collect responses online or face to face, and analyse them with built-in statistics and AI.", points: ["Word, PDF and Excel upload", "Paid participant panel", "Analysis and Excel reports"], cta: "Start a survey" },
-    { key: "analytics", brand: "Afrimetrica Analytics", title: "Data analysis", text: "Statistical analysis, dashboards and data management carried out by experienced analysts.", points: ["Descriptive to multivariate analysis", "Dashboards and reports", "Data cleaning and management"], cta: "Request analysis" },
-    { key: "consultancy", brand: "Afrimetrica Consulting", title: "Research and evaluation consultancy", text: "Research design, monitoring and evaluation, surveys and commissioned studies, from proposal to final report.", points: ["Study design and protocols", "Monitoring and evaluation", "Fieldwork and reporting"], cta: "Discuss a project" }
+  const AUDIENCES = [
+    ["Governments and public institutions", "Policy research, evaluations, data systems and training for ministries, agencies and local government."],
+    ["Businesses and investors", "Market intelligence, feasibility studies, analytics and executive programmes."],
+    ["Development institutions", "Baselines, monitoring and evaluation, and independent evaluations of programmes."],
+    ["Civil society organisations", "Surveys, evidence for advocacy and practical skills for teams."],
   ];
   const TIMELINES = ["As soon as possible", "Within a month", "1–3 months", "3–6 months", "Not sure yet"];
   const BUDGETS = ["Under US$1,000", "US$1,000–5,000", "US$5,000–20,000", "Over US$20,000", "Not sure yet"];
@@ -3108,44 +3125,49 @@ ${richSummary(st, rows)}`;
     return `
     <section class="hero2 afri-hero hero-solo">
       <div>
-        <h1>Data, research and <span class="gold-text">executive training.</span></h1>
-        <p class="lede">Afrimetrica helps organisations, governments and NGOs make better decisions and deliver results. We train leaders and teams in data, research and management, collect and analyse data, and advise on strategy, research and evaluation, in Africa and around the world.</p>
-        <div class="hero-ctas"><a class="btn gold big" href="#training">Explore training</a><a class="btn primary big" href="#surveys">Start a survey</a><a class="btn big" href="#consultancy">Talk to a consultant</a></div>
+        <h1>Data. Research. Advisory. <span class="gold-text">Executive Education.</span></h1>
+        <p class="lede">An independent, Africa-focused professional services firm specialising in data intelligence, research, strategic advisory and executive education, supported by digital solutions. We help governments, businesses, development institutions and civil society organisations generate credible evidence and make better decisions, in Africa and beyond.</p>
+        <div class="hero-ctas"><a class="btn gold big" href="#practices">Explore our practices</a><a class="btn primary big" href="#training">Executive Education</a><a class="btn big" href="#contact">Discuss a project</a></div>
       </div>
     </section>
     ${slideshow("home")}
     <section class="stack">
-      <div class="section-head"><span class="eyebrow gold">What we do</span><h2 class="h2xl">Four ways we help organisations decide and deliver</h2></div>
-      <div class="units">${UNITS.map((u) => `<article class="card unit"><span class="eyebrow gold">${esc(u.brand)}</span><h3>${esc(u.title)}</h3><p class="muted">${esc(u.text)}</p><ul class="ticks small">${u.points.map((x) => `<li><div><span>${esc(x)}</span></div></li>`).join("")}</ul><a class="btn" href="#${u.key}" style="align-self:flex-start">${esc(u.cta)}</a></article>`).join("")}</div>
+      <div class="section-head"><span class="eyebrow gold">Our practices</span><h2 class="h2xl">Five practices, one firm</h2></div>
+      ${practiceCards()}
+    </section>
+    <section class="stack" aria-labelledby="audH">
+      <div class="section-head"><span class="eyebrow gold">Who we serve</span><h2 id="audH" class="h2xl">Evidence and skills for decision-makers</h2></div>
+      <div class="audience-grid">${AUDIENCES.map(([t, d]) => `<div class="audience"><b>${esc(t)}</b><span class="hint">${esc(d)}</span></div>`).join("")}</div>
     </section>
     <section class="stack">
-      <div class="row wrap" style="justify-content:space-between;align-items:flex-end"><div class="section-head"><span class="eyebrow gold">Afrimetrica Academy</span><h2 class="h2xl">Upcoming courses</h2></div><a class="btn" href="#training">All courses</a></div>
+      <div class="row wrap" style="justify-content:space-between;align-items:flex-end"><div class="section-head"><span class="eyebrow gold">Executive Education</span><h2 class="h2xl">Upcoming courses</h2></div><a class="btn" href="#training">All courses</a></div>
       ${up.length ? `<div class="course-grid">${up.map(({ c, s }) => courseCard(c, s)).join("")}</div>` : `<div class="empty"><h2>Choose a course and a city</h2><p class="muted">Dates are set for each venue. Pick a course from the catalogue, tell us the city or the online option you prefer, and we'll send you the dates and fees. Any course can also run in-house for your team.</p><div class="row wrap"><a class="btn primary" href="#training/finder">Find a course</a><a class="btn" href="#training/venues">Training venues</a></div></div>`}
     </section>
     <section class="split">
-      <div class="stack"><div class="section-head"><span class="eyebrow gold">Knowledge Hub</span><h2 class="h2xl">Free guides for better research</h2></div><p class="muted">Practical advice on questionnaire design, sample size, scales and monitoring and evaluation, plus ready-made survey templates.</p><a class="btn primary" href="#resources" style="align-self:flex-start">Browse resources</a></div>
+      <div class="stack"><div class="section-head"><span class="eyebrow gold">Insights</span><h2 class="h2xl">Free guides for better research</h2></div><p class="muted">Practical advice on questionnaire design, sample size, scales and monitoring and evaluation, plus ready-made survey templates.</p><a class="btn primary" href="#resources" style="align-self:flex-start">Browse insights</a></div>
       <div class="stack" style="gap:10px">${GUIDES.slice(0, 3).map((g) => `<a class="card guide-link" href="#resources/articles/${g.id}"><b>${esc(g.title)}</b><span class="hint">${esc(g.summary)} · ${g.minutes} min read</span></a>`).join("")}</div>
     </section>
     <section class="band">
-      <div class="stack" style="gap:10px"><span class="eyebrow">Afrimetrica Consulting</span><h2>Planning a study or evaluation?</h2><p>Tell us what you need to find out. We can help with design, fieldwork, analysis or the whole project.</p></div>
+      <div class="stack" style="gap:10px"><span class="eyebrow">Research &amp; Advisory</span><h2>Planning a study, an evaluation or a strategy?</h2><p>Tell us what you need to find out or decide. We can help with design, fieldwork, analysis, advice or the whole project.</p></div>
       <div class="band-list"><a class="band-item" href="#consultancy"><b>Discuss a project</b><span>Research design, M&amp;E and commissioned studies</span></a><a class="band-item" href="#paper-survey"><b>Get a fieldwork quote</b><span>Face-to-face interviews, priced instantly</span></a><a class="band-item" href="#analytics"><b>Request data analysis</b><span>Statistics, dashboards and reports</span></a><a class="band-item" href="#training"><b>Train your team</b><span>In-house workshops on research methods</span></a></div>
     </section>`;
   }
   // ---- About section: its own menu and pages (#about/<part>) ----
-  const ABOUT_MENU = [["", "Overview"], ["mission", "Our mission"], ["vision", "Our vision"], ["team", "Our team"], ["organisation", "How we're organised"], ["certificates", "About our certificates"]];
+  const ABOUT_MENU = [["", "Overview"], ["team", "Our people"], ["approach", "Our approach"], ["organisation", "How we're organised"], ["mission", "Our mission"], ["vision", "Our vision"], ["certificates", "About our certificates"]];
   const ACCOUNT_MENU = [["", "Overview"], ["courses", "My courses"], ["surveys", "My surveys"], ["enquiries", "My enquiries"], ["profile", "My profile"]];
   const accNav = () => `<div class="subnav-inner"><span class="subnav-label">My Account</span><div class="subnav-links">${subLinks("account", ACCOUNT_MENU, S.acc || "")}${S.isOwner ? `<a href="#business">Admin area</a>` : ""}</div></div>`;
   const abNav = () => `<div class="subnav-inner"><span class="subnav-label">About Afrimetrica</span><div class="subnav-links">${subLinks("about", ABOUT_MENU, S.ab || "")}</div></div>`;
   const abCrumbs = (label) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#about">About</a> › <span>${esc(label)}</span></nav>`;
-  const AB_MISSION = "To help organisations, governments and NGOs make better decisions and deliver results, by building their people's skills in data, research and leadership, and by providing reliable data and independent analysis.";
+  const AB_MISSION = "To help governments, businesses, development institutions and civil society organisations make better decisions and deliver results, by providing reliable data, credible research and practical advice, and by building their people's skills.";
   const AB_VISION = "An Africa where every organisation, government and NGO has the data, evidence and skilled people it needs to make good decisions and deliver results.";
   const AB_VALUES = [["Rigour", "Methods and advice that are sound, transparent and honestly reported."], ["Practicality", "Training and solutions that work in real organisations, field conditions and budgets."], ["Evidence-led leadership", "Helping leaders use data and evidence to set priorities and make decisions."], ["Ethics and data protection", "Respect for participants, informed consent and careful handling of personal data."], ["Building capacity", "Leaving people and organisations more skilled, and more independent, than we found them."]];
-  const AB_UNITS = [["Organisation", "Afrimetrica — Data, Research and Executive Training", ""], ["Training", "Afrimetrica Academy (data, research and executive training)", "#training"], ["Survey software", "Afrimetrica Surveys", "#surveys"], ["Analytics", "Afrimetrica Analytics", "#analytics"], ["Consultancy", "Afrimetrica Consulting", "#consultancy"], ["Research resources", "Afrimetrica Knowledge Hub", "#resources"]];
   const abValues = () => `<ul class="ticks small">${AB_VALUES.map(([t, d]) => `<li><div><b>${esc(t)}</b><span>${esc(d)}</span></div></li>`).join("")}</ul>`;
   function abOverview() {
-    return `<div class="page-head"><div><span class="eyebrow gold">About Afrimetrica</span><h1>Data, research and executive training for better decisions</h1><p class="muted" style="max-width:66ch">Afrimetrica trains leaders and teams, collects and analyses data, and advises organisations, governments and NGOs in Africa and around the world. Our courses range from research methods and statistics to strategy, leadership and governance. Every course is practical, grounded in evidence and built around the decisions participants make at work.</p></div></div>
+    return `<div class="page-head"><div><span class="eyebrow gold">About Afrimetrica</span><h1>An independent, Africa-focused professional services firm</h1><p class="muted" style="max-width:70ch">Afrimetrica is an independent, multidisciplinary professional services firm specialising in data intelligence, research, strategic advisory and executive education, supported by digital solutions.</p></div></div>
+      <section class="prose stack" style="gap:12px"><p>We work with governments, businesses, development institutions and civil society organisations to generate credible evidence, solve complex problems, strengthen institutional capabilities and enable better decisions, in Africa and beyond.</p><p>Through our five practices and our network of researchers, analysts, advisers and executive faculty, we combine analytical rigour, practical tools and knowledge of the contexts our clients work in.</p></section>
       ${slideshow("about")}
-      <div class="area-grid">${ABOUT_MENU.slice(1).map(([k, label]) => `<a class="card area-card" href="#about/${k}"><b>${esc(label)}</b><span class="hint">${esc({ mission: "Why we exist and what we stand for", vision: "The future we are working towards", team: "The people behind Afrimetrica", organisation: "Our training, survey, analytics, consultancy and resources units", certificates: "What our certificates of completion mean" }[k])}</span></a>`).join("")}</div>`;
+      <section class="stack" aria-labelledby="abPrH"><h2 id="abPrH">Our practices</h2>${practiceCards()}</section>
+      <div class="area-grid">${ABOUT_MENU.slice(1).map(([k, label]) => `<a class="card area-card" href="#about/${k}"><b>${esc(label)}</b><span class="hint">${esc({ team: "The specialists behind Afrimetrica", approach: "How we run assignments, check quality and protect data", organisation: "Our five practices and how they fit together", mission: "Why we exist and what we stand for", vision: "The future we are working towards", certificates: "What our certificates of completion mean" }[k])}</span></a>`).join("")}</div>`;
   }
   function abMission() {
     return `${abCrumbs("Our mission")}<div class="page-head"><div><span class="eyebrow gold">Our mission</span><h1>Why we exist</h1></div></div>
@@ -3155,7 +3177,7 @@ ${richSummary(st, rows)}`;
   function abVision() {
     return `${abCrumbs("Our vision")}<div class="feature">${sidePhoto("vision")}<div class="stack"><div class="page-head"><div><span class="eyebrow gold">Our vision</span><h1>The future we are working towards</h1></div></div>
       <section class="card statement"><p>${esc(AB_VISION)}</p></section></div></div>
-      <section class="card"><h2>How we get there</h2><ul class="ticks small"><li><div><b>Skills</b><span>Training leaders and teams in data, research and management through Afrimetrica Academy.</span></div></li><li><div><b>Data</b><span>Reliable surveys and data collection through Afrimetrica Surveys and our field teams.</span></div></li><li><div><b>Evidence</b><span>Independent analysis and research through Afrimetrica Analytics and Afrimetrica Consulting.</span></div></li><li><div><b>Knowledge</b><span>Free guides and tools for everyone through the Afrimetrica Knowledge Hub.</span></div></li></ul></section>`;
+      <section class="card"><h2>How we get there</h2><ul class="ticks small"><li><div><b>Data</b><span>Reliable analysis and intelligence through our Data &amp; Intelligence practice.</span></div></li><li><div><b>Evidence</b><span>Credible research, surveys and evaluations through our Research &amp; Evaluation practice.</span></div></li><li><div><b>Advice</b><span>Evidence-based policy, strategy and investment advice through our Strategy &amp; Advisory practice.</span></div></li><li><div><b>Skills</b><span>Practical programmes for leaders and teams through our Executive Education practice.</span></div></li><li><div><b>Tools</b><span>Survey and data tools through our Digital Solutions practice.</span></div></li><li><div><b>Knowledge</b><span>Free guides and resources for everyone through Afrimetrica Insights.</span></div></li></ul></section>`;
   }
   // Team profiles: wording and photos supplied by Afrimetrica (photos shown in black and white).
   const TEAM = [
@@ -3174,7 +3196,7 @@ ${richSummary(st, rows)}`;
     { id: "stephen-kehinde-medase", name: "Stephen Kehinde Medase, PhD", role: "Analyst, Market Intelligence", photo: "team-stephen-kehinde-medase.webp",
       bio: "Stephen Kehinde Medase, PhD, is a Market Intelligence Analyst at Afrimetrica and Senior Research Associate at the University of Johannesburg. He holds an MSc and PhD from Friedrich Schiller University Jena, Germany, and researches entrepreneurship, innovation and firm growth, publishing in journals including the Journal of Innovation & Knowledge." },
   ];
-  // Leadership team: roles are shown now; add name, photo and bio as they are confirmed (the card then becomes a full profile).
+  // Leadership roles requested by Afrimetrica: not shown on Our people until a name is confirmed (add name, photo and bio).
   const LEADERSHIP = [
     { role: "Chief Executive Officer", abbr: "CEO", name: "", photo: "", bio: "" },
     { role: "Director, Business Development", abbr: "BD", name: "", photo: "", bio: "" },
@@ -3182,25 +3204,38 @@ ${richSummary(st, rows)}`;
     { role: "Director, People and Human Capital", abbr: "PHC", name: "", photo: "", bio: "" },
     { role: "Director, Operations", abbr: "OPS", name: "", photo: "", bio: "" },
   ];
-  const leaderCard = (l) => l.name ? teamCard({ id: slug(l.name), name: l.name, role: l.role, photo: l.photo, bio: l.bio })
-    : `<article class="leader-role"><div class="person-initials" aria-hidden="true">${esc(l.abbr)}</div><h3>${esc(l.role)}</h3></article>`;
   // Without a photo yet, a profile shows the person's initials.
   const initials = (n) => n.split(",")[0].split(/\s+/).filter(Boolean).map((w) => w[0]).slice(0, 2).join("").toUpperCase();
   const teamCard = (t) => `<article class="person" id="team-${t.id}">${t.photo ? `<img src="/photos/${t.photo}" alt="Portrait of ${esc(t.name.split(",")[0])}" width="150" height="150" loading="lazy" decoding="async">` : `<div class="person-initials" aria-hidden="true">${esc(initials(t.name))}</div>`}<div><h3>${esc(t.name)}</h3><p class="person-role">${esc(t.role)}</p><p class="muted">${esc(t.bio)}</p></div></article>`;
+  // Our people: categories from the target operating model. A category is shown only when it has confirmed members.
+  // Everyone in TEAM is currently a project-based specialist ("ad hoc consultants"), so they sit in the Expert network;
+  // move a person by setting their group once their affiliation is confirmed. Titles are kept as confirmed by Afrimetrica.
+  const PEOPLE_GROUPS = [
+    ["leadership", "Leadership & Partners", "The people who lead the firm."],
+    ["directors", "Practice Directors", "Leaders of our practices."],
+    ["professional", "Professional Team", "Researchers, data scientists, consultants and analysts employed by Afrimetrica."],
+    ["fellows", "Fellows & Faculty", "Research fellows and executive faculty who contribute to our research and programmes."],
+    ["network", "Expert Network", "Specialists and academics who work with Afrimetrica on a project basis."],
+  ];
+  const peopleGroup = (t) => t.group || "network";
   function abTeam() {
-    return `${abCrumbs("Our team")}<div class="page-head"><div><span class="eyebrow gold">Our team</span><h1>The people behind Afrimetrica</h1><p class="muted" style="max-width:66ch">A core team of trainers, researchers, analysts and consultants, supported by an associate network of specialists and field staff in Africa and around the world.</p></div></div>
-      <section class="stack" aria-labelledby="leadH"><h2 id="leadH">Leadership team</h2><div class="${LEADERSHIP.some((l) => l.name) ? "team-grid" : "leader-grid"}">${LEADERSHIP.map(leaderCard).join("")}</div></section>
-      ${TEAM.length ? `<section class="stack" aria-labelledby="teamH"><h2 id="teamH">Ad hoc consultants</h2><div class="team-grid">${TEAM.map(teamCard).join("")}</div></section>` : ""}
-      <section class="card"><h2>Join us</h2><p class="muted">We work with independent consultants, trainers, analysts, enumerators and field supervisors.</p><div class="row wrap"><a class="btn primary" href="#consultancy/work-with-us">Join the associate network</a><a class="btn" href="#contact/careers">Careers</a></div></section>`;
+    // Leadership roles appear only once a name is confirmed (LEADERSHIP keeps the roles ready to fill).
+    const people = [...LEADERSHIP.filter((l) => l.name).map((l) => ({ id: slug(l.name), name: l.name, role: l.role, photo: l.photo, bio: l.bio, group: "leadership" })), ...TEAM];
+    return `${abCrumbs("Our people")}<div class="page-head"><div><span class="eyebrow gold">Our people</span><h1>Our people</h1><p class="muted" style="max-width:70ch">The specialists who deliver Afrimetrica's research, analysis, advice and teaching, supported by an expert network of specialists and field staff in Africa and around the world.</p></div></div>
+      ${PEOPLE_GROUPS.map(([g, title, intro]) => { const list = people.filter((t) => peopleGroup(t) === g); return list.length ? `<section class="stack" aria-labelledby="pg-${g}"><div class="section-head"><h2 id="pg-${g}">${esc(title)}</h2><p class="muted">${esc(intro)}</p></div><div class="team-grid">${list.map(teamCard).join("")}</div></section>` : ""; }).join("")}
+      <section class="card"><h2>Join us</h2><p class="muted">We work with independent researchers, analysts, advisers, trainers, enumerators and field supervisors.</p><div class="row wrap"><a class="btn primary" href="#consultancy/work-with-us">Join our expert network</a><a class="btn" href="#contact/careers">Careers</a></div></section>`;
   }
   function abOrganisation() {
-    return `${abCrumbs("How we're organised")}<div class="page-head"><div><span class="eyebrow gold">How we're organised</span><h1>One organisation, five units</h1><p class="muted" style="max-width:66ch">Each part of Afrimetrica focuses on one way of helping organisations make better decisions, and they work together on larger assignments.</p></div></div>
-      <section class="card"><div class="table-wrap" tabindex="0"><table><tbody>${AB_UNITS.map(([a, b2, href]) => `<tr><th scope="row" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.88rem;color:var(--muted);font-weight:500">${a}</th><td>${href ? `<a href="${href}">${esc(b2)}</a>` : esc(b2)}</td></tr>`).join("")}</tbody></table></div></section>`;
+    return `${abCrumbs("How we're organised")}<div class="page-head"><div><span class="eyebrow gold">How we're organised</span><h1>One firm, five practices</h1><p class="muted" style="max-width:70ch">Afrimetrica operates as a single firm organised into five practices. Each practice focuses on one way of helping clients make better decisions, and the practices work together on larger assignments.</p></div></div>
+      <section class="card"><div class="table-wrap" tabindex="0"><table><thead><tr><th scope="col">Practice</th><th scope="col">What it covers</th></tr></thead><tbody>${PRACTICES.map((x) => `<tr><th scope="row" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.95rem;font-weight:600"><a href="#practices/${x.id}">${esc(x.name)}</a></th><td>${esc(x.short)}</td></tr>`).join("")}<tr><th scope="row" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.95rem;font-weight:600"><a href="#resources">Insights</a></th><td>Free guides, tools and resources for better research.</td></tr></tbody></table></div></section>`;
+  }
+  function abApproach() {
+    return `${abCrumbs("Our approach")}${approachBody()}`;
   }
   function abCertificates() {
     return `${abCrumbs("About our certificates")}<div class="page-head"><div><span class="eyebrow gold">About our certificates</span><h1>Certificates of completion</h1></div></div>
       <div class="split">
-        <section class="card"><h2>What they confirm</h2><p class="muted">Afrimetrica Academy issues certificates of completion. They confirm that a participant attended and completed a course, and show the course title, its length, the dates and the venue (or "live online").</p></section>
+        <section class="card"><h2>What they confirm</h2><p class="muted">Afrimetrica Executive Education issues certificates of completion. They confirm that a participant attended and completed a course, and show the course title, its length, the dates and the venue (or "live online").</p></section>
         <section class="card"><h2>What they are not</h2><p class="muted">They are not accredited academic or professional qualifications, and we don't claim endorsement by any professional body. If your professional body asks you to log training hours, you can usually record an Afrimetrica course as CPD yourself; check your body's own rules.</p></section>
       </div>
       <p><a class="btn primary" href="#training/finder">Find a course</a></p>`;
@@ -3211,6 +3246,7 @@ ${richSummary(st, rows)}`;
     if (part === "vision") return abVision();
     if (part === "team") return abTeam();
     if (part === "organisation") return abOrganisation();
+    if (part === "approach") return abApproach();
     if (part === "certificates") return abCertificates();
     return abOverview();
   }
@@ -3223,7 +3259,7 @@ ${richSummary(st, rows)}`;
       ${mine ? `<span class="pill live" style="align-self:flex-start">${mine.status === "interest" ? "Interest registered" : "You're registered"}</span>` : ""}
       <div><button class="btn primary" data-act="openCourse" data-id="${esc(c.id)}">${s ? "Details and registration" : "Details"}</button></div></article>`;
   }
-  // ---- Afrimetrica Academy course catalogue (public courses, live online and in-house) ----
+  // ---- Afrimetrica Executive Education course catalogue (public courses, live online and in-house) ----
   // Dates and fees are not listed here: they are set per venue and quoted on request, or published by an
   // administrator as dated courses (S.courses), which appear on the Training page with registration.
   // Subjects, grouped into subject areas (a subject can sit in more than one area, as on most course sites).
@@ -3723,7 +3759,7 @@ ${richSummary(st, rows)}`;
     if (m === "courses") panel = `<div class="tr-panel-grid">${GROUPS.map(([g, name]) => `<a href="#training/area/${g}"><b>${esc(name)}</b><span>${groupCourses(g).length} courses</span></a>`).join("")}</div>`;
     if (m === "venues") panel = `<div class="tr-panel-grid">${VENUES.map(([country, cities]) => `<a href="#training/venue/${slug(country)}"><b>${esc(country)}</b><span>${esc(cities.join(", "))}</span></a>`).join("")}<a href="#training/venues"><b>All venues</b><span>${VENUES.length} countries</span></a></div>`;
     if (m === "sectors") panel = `<div class="tr-panel-grid">${groupOf(SECTOR_GROUP)[2].map((k) => `<a href="#training/subject/${k}"><b>${esc(catName(k))}</b><span>${subCount(k)} course${subCount(k) === 1 ? "" : "s"}</span></a>`).join("")}</div>`;
-    return `<div class="subnav-inner"><span class="subnav-label">Afrimetrica Academy</span><div class="subnav-links tr-links">${links}</div></div>${panel ? `<div class="tr-panel" id="trPanel" role="region" aria-label="${m === "courses" ? "Subject areas" : m === "venues" ? "Training venues" : "Training sectors"}"><div class="tr-panel-inner">${panel}</div></div>` : ""}`;
+    return `<div class="subnav-inner"><span class="subnav-label">Executive Education</span><div class="subnav-links tr-links">${links}</div></div>${panel ? `<div class="tr-panel" id="trPanel" role="region" aria-label="${m === "courses" ? "Subject areas" : m === "venues" ? "Training venues" : "Training sectors"}"><div class="tr-panel-inner">${panel}</div></div>` : ""}`;
   }
   const crumbs = (...items) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#training">Training</a>${items.map(([href, label]) => (href ? ` › <a href="${href}">${esc(label)}</a>` : ` › <span>${esc(label)}</span>`)).join("")}</nav>`;
   const courseLine = (c, showSubject) => `<li class="course-line"><div><a href="#training/course/${c.id}"><b>${esc(c.title)}</b></a>${showSubject ? `<span class="hint">${esc(catName(c.cat))}</span>` : ""}<span class="muted">${esc(c.summary)}</span></div><div class="course-line-meta"><span class="pill">${c.days} days</span><span class="pill">${esc(c.level)}</span></div></li>`;
@@ -3759,7 +3795,7 @@ ${richSummary(st, rows)}`;
   }
   function trLanding() {
     const pub = S.courses.filter((c) => c.status === "published").sort((a, b) => ((upcoming(a)[0] || {}).start || "9").localeCompare((upcoming(b)[0] || {}).start || "9"));
-    return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Academy · Plan. Analyse. Lead.</span><h1>Data, research and executive training</h1><p style="max-width:70ch;font-size:1.12rem;font-weight:500;margin:10px 0 6px">Practical training that helps organisations, governments and NGOs make better decisions and deliver results.</p><p class="muted" style="max-width:70ch">Build skills in research design, surveys, statistics, monitoring and evaluation, dashboards and market research, alongside executive programmes in strategy and strategic planning, leadership, governance, finance and project management. Join a classroom course in a city near you, learn live online, or bring any course to your organisation, tailored to your sector and your team.</p></div></div>
+    return `<div class="page-head"><div><span class="eyebrow gold">Executive Education · Plan. Analyse. Lead.</span><h1>Executive education and professional training</h1><p style="max-width:70ch;font-size:1.12rem;font-weight:500;margin:10px 0 6px">Practical training that helps organisations, governments and NGOs make better decisions and deliver results.</p><p class="muted" style="max-width:70ch">Build skills in research design, surveys, statistics, monitoring and evaluation, dashboards and market research, alongside executive programmes in strategy and strategic planning, leadership, governance, finance and project management. Join a classroom course in a city near you, learn live online, or bring any course to your organisation, tailored to your sector and your team.</p></div></div>
       ${slideshow("training")}
       <form class="card quick-find" data-act-form="catQuick" role="search"><label for="catQuickQ">Search ${CATALOGUE.length} courses<input id="catQuickQ" type="search" placeholder="e.g. strategy, Power BI, monitoring and evaluation"></label><button class="btn primary" type="submit">Find courses</button></form>
       <section class="stack" aria-labelledby="areasH"><div class="section-head"><span class="eyebrow gold">Courses</span><h2 id="areasH" class="h2xl">Start with a subject area</h2></div>${areaCards()}</section>
@@ -3809,7 +3845,7 @@ ${richSummary(st, rows)}`;
       <section class="card">${courseLines(list, true)}</section><p><a class="btn" href="#training/finder">Search all ${CATALOGUE.length} courses</a></p>`;
   }
   function trCertificates() {
-    return `${crumbs(["", "Certificates"])}<div class="page-head"><div><span class="eyebrow gold">Certificates</span><h1>Certificates of completion</h1><p class="muted" style="max-width:70ch">Every participant who attends and completes an Afrimetrica Academy course receives a certificate of completion.</p></div></div>
+    return `${crumbs(["", "Certificates"])}<div class="page-head"><div><span class="eyebrow gold">Certificates</span><h1>Certificates of completion</h1><p class="muted" style="max-width:70ch">Every participant who attends and completes an Afrimetrica Executive Education course receives a certificate of completion.</p></div></div>
       <div class="split">
         <section class="card"><h2>What the certificate shows</h2><ul class="ticks small"><li><div><span>The participant's name</span></div></li><li><div><span>The course title and its length</span></div></li><li><div><span>The dates and the venue, or "live online"</span></div></li><li><div><span>That the participant attended and completed the course</span></div></li></ul></section>
         <section class="card"><h2>What it is not</h2><p class="muted">Our certificates confirm attendance and completion. They are not accredited academic or professional qualifications, and we don't claim endorsement by any professional body.</p><h3>Continuing professional development</h3><p class="muted">If your professional body asks you to log training hours, you can usually record an Afrimetrica course as CPD yourself. Check your body's own rules.</p></section>
@@ -3826,7 +3862,7 @@ ${richSummary(st, rows)}`;
           <section class="card"><h2>Who should attend</h2><p>${esc(c.audience)}</p></section>
           <section class="card"><h2>Course outline</h2><ol class="outline">${c.outline.map(([t, topics], i) => `<li><span class="eyebrow gold">Day ${i + 1}</span><b>${esc(t)}</b><span class="muted">${esc(topics)}</span></li>`).join("")}</ol></section>
           <section class="card"><h2>How the course is taught</h2><p class="muted">Short explanations, worked examples and practical exercises, with time to work on participants' own questions and data. Software courses are taught hands-on: bring a laptop, or ask us about equipment. Materials, templates and exercise files are yours to keep.</p>
-            <h3>Certificate</h3><p class="muted">Participants who attend and complete the course receive an Afrimetrica Academy certificate of completion. It is not an accredited academic qualification.</p></section>
+            <h3>Certificate</h3><p class="muted">Participants who attend and complete the course receive an Afrimetrica Executive Education certificate of completion. It is not an accredited academic qualification.</p></section>
         </div>
         <aside class="stack">
           <section class="card"><h2>Venues and dates</h2><p class="muted">This course can run as a classroom course in any of our venues, live online, or in-house. Dates and fees depend on the venue.</p>
@@ -3859,7 +3895,7 @@ ${richSummary(st, rows)}`;
       return `<li class="ses"><div><b>${esc(fmtDay(s.start))}${s.end && s.end !== s.start ? ` – ${esc(fmtDay(s.end))}` : ""}</b><span class="hint">${esc(s.location || c.format || "")} · ${fee(s.fee, s.currency)} · ${left === null ? "Places available" : left ? `${left} seat${left === 1 ? "" : "s"} left` : "Full"}</span></div>
         ${mine ? `<span class="pill live">Registered</span>` : past ? `<span class="hint">Finished</span>` : left === 0 ? `<span class="hint">Full</span>` : `<button class="btn small primary" data-act="regStart" data-c="${esc(c.id)}" data-s="${esc(s.id)}">Register</button>`}</li>`; };
     return `<div><button class="btn small ghost" data-act="closeCourse">← All courses</button></div>
-      <div class="page-head"><div><span class="eyebrow gold">Afrimetrica Academy</span><h1>${esc(c.title)}</h1><div class="row wrap" style="gap:6px">${[c.level, c.format, c.duration].filter(Boolean).map((x) => `<span class="pill">${esc(x)}</span>`).join("")}</div></div></div>
+      <div class="page-head"><div><span class="eyebrow gold">Afrimetrica Executive Education</span><h1>${esc(c.title)}</h1><div class="row wrap" style="gap:6px">${[c.level, c.format, c.duration].filter(Boolean).map((x) => `<span class="pill">${esc(x)}</span>`).join("")}</div></div></div>
       <div class="results-grid">
         <div class="stack">
           <section class="card prose"><p class="lede-sm">${esc(c.summary)}</p>${sentenceBlocks(c.description)}</section>
@@ -3966,14 +4002,14 @@ ${richSummary(st, rows)}`;
     let panel = "";
     if (m === "an-services") panel = `<div class="tr-panel-grid">${AN_SERVICES.map((x) => `<a href="#analytics/service/${x.id}"><b>${esc(x.name)}</b><span>${esc(x.summary)}</span></a>`).join("")}</div>`;
     if (m === "an-sectors") panel = `<div class="tr-panel-grid">${AN_SECTORS.map((x) => `<a href="#analytics/sector/${x.id}"><b>${esc(x.name)}</b><span>${esc(x.summary)}</span></a>`).join("")}</div>`;
-    return `<div class="subnav-inner"><span class="subnav-label">Afrimetrica Analytics</span><div class="subnav-links tr-links">${links}</div></div>${panel ? `<div class="tr-panel" id="trPanel" role="region" aria-label="${m === "an-services" ? "Analytics services" : "Sectors"}"><div class="tr-panel-inner">${panel}</div></div>` : ""}`;
+    return `<div class="subnav-inner"><span class="subnav-label">Data &amp; Intelligence</span><div class="subnav-links tr-links">${links}</div></div>${panel ? `<div class="tr-panel" id="trPanel" role="region" aria-label="${m === "an-services" ? "Analytics services" : "Sectors"}"><div class="tr-panel-inner">${panel}</div></div>` : ""}`;
   }
-  const anCrumbs = (...items) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#analytics">Analytics</a>${items.map(([href, label]) => (href ? ` › <a href="${href}">${esc(label)}</a>` : ` › <span>${esc(label)}</span>`)).join("")}</nav>`;
+  const anCrumbs = (...items) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#practices">Practices</a> › <a href="#analytics">Data &amp; Intelligence</a>${items.map(([href, label]) => (href ? ` › <a href="${href}">${esc(label)}</a>` : ` › <span>${esc(label)}</span>`)).join("")}</nav>`;
   const anServiceCards = (ids) => `<div class="area-grid">${(ids || AN_SERVICES.map((x) => x.id)).map(anService).map((x) => `<a class="card area-card" href="#analytics/service/${x.id}"><b>${esc(x.name)}</b><span class="hint">${esc(x.summary)}</span></a>`).join("")}</div>`;
   const anForm = (title, message) => enquiryForm("analytics", { title, intro: "Describe your data and what you need to know. We'll reply with an approach, a timeline and a quote.", services: ANALYTICS_SERVICES, budget: true, messageLabel: "Your data and questions", placeholder: "e.g. 1,200 household survey responses in Excel; we need prevalence estimates by region and a regression on food security.", message });
   const anSteps = `<ol class="steps"><li>You tell us your questions and describe your data. Share it securely when we're ready to start.</li><li>We agree an analysis plan, a timeline and a fixed price.</li><li>We clean and analyse the data and check the results.</li><li>You receive tables, charts and a plain-language summary, and we walk you through them.</li></ol>`;
   function anLanding() {
-    return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Analytics</span><h1>Data analysis you can rely on</h1><p class="muted" style="max-width:70ch">Send us your data and your questions. Our analysts clean it, analyse it with the right methods and give organisations, governments and NGOs results they can explain, defend and act on.</p></div></div>
+    return `<div class="page-head"><div><span class="eyebrow gold">Data &amp; Intelligence</span><h1>Data analysis you can rely on</h1><p class="muted" style="max-width:70ch">Send us your data and your questions. Our analysts clean it, analyse it with the right methods and give organisations, governments and NGOs results they can explain, defend and act on.</p></div></div>
       ${slideshow("analytics")}
       <section class="stack" aria-labelledby="anSvcH"><div class="section-head"><span class="eyebrow gold">Services</span><h2 id="anSvcH" class="h2xl">What we can do with your data</h2></div>${anServiceCards()}</section>
       <div class="feature">${sidePhoto("analyticsTeam")}<section class="stack" aria-labelledby="anSecH"><div class="section-head"><span class="eyebrow gold">Sectors</span><h2 id="anSecH" class="h2xl">Analysis for your sector</h2></div><nav class="sub-jump" aria-label="Sectors">${AN_SECTORS.map((x) => `<a href="#analytics/sector/${x.id}">${esc(x.name)}</a>`).join("")}</nav></section></div>
@@ -3984,12 +4020,12 @@ ${richSummary(st, rows)}`;
   }
   function anServicePage(x) {
     const courses = x.courses.map(catCourse).filter(Boolean);
-    return `${anCrumbs(["", x.name])}<div class="page-head"><div><span class="eyebrow gold">Analytics service</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.summary)}</p></div></div>
+    return `${anCrumbs(["", x.name])}<div class="page-head"><div><span class="eyebrow gold">Data &amp; Intelligence</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.summary)}</p></div></div>
       <div class="split">
         <section class="card"><h2>Questions we help you answer</h2><ul class="ticks small">${x.questions.map((q) => `<li><div><span>${esc(q)}</span></div></li>`).join("")}</ul><h3>Methods</h3><p class="muted">${esc(x.methods)}</p></section>
         <section class="card"><h2>What you receive</h2><ul class="ticks small">${x.deliverables.map((q) => `<li><div><span>${esc(q)}</span></div></li>`).join("")}</ul><h3>How it works</h3>${anSteps}</section>
       </div>
-      ${courses.length ? `<section class="card"><h2>Build these skills in your own team</h2><p class="muted">Related Afrimetrica Academy courses, in the classroom, live online or in-house.</p>${courseLines(courses)}</section>` : ""}
+      ${courses.length ? `<section class="card"><h2>Build these skills in your own team</h2><p class="muted">Related Afrimetrica Executive Education courses, in the classroom, live online or in-house.</p>${courseLines(courses)}</section>` : ""}
       <div id="anEnquiry">${anForm(`Ask about ${lcFirst(x.name)}`, `Service: ${x.name}\nOur data: \nOur questions: `)}</div>`;
   }
   function anSectorPage(x) {
@@ -4001,7 +4037,7 @@ ${richSummary(st, rows)}`;
   function anTools() {
     return `${anCrumbs(["", "Tools we use"])}<div class="page-head"><div><span class="eyebrow gold">Tools</span><h1>Tools we use</h1><p class="muted" style="max-width:70ch">We work in the software that suits your data and your team, and hand over files your staff can open, check and reuse.</p></div></div>
       <div class="area-grid">${AN_TOOLS.map(([t, d]) => `<div class="card area-card"><b>${esc(t)}</b><span class="hint">${esc(d)}</span></div>`).join("")}</div>
-      <section class="card"><h2>Want your team to use these tools?</h2><p class="muted">Afrimetrica Academy runs hands-on courses in SPSS, Stata, R, Python, Power BI, Excel and NVivo.</p><a class="btn primary" href="#training/area/research" style="align-self:flex-start">See training courses</a></section>`;
+      <section class="card"><h2>Want your team to use these tools?</h2><p class="muted">Afrimetrica Executive Education runs hands-on courses in SPSS, Stata, R, Python, Power BI, Excel and NVivo.</p><a class="btn primary" href="#training/area/research" style="align-self:flex-start">See training courses</a></section>`;
   }
   function anHowWeWork() {
     return `${anCrumbs(["", "How we work"])}<div class="page-head"><div><span class="eyebrow gold">How we work</span><h1>From your questions to clear answers</h1></div></div>
@@ -4081,14 +4117,14 @@ ${richSummary(st, rows)}`;
     let panel = "";
     if (m === "co-services") panel = `<div class="tr-panel-grid">${CO_SERVICES.map((x) => `<a href="#consultancy/service/${x.id}"><b>${esc(x.name)}</b><span>${esc(x.summary)}</span></a>`).join("")}</div>`;
     if (m === "co-sectors") panel = `<div class="tr-panel-grid">${CO_SECTORS.map((x) => `<a href="#consultancy/sector/${x.id}"><b>${esc(x.name)}</b><span>${esc(x.summary)}</span></a>`).join("")}</div>`;
-    return `<div class="subnav-inner"><span class="subnav-label">Afrimetrica Consulting</span><div class="subnav-links tr-links">${links}</div></div>${panel ? `<div class="tr-panel" id="trPanel" role="region" aria-label="${m === "co-services" ? "Consultancy services" : "Sectors"}"><div class="tr-panel-inner">${panel}</div></div>` : ""}`;
+    return `<div class="subnav-inner"><span class="subnav-label">Research &amp; Advisory</span><div class="subnav-links tr-links">${links}</div></div>${panel ? `<div class="tr-panel" id="trPanel" role="region" aria-label="${m === "co-services" ? "Consultancy services" : "Sectors"}"><div class="tr-panel-inner">${panel}</div></div>` : ""}`;
   }
-  const coCrumbs = (...items) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#consultancy">Consultancy</a>${items.map(([href, label]) => (href ? ` › <a href="${href}">${esc(label)}</a>` : ` › <span>${esc(label)}</span>`)).join("")}</nav>`;
+  const coCrumbs = (...items) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#practices">Practices</a> › <a href="#consultancy">Research &amp; Advisory</a>${items.map(([href, label]) => (href ? ` › <a href="${href}">${esc(label)}</a>` : ` › <span>${esc(label)}</span>`)).join("")}</nav>`;
   const coServiceCards = (ids) => `<div class="area-grid">${(ids || CO_SERVICES.map((x) => x.id)).map(coService).map((x) => `<a class="card area-card" href="#consultancy/service/${x.id}"><b>${esc(x.name)}</b><span class="hint">${esc(x.summary)}</span></a>`).join("")}</div>`;
   const coForm = (title, message) => enquiryForm("consultancy", { title, intro: "Tell us about your project. We'll reply within two working days to arrange a call.", services: CONSULT_SERVICES, budget: true, messageLabel: "About your project", placeholder: "Objectives, target population, locations, deadlines and any terms of reference.", message });
   const coPhases = `<ol class="steps"><li><b>Inception.</b> We agree the questions, scope, methods, timeline and budget, usually in an inception report.</li><li><b>Design.</b> Sampling, tools, ethics approvals and consent procedures.</li><li><b>Data collection.</b> Trained teams, digital tools and daily quality checks.</li><li><b>Analysis.</b> Rigorous analysis, checked before anything is reported.</li><li><b>Reporting and learning.</b> Clear reports, briefs and a presentation, with recommendations you can act on.</li></ol>`;
   function coLanding() {
-    return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Consulting</span><h1>Research and evaluation consultancy</h1><p class="muted" style="max-width:70ch">From a single questionnaire review to a full multi-site study or a new strategic plan, we design, run and report work that stands up to scrutiny, for organisations, governments and NGOs.</p></div></div>
+    return `<div class="page-head"><div><span class="eyebrow gold">Research &amp; Advisory</span><h1>Research, evaluation and advisory services</h1><p class="muted" style="max-width:70ch">From a single questionnaire review to a full multi-site study or a new strategic plan, we design, run and report work that stands up to scrutiny, for organisations, governments and NGOs.</p></div></div>
       ${slideshow("consultancy")}
       <section class="stack" aria-labelledby="coSvcH"><div class="section-head"><span class="eyebrow gold">Services</span><h2 id="coSvcH" class="h2xl">How we can help</h2></div>${coServiceCards()}</section>
       <div class="feature">${sidePhoto("coWorkshop")}<section class="stack" aria-labelledby="coSecH"><div class="section-head"><span class="eyebrow gold">Sectors</span><h2 id="coSecH" class="h2xl">Who we work with</h2></div><nav class="sub-jump" aria-label="Sectors">${CO_SECTORS.map((x) => `<a href="#consultancy/sector/${x.id}">${esc(x.name)}</a>`).join("")}</nav></section></div>
@@ -4099,7 +4135,7 @@ ${richSummary(st, rows)}`;
   }
   function coServicePage(x) {
     const courses = x.courses.map(catCourse).filter(Boolean), an = x.analytics.map(anService).filter(Boolean);
-    return `${coCrumbs(["", x.name])}<div class="page-head"><div><span class="eyebrow gold">Consultancy service</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.summary)}</p></div></div>
+    return `${coCrumbs(["", x.name])}<div class="page-head"><div><span class="eyebrow gold">${esc(coPractice(x.id).name)}</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.summary)}</p></div></div>
       <div class="split">
         <section class="card"><h2>When this helps</h2><ul class="ticks small">${x.when.map((q) => `<li><div><span>${esc(q)}</span></div></li>`).join("")}</ul></section>
         <section class="card"><h2>What you receive</h2><ul class="ticks small">${x.deliverables.map((q) => `<li><div><span>${esc(q)}</span></div></li>`).join("")}</ul></section>
@@ -4113,24 +4149,27 @@ ${richSummary(st, rows)}`;
       <div>${coForm(`Discuss ${lcFirst(x.name)}`, `Service: ${x.name}\nOur organisation and project: \nTimeline and location: `)}</div>`;
   }
   function coSectorPage(x) {
-    return `${coCrumbs(["", x.name])}<div class="page-head"><div><span class="eyebrow gold">Sector</span><h1>Consultancy for ${esc(lcFirst(x.name))}</h1><p class="muted" style="max-width:70ch">${esc(x.summary)}</p></div></div>
+    return `${coCrumbs(["", x.name])}<div class="page-head"><div><span class="eyebrow gold">Sector</span><h1>Research and advisory for ${esc(lcFirst(x.name))}</h1><p class="muted" style="max-width:70ch">${esc(x.summary)}</p></div></div>
       <section class="card"><h2>Typical assignments</h2><ul class="ticks small">${x.assignments.map((q) => `<li><div><span>${esc(q)}</span></div></li>`).join("")}</ul></section>
       <section class="stack"><h2>Services that fit</h2>${coServiceCards(x.services)}</section>
       <div>${coForm("Discuss your project", `Sector: ${x.name}\nOur organisation and project: \nTimeline and location: `)}</div>`;
   }
   function coApproach() {
-    return `${coCrumbs(["", "Our approach"])}<div class="page-head"><div><span class="eyebrow gold">Our approach</span><h1>Independent, rigorous and practical</h1><p class="muted" style="max-width:70ch">Every assignment follows the same disciplined path, adapted to your questions, budget and context.</p></div></div>
+    return `${coCrumbs(["", "Our approach"])}${approachBody()}`;
+  }
+  function approachBody() {
+    return `<div class="page-head"><div><span class="eyebrow gold">Our approach</span><h1>Independent, rigorous and practical</h1><p class="muted" style="max-width:70ch">Every assignment follows the same disciplined path, adapted to your questions, budget and context.</p></div></div>
       <section class="card"><h2>How an assignment runs</h2>${coPhases}</section>
       <div class="split">
         <section class="card"><h2>Quality</h2><ul class="ticks small"><li><div><b>Fit-for-purpose methods</b><span>The simplest design that can answer your question credibly.</span></div></li><li><div><b>Checked results</b><span>Analysis is reviewed before anything is reported.</span></div></li><li><div><b>Honest findings</b><span>We report what the evidence shows, including what didn't work.</span></div></li></ul></section>
         <section class="card"><h2>Ethics and data protection</h2><ul class="ticks small"><li><div><b>Informed consent</b><span>Participants know what they are agreeing to and can stop at any time.</span></div></li><li><div><b>Ethics approval</b><span>We seek approval from the relevant committees where a study needs it.</span></div></li><li><div><b>Safeguarding</b><span>Extra care with children and vulnerable groups.</span></div></li><li><div><b>Data protection</b><span>Personal data handled in line with the law, including Ghana's Data Protection Act, 2012.</span></div></li></ul></section>
       </div>
-      <section class="card"><h2>Our team</h2><p class="muted">A core team of researchers and analysts, supported by an associate network of specialists and field staff in Africa and around the world.</p><a class="btn" href="#consultancy/work-with-us" style="align-self:flex-start">Join our associate network</a></section>`;
+      <section class="card"><h2>Our people</h2><p class="muted">Specialists in research, data, advice and teaching, supported by an expert network of specialists and field staff in Africa and around the world.</p><div class="row wrap"><a class="btn" href="#about/team">Meet our people</a><a class="btn" href="#consultancy/work-with-us">Join our expert network</a></div></section>`;
   }
   function coWorkWithUs() {
-    return `${coCrumbs(["", "Work with us"])}<div class="page-head"><div><span class="eyebrow gold">Work with us</span><h1>Join our associate network</h1><p class="muted" style="max-width:70ch">We work with independent consultants, researchers, trainers, data analysts, enumerators and field supervisors in Africa and around the world. Tell us about your skills and where you work.</p></div></div>
+    return `${coCrumbs(["", "Work with us"])}<div class="page-head"><div><span class="eyebrow gold">Work with us</span><h1>Join our expert network</h1><p class="muted" style="max-width:70ch">We work with independent consultants, researchers, trainers, data analysts, enumerators and field supervisors in Africa and around the world. Tell us about your skills and where you work.</p></div></div>
       <div class="split">${enquiryForm("contact", { title: "Tell us about yourself", intro: "Share your expertise, languages and locations. We'll keep your details on file and contact you when a suitable assignment comes up.", messageLabel: "Your skills, experience and locations", placeholder: "e.g. M&E consultant, 8 years' experience, based in Kampala; English and Luganda; available for evaluations in East Africa.", message: "I'd like to join the associate network.\nRole (consultant, trainer, analyst, enumerator, supervisor): \nExperience: \nLocation and languages: " })}
-        <section class="card"><h2>Who we look for</h2><ul class="ticks small"><li><div><span>Researchers and evaluators</span></div></li><li><div><span>Trainers for Afrimetrica Academy courses</span></div></li><li><div><span>Data analysts and statisticians</span></div></li><li><div><span>Enumerators, supervisors and field coordinators</span></div></li><li><div><span>Sector specialists, such as health, education, agriculture and finance</span></div></li></ul><p class="hint">Please don't send CVs or ID documents yet. We'll ask for them when there's a suitable assignment.</p></section>
+        <section class="card"><h2>Who we look for</h2><ul class="ticks small"><li><div><span>Researchers and evaluators</span></div></li><li><div><span>Trainers for Afrimetrica Executive Education courses</span></div></li><li><div><span>Data analysts and statisticians</span></div></li><li><div><span>Enumerators, supervisors and field coordinators</span></div></li><li><div><span>Sector specialists, such as health, education, agriculture and finance</span></div></li></ul><p class="hint">Please don't send CVs or ID documents yet. We'll ask for them when there's a suitable assignment.</p></section>
       </div>`;
   }
   function coRequest() {
@@ -4146,19 +4185,93 @@ ${richSummary(st, rows)}`;
     if (part === "request") return coRequest();
     return coLanding();
   }
+  // ================= PRACTICES: the firm's five practices (#practices, #practices/<id>) =================
+  // Each practice page is built from existing, live service content (AN_SERVICES, CO_SERVICES, the training catalogue and
+  // the survey platform); nothing here describes a capability the site doesn't already offer.
+  const PRACTICES = [
+    { id: "data-intelligence", name: "Data & Intelligence", short: "Statistical analysis, survey analysis, dashboards, data management, and predictive and qualitative analysis.",
+      problem: "Organisations hold more data than ever, but it is often incomplete, scattered or hard to interpret. Decisions need figures that are accurate, clearly explained and fit for purpose.",
+      an: ["statistics", "survey", "mel", "dashboards", "data", "market", "predictive", "qualitative"], co: [], sectors: "an",
+      more: [["#analytics/tools", "Tools we use"], ["#analytics/how-we-work", "How we work"], ["#analytics/data-security", "How we protect your data"]] },
+    { id: "research-evaluation", name: "Research & Evaluation", short: "Research design, surveys and fieldwork, monitoring and evaluation, independent evaluations and commissioned studies.",
+      problem: "Programmes, policies and investments need evidence that stands up to scrutiny: what is happening, for whom, and whether it is working.",
+      an: [], co: ["design", "fieldwork", "mel", "evaluations", "reports"], sectors: "co",
+      more: [["#paper-survey", "Get a fieldwork quote"], ["#consultancy/approach", "Our approach"], ["#consultancy/work-with-us", "Join our expert network"]] },
+    { id: "strategy-advisory", name: "Strategy & Advisory", short: "Policy research, strategy and organisational development, and feasibility studies.",
+      problem: "Leaders face decisions about policy, strategy, organisation and investment where the stakes are high and the evidence is often incomplete.",
+      an: [], co: ["policy", "strategy", "feasibility"], sectors: "co",
+      more: [["#consultancy/approach", "Our approach"], ["#training/area/leadership", "Executive programmes in leadership and strategy"]] },
+    { id: "executive-education", name: "Executive Education", short: "Executive programmes, professional training and in-house capacity building, in the classroom, live online or at your premises.",
+      problem: "Teams need practical skills in data, research, leadership and management that they can apply at work straight away." },
+    { id: "digital-solutions", name: "Digital Solutions", short: "The Afrimetrica Surveys platform: questionnaire building, online and face-to-face data collection, and built-in analysis.",
+      problem: "Collecting and analysing data should not require several tools, specialist software or weeks of manual work." },
+  ];
+  const practice = (id) => PRACTICES.find((x) => x.id === id);
+  // Which practice each consultancy service belongs to (all analytics services sit in Data & Intelligence).
+  const coPractice = (id) => PRACTICES.find((p) => (p.co || []).includes(id)) || PRACTICES[1];
+  const PRACTICE_MENU = [["", "Overview"], ...PRACTICES.map((x) => [x.id, x.name])];
+  const prNav = () => `<div class="subnav-inner"><span class="subnav-label">Our practices</span><div class="subnav-links">${subLinks("practices", PRACTICE_MENU, S.pr || "")}</div></div>`;
+  const prCrumbs = (label) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#practices">Practices</a> › <span>${esc(label)}</span></nav>`;
+  const practiceCards = () => `<div class="practice-grid">${PRACTICES.map((x, i) => `<a class="card practice-card" href="#practices/${x.id}"><span class="practice-num" aria-hidden="true">0${i + 1}</span><b>${esc(x.name)}</b><span class="hint">${esc(x.short)}</span></a>`).join("")}</div>`;
+  const tickList = (items) => `<ul class="ticks small">${items.map((q) => `<li><div><span>${esc(q)}</span></div></li>`).join("")}</ul>`;
+  function prOverview() {
+    return `<div class="page-head"><div><span class="eyebrow gold">Our practices</span><h1>Five practices, one firm</h1><p class="muted" style="max-width:70ch">Afrimetrica brings data, research, advice and learning together. Each practice has its own specialists and methods, and they work together on larger assignments, from collecting the evidence to acting on it.</p></div></div>
+      ${practiceCards()}
+      <section class="band"><div class="stack" style="gap:10px"><span class="eyebrow">Not sure where to start?</span><h2>Tell us what you need to decide</h2><p>Describe the question or the problem. We'll suggest the right mix of research, analysis, advice and training.</p></div>
+        <div class="band-list"><a class="band-item" href="#contact"><b>Send an enquiry</b><span>We reply within two working days</span></a><a class="band-item" href="#about/team"><b>Meet our people</b><span>The specialists who do the work</span></a></div></section>`;
+  }
+  function prServicePractice(x) {
+    const svc = [...x.an.map(anService).map((s) => [`#analytics/service/${s.id}`, s]), ...x.co.map(coService).map((s) => [`#consultancy/service/${s.id}`, s])];
+    const deliver = [...new Set(svc.flatMap(([, s]) => s.deliverables))].slice(0, 6);
+    const sectors = x.sectors === "an" ? AN_SECTORS.map((s) => [`#analytics/sector/${s.id}`, s.name]) : CO_SECTORS.map((s) => [`#consultancy/sector/${s.id}`, s.name]);
+    const form = x.sectors === "an" ? anForm(`Discuss a ${x.name} project`, `Practice: ${x.name}\n`) : coForm(`Discuss a ${x.name} project`, `Practice: ${x.name}\nOur organisation and project: \nTimeline and location: `);
+    return `${prCrumbs(x.name)}<div class="page-head"><div><span class="eyebrow gold">Practice</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.problem)}</p></div></div>
+      <section class="stack" aria-labelledby="prSvcH"><div class="section-head"><span class="eyebrow gold">What we do</span><h2 id="prSvcH" class="h2xl">Services</h2></div><div class="area-grid">${svc.map(([href, s]) => `<a class="card area-card" href="${href}"><b>${esc(s.name)}</b><span class="hint">${esc(s.summary)}</span></a>`).join("")}</div></section>
+      <div class="split">
+        <section class="card"><h2>Typical deliverables</h2>${tickList(deliver)}</section>
+        <section class="card"><h2>Sectors</h2><nav class="sub-jump" aria-label="${esc(x.name)} sectors">${sectors.map(([href, n]) => `<a href="${href}">${esc(n)}</a>`).join("")}</nav>${x.more.length ? `<h3>More</h3><ul class="ticks small">${x.more.map(([href, l]) => `<li><div><a href="${href}">${esc(l)}</a></div></li>`).join("")}</ul>` : ""}</section>
+      </div>
+      <section class="stack" aria-labelledby="prInsH"><div class="section-head"><span class="eyebrow gold">Insights</span><h2 id="prInsH">Related guides</h2></div><div class="stack" style="gap:10px">${GUIDES.slice(0, 3).map((g) => `<a class="card guide-link" href="#resources/articles/${g.id}"><b>${esc(g.title)}</b><span class="hint">${esc(g.summary)} · ${g.minutes} min read</span></a>`).join("")}</div></section>
+      <div>${form}</div>`;
+  }
+  function prExecEd() {
+    const x = practice("executive-education");
+    return `${prCrumbs(x.name)}<div class="page-head"><div><span class="eyebrow gold">Practice</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.problem)} ${esc(x.short)}</p></div></div>
+      <div class="split">
+        <section class="card"><h2>What we offer</h2>${tickList([`${CATALOGUE.length} courses in ${GROUPS.length} subject areas, from research methods and data to leadership, strategy, finance and governance`, `Classroom courses in ${VENUES.length} countries, in Africa and internationally`, "Live online courses taught in short daily sessions", "In-house programmes tailored to your organisation, sector and data", "Certificates of completion for participants who attend and complete a course"])}<p class="hint">Certificates of completion are not accredited qualifications.</p></section>
+        <section class="card"><h2>Subject areas</h2><nav class="sub-jump" aria-label="Subject areas">${GROUPS.map(([g, name]) => `<a href="#training/area/${g}">${esc(name)}</a>`).join("")}</nav></section>
+      </div>
+      <div class="row wrap"><a class="btn gold" href="#training">Go to Executive Education</a><a class="btn primary" href="#training/finder">Find a course</a><a class="btn" href="#training/venues">Training venues</a><a class="btn" href="#training/certificates">Certificates</a></div>`;
+  }
+  function prDigital() {
+    const x = practice("digital-solutions");
+    return `${prCrumbs(x.name)}<div class="page-head"><div><span class="eyebrow gold">Practice</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.problem)} ${esc(x.short)}</p></div></div>
+      <div class="split">
+        <section class="card"><h2>Available now</h2>${tickList(["Build questionnaires online, or upload them from Word, PDF or Excel", "Collect responses online, through our participant panel, or face to face with our field teams", "Built-in analysis: charts, group comparisons, statistical tests and Excel exports", "AI-assisted question checks and insight reports, grounded in your own responses", "Clear plans and prices, with answers visible only to the survey's owner"])}</section>
+        <section class="card"><h2>Start here</h2><ul class="ticks small"><li><div><a href="#surveys">Afrimetrica Surveys overview</a></div></li><li><div><a href="#create">Create a survey</a></div></li><li><div><a href="#import">Upload a questionnaire</a></div></li><li><div><a href="#paper-survey">Price face-to-face fieldwork</a></div></li><li><div><a href="#pricing">Plans and prices</a></div></li></ul></section>
+      </div>
+      <div class="row wrap"><a class="btn gold" href="#surveys">Go to Afrimetrica Surveys</a><a class="btn" href="#contact">Ask about a digital project</a></div>`;
+  }
+  function viewPractices() {
+    const x = practice((S.pr || "").split("/")[0]);
+    if (!x) return prOverview();
+    if (x.id === "executive-education") return prExecEd();
+    if (x.id === "digital-solutions") return prDigital();
+    return prServicePractice(x);
+  }
   // ---- Resources (#resources/<part>) and Contact (#contact/<part>) sections, with their own menus ----
   const subLinks = (base, items, cur) => items.map(([k, label]) => `<a href="#${base}${k ? "/" + k : ""}"${cur === k || (k && cur.startsWith(k + "/")) ? ' aria-current="page"' : ""}>${label}</a>`).join("");
   // Case studies and Videos are left out of the menu (and the sitemap) until they have real content; their pages still open.
   const RES_MENU = [["", "Overview"], ["articles", "Articles and guides"], ["testimonials", "Testimonials"], ["press", "Press releases"], ["catalogues", "Catalogues and brochures"]];
   const CONTACT_MENU = [["", "Contact us"], ["hotel", "Hotel reservation"], ["careers", "Careers"], ["mailing-list", "Mailing list"]];
-  const resNav = () => `<div class="subnav-inner"><span class="subnav-label">Knowledge Hub</span><div class="subnav-links">${subLinks("resources", RES_MENU, S.res || "")}</div></div>`;
+  const resNav = () => `<div class="subnav-inner"><span class="subnav-label">Insights</span><div class="subnav-links">${subLinks("resources", RES_MENU, S.res || "")}</div></div>`;
   const ctNav = () => `<div class="subnav-inner"><span class="subnav-label">Contact</span><div class="subnav-links">${subLinks("contact", CONTACT_MENU, S.ct || "")}<a href="#training/finder">Find training</a></div></div>`;
   const resCrumbs = (label) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#resources">Resources</a> › <span>${esc(label)}</span></nav>`;
   const ctCrumbs = (label) => `<nav class="crumbs" aria-label="Breadcrumb"><a href="#contact">Contact</a> › <span>${esc(label)}</span></nav>`;
   const guideCards = () => `<div class="course-grid">${GUIDES.map((g) => `<a class="card tpl" href="#resources/articles/${g.id}"><h3>${esc(g.title)}</h3><p class="muted">${esc(g.summary)}</p><span class="hint">${g.minutes} min read</span></a>`).join("")}</div>`;
   const pageHead = (eyebrow, title, intro) => `<div class="page-head"><div><span class="eyebrow gold">${esc(eyebrow)}</span><h1>${esc(title)}</h1>${intro ? `<p class="muted" style="max-width:70ch">${intro}</p>` : ""}</div></div>`;
   function resArticles() {
-    return `${resCrumbs("Articles and guides")}${pageHead("Knowledge Hub", "Articles and guides", "Practical, free guides on research methods, surveys and evaluation, written by our team.")}${guideCards()}`;
+    return `${resCrumbs("Articles and guides")}${pageHead("Insights", "Articles and guides", "Practical, free guides on research methods, surveys and evaluation, written by our team.")}${guideCards()}`;
   }
   function resCaseStudies() {
     return `${resCrumbs("Case studies")}${pageHead("Case studies", "Case studies", "Short accounts of projects we have delivered: the question, what we did, and what changed.")}
@@ -4188,12 +4301,12 @@ ${richSummary(st, rows)}`;
   }
   const printBar = (back) => `<div class="row wrap no-print"><a class="btn small ghost" href="${back}">← Catalogues and brochures</a><button class="btn small primary" data-act="printPage">Print or save as PDF</button></div>`;
   function resTrainingCatalogue() {
-    return `${printBar("#resources/catalogues")}<article class="printable"><header class="print-head"><span class="eyebrow gold">Afrimetrica Academy</span><h1>Training course catalogue</h1><p class="muted">Data, research and executive training. Every course runs in the classroom in our venues in Africa and around the world, live online or in-house. Ask us for dates and fees. Participants receive a certificate of completion (not an accredited qualification).</p></header>
+    return `${printBar("#resources/catalogues")}<article class="printable"><header class="print-head"><span class="eyebrow gold">Afrimetrica Executive Education</span><h1>Training course catalogue</h1><p class="muted">Executive education and professional training. Every course runs in the classroom in our venues in Africa and around the world, live online or in-house. Ask us for dates and fees. Participants receive a certificate of completion (not an accredited qualification).</p></header>
       ${GROUPS.map(([g, name, subs]) => { const list = CATALOGUE.filter((c) => subs.includes(c.cat)); return `<section class="print-group"><h2>${esc(name)}</h2><div class="table-wrap" tabindex="0"><table class="print-table"><thead><tr><th>Course</th><th>Subject</th><th>Days</th><th>Level</th></tr></thead><tbody>${list.map((c) => `<tr><td>${esc(c.title)}</td><td>${esc(catName(c.cat))}</td><td class="n">${c.days}</td><td>${esc(c.level)}</td></tr>`).join("")}</tbody></table></div></section>`; }).join("")}
       <p class="hint">Venues: ${esc(VENUES.map(([country, cities]) => `${country} (${cities.join(", ")})`).join("; "))}.</p></article>`;
   }
   function resServicesBrochure() {
-    return `${printBar("#resources/catalogues")}<article class="printable"><header class="print-head"><span class="eyebrow gold">Afrimetrica</span><h1>Analytics and consultancy services</h1><p class="muted">Data, research and executive training, analysis and advice for organisations, governments and NGOs in Africa and around the world.</p></header>
+    return `${printBar("#resources/catalogues")}<article class="printable"><header class="print-head"><span class="eyebrow gold">Afrimetrica</span><h1>Data, research and advisory services</h1><p class="muted">An independent, Africa-focused professional services firm specialising in data intelligence, research, strategic advisory and executive education.</p></header>
       <section class="print-group"><h2>Analytics</h2>${AN_SERVICES.map((x) => `<h3>${esc(x.name)}</h3><p>${esc(x.summary)}</p>`).join("")}</section>
       <section class="print-group"><h2>Consultancy</h2>${CO_SERVICES.map((x) => `<h3>${esc(x.name)}</h3><p>${esc(x.summary)}</p>`).join("")}</section></article>`;
   }
@@ -4205,7 +4318,7 @@ ${richSummary(st, rows)}`;
   function ctCareers() {
     return `${ctCrumbs("Careers")}${pageHead("Careers", "Careers at Afrimetrica", "We're building a team of researchers, analysts, trainers and field staff in Africa and around the world.")}
       <div class="split"><section class="card"><h2>Current vacancies</h2><p class="muted">There are no advertised vacancies at the moment. When there are, they will be listed here.</p></section>
-        <section class="card"><h2>Work with us as an associate</h2><p class="muted">We regularly work with independent consultants, trainers, data analysts, enumerators and field supervisors. Join our associate network and we'll contact you when a suitable assignment comes up.</p><a class="btn primary" href="#consultancy/work-with-us" style="align-self:flex-start">Join the associate network</a></section></div>`;
+        <section class="card"><h2>Work with us as an associate</h2><p class="muted">We regularly work with independent consultants, trainers, data analysts, enumerators and field supervisors. Join our associate network and we'll contact you when a suitable assignment comes up.</p><a class="btn primary" href="#consultancy/work-with-us" style="align-self:flex-start">Join our expert network</a></section></div>`;
   }
   function ctMailing() {
     return `${ctCrumbs("Mailing list")}${pageHead("Mailing list", "Join our mailing list", "Hear about new courses, course dates, free guides and events. We'll only email you about Afrimetrica, and you can ask to be removed at any time.")}
@@ -4272,7 +4385,7 @@ ${richSummary(st, rows)}`;
     if (part === "videos") return resVideos();
     if (part === "catalogues") return arg === "training" ? resTrainingCatalogue() : arg === "services" ? resServicesBrochure() : resCatalogues();
     const tpl = Object.entries(TEMPLATES);
-    return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Knowledge Hub</span><h1>Resources for better research</h1><p class="muted" style="max-width:66ch">Free guides, a sample size calculator, ready-made survey templates, published findings and links to open data.</p></div></div>
+    return `<div class="page-head"><div><span class="eyebrow gold">Afrimetrica Insights</span><h1>Insights for better research</h1><p class="muted" style="max-width:66ch">Free guides, a sample size calculator, ready-made survey templates, published findings and links to open data.</p></div></div>
       <section class="stack"><h2>Guides</h2>${guideCards()}</section>
       <section class="card" id="sampleCalc"><div><h2>Sample size calculator</h2><p class="muted">How many completed responses you need for a given margin of error.</p></div>
         <div class="grid4"><label for="sc-conf">Confidence<select id="sc-conf"><option value="1.645">90%</option><option value="1.96" selected>95%</option><option value="2.576">99%</option></select></label>
@@ -4293,7 +4406,7 @@ ${richSummary(st, rows)}`;
   function guideView(g) {
     const table = `<div class="table-wrap" tabindex="0"><table><thead><tr><th>Margin of error</th><th>Responses needed</th></tr></thead><tbody>${[10, 5, 3, 2].map((m) => `<tr><td>±${m}%</td><td class="n">${int(sampleN(1.96, m / 100, 0))}</td></tr>`).join("")}</tbody></table></div>`;
     return `<div><a class="btn small ghost" href="#resources/articles">← Articles and guides</a></div>
-      <article class="card prose guide"><span class="eyebrow gold">Afrimetrica Knowledge Hub · ${g.minutes} min read</span><h1>${esc(g.title)}</h1><p class="lede-sm">${esc(g.summary)}</p>
+      <article class="card prose guide"><span class="eyebrow gold">Afrimetrica Insights · ${g.minutes} min read</span><h1>${esc(g.title)}</h1><p class="lede-sm">${esc(g.summary)}</p>
         ${g.sections.map(([h, p]) => `<h2>${esc(h)}</h2>${p === "__SAMPLE_TABLE__" ? table + `<p class="hint">For a yes/no style result, assuming a 50% split, which gives the largest (safest) number.</p>` : `<p>${esc(p)}</p>`}`).join("")}
         <div class="row wrap" style="margin-top:8px"><a class="btn primary" href="#create">Build a survey</a><a class="btn" href="#training">See our courses</a></div></article>`;
   }
@@ -4305,11 +4418,11 @@ ${richSummary(st, rows)}`;
     const st = S.settings || {}, wa = String(st.whatsapp || "").replace(/[^\d]/g, "");
     const item = (label, val) => `<div class="contact-item"><span class="hint">${label}</span>${val}</div>`;
     const details = [st.email ? item("Email", `<span class="row wrap" style="gap:8px"><b class="sel">${esc(st.email)}</b><button class="btn small ghost" data-act="copyText" data-v="${esc(st.email)}">Copy</button></span>`) : "", st.phone ? item("Phone", `<b class="sel">${esc(st.phone)}</b>`) : "", wa ? item("WhatsApp", `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Message us on WhatsApp</a>`) : "", st.address ? item("Office", `<span class="sel" style="white-space:pre-line">${esc(st.address)}</span>`) : "", st.hours ? item("Hours", esc(st.hours)) : "", st.linkedin ? item("LinkedIn", `<a href="${esc(st.linkedin)}" target="_blank" rel="noopener">Follow Afrimetrica</a>`) : ""].join("");
-    return `<div class="page-head"><div><span class="eyebrow gold">Contact</span><h1>Get in touch</h1><p class="muted" style="max-width:66ch">Questions about courses, surveys, analysis or a project? Send us a message and we'll reply within two working days.</p></div></div>
+    return `<div class="page-head"><div><span class="eyebrow gold">Contact</span><h1>Get in touch</h1><p class="muted" style="max-width:66ch">Questions about our practices, an executive programme, a survey or a project? Send us a message and we'll reply within two working days.</p></div></div>
       <div class="split">
         ${enquiryForm("contact", { title: "Send us a message", subject: true, messageLabel: "Your message" })}
         <section class="card"><h2>Contact details</h2>${details || `<p class="muted">Use the form and we'll reply by email.</p>`}
-          <h3>Looking for something specific?</h3><ul class="links"><li><a href="#training">Course registration and in-house training</a></li><li><a href="#consultancy">Research and evaluation projects</a></li><li><a href="#analytics">Data analysis requests</a></li><li><a href="#paper-survey">Face-to-face fieldwork quotes</a></li></ul></section>
+          <h3>Looking for something specific?</h3><ul class="links"><li><a href="#practices/data-intelligence">Data &amp; Intelligence: data analysis requests</a></li><li><a href="#practices/research-evaluation">Research &amp; Evaluation: studies and evaluations</a></li><li><a href="#practices/strategy-advisory">Strategy &amp; Advisory: policy, strategy and feasibility</a></li><li><a href="#training">Executive Education: courses and in-house training</a></li><li><a href="#paper-survey">Face-to-face fieldwork quotes</a></li></ul></section>
       </div>`;
   }
   function viewAccount() {

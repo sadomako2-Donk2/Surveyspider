@@ -74,7 +74,7 @@ check("sitemap.xml lists every public page at its real address", sitemap.status 
 check("the Bing ownership code is in the page", homeHtml.includes('<meta name="msvalidate.01" content="ABCDEF0123456789ABCDEF0123456789">'));
 check("the home page has its canonical address, social preview and organisation details", homeHtml.includes('<link rel="canonical" href="https://surveyspider.test/">') && homeHtml.includes('property="og:image" content="https://surveyspider.test/social.jpg"') && /"@type":"Organization"/.test(homeHtml));
 const aboutPage = await fetch(base + "/about"), aboutHtml = await aboutPage.text();
-check("public pages have real addresses with their own title and description", aboutPage.status === 200 && /<title>[^<]*better decisions \| Afrimetrica<\/title>/.test(aboutHtml) && aboutHtml.includes('<link rel="canonical" href="https://surveyspider.test/about">') && !aboutHtml.includes(`<meta name="description" content="Data, research and executive training, survey tools`));
+check("public pages have real addresses with their own title and description", aboutPage.status === 200 && /<title>An independent, Africa-focused professional services firm \| Afrimetrica<\/title>/.test(aboutHtml) && aboutHtml.includes('<link rel="canonical" href="https://surveyspider.test/about">') && !aboutHtml.includes(`<meta name="description" content="Data, research and executive training, survey tools`));
 const coursePath = smText.match(/<loc>https:\/\/surveyspider\.test(\/training\/course\/[a-z0-9-]+)<\/loc>/)[1];
 const courseHtml = await (await fetch(base + coursePath)).text();
 check("course pages describe the course for search engines", /"@type":"Course"/.test(courseHtml) && /"provider":\{"@type":"Organization"/.test(courseHtml));
@@ -90,6 +90,24 @@ check("a trailing slash redirects to the page's address", slash.status === 301 &
 check("app pages don't get public addresses", (await fetch(base + "/studies")).status === 404 && (await fetch(base + "/admin")).status === 404);
 const social = await fetch(base + "/social.jpg");
 check("the social preview image is served", social.status === 200 && social.headers.get("content-type") === "image/jpeg");
+// Repositioning: five practices, positioning copy, and a staging switch that keeps copies out of search engines.
+for (const id of ["data-intelligence", "research-evaluation", "strategy-advisory", "executive-education", "digital-solutions"]) {
+  const r = await fetch(base + "/practices/" + id), h = await r.text();
+  check(`practice page /practices/${id} is served, listed and canonical`, r.status === 200 && h.includes(`<link rel="canonical" href="https://surveyspider.test/practices/${id}">`) && smText.includes(`<loc>https://surveyspider.test/practices/${id}</loc>`));
+}
+check("the home page uses the new positioning", /<title>Afrimetrica — Data, Research, Advisory and Executive Education<\/title>/.test(homeHtml) && homeHtml.includes('<meta name="description" content="An independent, Africa-focused professional services firm specialising in data intelligence, research, strategic advisory and executive education'));
+const pageSrc = readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
+check("the main menu has Practices, Executive Education and Insights", pageSrc.includes('["practices", "Practices"], ["training", "Executive Education"]') && pageSrc.includes('["resources", "Insights"]'));
+check("old unit names are gone from the pages", !/Afrimetrica (Consulting|Analytics|Academy)|Knowledge Hub/.test(pageSrc));
+check("the approach page under Research & Advisory points to About", (await (await fetch(base + "/consultancy/approach")).text()).includes('<link rel="canonical" href="https://surveyspider.test/about/approach">'));
+check("old addresses still open (no page removed)", (await fetch(base + "/analytics/service/statistics")).status === 200 && (await fetch(base + "/consultancy/service/policy")).status === 200 && (await fetch(base + "/about/team")).status === 200);
+check("production pages are indexable", !(await fetch(base + "/")).headers.get("x-robots-tag") && !homeHtml.includes('content="noindex'));
+process.env.NOINDEX = "1";
+{
+  const r = await fetch(base + "/about"), h = await r.text(), robotsStaging = await (await fetch(base + "/robots.txt")).text();
+  check("a staging copy (NOINDEX=1) is kept out of search engines", r.headers.get("x-robots-tag") === "noindex, nofollow" && h.includes('<meta name="robots" content="noindex, nofollow">') && /Disallow: \/\n/.test(robotsStaging) && !/Allow: \//.test(robotsStaging));
+}
+delete process.env.NOINDEX;
 const sec = await fetch(base + "/"), csp = sec.headers.get("content-security-policy") || "";
 check("pages send a content security policy that blocks outside scripts", /script-src 'self' 'unsafe-inline'(;|$)/.test(csp) && /object-src 'none'/.test(csp) && /frame-ancestors 'self'/.test(csp) && /fonts\.googleapis\.com/.test(csp));
 check("pages send permissions and opener policies", /camera=\(\)/.test(sec.headers.get("permissions-policy") || "") && sec.headers.get("cross-origin-opener-policy") === "same-origin");

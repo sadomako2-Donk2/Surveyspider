@@ -40,7 +40,7 @@ const GOOGLE_VERIFY = (process.env.GOOGLE_SITE_VERIFICATION || "").trim().replac
 // Bing Webmaster Tools works the same way (BING_SITE_VERIFICATION); Bing also feeds DuckDuckGo and Yahoo.
 const BING_VERIFY = (process.env.BING_SITE_VERIFICATION || "").trim().replace(/^.*content="([^"]+)".*$/s, "$1");
 const SITE_VERIFY = (/^[A-Za-z0-9_-]{10,100}$/.test(GOOGLE_VERIFY) ? `<meta name="google-site-verification" content="${GOOGLE_VERIFY}">` : "") + (/^[A-Za-z0-9]{10,100}$/.test(BING_VERIFY) ? `<meta name="msvalidate.01" content="${BING_VERIFY}">` : "");
-const SHELL_HEAD = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs in Africa and around the world."><link rel="icon" type="image/svg+xml" href="/icon.svg">${SITE_VERIFY}<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>`;
+const SHELL_HEAD = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="An independent, Africa-focused professional services firm specialising in data intelligence, research, strategic advisory and executive education."><link rel="icon" type="image/svg+xml" href="/icon.svg">${SITE_VERIFY}<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>`;
 const PAGE = SHELL_HEAD + readFileSync(path.join(here, "public", "index.html"), "utf8") + "</body></html>";
 const ICON = readFileSync(path.join(here, "public", "icon.svg"));
 // Browser libraries served from this site rather than a CDN (see public/vendor/README.md). Only these exact names.
@@ -48,10 +48,12 @@ const VENDOR_DIR = path.join(here, "public", "vendor");
 const VENDOR = new Map(existsSync(VENDOR_DIR) ? readdirSync(VENDOR_DIR).filter((f) => /^[a-z0-9.-]+\.js$/.test(f)).map((f) => [f, readFileSync(path.join(VENDOR_DIR, f))]) : []);
 // Public pages with real addresses, for search engines (written by scripts/build-pages.mjs; see that file).
 const PAGES = new Map((existsSync(path.join(here, "public", "pages.json")) ? JSON.parse(readFileSync(path.join(here, "public", "pages.json"), "utf8")) : [{ path: "/" }]).map((p) => [p.path, p]));
-const PUBLIC_SECTIONS = /^\/(about|training|surveys|analytics|consultancy|resources|contact|privacy|terms|pricing|paper-survey)(\/[a-z0-9-]+)*$/;
+const PUBLIC_SECTIONS = /^\/(about|practices|training|surveys|analytics|consultancy|resources|contact|privacy|terms|pricing|paper-survey)(\/[a-z0-9-]+)*$/;
+// NOINDEX=1 marks a staging copy: robots.txt blocks everything and every page says noindex. Read per request.
+const staging = () => process.env.NOINDEX === "1";
 const SOCIAL = existsSync(path.join(here, "public", "social.jpg")) ? readFileSync(path.join(here, "public", "social.jpg")) : null;
-const DEFAULT_TITLE = "Afrimetrica — Data, Research and Executive Training";
-const DEFAULT_DESC = "Data, research and executive training, survey tools, data analysis and consultancy for organisations, governments and NGOs in Africa and around the world.";
+const DEFAULT_TITLE = "Afrimetrica — Data, Research, Advisory and Executive Education";
+const DEFAULT_DESC = "An independent, Africa-focused professional services firm specialising in data intelligence, research, strategic advisory and executive education.";
 const attr = (x) => String(x).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const shorten = (t, n = 160) => { t = String(t || "").replace(/\s+/g, " ").trim(); if (t.length <= n) return t; const cut = t.slice(0, n - 1); return cut.slice(0, cut.lastIndexOf(" ") > 80 ? cut.lastIndexOf(" ") : cut.length).replace(/[,;:.\s]+$/, "") + "…"; };
 // The page with its own title, description, canonical address, social preview and structured data.
@@ -61,7 +63,7 @@ function pageHtml(info, base, known) {
   const org = { "@type": "Organization", name: "Afrimetrica", url: base + "/", logo: base + "/photos/logo-full.webp", description: DEFAULT_DESC };
   const ld = info.path === "/" ? { "@context": "https://schema.org", "@graph": [org, { "@type": "WebSite", name: "Afrimetrica", url: base + "/" }] }
     : info.path.startsWith("/training/course/") ? { "@context": "https://schema.org", "@type": "Course", name: info.h1 || title, description: desc, url, provider: org } : null;
-  const head = (known ? `<link rel="canonical" href="${attr(info.canonical ? base + info.canonical : url)}">` : `<meta name="robots" content="noindex">`) +
+  const head = (staging() ? `<meta name="robots" content="noindex, nofollow">` : "") + (known ? `<link rel="canonical" href="${attr(info.canonical ? base + info.canonical : url)}">` : `<meta name="robots" content="noindex">`) +
     `<meta property="og:type" content="website"><meta property="og:site_name" content="Afrimetrica"><meta property="og:title" content="${attr(title)}"><meta property="og:description" content="${attr(desc)}"><meta property="og:url" content="${attr(url)}">` +
     (SOCIAL ? `<meta property="og:image" content="${attr(base)}/social.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">` : "") +
     (ld ? `<script type="application/ld+json">${JSON.stringify(ld).replace(/</g, "\\u003c")}</script>` : "");
@@ -644,6 +646,8 @@ export const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, "http://localhost");
   try {
     for (const [k, v] of Object.entries(SECURITY)) res.setHeader(k, v);
+    // Staging copies (NOINDEX=1) must never appear in search results.
+    if (staging()) res.setHeader("X-Robots-Tag", "noindex, nofollow");
     // Browsers remember to use https only for a year (only sent over https, as browsers require).
     if (isHttps(req)) res.setHeader("Strict-Transport-Security", "max-age=31536000");
     const host = String(req.headers.host || "").toLowerCase();
@@ -660,6 +664,7 @@ export const server = http.createServer(async (req, res) => {
     if (url.pathname === "/auth/google/callback" && req.method === "GET") return await googleCallback(req, res, url);
     if (url.pathname === "/healthz") return send(res, 200, { ok: true });
     if (url.pathname.startsWith("/photos/") && PHOTOS.has(url.pathname.slice(8))) { res.writeHead(200, { "Content-Type": "image/webp", "Cache-Control": "public, max-age=86400" }); return res.end(PHOTOS.get(url.pathname.slice(8))); }
+    if (req.method === "GET" && url.pathname === "/robots.txt" && staging()) { res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-cache" }); return res.end("User-agent: *\nDisallow: /\n"); }
     if (req.method === "GET" && url.pathname === "/robots.txt") { res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=3600" }); return res.end(`User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /auth/\n\nSitemap: ${baseUrl(req)}/sitemap.xml\n`); }
     if (req.method === "GET" && url.pathname === "/sitemap.xml") { const b = baseUrl(req); res.writeHead(200, { "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, max-age=3600" }); return res.end(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...PAGES.values()].filter((p) => !p.canonical).map((p) => `<url><loc>${attr(b + p.path)}</loc></url>`).join("\n")}\n</urlset>\n`); }
     if (url.pathname === "/social.jpg" && SOCIAL) { res.writeHead(200, { "Content-Type": "image/jpeg", "Cache-Control": "public, max-age=86400" }); return res.end(SOCIAL); }

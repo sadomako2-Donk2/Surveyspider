@@ -1,39 +1,45 @@
 [
  {
   "path": "/",
-  "title": "Afrimetrica — Data, Research and Executive Training",
-  "description": "Afrimetrica helps organisations, governments and NGOs make better decisions and deliver results. We train leaders and teams in data, research and management, collect and analyse data, and advise on strategy, research and evaluation, in Africa and around the world.",
-  "h1": "Data, research and executive training."
+  "title": "Afrimetrica — Data, Research, Advisory and Executive Education",
+  "description": "An independent, Africa-focused professional services firm specialising in data intelligence, research, strategic advisory and executive education, supported by digital solutions. We help governments, businesses, development institutions and civil society organisations generate credible evidence and ",
+  "h1": "Data. Research. Advisory. Executive Education."
  },
  {
   "path": "/about",
-  "title": "Data, research and executive training for better decisions | Afrimetrica",
-  "description": "Afrimetrica trains leaders and teams, collects and analyses data, and advises organisations, governments and NGOs in Africa and around the world. Our courses range from research methods and statistics to strategy, leadership and governance. Every course is practical, grounded in evidence and built a",
-  "h1": "Data, research and executive training for better decisions"
+  "title": "An independent, Africa-focused professional services firm | Afrimetrica",
+  "description": "Afrimetrica is an independent, multidisciplinary professional services firm specialising in data intelligence, research, strategic advisory and executive education, supported by digital solutions.",
+  "h1": "An independent, Africa-focused professional services firm"
+ },
+ {
+  "path": "/about/approach",
+  "title": "Independent, rigorous and practical | Afrimetrica",
+  "description": "Every assignment follows the same disciplined path, adapted to your questions, budget and context.",
+  "h1": "Independent, rigorous and practical"
  },
  {
   "path": "/about/certificates",
   "title": "Certificates of completion | Afrimetrica",
-  "description": "Certificates of completion: Afrimetrica Academy issues certificates of completion. They confirm that a participant attended and completed a course, and show the course title, its length, the dates and the venue (or \"live online\").",
+  "description": "Certificates of completion: Afrimetrica Executive Education issues certificates of completion. They confirm that a participant attended and completed a course, and show the course title, its length, the dates and the venue (or \"live online\").",
   "h1": "Certificates of completion"
  },
  {
   "path": "/about/mission",
   "title": "Why we exist | Afrimetrica",
-  "description": "Why we exist: To help organisations, governments and NGOs make better decisions and deliver results, by building their people's skills in data, research and leadership, and by providing reliable data and independent analysis.",
+  "description": "Why we exist: To help governments, businesses, development institutions and civil society organisations make better decisions and deliver results, by providing reliable data, credible research and practical advice, and by building their people's skills.",
   "h1": "Why we exist"
  },
  {
   "path": "/about/organisation",
-  "title": "One organisation, five units | Afrimetrica",
-  "description": "Each part of Afrimetrica focuses on one way of helping organisations make better decisions, and they work together on larger assignments.",
-  "h1": "One organisation, five units"
+  "title": "One firm, five practices | Afrimetrica",
+  "description": "Afrimetrica operates as a single firm organised into five practices. Each practice focuses on one way of helping clients make better decisions, and the practices work together on larger assignments.",
+  "h1": "One firm, five practices"
  },
  {
   "path": "/about/team",
-  "title": "The people behind Afrimetrica | Afrimetrica",
-  "description": "A core team of trainers, researchers, analysts and consultants, supported by an associate network of specialists and field staff in Africa and around the world.",
-  "h1": "The people behind Afrimetrica"
+  "title": "Our people | Afrimetrica",
+  "description": "The specialists who deliver Afrimetrica's research, analysis, advice and teaching, supported by an expert network of specialists and field staff in Africa and around the world.",
+  "h1": "Our people"
  },
  {
   "path": "/about/vision",
@@ -169,15 +175,16 @@
  },
  {
   "path": "/consultancy",
-  "title": "Research and evaluation consultancy | Afrimetrica",
+  "title": "Research, evaluation and advisory services | Afrimetrica",
   "description": "From a single questionnaire review to a full multi-site study or a new strategic plan, we design, run and report work that stands up to scrutiny, for organisations, governments and NGOs.",
-  "h1": "Research and evaluation consultancy"
+  "h1": "Research, evaluation and advisory services"
  },
  {
   "path": "/consultancy/approach",
   "title": "Independent, rigorous and practical | Afrimetrica",
   "description": "Every assignment follows the same disciplined path, adapted to your questions, budget and context.",
-  "h1": "Independent, rigorous and practical"
+  "h1": "Independent, rigorous and practical",
+  "canonical": "/about/approach"
  },
  {
   "path": "/consultancy/request",
@@ -187,51 +194,51 @@
  },
  {
   "path": "/consultancy/sector/agriculture",
-  "title": "Consultancy for agriculture and food security | Afrimetrica",
+  "title": "Research and advisory for agriculture and food security | Afrimetrica",
   "description": "Studies that support farmers, markets and food security programmes.",
-  "h1": "Consultancy for agriculture and food security"
+  "h1": "Research and advisory for agriculture and food security"
  },
  {
   "path": "/consultancy/sector/development",
-  "title": "Consultancy for NGOs and development partners | Afrimetrica",
+  "title": "Research and advisory for NGOs and development partners | Afrimetrica",
   "description": "Independent research and evaluation for donor-funded programmes.",
-  "h1": "Consultancy for NGOs and development partners"
+  "h1": "Research and advisory for NGOs and development partners"
  },
  {
   "path": "/consultancy/sector/education",
-  "title": "Consultancy for education | Afrimetrica",
+  "title": "Research and advisory for education | Afrimetrica",
   "description": "Evidence on access, learning and school performance.",
-  "h1": "Consultancy for education"
+  "h1": "Research and advisory for education"
  },
  {
   "path": "/consultancy/sector/finance",
-  "title": "Consultancy for banking and financial services | Afrimetrica",
+  "title": "Research and advisory for banking and financial services | Afrimetrica",
   "description": "Research for financial inclusion, products and customers.",
-  "h1": "Consultancy for banking and financial services"
+  "h1": "Research and advisory for banking and financial services"
  },
  {
   "path": "/consultancy/sector/government",
-  "title": "Consultancy for government and the public sector | Afrimetrica",
+  "title": "Research and advisory for government and the public sector | Afrimetrica",
   "description": "Evidence and advice for ministries, agencies and local government.",
-  "h1": "Consultancy for government and the public sector"
+  "h1": "Research and advisory for government and the public sector"
  },
  {
   "path": "/consultancy/sector/health",
-  "title": "Consultancy for health | Afrimetrica",
+  "title": "Research and advisory for health | Afrimetrica",
   "description": "Research and evaluation for health programmes and services.",
-  "h1": "Consultancy for health"
+  "h1": "Research and advisory for health"
  },
  {
   "path": "/consultancy/sector/private",
-  "title": "Consultancy for private sector and investors | Afrimetrica",
+  "title": "Research and advisory for private sector and investors | Afrimetrica",
   "description": "Evidence to grow, invest and manage risk.",
-  "h1": "Consultancy for private sector and investors"
+  "h1": "Research and advisory for private sector and investors"
  },
  {
   "path": "/consultancy/sector/research",
-  "title": "Consultancy for universities and research institutes | Afrimetrica",
+  "title": "Research and advisory for universities and research institutes | Afrimetrica",
   "description": "Methods support and fieldwork for academic research.",
-  "h1": "Consultancy for universities and research institutes"
+  "h1": "Research and advisory for universities and research institutes"
  },
  {
   "path": "/consultancy/service/design",
@@ -283,14 +290,14 @@
  },
  {
   "path": "/consultancy/work-with-us",
-  "title": "Join our associate network | Afrimetrica",
+  "title": "Join our expert network | Afrimetrica",
   "description": "We work with independent consultants, researchers, trainers, data analysts, enumerators and field supervisors in Africa and around the world. Tell us about your skills and where you work.",
-  "h1": "Join our associate network"
+  "h1": "Join our expert network"
  },
  {
   "path": "/contact",
   "title": "Get in touch | Afrimetrica",
-  "description": "Questions about courses, surveys, analysis or a project? Send us a message and we'll reply within two working days.",
+  "description": "Questions about our practices, an executive programme, a survey or a project? Send us a message and we'll reply within two working days.",
   "h1": "Get in touch"
  },
  {
@@ -318,6 +325,42 @@
   "h1": "Face-to-face surveys and interviews, priced instantly"
  },
  {
+  "path": "/practices",
+  "title": "Five practices, one firm | Afrimetrica",
+  "description": "Afrimetrica brings data, research, advice and learning together. Each practice has its own specialists and methods, and they work together on larger assignments, from collecting the evidence to acting on it.",
+  "h1": "Five practices, one firm"
+ },
+ {
+  "path": "/practices/data-intelligence",
+  "title": "Data & Intelligence | Afrimetrica",
+  "description": "Organisations hold more data than ever, but it is often incomplete, scattered or hard to interpret. Decisions need figures that are accurate, clearly explained and fit for purpose.",
+  "h1": "Data & Intelligence"
+ },
+ {
+  "path": "/practices/digital-solutions",
+  "title": "Digital Solutions | Afrimetrica",
+  "description": "Collecting and analysing data should not require several tools, specialist software or weeks of manual work. The Afrimetrica Surveys platform: questionnaire building, online and face-to-face data collection, and built-in analysis.",
+  "h1": "Digital Solutions"
+ },
+ {
+  "path": "/practices/executive-education",
+  "title": "Executive Education | Afrimetrica",
+  "description": "Teams need practical skills in data, research, leadership and management that they can apply at work straight away. Executive programmes, professional training and in-house capacity building, in the classroom, live online or at your premises.",
+  "h1": "Executive Education"
+ },
+ {
+  "path": "/practices/research-evaluation",
+  "title": "Research & Evaluation | Afrimetrica",
+  "description": "Programmes, policies and investments need evidence that stands up to scrutiny: what is happening, for whom, and whether it is working.",
+  "h1": "Research & Evaluation"
+ },
+ {
+  "path": "/practices/strategy-advisory",
+  "title": "Strategy & Advisory | Afrimetrica",
+  "description": "Leaders face decisions about policy, strategy, organisation and investment where the stakes are high and the evidence is often incomplete.",
+  "h1": "Strategy & Advisory"
+ },
+ {
   "path": "/pricing",
   "title": "Simple plans. Lower prices. | Afrimetrica",
   "description": "All prices in US dollars. Every plan includes the survey builder, Word and PDF upload, rating and Likert scales, and charts.",
@@ -331,9 +374,9 @@
  },
  {
   "path": "/resources",
-  "title": "Resources for better research | Afrimetrica",
+  "title": "Insights for better research | Afrimetrica",
   "description": "Free guides, a sample size calculator, ready-made survey templates, published findings and links to open data.",
-  "h1": "Resources for better research"
+  "h1": "Insights for better research"
  },
  {
   "path": "/resources/articles",
@@ -373,14 +416,14 @@
  },
  {
   "path": "/resources/catalogues/services",
-  "title": "Analytics and consultancy services | Afrimetrica",
-  "description": "Analytics and consultancy services: Data, research and executive training, analysis and advice for organisations, governments and NGOs in Africa and around the world.",
-  "h1": "Analytics and consultancy services"
+  "title": "Data, research and advisory services | Afrimetrica",
+  "description": "Data, research and advisory services: An independent, Africa-focused professional services firm specialising in data intelligence, research, strategic advisory and executive education.",
+  "h1": "Data, research and advisory services"
  },
  {
   "path": "/resources/catalogues/training",
   "title": "Training course catalogue | Afrimetrica",
-  "description": "Training course catalogue: Data, research and executive training. Every course runs in the classroom in our venues in Africa and around the world, live online or in-house. Ask us for dates and fees. Participants receive a certificate of completion (not an accredited qualification).",
+  "description": "Training course catalogue: Executive education and professional training. Every course runs in the classroom in our venues in Africa and around the world, live online or in-house. Ask us for dates and fees. Participants receive a certificate of completion (not an accredited qualification).",
   "h1": "Training course catalogue"
  },
  {
@@ -409,9 +452,9 @@
  },
  {
   "path": "/training",
-  "title": "Data, research and executive training | Afrimetrica",
+  "title": "Executive education and professional training | Afrimetrica",
   "description": "Practical training that helps organisations, governments and NGOs make better decisions and deliver results.",
-  "h1": "Data, research and executive training"
+  "h1": "Executive education and professional training"
  },
  {
   "path": "/training/area/engineering",
@@ -482,7 +525,7 @@
  {
   "path": "/training/certificates",
   "title": "Certificates of completion | Afrimetrica",
-  "description": "Every participant who attends and completes an Afrimetrica Academy course receives a certificate of completion.",
+  "description": "Every participant who attends and completes an Afrimetrica Executive Education course receives a certificate of completion.",
   "h1": "Certificates of completion"
  },
  {
