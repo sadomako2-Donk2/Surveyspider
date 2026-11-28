@@ -667,6 +667,17 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
 .person h3 { margin: 0; font-size: 1.2rem; }
 .person-role { margin: 4px 0 10px; color: var(--gold-ink, #8a6416); font-weight: 600; font-size: 0.9rem; letter-spacing: 0.02em; }
 .person .muted { max-width: 75ch; margin: 0; }
+/* Leadership profiles: the biography appears when the pointer is over the profile or it has keyboard focus.
+   On touch screens (no hover) it is always shown. It stays in the page for screen readers. */
+.person.reveal:focus-visible { outline: 3px solid var(--focus, var(--gold)); outline-offset: 3px; }
+.reveal-hint { display: none; margin: 0 0 6px; font-size: .82rem; color: var(--muted); }
+@media (hover: hover) {
+  .reveal-hint { display: block; }
+  .person.reveal:hover .reveal-hint, .person.reveal:focus-within .reveal-hint { display: none; }
+  .person.reveal .person-bio { max-height: 0; opacity: 0; overflow: hidden; transition: max-height .35s ease, opacity .3s ease; }
+  .person.reveal:hover .person-bio, .person.reveal:focus-within .person-bio { max-height: 20em; opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .person.reveal .person-bio { transition: none; } }
 @media (max-width: 560px) { .person { grid-template-columns: 1fr; padding: 18px; } .person img { width: 120px; height: 120px; } }
 .person-initials { width: 150px; height: 150px; border-radius: 14px; border-bottom: 3px solid var(--gold); background: #010e3a; color: var(--gold-hi, #f2d27e); display: grid; place-items: center; font: 700 2.6rem/1 var(--font-display); letter-spacing: 0.04em; }
 @media (max-width: 560px) { .person-initials { width: 120px; height: 120px; font-size: 2.1rem; } }
@@ -3341,8 +3352,6 @@ ${richSummary(st, rows)}`;
       bio: "Irene Chu, PhD, is a Corporate ESG and Sustainability Consultant at Afrimetrica, where she advises and trains corporate clients on ESG, sustainability and ethics. She is Senior Lecturer in International Management at Newcastle University Business School and Associate Editor of Business Strategy and the Environment, and her research appears in journals including the Journal of Business Ethics." },
     { id: "mujtaba-ahsan", name: "Mujtaba Ahsan, PhD", title: "Consultant, AI and Data Science", group: "network", affiliation: "project", practices: [], photo: "team-mujtaba-ahsan.webp",
       bio: "Mujtaba Ahsan, PhD, is an AI and Data Science Consultant at Afrimetrica and Professor of Management at the Fowler College of Business, San Diego State University. His research on entrepreneurship, international business and innovation appears in journals including the Academy of Management Review and Entrepreneurship Theory and Practice. He holds a PhD in Management from the University of Wisconsin-Milwaukee." },
-    { id: "emmanuel-amoah", name: "Emmanuel Amoah, MBA, ACCA", title: "Consultant, Route to Market", group: "network", affiliation: "project", practices: [], photo: "",
-      bio: "Emmanuel Amoah, MBA, ACCA, is a Route to Market Consultant at Afrimetrica with over 20 years' experience in multinational corporations across Africa, including Coca-Cola and Promasidor. He advises companies on their route to market and has trained more than 1,000 delegates in route-to-market strategy and market surveys." },
     { id: "stephen-kehinde-medase", name: "Stephen Kehinde Medase, PhD", title: "Analyst, Market Intelligence", group: "network", affiliation: "project", practices: [], photo: "team-stephen-kehinde-medase.webp",
       bio: "Stephen Kehinde Medase, PhD, is a Market Intelligence Analyst at Afrimetrica and Senior Research Associate at the University of Johannesburg. He holds an MSc and PhD from Friedrich Schiller University Jena, Germany, and researches entrepreneurship, innovation and firm growth, publishing in journals including the Journal of Innovation & Knowledge." },
   ];
@@ -3351,7 +3360,8 @@ ${richSummary(st, rows)}`;
   const SHOW_VACANT_ROLES = true;
   const LEADERSHIP = [
     { role: "Managing Partner", abbr: "MP", group: "leadership", name: "", photo: "", bio: "", practices: [] },
-    { role: "Partner, Data & Intelligence", abbr: "D&I", group: "leadership", name: "", photo: "", bio: "", practices: ["data-intelligence"] },
+    { role: "Partner, Data & Intelligence", abbr: "D&I", group: "leadership", name: "Emmanuel Amoah, MBA, ACCA", photo: "team-emmanuel-amoah.webp",
+      bio: "Emmanuel Amoah, MBA, ACCA, is Partner, Data & Intelligence at Afrimetrica. He brings more than 20 years' commercial experience with multinational companies across Africa, including Coca-Cola and Promasidor. He helps companies turn market data into route-to-market strategy and has trained more than 1,000 delegates in route-to-market strategy and market surveys.", practices: ["data-intelligence"] },
     { role: "Partner, Research & Evaluation", abbr: "R&E", group: "leadership", name: "", photo: "", bio: "", practices: ["research-evaluation"] },
     { role: "Partner, Strategy & Advisory", abbr: "S&A", group: "leadership", name: "", photo: "", bio: "", practices: ["strategy-advisory"] },
     { role: "Director, Executive Education", abbr: "EE", group: "directors", name: "", photo: "", bio: "", practices: ["executive-education"] },
@@ -3368,10 +3378,12 @@ ${richSummary(st, rows)}`;
   // Without a photo yet, a profile shows the person's initials.
   const initials = (n) => n.split(",")[0].split(/\s+/).filter(Boolean).map((w) => w[0]).slice(0, 2).join("").toUpperCase();
   const personName = (n) => n.split(",")[0];
-  const teamCard = (t) => `<article class="person" id="team-${t.id}">${t.photo ? `<img src="/photos/${t.photo}" alt="Portrait of ${esc(personName(t.name))}" width="150" height="150" loading="lazy" decoding="async">` : `<div class="person-initials" aria-hidden="true">${esc(initials(t.name))}</div>`}<div><h3>${esc(t.name)}</h3><p class="person-role">${esc(t.title)}</p>${t.affiliation || (t.practices || []).length ? `<p class="person-meta">${t.affiliation ? `<span class="pill">${esc(AFFILIATION[t.affiliation] || "")}</span>` : ""}${(t.practices || []).map((id) => practice(id)).filter(Boolean).map((x) => `<a class="pill" href="#practices/${x.id}">${esc(x.name)}</a>`).join("")}</p>` : ""}<p class="muted">${esc(t.bio)}</p></div></article>`;
+  // Leadership and director profiles show their biography on hover or keyboard focus (always on touch screens).
+  const revealBio = (t) => t.group === "leadership" || t.group === "directors";
+  const teamCard = (t) => `<article class="person${revealBio(t) ? " reveal" : ""}" id="team-${t.id}"${revealBio(t) ? ' tabindex="0"' : ""}>${t.photo ? `<img src="/photos/${t.photo}" alt="Portrait of ${esc(personName(t.name))}" width="150" height="150" loading="lazy" decoding="async">` : `<div class="person-initials" aria-hidden="true">${esc(initials(t.name))}</div>`}<div><h3>${esc(t.name)}</h3><p class="person-role">${esc(t.title)}</p>${revealBio(t) ? '<p class="reveal-hint" aria-hidden="true">Hover to read more</p>' : ""}${t.affiliation || (t.practices || []).length ? `<p class="person-meta">${t.affiliation ? `<span class="pill">${esc(AFFILIATION[t.affiliation] || "")}</span>` : ""}${(t.practices || []).map((id) => practice(id)).filter(Boolean).map((x) => `<a class="pill" href="#practices/${x.id}">${esc(x.name)}</a>`).join("")}</p>` : ""}<p class="muted person-bio">${esc(t.bio)}</p></div></article>`;
   const roleCard = (t) => `<article class="leader-role"><div class="person-initials" aria-hidden="true">${esc(t.abbr)}</div><h3>${esc(t.role)}</h3></article>`;
   function abTeam() {
-    const all = [...LEADERSHIP.filter((l) => l.name || SHOW_VACANT_ROLES).map((l) => ({ ...l, id: l.name ? slug(l.name) : slug(l.role), title: l.role, affiliation: l.name ? l.affiliation : "" })), ...PEOPLE];
+    const all = [...LEADERSHIP.filter((l) => l.name || SHOW_VACANT_ROLES).map((l) => ({ ...l, id: l.name ? slug(personName(l.name)) : slug(l.role), title: l.role, affiliation: l.name ? l.affiliation : "" })), ...PEOPLE];
     // Practice filter: offered only when confirmed practices cover at least two practices among named people.
     const named = all.filter((t) => t.name), used = PRACTICES.filter((x) => named.some((t) => (t.practices || []).includes(x.id)));
     const f = used.some((x) => x.id === S.peopleFilter) ? S.peopleFilter : "";

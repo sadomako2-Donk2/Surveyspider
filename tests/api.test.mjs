@@ -110,7 +110,7 @@ check("merged pages are not in the sitemap, their replacements are", !smText.inc
   // Our people content model: every profile has a confirmed title, a group, an affiliation and a practices list;
   // only approved leadership titles are used; no equity wording.
   const people = [...pageSrc.matchAll(/\{ id: "[a-z-]+", name: "[^"]+", title: "[^"]+", group: "(leadership|directors|professional|fellows|network)", affiliation: "(permanent|project|visiting)", practices: \[[^\]]*\]/g)];
-  check("every person has a title, group, affiliation and practices in the people data", people.length === 7 && !/\bconst TEAM\b/.test(pageSrc));
+  check("every person has a title, group, affiliation and practices in the people data", people.length === 6 && !/\bconst TEAM\b/.test(pageSrc));
   check("partner and director titles appear only as the approved leadership roles", (pageSrc.match(/role: "(Managing Partner|Partner, [^"]+|Director, [^"]+)"/g) || []).length === 6 && !/(Associate Partner|Principal Consultant|equity|shareholder)/i.test(pageSrc.slice(pageSrc.indexOf("const PEOPLE = ["), pageSrc.indexOf("function abTeam"))));
 }
 check("old addresses still open (no page removed)", (await fetch(base + "/analytics/service/statistics")).status === 200 && (await fetch(base + "/consultancy/service/policy")).status === 200 && (await fetch(base + "/about/team")).status === 200);
