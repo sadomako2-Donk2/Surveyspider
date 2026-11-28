@@ -3125,6 +3125,10 @@ ${richSummary(st, rows)}`;
     consultancyAI: ["consultancy.webp", "A consultant presents to a group around a meeting table, with a map of Africa and charts on a screen and printed reports on the table", "center 35%", "AI-generated: illustrative only"],
     analyticsAI: ["analytics.webp", "Three analysts look at a laptop together, with a dashboard of charts on the wall behind them", "center 8%", "AI-generated: illustrative only"],
     fieldworkAI: ["fieldwork-team.webp", "A field team with a tablet and clipboards talks with women in a village, beside thatched houses", "center 40%", "AI-generated: illustrative only"],
+    orgPresentation: ["org-presentation.webp", "A woman presents a marketing strategy on a screen to colleagues around a meeting table", "center 45%", "Supplied by Afrimetrica: licence to confirm", true],
+    orgMeeting: ["org-meeting.webp", "Five colleagues talk around a white meeting table with laptops, seen from above", "center 45%", "Supplied by Afrimetrica: licence to confirm", true],
+    orgDiscussion: ["org-discussion.webp", "Six professionals in discussion around a meeting table with laptops and notebooks", "center 40%", "Supplied by Afrimetrica: licence to confirm", true],
+    orgLaptop: ["org-laptop.webp", "Five colleagues smile as they review work on a laptop together", "center 40%", "Supplied by Afrimetrica: licence to confirm", true],
     shotBuilder: ["screen-builder.webp", "Screenshot of the Afrimetrica Surveys questionnaire builder, showing a sample questionnaire", "top left", "Screenshot of Afrimetrica Surveys with sample data", true],
     shotResults: ["screen-results.webp", "Screenshot of Afrimetrica Surveys results, with charts for a sample survey", "top left", "Screenshot of Afrimetrica Surveys with sample data", true],
   };
@@ -3149,6 +3153,8 @@ ${richSummary(st, rows)}`;
     surveysShots: ["shotResults", "shotBuilder"],
     // Our approach: AI illustrations following an assignment (planning, fieldwork, interviews, analysis, reporting).
     approach: ["homeAI", "fieldworkAI", "surveysAI", "analyticsAI", "consultancyAI"],
+    // How we're organised: photos supplied by Afrimetrica for this page.
+    organisation: ["orgDiscussion", "orgPresentation", "orgMeeting", "orgLaptop"],
     // Insights: AI illustrations of data and research work (owner's request).
     insights: ["dataIntel", "analyticsAI", "digital", "trainingAI"],
   };
@@ -3424,8 +3430,8 @@ ${richSummary(st, rows)}`;
       <section class="card"><h2>Join us</h2><p class="muted">We work with independent researchers, analysts, advisers, trainers, enumerators and field supervisors.</p><div class="row wrap"><a class="btn primary" href="#consultancy/work-with-us">Join our expert network</a><a class="btn" href="#contact/careers">Careers</a></div></section>`;
   }
   function abOrganisation() {
-    return `${abCrumbs("How we're organised")}<div class="page-head"><div><span class="eyebrow gold">How we're organised</span><h1>One firm, five practices</h1><p class="muted" style="max-width:70ch">Afrimetrica operates as a single firm organised into five practices. Each practice focuses on one way of helping clients make better decisions, and the practices work together on larger assignments.</p></div></div>
-      <section class="card"><div class="table-wrap" tabindex="0"><table><thead><tr><th scope="col">Area</th><th scope="col">What it covers</th></tr></thead><tbody>${PRACTICES.map((x) => `<tr><th scope="row" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.95rem;font-weight:600"><a href="#practices/${x.id}">${esc(x.name)}</a></th><td>${esc(x.short)}</td></tr>`).join("")}<tr><th scope="row" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.95rem;font-weight:600"><a href="#resources">Insights</a></th><td>Free guides, tools and resources for better research.</td></tr></tbody></table></div></section>`;
+    return `${abCrumbs("How we're organised")}${introMedia(`<div class="stack intro-text"><div class="page-head"><div><span class="eyebrow gold">How we're organised</span><h1>One firm, five practices</h1><p class="muted" style="max-width:70ch">Afrimetrica operates as a single firm organised into five practices. Each practice focuses on one way of helping clients make better decisions, and the practices work together on larger assignments.</p></div></div>
+      <section class="card"><div class="table-wrap" tabindex="0"><table><thead><tr><th scope="col">Area</th><th scope="col">What it covers</th></tr></thead><tbody>${PRACTICES.map((x) => `<tr><th scope="row" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.95rem;font-weight:600"><a href="#practices/${x.id}">${esc(x.name)}</a></th><td>${esc(x.short)}</td></tr>`).join("")}<tr><th scope="row" style="text-transform:none;letter-spacing:0;font-family:var(--font-body);font-size:.95rem;font-weight:600"><a href="#resources">Insights</a></th><td>Free guides, tools and resources for better research.</td></tr></tbody></table></div></section></div>`, "organisation")}`;
   }
   function abApproach() {
     return `${abCrumbs("Our approach")}${approachBody()}`;
