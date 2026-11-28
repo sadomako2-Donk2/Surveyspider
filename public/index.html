@@ -665,6 +665,27 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
 .person { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 24px; align-items: start; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 24px; }
 .person img { width: 150px; height: 150px; object-fit: cover; border-radius: 14px; border-bottom: 3px solid var(--gold); display: block; filter: grayscale(1); }
 .person h3 { margin: 0; font-size: 1.2rem; }
+/* Our people: organisation chart for the partners and directors */
+.org { display: grid; gap: 28px; }
+.org-top { width: 100%; max-width: 340px; margin: 0 auto; position: relative; }
+.org-row { display: grid; gap: 16px; align-items: stretch; position: relative; }
+.org-row.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.org-row.two { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: calc((100% - 32px) * 2 / 3 + 16px); width: 100%; margin: 0 auto; }
+.org-row > * { position: relative; }
+.org .person { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 14px; }
+.org .person > div { width: 100%; }
+.org .person img, .org .person .person-initials { width: 120px; height: 120px; }
+.org .person .person-meta { justify-content: center; }
+.org .person .muted { text-align: left; }
+.org .leader-role { justify-content: flex-start; }
+/* connectors: a line down from the Managing Partner to a bar across the three partners */
+.org-top::after { content: ""; position: absolute; left: 50%; bottom: -14px; height: 14px; border-left: 2px solid var(--gold); }
+.org-row.linked::before { content: ""; position: absolute; top: -14px; left: calc((100% - 32px) / 6); right: calc((100% - 32px) / 6); border-top: 2px solid var(--gold); }
+.org-row.linked > *::before { content: ""; position: absolute; left: 50%; top: -14px; height: 14px; border-left: 2px solid var(--gold); }
+@media (max-width: 860px) {
+  .org-row.three, .org-row.two { grid-template-columns: 1fr; max-width: none; }
+  .org-top::after, .org-row.linked::before, .org-row.linked > *::before { display: none; }
+}
 .person-role { margin: 4px 0 10px; color: var(--gold-ink, #8a6416); font-weight: 600; font-size: 0.9rem; letter-spacing: 0.02em; }
 .person .muted { max-width: 75ch; margin: 0; }
 @media (max-width: 560px) { .person { grid-template-columns: 1fr; padding: 18px; } .person img { width: 120px; height: 120px; } }
@@ -3368,6 +3389,19 @@ ${richSummary(st, rows)}`;
   const initials = (n) => n.split(",")[0].split(/\s+/).filter(Boolean).map((w) => w[0]).slice(0, 2).join("").toUpperCase();
   const personName = (n) => n.split(",")[0];
   const teamCard = (t) => `<article class="person" id="team-${t.id}">${t.photo ? `<img src="/photos/${t.photo}" alt="Portrait of ${esc(personName(t.name))}" width="150" height="150" loading="lazy" decoding="async">` : `<div class="person-initials" aria-hidden="true">${esc(initials(t.name))}</div>`}<div><h3>${esc(t.name)}</h3><p class="person-role">${esc(t.title)}</p>${t.affiliation || (t.practices || []).length ? `<p class="person-meta">${t.affiliation ? `<span class="pill">${esc(AFFILIATION[t.affiliation] || "")}</span>` : ""}${(t.practices || []).map((id) => practice(id)).filter(Boolean).map((x) => `<a class="pill" href="#practices/${x.id}">${esc(x.name)}</a>`).join("")}</p>` : ""}<p class="muted">${esc(t.bio)}</p></div></article>`;
+  const personOrRole = (t) => (t.name ? teamCard(t) : roleCard(t));
+  // Organisation chart: the Managing Partner at the top, the three practice partners below (Data & Intelligence in the
+  // middle), then the two practice directors side by side. Other groups use the usual grid.
+  const ORG_ROW = ["Partner, Research & Evaluation", "Partner, Data & Intelligence", "Partner, Strategy & Advisory"];
+  const orgLayout = (g, list) => {
+    const byRole = (r) => list.find((t) => t.role === r);
+    if (g === "leadership") {
+      const top = byRole("Managing Partner"), row = ORG_ROW.map(byRole).filter(Boolean), rest = list.filter((t) => t !== top && !row.includes(t));
+      return `<div class="org">${top ? `<div class="org-top">${personOrRole(top)}</div>` : ""}<div class="org-row three${top ? " linked" : ""}">${row.map(personOrRole).join("")}</div>${rest.length ? `<div class="team-grid">${rest.map(personOrRole).join("")}</div>` : ""}</div>`;
+    }
+    if (g === "directors") return `<div class="org"><div class="org-row two">${list.map(personOrRole).join("")}</div></div>`;
+    return `<div class="${list.some((t) => t.name) ? "team-grid" : "leader-grid"}">${list.map(personOrRole).join("")}</div>`;
+  };
   const roleCard = (t) => `<article class="leader-role"><div class="person-initials" aria-hidden="true">${esc(t.abbr)}</div><h3>${esc(t.role)}</h3></article>`;
   function abTeam() {
     const all = [...LEADERSHIP.filter((l) => l.name || SHOW_VACANT_ROLES).map((l) => ({ ...l, id: l.name ? slug(personName(l.name)) : slug(l.role), title: l.role, affiliation: l.name ? l.affiliation : "" })), ...PEOPLE];
@@ -3378,7 +3412,7 @@ ${richSummary(st, rows)}`;
     const filter = used.length >= 2 ? `<div class="row wrap people-filter" role="group" aria-label="Filter by practice"><button type="button" class="btn small${f ? "" : " primary"}" data-act="peopleFilter" data-v="" aria-pressed="${!f}">Everyone</button>${used.map((x) => `<button type="button" class="btn small${f === x.id ? " primary" : ""}" data-act="peopleFilter" data-v="${x.id}" aria-pressed="${f === x.id}">${esc(x.name)}</button>`).join("")}</div>` : "";
     return `${abCrumbs("Our people")}<div class="page-head"><div><span class="eyebrow gold">Our people</span><h1>Our people</h1><p class="muted" style="max-width:70ch">The specialists who deliver Afrimetrica's research, analysis, advice and teaching, supported by an expert network of specialists and field staff across Africa.</p></div></div>
       ${filter}
-      ${PEOPLE_GROUPS.map(([g, title, intro]) => { const list = shown.filter((t) => (t.group || "network") === g); return list.length ? `<section class="stack" aria-labelledby="pg-${g}"><div class="section-head"><h2 id="pg-${g}">${esc(title)}</h2><p class="muted">${esc(intro)}</p></div><div class="${list.some((t) => t.name) ? "team-grid" : "leader-grid"}">${list.map((t) => (t.name ? teamCard(t) : roleCard(t))).join("")}</div></section>` : ""; }).join("")}
+      ${PEOPLE_GROUPS.map(([g, title, intro]) => { const list = shown.filter((t) => (t.group || "network") === g); return list.length ? `<section class="stack" aria-labelledby="pg-${g}"><div class="section-head"><h2 id="pg-${g}">${esc(title)}</h2><p class="muted">${esc(intro)}</p></div>${f ? `<div class="${list.some((t) => t.name) ? "team-grid" : "leader-grid"}">${list.map(personOrRole).join("")}</div>` : orgLayout(g, list)}</section>` : ""; }).join("")}
       <section class="card"><h2>Join us</h2><p class="muted">We work with independent researchers, analysts, advisers, trainers, enumerators and field supervisors.</p><div class="row wrap"><a class="btn primary" href="#consultancy/work-with-us">Join our expert network</a><a class="btn" href="#contact/careers">Careers</a></div></section>`;
   }
   function abOrganisation() {
