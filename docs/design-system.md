@@ -46,7 +46,7 @@ Built from the existing brand: the Afrimetrica logo (sun mark and wordmark, upda
 
 ## Imagery
 
-Real photography first; AI illustrations only as captioned fallbacks ("Illustrative image"); About uses real photos only. One image per section, text and image side by side (about 50/50) on desktop, text first on small screens. Image slots are slideshows (owner's request) with a Pause button; About and Contact use real photos only. No image overlays. The full manifest, rights status and the steps for swapping in licensed photos are in `docs/imagery.md`; each photo's status is also in `PHOTO` (`public/index.html`).
+Real photography first; AI illustrations only as fallbacks (uncaptioned, at the owner's request); About uses real photos only. One image per section, text and image side by side (about 50/50) on desktop, text first on small screens. Image slots are slideshows (owner's request) with a Pause button; About and Contact use real photos only. No image overlays. The full manifest, rights status and the steps for swapping in licensed photos are in `docs/imagery.md`; each photo's status is also in `PHOTO` (`public/index.html`).
 
 No charts implying real data. The practices diagram shows how the practices connect, not figures; product screenshots are labelled as sample data.
 

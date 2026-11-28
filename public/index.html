@@ -3067,7 +3067,7 @@ ${richSummary(st, rows)}`;
   const sentenceBlocks = (t) => String(t || "").split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean).map((p) => `<p>${esc(p)}</p>`).join("");
   // Images on the public pages. None shows Afrimetrica staff, clients, participants or projects, and no alt text names anyone.
   // [file, alt text, crop position, rights status, has a 640px copy]. Rights status is for the team (docs/imagery.md);
-  // entries marked "AI illustration" carry a small "Illustrative image" note on the page.
+  // entries marked "AI illustration" are not captioned on the page (owner's decision) and must never be presented as real people or projects.
   const PHOTO = {
     hero: ["p01-homepage-collaboration.webp", "Professionals collaborating around laptops at a meeting table", "center 40%", "AI illustration (placement guide P01): fallback until R05 is licensed", true],
     execEd: ["p03-executive-education.webp", "Presenter explaining charts to professionals", "center 35%", "AI illustration (placement guide P03): fallback until R10 is licensed", true],
@@ -3118,7 +3118,8 @@ ${richSummary(st, rows)}`;
   };
   // The slideshow that stands in for each photo placed beside a section.
   const SIDE_SET = { trainingExec: "trainingSide", venuesCity: "venues", analyticsTeam: "dataIntelSide", coWorkshop: "consultancySide", research: "fieldwork" };
-  const slideNote = (k) => { const r = PHOTO[k][3]; return r.startsWith("AI") ? "Illustrative image" : r.startsWith("Screenshot") ? "Afrimetrica Surveys, shown with sample data" : ""; };
+  // AI illustrations carry no caption (owner's decision); screenshots say they show sample data.
+  const slideNote = (k) => (PHOTO[k][3].startsWith("Screenshot") ? "Afrimetrica Surveys, shown with sample data" : "");
   // Each slideshow keeps its own position and its own Pause button. They start paused for people who ask their
   // device to reduce motion.
   const reduceMotion = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);

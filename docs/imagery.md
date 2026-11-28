@@ -3,7 +3,7 @@
 Implements the *Afrimetrica Claude Final Placement Guide* (P01–P19 embedded images, R01–R20 stock register) on the live site (`public/index.html`). Every image is a local WebP in `public/photos/`, listed in `PHOTO` with its rights status. The server serves only the files in that folder (`tests/api.test.mjs` checks each listed photo is served and that P08 and P10 never are).
 
 Rules followed:
-- Real photography first. AI illustrations only where the guide names them as fallbacks, always captioned "Illustrative image".
+- Real photography first. AI illustrations only where the guide names them as fallbacks, no longer captioned on the page (owner's decision, November 2026); they are never presented as Afrimetrica staff, clients or projects.
 - About uses real photography only.
 - No image shows or implies Afrimetrica staff, clients, participants, projects or offices. No alt text names anyone.
 - Each image appears on one page, except P05, which is used on two pages of the same practice (Research & Evaluation and its Fieldwork service).
@@ -66,7 +66,7 @@ The owner asked for all 20 pictures (P01–P19 and the Memorial Park photo) to b
 | Surveys | results screenshot, builder screenshot |
 
 Notes:
-- P08 and P10 were marked "do not publish" in the guide; they are used at the owner's request, captioned "Illustrative image", and P10 never appears on Our People or beside profiles.
+- P08 and P10 were marked "do not publish" in the guide; they are used at the owner's request, no longer captioned, and P10 never appears on Our People or beside profiles.
 - About and Contact show real photographs only.
 - P02, P07 and P11–P19 still have **unconfirmed source and licence**; the guide notes some may be stock photos that need a licence. P02 shows third-party signage and P19 a building's branding.
 
