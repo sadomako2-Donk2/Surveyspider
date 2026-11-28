@@ -3129,6 +3129,10 @@ ${richSummary(st, rows)}`;
     orgMeeting: ["org-meeting.webp", "Five colleagues talk around a white meeting table with laptops, seen from above", "center 45%", "Supplied by Afrimetrica: licence to confirm", true],
     orgDiscussion: ["org-discussion.webp", "Six professionals in discussion around a meeting table with laptops and notebooks", "center 40%", "Supplied by Afrimetrica: licence to confirm", true],
     orgLaptop: ["org-laptop.webp", "Five colleagues smile as they review work on a laptop together", "center 40%", "Supplied by Afrimetrica: licence to confirm", true],
+    missionMeeting: ["mission-meeting.webp", "Professionals discuss charts and a map of Africa around a meeting table", "center 40%", "Supplied by Afrimetrica: licence to confirm (appears AI-generated)", true],
+    missionTraining: ["mission-training.webp", "A trainer presents practical skills and leadership to participants around a table", "center 40%", "Supplied by Afrimetrica: licence to confirm (appears AI-generated)", true],
+    missionSpeaker: ["mission-speaker.webp", "A speaker with a microphone addresses a seated audience in a workshop", "center 40%", "Supplied by Afrimetrica: licence to confirm (appears to be a stock photo)", true],
+    missionAudience: ["mission-audience.webp", "An audience at a conference raises their hands to answer a question", "center 35%", "Supplied by Afrimetrica: licence to confirm", true],
     shotBuilder: ["screen-builder.webp", "Screenshot of the Afrimetrica Surveys questionnaire builder, showing a sample questionnaire", "top left", "Screenshot of Afrimetrica Surveys with sample data", true],
     shotResults: ["screen-results.webp", "Screenshot of Afrimetrica Surveys results, with charts for a sample survey", "top left", "Screenshot of Afrimetrica Surveys with sample data", true],
   };
@@ -3155,6 +3159,8 @@ ${richSummary(st, rows)}`;
     approach: ["homeAI", "fieldworkAI", "surveysAI", "analyticsAI", "consultancyAI"],
     // How we're organised: photos supplied by Afrimetrica for this page.
     organisation: ["orgDiscussion", "orgPresentation", "orgMeeting", "orgLaptop"],
+    // Our mission: photos supplied by Afrimetrica for this page.
+    mission: ["missionMeeting", "missionTraining", "missionSpeaker", "missionAudience"],
     // Insights: AI illustrations of data and research work (owner's request).
     insights: ["dataIntel", "analyticsAI", "digital", "trainingAI"],
   };
@@ -3344,8 +3350,8 @@ ${richSummary(st, rows)}`;
       <div class="area-grid">${ABOUT_MENU.slice(1).map(([k, label]) => `<a class="card area-card" href="#about/${k}"><b>${esc(label)}</b><span class="hint">${esc({ team: "The specialists behind Afrimetrica", approach: "How we run assignments, check quality and protect data", organisation: "Our five practices and how they fit together", mission: "Why we exist and what we stand for", vision: "The future we are working towards", certificates: "What our certificates of completion mean" }[k])}</span></a>`).join("")}</div>`;
   }
   function abMission() {
-    return `${abCrumbs("Our mission")}<div class="page-head"><div><span class="eyebrow gold">Our mission</span><h1>Why we exist</h1></div></div>
-      <section class="card statement"><p>${esc(AB_MISSION)}</p></section>
+    return `${abCrumbs("Our mission")}${introMedia(`<div class="stack intro-text"><div class="page-head"><div><span class="eyebrow gold">Our mission</span><h1>Why we exist</h1></div></div>
+      <section class="card statement"><p>${esc(AB_MISSION)}</p></section></div>`, "mission")}
       <section class="card"><h2>What we stand for</h2>${abValues()}</section>`;
   }
   function abVision() {

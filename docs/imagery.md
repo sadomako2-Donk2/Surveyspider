@@ -71,6 +71,7 @@ The owner asked for all 20 pictures (P01–P19 and the Memorial Park photo) to b
 | Our approach (About Us and Research & Advisory) | AI photos: home, fieldwork-team, surveys, analytics, consultancy (owner's request) |
 | Insights overview | AI photos: P04, analytics, P09, training (owner's request) |
 | How we're organised | Supplied photos: org-discussion, org-presentation, org-meeting, org-laptop (licence to confirm; org-presentation shows a coworking brand on the mugs) |
+| Our mission | Supplied photos: mission-meeting and mission-training (appear AI-generated), mission-speaker (appears to be a stock photo), mission-audience (conference event; licence to confirm) |
 
 Notes:
 - P08 and P10 were marked "do not publish" in the guide; they are used at the owner's request, no longer captioned, and P10 never appears on Our People or beside profiles.
