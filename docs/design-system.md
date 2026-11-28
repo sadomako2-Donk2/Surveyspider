@@ -33,7 +33,7 @@ Built from the existing brand: the Afrimetrica logo (sun mark and wordmark, upda
 | Contact call to action | `.band` with `.band-item` links | Home, Our practices |
 | Enquiry form | `enquiryForm(type, options)` | Contact, practices, services, courses, press, testimonials |
 | Section menu | `subLinks()`, `.subnav` | Every section |
-| Photo | `slideshow()`, `sidePhoto()` | Section landings |
+| Photo | `pic()`, `introMedia()`, `sidePhoto()` | Page introductions and sections |
 
 ## Accessibility (WCAG 2.2 AA)
 
@@ -42,24 +42,18 @@ Built from the existing brand: the Afrimetrica logo (sun mark and wordmark, upda
 - Mobile: a Menu button (aria-expanded) opens the main menu as a list; Escape closes it and returns focus; it closes after navigation.
 - Hover menus also open on keyboard focus and close with Escape; section menus are labelled by section.
 - Forms: every field has a visible label; errors are announced (role="alert"), invalid fields are marked (aria-invalid) and linked to the message, and focus moves to the first problem.
-- Targets at least 24 × 24 px; contrast checked with axe in light and dark mode; reduced motion stops the slideshow.
+- Targets at least 24 × 24 px; contrast checked with axe in light and dark mode.
 
 ## Imagery
 
-Authentic photography only where rights are confirmed. Each photo's status is recorded in `PHOTO` (`public/index.html`):
+Real photography first; AI illustrations only as captioned fallbacks ("Illustrative image"); About uses real photos only. One image per section, text and image side by side (about 50/50) on desktop, text first on small screens. No slideshows or image overlays. The full manifest, rights status and the steps for swapping in licensed photos are in `docs/imagery.md`; each photo's status is also in `PHOTO` (`public/index.html`).
 
-| Photo | Status |
-|---|---|
-| home, training, surveys, analytics, consultancy, fieldwork | AI-generated: replace with authentic photos |
-| about, venuesCity, trainingExec, analyticsTeam, coWorkshop, vision | Supplied by Afrimetrica: licence to confirm |
-| team portraits | Supplied by Afrimetrica: confirm each person's consent |
-
-No charts implying real data. The practices diagram shows how the practices connect, not figures.
+No charts implying real data. The practices diagram shows how the practices connect, not figures; product screenshots are labelled as sample data.
 
 ## Performance
 
-Fonts: six Latin WOFF2 files (about 118 KB, two preloaded), served by the site with long caching. Photos are WebP; slideshow images load only when shown. Excel, Word and PDF libraries load only when used, from `/vendor`. Pages make no third-party requests.
+Fonts: six Latin WOFF2 files (about 118 KB, two preloaded), served by the site with long caching. Photos are WebP with a 640 px copy for phones (`srcset`); only the first image on a page loads straight away, the rest lazily. Excel, Word and PDF libraries load only when used, from `/vendor`. Pages make no third-party requests.
 
 ## Open decisions
 
-- The slideshows autoplay (requested earlier) and use AI-generated photos. The brief prefers authentic imagery and minimal animation: replacing the photos and switching autoplay off are owner decisions. Autoplay already stops for people who ask for reduced motion, and there is a pause button.
+- Licensed real photos to replace the AI illustrations (see `docs/imagery.md`).

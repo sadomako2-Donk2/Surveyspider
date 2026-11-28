@@ -20,6 +20,8 @@ Phase 1: a single Node.js service (`server.mjs`) plus a single-page front end (`
 - The statistics library sits between `/*STAT-START*/` and `/*STAT-END*/` and is tested against SciPy (`tests/stats.test.mjs`).
 - `server.mjs`: JSON store at `DATA_DIR/store.json`; routes under `/api/*`; auth (email+password, Google), Resend emails, rate limits, same-origin checks.
 
+- Images: `PHOTO` in `public/index.html` (file, alt, crop, rights status); manifest and licence rules in `docs/imagery.md`. Never publish reference-only or unlicensed images; AI images are captioned "Illustrative image".
+
 ## Commands
 - `npm test` — 20 statistics checks + 147 API checks. Must pass before pushing.
 - `npm start` — runs on port 10000.

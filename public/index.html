@@ -505,24 +505,14 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
 @media (prefers-reduced-motion: no-preference) { .btn, .opt, .tpl { transition: border-color .15s, background-color .15s; } }
 /* photos on the public pages (illustrative images) */
 .hero-solo { grid-template-columns: minmax(0, 1fr); max-width: 860px; }
-/* home page slideshow */
-.slideshow { position: relative; border-radius: 18px; overflow: hidden; background: var(--navy-band); border-bottom: 3px solid var(--gold); aspect-ratio: 21 / 8; }
-.slides { display: flex; height: 100%; transition: transform .8s ease; }
-.slide { flex: 0 0 100%; height: 100%; }
-.slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.slide-ctl { position: absolute; left: 50%; transform: translateX(-50%); bottom: 12px; display: flex; align-items: center; gap: 2px; background: rgba(14,29,58,.7); border-radius: 999px; padding: 3px 8px 3px 3px; width: max-content; }
-.slide-ctl button { border: 0; cursor: pointer; }
-.slide-dot { width: 26px; height: 26px; border-radius: 50%; background: transparent; display: grid; place-items: center; padding: 0; }
-.slide-dot::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.6); }
-.slide-dot[aria-current="true"]::before { background: var(--gold-hi); width: 12px; height: 12px; }
-.slide-play { background: rgba(255,255,255,.14); color: #fff; border-radius: 999px; padding: 5px 12px; font: 600 .8rem var(--font-body); margin-right: 6px; }
-.slide-ctl button:focus-visible { outline: 3px solid var(--gold-hi); outline-offset: 2px; }
-@media (max-width: 700px) { .slideshow { aspect-ratio: 4 / 3; } }
-@media (prefers-reduced-motion: reduce) { .slides { transition: none; } }
-.photo { margin: 0; display: grid; gap: 6px; }
-.photo-frame { position: relative; aspect-ratio: 21 / 8; border-radius: 18px; overflow: hidden; background: var(--navy-band); border-bottom: 3px solid var(--gold); }
-.photo-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.photo figcaption { font-size: .78rem; color: var(--muted); }
+/* page introductions and the home hero: text and image side by side, about 50/50; stacked text-first on small screens */
+.hero-media { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); padding-block: 8px 4px; }
+.intro-media { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); align-items: center; }
+.intro-media .page-head { align-items: flex-start; }
+.hero-photo, .intro-photo { margin: 0; display: grid; gap: 6px; }
+.hero-photo img, .intro-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius-l, 18px); display: block; background: var(--surface); box-shadow: var(--shadow-1, 0 1px 3px rgba(14,29,58,.12)); }
+.img-note { font-size: .75rem; color: var(--muted); }
+@media (max-width: 860px) { .intro-media, .hero-media { grid-template-columns: 1fr; } .hero-photo img, .intro-photo img { aspect-ratio: 16 / 10; } }
 .photo-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .photo-pair .photo-frame { aspect-ratio: 4 / 3; }
 @media (max-width: 700px) { .photo-frame { aspect-ratio: 4 / 3; } .photo-pair { grid-template-columns: 1fr; } }
@@ -614,10 +604,12 @@ a.venue:hover, .venue-btn:hover { box-shadow: inset 0 0 0 1px var(--gold); }
 .notice-warn { border-left: 4px solid var(--signal); background: var(--signal-soft); margin-bottom: 16px; }
 @media (max-width: 560px) { .legal-toc ol { columns: 1; } }
 /* photos beside text */
+.wide-shot { margin: 0 auto; display: grid; gap: 6px; width: 100%; max-width: 960px; }
+.wide-shot img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--radius-l, 18px); border: 1px solid var(--line); display: block; background: var(--surface); }
 .feature { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 28px; align-items: center; }
-.side-photo, .card-photo { margin: 0; }
-.side-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 18px; border-bottom: 3px solid var(--gold); display: block; background: var(--navy-band); }
-.card-photo img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 12px; display: block; }
+.side-photo { margin: 0; }
+.side-photo { display: grid; gap: 6px; }
+.side-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius-l, 18px); display: block; background: var(--surface); box-shadow: var(--shadow-1, 0 1px 3px rgba(14,29,58,.12)); }
 @media (max-width: 860px) { .feature { grid-template-columns: 1fr; } }
 .foot-logo { display: block; height: 56px; width: auto; border-radius: 8px; margin-bottom: 10px; }
 /* dark navy header with the original logo (the navy matches the logo's own background) */
@@ -640,7 +632,6 @@ body { overflow-x: clip; }
 .topbar-inner, .subnav-inner { max-width: var(--page); }
 main, footer { max-width: calc(var(--page) + 2 * max(16px, env(safe-area-inset-left, 0px))); } /* these carry their own side padding */
 .banner { max-width: var(--page); }
-main > .slideshow { margin-inline: calc(50% - 50vw); border-radius: 0; aspect-ratio: auto; height: clamp(240px, 34vw, 580px); }
 main > .band { border-radius: 0; box-shadow: 0 0 0 100vmax var(--navy-band); clip-path: inset(0 -100vmax); padding-inline: 0; padding-block: 48px; margin-block: 12px; }
 main:has(> .band:last-child) { padding-bottom: 0; }
 main:has(> .band:last-child) > .band:last-child { margin-bottom: 0; }
@@ -649,7 +640,7 @@ footer { background: var(--surface); box-shadow: 0 0 0 100vmax var(--surface); c
 footer .foot-inner { border-top: 0; padding-top: 0; }
 .hero .lede, .hero2 .lede { max-width: 68ch; }
 .page-head > div > p { max-width: min(82ch, 100%) !important; } /* overrides the narrower inline widths on intro text */
-@media (max-width: 700px) { main > .slideshow { height: auto; aspect-ratio: 4 / 3; } main > .band { padding-block: 32px; } }
+@media (max-width: 700px) { main > .band { padding-block: 32px; } }
 
 /* team profiles */
 .team-grid { display: grid; gap: 16px; }
@@ -1220,7 +1211,6 @@ html { scroll-padding-top: calc(var(--header-h, 110px) + 16px); }
     if ((S.tr || "").startsWith("course/") && S.tr !== trPart) S.catEnquiry = "";
     S.tr = h === "training" ? trPart : ""; S.trMenu = null;
     if (h === "library") h = "resources";
-    if ((ROUTES.has(h) ? h : "home") !== S.view) slideIdx = 0; // a new page's slideshow starts at its first photo
     S.view = ROUTES.has(h) ? h : "home";
     if (S.view !== "training") { S.courseOpen = null; S.regFor = null; S.catEnquiry = ""; }
     if (S.view !== "resources") S.guideOpen = null;
@@ -1268,7 +1258,7 @@ html { scroll-padding-top: calc(var(--header-h, 110px) + 16px); }
         <div class="rm-rec"><b>Recommendation</b>Add a 30-minute workplace practice task to each module, then re-survey in 6 weeks.</div>
       </div>
     </section>
-    ${slideshow("surveys")}
+    ${pic("shotResults", "wide-shot")}
     <section class="stats" aria-label="Platform activity">
       <div class="stat"><span class="v">${int(live)}</span><span class="l">Surveys open now</span></div>
       <div class="stat"><span class="v">${int(S.responses.length)}</span><span class="l">Responses collected</span></div>
@@ -3060,51 +3050,33 @@ ${richSummary(st, rows)}`;
   }
   const myEnrol = (cid, sid) => S.enrollments.find((e) => e.userId === S.uid && e.courseId === cid && (sid === undefined || (e.sessionId || "") === sid) && e.status !== "cancelled");
   const sentenceBlocks = (t) => String(t || "").split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean).map((p) => `<p>${esc(p)}</p>`).join("");
-  // Illustrative images (not Afrimetrica staff or projects); their alt text describes the scene and names no one.
-  // [file, alt text, crop position, rights status]. Rights status is for the team (docs/design-system.md), not shown.
+  // Images on the public pages. None shows Afrimetrica staff, clients, participants or projects, and no alt text names anyone.
+  // [file, alt text, crop position, rights status, has a 640px copy]. Rights status is for the team (docs/imagery.md);
+  // entries marked "AI illustration" carry a small "Illustrative image" note on the page.
   const PHOTO = {
-    home: ["home.webp", "A team around a laptop discussing research results, with charts and a map of Africa on a screen behind them", "center 30%", "AI-generated: replace with an authentic photo"],
-    training: ["training.webp", "A trainer points to charts and a map of Africa on a screen while participants at a table listen and take notes", "center 35%", "AI-generated: replace with an authentic photo"],
-    surveys: ["surveys.webp", "An interviewer with a tablet talks with a smiling market trader at her stall", "center 35%", "AI-generated: replace with an authentic photo"],
+    hero: ["p01-homepage-collaboration.webp", "Professionals collaborating around laptops at a meeting table", "center 40%", "AI illustration (placement guide P01): fallback until R05 is licensed", true],
+    execEd: ["p03-executive-education.webp", "Presenter explaining charts to professionals", "center 35%", "AI illustration (placement guide P03): fallback until R10 is licensed", true],
+    dataIntel: ["p04-data-analytics.webp", "Analyst reviewing charts on a computer", "center 40%", "AI illustration (placement guide P04): fallback until R11 is licensed", true],
+    research: ["p05-field-research.webp", "Illustrated community interview with a tablet and clipboard", "center 40%", "AI illustration (placement guide P05): fallback until R13/R16 are licensed", true],
+    advisory: ["p06-strategic-advisory.webp", "Consultant presenting to colleagues around a meeting table", "center 40%", "AI illustration (placement guide P06): fallback until R06 is licensed", true],
     about: ["about.webp", "Aerial view of a growing town: red-roofed houses, warehouses and green open land, with more houses in the distance", "center 55%", "Supplied by Afrimetrica: licence to confirm"],
-    consultancy: ["consultancy.webp", "A consultant presents to a group around a meeting table, with a map of Africa and charts on a screen and printed reports on the table", "center 35%", "AI-generated: replace with an authentic photo"],
     venuesCity: ["venues-city.webp", "The Kwame Nkrumah Memorial Park in Accra: the monument and statue above blue fountains under a clear sky", "center 55%", "Supplied by Afrimetrica: licence to confirm"],
     trainingExec: ["training-executive.webp", "Professionals with laptops in a meeting around a long table in a bright conference room", "center 50%", "Supplied by Afrimetrica: licence to confirm"],
     analyticsTeam: ["analytics-team.webp", "Three women in a meeting around a table with laptops, in an office with large windows", "center 40%", "Supplied by Afrimetrica: licence to confirm"],
     coWorkshop: ["consultancy-workshop.webp", "Participants in a workshop write and draw charts on large sheets of paper spread across a table", "center 40%", "Supplied by Afrimetrica: licence to confirm"],
-    vision: ["vision-city.webp", "Aerial view of a city of red-roofed houses and green trees, with a railway line running towards the horizon under a blue sky", "center 60%", "Supplied by Afrimetrica: licence to confirm"],
-    fieldwork: ["fieldwork-team.webp", "A field team with a tablet and clipboards talks with women in a village, beside thatched houses", "center 40%", "AI-generated: replace with an authentic photo"],
-    analytics: ["analytics.webp", "Three analysts look at a laptop together, with a dashboard of charts on the wall behind them", "center 8%", "AI-generated: replace with an authentic photo"],
+    shotBuilder: ["screen-builder.webp", "Screenshot of the Afrimetrica Surveys questionnaire builder, showing a sample questionnaire", "top left", "Screenshot of Afrimetrica Surveys with sample data", true],
+    shotResults: ["screen-results.webp", "Screenshot of Afrimetrica Surveys results, with charts for a sample survey", "top left", "Screenshot of Afrimetrica Surveys with sample data", true],
   };
-  // A photo shown beside text (for photos too small to stretch across a full-width slideshow).
-  const sidePhoto = (k, cls = "side-photo") => { const [f, alt, pos] = PHOTO[k]; return `<figure class="${cls}"><img src="/photos/${f}" alt="${esc(alt)}" loading="lazy" decoding="async" style="object-position:${pos}"></figure>`; };
-  const photo = (k) => { const [f, alt, pos] = PHOTO[k]; return `<figure class="photo"><div class="photo-frame"><img src="/photos/${f}" alt="${esc(alt)}" loading="lazy" decoding="async" style="object-position:${pos}"></div></figure>`; };
-  // Home page slideshow: starts with the first photo and moves on every 5 seconds. Visitors can pause it
-  // (needed for accessibility); it starts paused for people who ask their device to reduce motion.
-  const SLIDES = ["home", "training", "surveys", "analytics", "consultancy", "about"];
-  let slideOrder = SLIDES, slideIdx = 0, slidePaused = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
-  // Each page's slideshow starts with that page's own photo(s), then shows the rest in the usual order.
-  const slideshow = (...first) => { slideOrder = [...first, ...SLIDES.filter((k) => !first.includes(k))]; return `<section class="slideshow" aria-roledescription="carousel" aria-label="Photos">
-    <div class="slides" style="transform:translateX(-${slideIdx * 100}%)">${slideOrder.map((k, i) => { const [f, alt, pos] = PHOTO[k]; return `<div class="slide" role="group" aria-roledescription="slide" aria-label="${i + 1} of ${slideOrder.length}"${i === slideIdx ? "" : ' aria-hidden="true"'}><img ${i === slideIdx ? "src" : "data-src"}="/photos/${f}" alt="${esc(alt)}" style="object-position:${pos}"${i === slideIdx ? "" : ' fetchpriority="low"'}></div>`; }).join("")}</div>
-    <div class="slide-ctl"><button class="slide-play" data-act="slidePause" aria-pressed="${slidePaused}">${slidePaused ? "Play" : "Pause"}</button>${slideOrder.map((_, i) => `<button class="slide-dot" data-act="slideGo" data-i="${i}" aria-label="Show photo ${i + 1}"${i === slideIdx ? ' aria-current="true"' : ""}></button>`).join("")}</div>
-  </section>`; };
-  // Only the photo on show is downloaded with the page; each next one is fetched shortly before its turn
-  // (saves about 600 KB per page on mobile data).
-  function loadSlide(j) {
-    const imgs = document.querySelectorAll(".slideshow .slide img"), img = imgs[(j + imgs.length) % (imgs.length || 1)];
-    if (img && img.dataset.src) { img.src = img.dataset.src; img.removeAttribute("data-src"); }
-  }
-  function showSlide(i) {
-    slideIdx = (i + slideOrder.length) % slideOrder.length;
-    const box = document.querySelector(".slideshow"); if (!box) return;
-    loadSlide(slideIdx); loadSlide(slideIdx + 1);
-    box.querySelector(".slides").style.transform = `translateX(-${slideIdx * 100}%)`;
-    box.querySelectorAll(".slide").forEach((s, j) => (j === slideIdx ? s.removeAttribute("aria-hidden") : s.setAttribute("aria-hidden", "true")));
-    box.querySelectorAll(".slide-dot").forEach((d, j) => (j === slideIdx ? d.setAttribute("aria-current", "true") : d.removeAttribute("aria-current")));
-  }
-  setInterval(() => { if (!slidePaused && !document.hidden) showSlide(slideIdx + 1); }, 5000);
-  // Fetch the next photo once the page has settled, so it's ready when the slideshow moves on.
-  new MutationObserver(() => { if (document.querySelector(".slideshow img[data-src]")) setTimeout(() => loadSlide(slideIdx + 1), 2500); }).observe(document.getElementById("main"), { childList: true });
+  // One image in a figure. Large images get a 640px copy for phones; the first image on a page loads straight away.
+  const pic = (k, cls = "side-photo", first = false) => {
+    const [f, alt, pos, rights, small] = PHOTO[k], src = `/photos/${f}`;
+    const set = small ? ` srcset="${src.replace(".webp", "-640.webp")} 640w, ${src} 1200w" sizes="${cls === "wide-shot" ? "(max-width: 992px) calc(100vw - 32px), 960px" : "(max-width: 860px) calc(100vw - 32px), 600px"}"` : "";
+    const note = rights.startsWith("AI") ? `<figcaption class="img-note">Illustrative image</figcaption>` : rights.startsWith("Screenshot") ? `<figcaption class="img-note">Afrimetrica Surveys, shown with sample data</figcaption>` : "";
+    return `<figure class="${cls}"><img src="${src}"${set} alt="${esc(alt)}" ${first ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" style="object-position:${pos}">${note}</figure>`;
+  };
+  const sidePhoto = (k, cls) => pic(k, cls);
+  // A page introduction with its image: text on the left, image on the right; text first on small screens.
+  const introMedia = (head, k) => `<div class="intro-media">${head}${pic(k, "intro-photo", true)}</div>`;
   const AUDIENCES = [
     ["Governments and public institutions", "Policy research, evaluations, data systems and training for ministries, agencies and local government."],
     ["Businesses and investors", "Market intelligence, feasibility studies, analytics and executive programmes."],
@@ -3194,14 +3166,14 @@ ${richSummary(st, rows)}`;
   function viewHome() {
     const up = S.courses.filter((c) => c.status === "published").map((c) => ({ c, s: upcoming(c)[0] })).sort((a, b) => ((a.s && a.s.start) || "9").localeCompare((b.s && b.s.start) || "9")).slice(0, 3);
     return `
-    <section class="hero2 afri-hero hero-solo">
+    <section class="hero2 afri-hero hero-media">
       <div>
         <h1>Data. Research. Advisory. <span class="gold-text">Executive Education.</span></h1>
         <p class="lede">An independent, Africa-focused professional services firm specialising in data intelligence, research, strategic advisory and executive education, supported by digital solutions. We help governments, businesses, development institutions and civil society organisations generate credible evidence and make better decisions across Africa.</p>
         <div class="hero-ctas"><a class="btn gold big" href="#practices">Explore our practices</a><a class="btn primary big" href="#training">Executive Education</a><a class="btn big" href="#contact">Discuss a project</a></div>
       </div>
+      ${pic("hero", "hero-photo", true)}
     </section>
-    ${slideshow("home")}
     <section class="stack">
       <div class="section-head"><span class="eyebrow gold">What We Do</span><h2 class="h2xl">Five practices, one firm</h2></div>
       ${practiceCards()}
@@ -3240,9 +3212,9 @@ ${richSummary(st, rows)}`;
   const AB_VALUES = [["Rigour", "Methods and advice that are sound, transparent and honestly reported."], ["Practicality", "Training and solutions that work in real organisations, field conditions and budgets."], ["Evidence-led leadership", "Helping leaders use data and evidence to set priorities and make decisions."], ["Ethics and data protection", "Respect for participants, informed consent and careful handling of personal data."], ["Building capacity", "Leaving people and organisations more skilled, and more independent, than we found them."]];
   const abValues = () => `<ul class="ticks small">${AB_VALUES.map(([t, d]) => `<li><div><b>${esc(t)}</b><span>${esc(d)}</span></div></li>`).join("")}</ul>`;
   function abOverview() {
-    return `<div class="page-head"><div><span class="eyebrow gold">About Afrimetrica</span><h1>An independent, Africa-focused professional services firm</h1><p class="muted" style="max-width:70ch">Afrimetrica is an independent, multidisciplinary professional services firm specialising in data intelligence, research, strategic advisory and executive education, supported by digital solutions.</p></div></div>
-      <section class="prose stack" style="gap:12px"><p>We work with governments, businesses, development institutions and civil society organisations to generate credible evidence, solve complex problems, strengthen institutional capabilities and enable better decisions across Africa.</p><p>Through our five practices and our network of researchers, analysts, advisers and executive faculty, we combine analytical rigour, practical tools and knowledge of the contexts our clients work in.</p></section>
-      ${slideshow("about")}
+    return `<div class="intro-media"><div class="stack"><div class="page-head"><div><span class="eyebrow gold">About Afrimetrica</span><h1>An independent, Africa-focused professional services firm</h1><p class="muted" style="max-width:70ch">Afrimetrica is an independent, multidisciplinary professional services firm specialising in data intelligence, research, strategic advisory and executive education, supported by digital solutions.</p></div></div>
+      <section class="prose stack" style="gap:12px"><p>We work with governments, businesses, development institutions and civil society organisations to generate credible evidence, solve complex problems, strengthen institutional capabilities and enable better decisions across Africa.</p><p>Through our five practices and our network of researchers, analysts, advisers and executive faculty, we combine analytical rigour, practical tools and knowledge of the contexts our clients work in.</p></section></div>${pic("about", "intro-photo", true)}</div>
+      
       <section class="stack" aria-labelledby="abPrH"><h2 id="abPrH">What We Do</h2>${practiceCards()}</section>
       <div class="area-grid">${ABOUT_MENU.slice(1).map(([k, label]) => `<a class="card area-card" href="#about/${k}"><b>${esc(label)}</b><span class="hint">${esc({ team: "The specialists behind Afrimetrica", approach: "How we run assignments, check quality and protect data", organisation: "Our five practices and how they fit together", mission: "Why we exist and what we stand for", vision: "The future we are working towards", certificates: "What our certificates of completion mean" }[k])}</span></a>`).join("")}</div>`;
   }
@@ -3252,7 +3224,7 @@ ${richSummary(st, rows)}`;
       <section class="card"><h2>What we stand for</h2>${abValues()}</section>`;
   }
   function abVision() {
-    return `${abCrumbs("Our vision")}<div class="feature">${sidePhoto("vision")}<div class="stack"><div class="page-head"><div><span class="eyebrow gold">Our vision</span><h1>The future we are working towards</h1></div></div>
+    return `${abCrumbs("Our vision")}<div><div class="stack"><div class="page-head"><div><span class="eyebrow gold">Our vision</span><h1>The future we are working towards</h1></div></div>
       <section class="card statement"><p>${esc(AB_VISION)}</p></section></div></div>
       <section class="card"><h2>How we get there</h2><ul class="ticks small"><li><div><b>Data</b><span>Reliable analysis and intelligence through our Data &amp; Intelligence practice.</span></div></li><li><div><b>Evidence</b><span>Credible research, surveys and evaluations through our Research &amp; Evaluation practice.</span></div></li><li><div><b>Advice</b><span>Evidence-based policy, strategy and investment advice through our Strategy &amp; Advisory practice.</span></div></li><li><div><b>Skills</b><span>Practical programmes for leaders and teams through our Executive Education practice.</span></div></li><li><div><b>Tools</b><span>Survey and data tools through our Digital Solutions practice.</span></div></li><li><div><b>Knowledge</b><span>Free guides and resources for everyone through Afrimetrica Insights.</span></div></li></ul></section>`;
   }
@@ -3890,7 +3862,6 @@ ${richSummary(st, rows)}`;
   function trLanding() {
     const pub = S.courses.filter((c) => c.status === "published").sort((a, b) => ((upcoming(a)[0] || {}).start || "9").localeCompare((upcoming(b)[0] || {}).start || "9"));
     return `<div class="page-head"><div><span class="eyebrow gold">Executive Education · Plan. Analyse. Lead.</span><h1>Executive education and professional training</h1><p style="max-width:70ch;font-size:1.12rem;font-weight:500;margin:10px 0 6px">Practical programmes that strengthen the skills of leaders and teams in government, business, development institutions and civil society.</p><p class="muted" style="max-width:70ch">Build skills in research design, surveys, statistics, monitoring and evaluation, dashboards and market research, alongside executive programmes in strategy and strategic planning, leadership, governance, finance and project management. Join a classroom course in a city near you, learn live online, or bring any course to your organisation, tailored to your sector and your team.</p></div></div>
-      ${slideshow("training")}
       <form class="card quick-find" data-act-form="catQuick" role="search"><label for="catQuickQ">Search ${CATALOGUE.length} courses<input id="catQuickQ" type="search" placeholder="e.g. strategy, Power BI, monitoring and evaluation"></label><button class="btn primary" type="submit">Find courses</button></form>
       <section class="stack" aria-labelledby="areasH"><div class="section-head"><span class="eyebrow gold">Courses</span><h2 id="areasH" class="h2xl">Start with a subject area</h2></div>${areaCards()}</section>
       <section class="feature" aria-labelledby="execH">${sidePhoto("trainingExec")}<div class="stack"><div class="section-head"><span class="eyebrow gold">Executive and in-house training</span><h2 id="execH" class="h2xl">Programmes for leaders and their teams</h2></div><p class="muted">Strategy, leadership, governance, finance and data skills for senior teams, run at your premises or at a venue near you, and tailored to your sector, your data and your goals.</p><ul class="ticks small"><li><div><span>Designed around the decisions your team makes</span></div></li><li><div><span>Your own cases and data in the exercises</span></div></li><li><div><span>Classroom, live online or a mix of both</span></div></li></ul><div class="row wrap"><a class="btn primary" href="#training/area/leadership">Executive courses</a><button class="btn" data-act="scrollToId" data-t="catEnquiry">Ask about in-house training</button></div></div></section>
@@ -4104,7 +4075,6 @@ ${richSummary(st, rows)}`;
   const anSteps = `<ol class="steps"><li>You tell us your questions and describe your data. Share it securely when we're ready to start.</li><li>We agree an analysis plan, a timeline and a fixed price.</li><li>We clean and analyse the data and check the results.</li><li>You receive tables, charts and a plain-language summary, and we walk you through them.</li></ol>`;
   function anLanding() {
     return `<div class="page-head"><div><span class="eyebrow gold">Data &amp; Intelligence</span><h1>Data analysis you can rely on</h1><p class="muted" style="max-width:70ch">Send us your data and your questions. Our analysts clean it, analyse it with the right methods and give governments, businesses, development institutions and civil society organisations results they can explain, defend and act on.</p></div></div>
-      ${slideshow("analytics")}
       <section class="stack" aria-labelledby="anSvcH"><div class="section-head"><span class="eyebrow gold">Services</span><h2 id="anSvcH" class="h2xl">What we can do with your data</h2></div>${anServiceCards()}</section>
       <div class="feature">${sidePhoto("analyticsTeam")}<section class="stack" aria-labelledby="anSecH"><div class="section-head"><span class="eyebrow gold">Sectors</span><h2 id="anSecH" class="h2xl">Analysis for your sector</h2></div><nav class="sub-jump" aria-label="Sectors">${AN_SECTORS.map((x) => `<a href="#analytics/sector/${x.id}">${esc(x.name)}</a>`).join("")}</nav></section></div>
       <div class="split">${anForm("Request an analysis", "")}
@@ -4219,11 +4189,10 @@ ${richSummary(st, rows)}`;
   const coPhases = `<ol class="steps"><li><b>Inception.</b> We agree the questions, scope, methods, timeline and budget, usually in an inception report.</li><li><b>Design.</b> Sampling, tools, ethics approvals and consent procedures.</li><li><b>Data collection.</b> Trained teams, digital tools and daily quality checks.</li><li><b>Analysis.</b> Rigorous analysis, checked before anything is reported.</li><li><b>Reporting and learning.</b> Clear reports, briefs and a presentation, with recommendations you can act on.</li></ol>`;
   function coLanding() {
     return `<div class="page-head"><div><span class="eyebrow gold">Research &amp; Advisory</span><h1>Research, evaluation and advisory services</h1><p class="muted" style="max-width:70ch">From a single questionnaire review to a full multi-site study or a new strategic plan, we design, run and report work that stands up to scrutiny, for governments, businesses, development institutions and civil society organisations.</p></div></div>
-      ${slideshow("consultancy")}
       <section class="stack" aria-labelledby="coSvcH"><div class="section-head"><span class="eyebrow gold">Services</span><h2 id="coSvcH" class="h2xl">How we can help</h2></div>${coServiceCards()}</section>
       <div class="feature">${sidePhoto("coWorkshop")}<section class="stack" aria-labelledby="coSecH"><div class="section-head"><span class="eyebrow gold">Sectors</span><h2 id="coSecH" class="h2xl">Who we work with</h2></div><nav class="sub-jump" aria-label="Sectors">${CO_SECTORS.map((x) => `<a href="#consultancy/sector/${x.id}">${esc(x.name)}</a>`).join("")}</nav></section></div>
       <div class="split">${coForm("Discuss a project", "")}
-        <section class="card">${sidePhoto("fieldwork", "card-photo")}<h2>Need face-to-face interviews?</h2><p class="muted">Upload your questionnaire and get an itemised fieldwork quote in US dollars straight away.</p><a class="btn gold" href="#paper-survey" style="align-self:flex-start">Get a fieldwork quote</a>
+        <section class="card"><h2>Need face-to-face interviews?</h2><p class="muted">Upload your questionnaire and get an itemised fieldwork quote in US dollars straight away.</p><a class="btn gold" href="#paper-survey" style="align-self:flex-start">Get a fieldwork quote</a>
           <h3>How we work</h3>${coPhases}<p><a href="#consultancy/approach">More about our approach</a></p></section>
       </div>`;
   }
@@ -4235,7 +4204,7 @@ ${richSummary(st, rows)}`;
         <section class="card"><h2>What you receive</h2><ul class="ticks small">${x.deliverables.map((q) => `<li><div><span>${esc(q)}</span></div></li>`).join("")}</ul></section>
       </div>
       <section class="card"><h2>How we work</h2>${coPhases}</section>
-      ${x.id === "fieldwork" ? `<section class="feature">${sidePhoto("fieldwork")}<div class="stack"><h2>Price face-to-face fieldwork now</h2><p class="muted">Trained enumerators and supervisors, digital questionnaires and daily quality checks, in towns and villages alike. Upload your questionnaire and get an itemised quote straight away.</p><a class="btn gold" href="#paper-survey" style="align-self:flex-start">Get a fieldwork quote</a></div></section>` : ""}
+      ${x.id === "fieldwork" ? `<section class="feature">${sidePhoto("research")}<div class="stack"><h2>Price face-to-face fieldwork now</h2><p class="muted">Trained enumerators and supervisors, digital questionnaires and daily quality checks, in towns and villages alike. Upload your questionnaire and get an itemised quote straight away.</p><a class="btn gold" href="#paper-survey" style="align-self:flex-start">Get a fieldwork quote</a></div></section>` : ""}
       <div class="split">
         ${an.length ? `<section class="card"><h2>Related analytics</h2><ul class="ticks small">${an.map((s) => `<li><div><a href="#analytics/service/${s.id}">${esc(s.name)}</a></div></li>`).join("")}</ul></section>` : ""}
         ${courses.length ? `<section class="card"><h2>Build these skills in your team</h2>${courseLines(courses)}</section>` : ""}
@@ -4301,6 +4270,8 @@ ${richSummary(st, rows)}`;
       problem: "Collecting and analysing data should not require several tools, specialist software or weeks of manual work." },
   ];
   const practice = (id) => PRACTICES.find((x) => x.id === id);
+  // The image beside each practice page's introduction (each image is used on one practice page only).
+  const PRACTICE_PHOTO = { "data-intelligence": "dataIntel", "research-evaluation": "research", "strategy-advisory": "advisory", "executive-education": "execEd", "digital-solutions": "shotBuilder" };
   // Which practice each consultancy service belongs to (all analytics services sit in Data & Intelligence).
   const coPractice = (id) => PRACTICES.find((p) => (p.co || []).includes(id)) || PRACTICES[1];
   const PRACTICE_MENU = [["", "Overview"], ...PRACTICES.map((x) => [x.id, x.name])];
@@ -4322,7 +4293,7 @@ ${richSummary(st, rows)}`;
     const deliver = [...new Set(svc.flatMap(([, s]) => s.deliverables))].slice(0, 6);
     const sectors = x.sectors === "an" ? AN_SECTORS.map((s) => [`#analytics/sector/${s.id}`, s.name]) : CO_SECTORS.map((s) => [`#consultancy/sector/${s.id}`, s.name]);
     const form = x.sectors === "an" ? anForm(`Discuss a ${x.name} project`, `Practice: ${x.name}\n`) : coForm(`Discuss a ${x.name} project`, `Practice: ${x.name}\nOur organisation and project: \nTimeline and location: `);
-    return `${prCrumbs(x.name)}<div class="page-head"><div><span class="eyebrow gold">What We Do</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.problem)}</p></div></div>
+    return `${prCrumbs(x.name)}${introMedia(`<div class="page-head"><div><span class="eyebrow gold">What We Do</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.problem)}</p></div></div>`, PRACTICE_PHOTO[x.id])}
       <section class="stack" aria-labelledby="prSvcH"><div class="section-head"><span class="eyebrow gold">What We Do</span><h2 id="prSvcH" class="h2xl">Services</h2></div><div class="area-grid">${svc.map(([href, s]) => `<a class="card area-card" href="${href}"><b>${esc(s.name)}</b><span class="hint">${esc(s.summary)}</span></a>`).join("")}</div></section>
       <div class="split">
         <section class="card"><h2>Typical deliverables</h2>${tickList(deliver)}</section>
@@ -4334,7 +4305,7 @@ ${richSummary(st, rows)}`;
   }
   function prExecEd() {
     const x = practice("executive-education");
-    return `${prCrumbs(x.name)}<div class="page-head"><div><span class="eyebrow gold">What We Do</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.problem)} ${esc(x.short)}</p></div></div>
+    return `${prCrumbs(x.name)}${introMedia(`<div class="page-head"><div><span class="eyebrow gold">What We Do</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.problem)} ${esc(x.short)}</p></div></div>`, PRACTICE_PHOTO[x.id])}
       <div class="split">
         <section class="card"><h2>What we offer</h2>${tickList([`${CATALOGUE.length} courses in ${GROUPS.length} subject areas, from research methods and data to leadership, strategy, finance and governance`, `Classroom courses in ${VENUES.filter((v) => !v[2]).length} African countries, with further venues in Europe, North America and Asia`, "Live online courses taught in short daily sessions", "In-house programmes tailored to your organisation, sector and data", "Certificates of completion for participants who attend and complete a course"])}<p class="hint">Certificates of completion are not accredited qualifications.</p></section>
         <section class="card"><h2>Subject areas</h2><nav class="sub-jump" aria-label="Subject areas">${GROUPS.map(([g, name]) => `<a href="#training/area/${g}">${esc(name)}</a>`).join("")}</nav></section>
@@ -4343,7 +4314,7 @@ ${richSummary(st, rows)}`;
   }
   function prDigital() {
     const x = practice("digital-solutions");
-    return `${prCrumbs(x.name)}<div class="page-head"><div><span class="eyebrow gold">What We Do</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.problem)} ${esc(x.short)}</p></div></div>
+    return `${prCrumbs(x.name)}${introMedia(`<div class="page-head"><div><span class="eyebrow gold">What We Do</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.problem)} ${esc(x.short)}</p></div></div>`, PRACTICE_PHOTO[x.id])}
       <div class="split">
         <section class="card"><h2>Available now</h2>${tickList(["Build questionnaires online, or upload them from Word, PDF or Excel", "Collect responses online, through our participant panel, or face to face with our field teams", "Built-in analysis: charts, group comparisons, statistical tests and Excel exports", "AI-assisted question checks and insight reports, grounded in your own responses", "Clear plans and prices, with answers visible only to the survey's owner"])}</section>
         <section class="card"><h2>Start here</h2><ul class="ticks small"><li><div><a href="#surveys">Afrimetrica Surveys overview</a></div></li><li><div><a href="#create">Create a survey</a></div></li><li><div><a href="#import">Upload a questionnaire</a></div></li><li><div><a href="#paper-survey">Price face-to-face fieldwork</a></div></li><li><div><a href="#pricing">Plans and prices</a></div></li></ul></section>
@@ -4749,8 +4720,6 @@ ${richSummary(st, rows)}`;
     switch (act) {
       case "tpl": S.draft = draftFromTemplate(b.dataset.key); S.aiCheck = null; S.importNote = null; saveDraftLocal(); if (S.view !== "create") go("create"); else { render(); window.scrollTo(0, 0); } break;
       case "billing": S.billing = b.dataset.v; render(); break;
-      case "slideGo": showSlide(+b.dataset.i); break;
-      case "slidePause": slidePaused = !slidePaused; b.textContent = slidePaused ? "Play" : "Pause"; b.setAttribute("aria-pressed", String(slidePaused)); break;
       case "plan": toast(b.dataset.id === "free" ? "You're on the Free plan. Every feature is unlocked in this prototype." : "Payments aren't connected yet, so every feature is unlocked in this prototype."); go("create"); break;
       case "genAI": generateSurvey(($("#genGoal").value || "").trim(), ($("#genAud").value || "").trim(), +$("#genN").value || 10); break;
       case "aiCheck": runAiCheck(); break;

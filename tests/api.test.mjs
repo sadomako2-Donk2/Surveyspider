@@ -131,8 +131,17 @@ const lib = await fetch(base + "/vendor/exceljs.min.js");
 check("browser libraries are served from this site", lib.status === 200 && /javascript/.test(lib.headers.get("content-type")) && (await lib.arrayBuffer()).byteLength > 100000 && (await fetch(base + "/vendor/pdf.worker.min.js")).status === 200);
 check("only listed library files are served", (await fetch(base + "/vendor/README.md")).status !== 200 && (await fetch(base + "/vendor/..%2Fserver.mjs")).status !== 200);
 check("health check responds", (await A.call("GET", "/healthz")).status === 200);
-const pic = await fetch(base + "/photos/home.webp");
+const pic = await fetch(base + "/photos/p01-homepage-collaboration.webp");
 check("website photos are served", pic.status === 200 && pic.headers.get("content-type") === "image/webp" && (await pic.arrayBuffer()).byteLength > 1000);
+{
+  // Every image the pages use is served, with its phone-sized copy where one is declared; reference-only images are never published.
+  const page = await (await fetch(base + "/")).text();
+  const used = [...page.matchAll(/\["([a-z0-9-]+\.webp)", "[^"]*", "[^"]*", "([^"]*)"(, true)?\]/g)];
+  const missing = [];
+  for (const [, f, , small] of used) { if ((await fetch(base + "/photos/" + f)).status !== 200) missing.push(f); if (small && (await fetch(base + "/photos/" + f.replace(".webp", "-640.webp"))).status !== 200) missing.push(f + " (640)"); }
+  check("every photo the pages list is served" + (missing.length ? ": missing " + missing.join(", ") : ""), used.length >= 10 && missing.length === 0);
+  check("reference-only images (P08, P10) are never published", !/p08-|p10-/.test(page) && (await fetch(base + "/photos/p08-generated-business-district.webp")).status !== 200 && (await fetch(base + "/photos/p10-executive-group-portrait.webp")).status !== 200);
+}
 check("only listed photos are served (no other files)", (await fetch(base + "/photos/..%2Fserver.mjs")).status !== 200 && (await fetch(base + "/photos/missing.webp")).status !== 200);
 const anonA = (await A.call("GET", "/api/me")).json;
 check("visitors start signed out", anonA.user === null && /^c_/.test(anonA.uid));
