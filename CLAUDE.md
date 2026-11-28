@@ -24,4 +24,5 @@ Phase 1: a single Node.js service (`server.mjs`) plus a single-page front end (`
 - `npm test` — 20 statistics checks + 147 API checks. Must pass before pushing.
 - `npm start` — runs on port 10000.
 - `npm run pages` (with `npm start` running) — re-lists the public pages in `public/pages.json` for the sitemap and each page's title, description and social preview. Run it after adding or renaming public pages (courses, services, articles).
+- Our people (`/about/team`): profile data is `PEOPLE` and `LEADERSHIP` in `index.html` (fields explained above `PEOPLE`); mapping and confirmation status in `docs/people-mapping.md`. Never infer seniority, employment, ownership or authority from a bio; keep confirmed titles until a change is approved.
 - Public pages have real addresses (`/training/course/x`); app pages keep `#addresses`. `CLEAN` in `index.html` and `PUBLIC_SECTIONS` in `server.mjs` list the public sections: change both together.

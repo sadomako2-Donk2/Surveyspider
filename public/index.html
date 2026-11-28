@@ -669,6 +669,9 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
 .audience-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
 .audience { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
 .audience b { display: block; margin-bottom: 4px; }
+.person-meta { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
+.person-meta .pill { font-size: 0.72rem; }
+.people-filter { gap: 8px; }
 </style>
 
 <header class="topbar gutter">
@@ -3188,51 +3191,67 @@ ${richSummary(st, rows)}`;
       <section class="card statement"><p>${esc(AB_VISION)}</p></section></div></div>
       <section class="card"><h2>How we get there</h2><ul class="ticks small"><li><div><b>Data</b><span>Reliable analysis and intelligence through our Data &amp; Intelligence practice.</span></div></li><li><div><b>Evidence</b><span>Credible research, surveys and evaluations through our Research &amp; Evaluation practice.</span></div></li><li><div><b>Advice</b><span>Evidence-based policy, strategy and investment advice through our Strategy &amp; Advisory practice.</span></div></li><li><div><b>Skills</b><span>Practical programmes for leaders and teams through our Executive Education practice.</span></div></li><li><div><b>Tools</b><span>Survey and data tools through our Digital Solutions practice.</span></div></li><li><div><b>Knowledge</b><span>Free guides and resources for everyone through Afrimetrica Insights.</span></div></li></ul></section>`;
   }
-  // Team profiles: wording and photos supplied by Afrimetrica (photos shown in black and white).
-  const TEAM = [
-    { id: "veselina-stoyanova", name: "Veselina Stoyanova, PhD", role: "Corporate Strategy Consultant", photo: "team-veselina-stoyanova.webp",
+  // ================= OUR PEOPLE: profile data (the site's content model for people) =================
+  // Wording and photos are supplied and approved by Afrimetrica; photos are shown in black and white.
+  // Fields:
+  //   title        the title Afrimetrica has confirmed (shown as is; see docs/people-mapping.md for proposed changes)
+  //   group        leadership | directors | professional | fellows | network (the section the person appears in)
+  //   affiliation  permanent (employed by Afrimetrica) | project (engaged project by project) | visiting (visiting faculty/fellow)
+  //   practices    confirmed practice ids only (data-intelligence, research-evaluation, strategy-advisory,
+  //                executive-education, digital-solutions); leave empty until confirmed. Drives the practice filter.
+  //   photo        file in public/photos ("" shows initials)
+  // Never infer seniority, employment status, ownership or authority from a biography: set these only when confirmed.
+  // Equity arrangements are never shown.
+  const PEOPLE = [
+    { id: "veselina-stoyanova", name: "Veselina Stoyanova, PhD", title: "Corporate Strategy Consultant", group: "network", affiliation: "project", practices: [], photo: "team-veselina-stoyanova.webp",
       bio: "Veselina Stoyanova, PhD, is a Corporate Strategy Consultant at Afrimetrica and Associate Professor at the University of Birmingham. She specialises in strategic transformation, organisational capabilities, sustainability, stakeholder engagement and international business. Her expertise combines academic research with practical consulting to help organisations navigate complexity, strengthen competitiveness and deliver sustainable growth." },
-    { id: "hayford-amegbe", name: "Hayford Amegbe, PhD", role: "Consultant, Marketing Analytics", photo: "team-hayford-amegbe.webp",
+    { id: "hayford-amegbe", name: "Hayford Amegbe, PhD", title: "Consultant, Marketing Analytics", group: "network", affiliation: "project", practices: [], photo: "team-hayford-amegbe.webp",
       bio: "Hayford Amegbe, PhD, is a Marketing Analytics Consultant at Afrimetrica and Associate Professor at Rabat Business School. He specialises in customer loyalty and satisfaction, branding, technology adoption, social media, SMEs and entrepreneurship. He holds a PhD in Marketing from Durban University of Technology, South Africa, and an MBA from Maastricht School of Management, and his research has been published in international journals including Technological Forecasting and Social Change and the International Journal of Bank Marketing." },
-    { id: "samuel-adomako", name: "Samuel Adomako, PhD", role: "Consultant, Data Analytics", photo: "team-samuel-adomako.webp",
+    { id: "samuel-adomako", name: "Samuel Adomako, PhD", title: "Consultant, Data Analytics", group: "network", affiliation: "project", practices: [], photo: "team-samuel-adomako.webp",
       bio: "Samuel Adomako, PhD, is a Data Analytics Consultant at Afrimetrica and Professor of Entrepreneurship and Innovation at Birmingham Business School, University of Birmingham. His research on entrepreneurship, innovation and sustainability in African and emerging economies has over 11,200 citations, and he was recognised among the world's top 2% of scientists in 2022–2026. He holds a PhD in Entrepreneurship and Innovation from Warwick Business School, University of Warwick, UK." },
-    { id: "irene-chu", name: "Irene Chu, PhD", role: "Consultant, Corporate ESG and Sustainability", photo: "team-irene-chu.webp",
+    { id: "irene-chu", name: "Irene Chu, PhD", title: "Consultant, Corporate ESG and Sustainability", group: "network", affiliation: "project", practices: [], photo: "team-irene-chu.webp",
       bio: "Irene Chu, PhD, is a Corporate ESG and Sustainability Consultant at Afrimetrica, where she advises and trains corporate clients on ESG, sustainability and ethics. She is Senior Lecturer in International Management at Newcastle University Business School and Associate Editor of Business Strategy and the Environment, and her research appears in journals including the Journal of Business Ethics." },
-    { id: "mujtaba-ahsan", name: "Mujtaba Ahsan, PhD", role: "Consultant, AI and Data Science", photo: "team-mujtaba-ahsan.webp",
+    { id: "mujtaba-ahsan", name: "Mujtaba Ahsan, PhD", title: "Consultant, AI and Data Science", group: "network", affiliation: "project", practices: [], photo: "team-mujtaba-ahsan.webp",
       bio: "Mujtaba Ahsan, PhD, is an AI and Data Science Consultant at Afrimetrica and Professor of Management at the Fowler College of Business, San Diego State University. His research on entrepreneurship, international business and innovation appears in journals including the Academy of Management Review and Entrepreneurship Theory and Practice. He holds a PhD in Management from the University of Wisconsin-Milwaukee." },
-    { id: "emmanuel-amoah", name: "Emmanuel Amoah, MBA, ACCA", role: "Consultant, Route to Market", photo: "",
+    { id: "emmanuel-amoah", name: "Emmanuel Amoah, MBA, ACCA", title: "Consultant, Route to Market", group: "network", affiliation: "project", practices: [], photo: "",
       bio: "Emmanuel Amoah, MBA, ACCA, is a Route to Market Consultant at Afrimetrica with over 20 years' experience in multinational corporations across Africa, including Coca-Cola and Promasidor. He advises companies on their route to market and has trained more than 1,000 delegates in route-to-market strategy and market surveys." },
-    { id: "stephen-kehinde-medase", name: "Stephen Kehinde Medase, PhD", role: "Analyst, Market Intelligence", photo: "team-stephen-kehinde-medase.webp",
+    { id: "stephen-kehinde-medase", name: "Stephen Kehinde Medase, PhD", title: "Analyst, Market Intelligence", group: "network", affiliation: "project", practices: [], photo: "team-stephen-kehinde-medase.webp",
       bio: "Stephen Kehinde Medase, PhD, is a Market Intelligence Analyst at Afrimetrica and Senior Research Associate at the University of Johannesburg. He holds an MSc and PhD from Friedrich Schiller University Jena, Germany, and researches entrepreneurship, innovation and firm growth, publishing in journals including the Journal of Innovation & Knowledge." },
   ];
-  // Leadership roles (partner-led model, approved by Afrimetrica). Shown as role cards until a name is added; then a full profile.
+  // Leadership roles in the partner-led model (titles approved by Afrimetrica, 28 November 2026). Each shows as a role
+  // card until a name is added (then a full profile). SHOW_VACANT_ROLES = false hides roles without a confirmed name.
+  const SHOW_VACANT_ROLES = true;
   const LEADERSHIP = [
-    { role: "Managing Partner", abbr: "MP", group: "leadership", name: "", photo: "", bio: "" },
-    { role: "Partner, Data & Intelligence", abbr: "D&I", group: "leadership", name: "", photo: "", bio: "" },
-    { role: "Partner, Research & Evaluation", abbr: "R&E", group: "leadership", name: "", photo: "", bio: "" },
-    { role: "Partner, Strategy & Advisory", abbr: "S&A", group: "leadership", name: "", photo: "", bio: "" },
-    { role: "Director, Executive Education", abbr: "EE", group: "directors", name: "", photo: "", bio: "" },
-    { role: "Director, Digital Solutions", abbr: "DS", group: "directors", name: "", photo: "", bio: "" },
+    { role: "Managing Partner", abbr: "MP", group: "leadership", name: "", photo: "", bio: "", practices: [] },
+    { role: "Partner, Data & Intelligence", abbr: "D&I", group: "leadership", name: "", photo: "", bio: "", practices: ["data-intelligence"] },
+    { role: "Partner, Research & Evaluation", abbr: "R&E", group: "leadership", name: "", photo: "", bio: "", practices: ["research-evaluation"] },
+    { role: "Partner, Strategy & Advisory", abbr: "S&A", group: "leadership", name: "", photo: "", bio: "", practices: ["strategy-advisory"] },
+    { role: "Director, Executive Education", abbr: "EE", group: "directors", name: "", photo: "", bio: "", practices: ["executive-education"] },
+    { role: "Director, Digital Solutions", abbr: "DS", group: "directors", name: "", photo: "", bio: "", practices: ["digital-solutions"] },
   ];
-  // Without a photo yet, a profile shows the person's initials.
-  const initials = (n) => n.split(",")[0].split(/\s+/).filter(Boolean).map((w) => w[0]).slice(0, 2).join("").toUpperCase();
-  const teamCard = (t) => `<article class="person" id="team-${t.id}">${t.photo ? `<img src="/photos/${t.photo}" alt="Portrait of ${esc(t.name.split(",")[0])}" width="150" height="150" loading="lazy" decoding="async">` : `<div class="person-initials" aria-hidden="true">${esc(initials(t.name))}</div>`}<div><h3>${esc(t.name)}</h3><p class="person-role">${esc(t.role)}</p><p class="muted">${esc(t.bio)}</p></div></article>`;
-  // Our people: categories from the target operating model. A category is shown only when it has confirmed members.
-  // Everyone in TEAM is currently a project-based specialist ("ad hoc consultants"), so they sit in the Expert network;
-  // move a person by setting their group once their affiliation is confirmed. Titles are kept as confirmed by Afrimetrica.
   const PEOPLE_GROUPS = [
     ["leadership", "Leadership & Partners", "The partners who lead the firm and its practices."],
     ["directors", "Practice Directors", "The directors who lead Executive Education and Digital Solutions."],
-    ["professional", "Professional Team", "Researchers, data scientists, consultants and analysts employed by Afrimetrica."],
-    ["fellows", "Fellows & Faculty", "Research fellows and executive faculty who contribute to our research and programmes."],
+    ["professional", "Professional Team", "Researchers, economists, data scientists, consultants and analysts employed by Afrimetrica."],
+    ["fellows", "Fellows & Faculty", "Research fellows and visiting faculty who contribute to our research and programmes."],
     ["network", "Expert Network", "Specialists and academics who work with Afrimetrica on a project basis."],
   ];
-  const peopleGroup = (t) => t.group || "network";
+  const AFFILIATION = { permanent: "Afrimetrica staff", project: "Project-based expert", visiting: "Visiting faculty" };
+  // Without a photo yet, a profile shows the person's initials.
+  const initials = (n) => n.split(",")[0].split(/\s+/).filter(Boolean).map((w) => w[0]).slice(0, 2).join("").toUpperCase();
+  const personName = (n) => n.split(",")[0];
+  const teamCard = (t) => `<article class="person" id="team-${t.id}">${t.photo ? `<img src="/photos/${t.photo}" alt="Portrait of ${esc(personName(t.name))}" width="150" height="150" loading="lazy" decoding="async">` : `<div class="person-initials" aria-hidden="true">${esc(initials(t.name))}</div>`}<div><h3>${esc(t.name)}</h3><p class="person-role">${esc(t.title)}</p>${t.affiliation || (t.practices || []).length ? `<p class="person-meta">${t.affiliation ? `<span class="pill">${esc(AFFILIATION[t.affiliation] || "")}</span>` : ""}${(t.practices || []).map((id) => practice(id)).filter(Boolean).map((x) => `<a class="pill" href="#practices/${x.id}">${esc(x.name)}</a>`).join("")}</p>` : ""}<p class="muted">${esc(t.bio)}</p></div></article>`;
+  const roleCard = (t) => `<article class="leader-role"><div class="person-initials" aria-hidden="true">${esc(t.abbr)}</div><h3>${esc(t.role)}</h3></article>`;
   function abTeam() {
-    const people = [...LEADERSHIP.map((l) => ({ ...l, id: l.name ? slug(l.name) : slug(l.role) })), ...TEAM];
-    const card = (t) => (t.name ? teamCard(t) : `<article class="leader-role"><div class="person-initials" aria-hidden="true">${esc(t.abbr)}</div><h3>${esc(t.role)}</h3></article>`);
+    const all = [...LEADERSHIP.filter((l) => l.name || SHOW_VACANT_ROLES).map((l) => ({ ...l, id: l.name ? slug(l.name) : slug(l.role), title: l.role, affiliation: l.name ? l.affiliation : "" })), ...PEOPLE];
+    // Practice filter: offered only when confirmed practices cover at least two practices among named people.
+    const named = all.filter((t) => t.name), used = PRACTICES.filter((x) => named.some((t) => (t.practices || []).includes(x.id)));
+    const f = used.some((x) => x.id === S.peopleFilter) ? S.peopleFilter : "";
+    const shown = f ? all.filter((t) => (t.practices || []).includes(f)) : all;
+    const filter = used.length >= 2 ? `<div class="row wrap people-filter" role="group" aria-label="Filter by practice"><button type="button" class="btn small${f ? "" : " primary"}" data-act="peopleFilter" data-v="" aria-pressed="${!f}">Everyone</button>${used.map((x) => `<button type="button" class="btn small${f === x.id ? " primary" : ""}" data-act="peopleFilter" data-v="${x.id}" aria-pressed="${f === x.id}">${esc(x.name)}</button>`).join("")}</div>` : "";
     return `${abCrumbs("Our people")}<div class="page-head"><div><span class="eyebrow gold">Our people</span><h1>Our people</h1><p class="muted" style="max-width:70ch">The specialists who deliver Afrimetrica's research, analysis, advice and teaching, supported by an expert network of specialists and field staff across Africa.</p></div></div>
-      ${PEOPLE_GROUPS.map(([g, title, intro]) => { const list = people.filter((t) => peopleGroup(t) === g); return list.length ? `<section class="stack" aria-labelledby="pg-${g}"><div class="section-head"><h2 id="pg-${g}">${esc(title)}</h2><p class="muted">${esc(intro)}</p></div><div class="${list.some((t) => t.name) ? "team-grid" : "leader-grid"}">${list.map(card).join("")}</div></section>` : ""; }).join("")}
+      ${filter}
+      ${PEOPLE_GROUPS.map(([g, title, intro]) => { const list = shown.filter((t) => (t.group || "network") === g); return list.length ? `<section class="stack" aria-labelledby="pg-${g}"><div class="section-head"><h2 id="pg-${g}">${esc(title)}</h2><p class="muted">${esc(intro)}</p></div><div class="${list.some((t) => t.name) ? "team-grid" : "leader-grid"}">${list.map((t) => (t.name ? teamCard(t) : roleCard(t))).join("")}</div></section>` : ""; }).join("")}
       <section class="card"><h2>Join us</h2><p class="muted">We work with independent researchers, analysts, advisers, trainers, enumerators and field supervisors.</p><div class="row wrap"><a class="btn primary" href="#consultancy/work-with-us">Join our expert network</a><a class="btn" href="#contact/careers">Careers</a></div></section>`;
   }
   function abOrganisation() {
@@ -4731,6 +4750,7 @@ ${richSummary(st, rows)}`;
       case "closeGuide": S.guideOpen = null; render(); window.scrollTo(0, 0); break;
       case "openCourse": S.courseOpen = id; S.regFor = null; if (S.view !== "training") go("training"); else { render(); window.scrollTo(0, 0); } break;
       case "closeCourse": S.courseOpen = null; S.regFor = null; render(); window.scrollTo(0, 0); break;
+      case "peopleFilter": S.peopleFilter = b.dataset.v; render(); break;
       case "catVenue": S.catFilter.venue = b.dataset.v; S.catPage = 1; location.hash = "training/finder"; break;
       case "catPage": S.catPage = Math.max(1, +b.dataset.p || 1); $("#catList").innerHTML = finderResults(); $("#catList").scrollIntoView({ block: "start" }); break;
       case "catReset": S.catFilter = { q: "", group: "", sub: "", venue: "", format: "", days: "" }; S.catPage = 1; render(); break;
