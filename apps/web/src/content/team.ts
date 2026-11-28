@@ -51,6 +51,13 @@ export const TEAM: TeamMember[] = [
     role: "Consultant, Route to Market",
     bio: "Emmanuel Amoah, MBA, ACCA, is a Route to Market Consultant at Afrimetrica with over 20 years' experience in multinational corporations across Africa, including Coca-Cola and Promasidor. He advises companies on their route to market and has trained more than 1,000 delegates in route-to-market strategy and market surveys.",
   },
+  {
+    id: "stephen-kehinde-medase",
+    name: "Stephen Kehinde Medase, PhD",
+    role: "Analyst",
+    photo: "stephen-kehinde-medase.webp",
+    bio: "Stephen Kehinde Medase, PhD, is an Analyst at Afrimetrica and Senior Research Associate at the University of Johannesburg. He holds an MSc and PhD from Friedrich Schiller University Jena, Germany, and researches entrepreneurship, innovation and firm growth, publishing in journals including the Journal of Innovation & Knowledge.",
+  },
 ];
 
 /** "Emmanuel Amoah, MBA" -> "EA" */
