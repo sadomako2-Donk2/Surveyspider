@@ -670,10 +670,7 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
 /* Leadership profiles: the biography appears when the pointer is over the profile or it has keyboard focus.
    On touch screens (no hover) it is always shown. It stays in the page for screen readers. */
 .person.reveal:focus-visible { outline: 3px solid var(--focus, var(--gold)); outline-offset: 3px; }
-.reveal-hint { display: none; margin: 0 0 6px; font-size: .82rem; color: var(--muted); }
 @media (hover: hover) {
-  .reveal-hint { display: block; }
-  .person.reveal:hover .reveal-hint, .person.reveal:focus-within .reveal-hint { display: none; }
   .person.reveal .person-bio { max-height: 0; opacity: 0; overflow: hidden; transition: max-height .35s ease, opacity .3s ease; }
   .person.reveal:hover .person-bio, .person.reveal:focus-within .person-bio { max-height: 20em; opacity: 1; }
 }
@@ -3380,7 +3377,7 @@ ${richSummary(st, rows)}`;
   const personName = (n) => n.split(",")[0];
   // Leadership and director profiles show their biography on hover or keyboard focus (always on touch screens).
   const revealBio = (t) => t.group === "leadership" || t.group === "directors";
-  const teamCard = (t) => `<article class="person${revealBio(t) ? " reveal" : ""}" id="team-${t.id}"${revealBio(t) ? ' tabindex="0"' : ""}>${t.photo ? `<img src="/photos/${t.photo}" alt="Portrait of ${esc(personName(t.name))}" width="150" height="150" loading="lazy" decoding="async">` : `<div class="person-initials" aria-hidden="true">${esc(initials(t.name))}</div>`}<div><h3>${esc(t.name)}</h3><p class="person-role">${esc(t.title)}</p>${revealBio(t) ? '<p class="reveal-hint" aria-hidden="true">Hover to read more</p>' : ""}${t.affiliation || (t.practices || []).length ? `<p class="person-meta">${t.affiliation ? `<span class="pill">${esc(AFFILIATION[t.affiliation] || "")}</span>` : ""}${(t.practices || []).map((id) => practice(id)).filter(Boolean).map((x) => `<a class="pill" href="#practices/${x.id}">${esc(x.name)}</a>`).join("")}</p>` : ""}<p class="muted person-bio">${esc(t.bio)}</p></div></article>`;
+  const teamCard = (t) => `<article class="person${revealBio(t) ? " reveal" : ""}" id="team-${t.id}"${revealBio(t) ? ' tabindex="0"' : ""}>${t.photo ? `<img src="/photos/${t.photo}" alt="Portrait of ${esc(personName(t.name))}" width="150" height="150" loading="lazy" decoding="async">` : `<div class="person-initials" aria-hidden="true">${esc(initials(t.name))}</div>`}<div><h3>${esc(t.name)}</h3><p class="person-role">${esc(t.title)}</p>${t.affiliation || (t.practices || []).length ? `<p class="person-meta">${t.affiliation ? `<span class="pill">${esc(AFFILIATION[t.affiliation] || "")}</span>` : ""}${(t.practices || []).map((id) => practice(id)).filter(Boolean).map((x) => `<a class="pill" href="#practices/${x.id}">${esc(x.name)}</a>`).join("")}</p>` : ""}<p class="muted person-bio">${esc(t.bio)}</p></div></article>`;
   const roleCard = (t) => `<article class="leader-role"><div class="person-initials" aria-hidden="true">${esc(t.abbr)}</div><h3>${esc(t.role)}</h3></article>`;
   function abTeam() {
     const all = [...LEADERSHIP.filter((l) => l.name || SHOW_VACANT_ROLES).map((l) => ({ ...l, id: l.name ? slug(personName(l.name)) : slug(l.role), title: l.role, affiliation: l.name ? l.affiliation : "" })), ...PEOPLE];
