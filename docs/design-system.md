@@ -33,7 +33,7 @@ Built from the existing brand: the Afrimetrica logo (sun mark and wordmark, upda
 | Contact call to action | `.band` with `.band-item` links | Home, Our practices |
 | Enquiry form | `enquiryForm(type, options)` | Contact, practices, services, courses, press, testimonials |
 | Section menu | `subLinks()`, `.subnav` | Every section |
-| Photo | `pic()`, `introMedia()`, `sidePhoto()` | Page introductions and sections |
+| Photo | `pic()`, `slideshow()`, `introMedia()`, `sidePhoto()` | Page introductions and sections |
 
 ## Accessibility (WCAG 2.2 AA)
 
@@ -46,7 +46,7 @@ Built from the existing brand: the Afrimetrica logo (sun mark and wordmark, upda
 
 ## Imagery
 
-Real photography first; AI illustrations only as captioned fallbacks ("Illustrative image"); About uses real photos only. One image per section, text and image side by side (about 50/50) on desktop, text first on small screens. No slideshows or image overlays. The full manifest, rights status and the steps for swapping in licensed photos are in `docs/imagery.md`; each photo's status is also in `PHOTO` (`public/index.html`).
+Real photography first; AI illustrations only as captioned fallbacks ("Illustrative image"); About uses real photos only. One image per section, text and image side by side (about 50/50) on desktop, text first on small screens. Image slots are slideshows (owner's request) with a Pause button; About and Contact use real photos only. No image overlays. The full manifest, rights status and the steps for swapping in licensed photos are in `docs/imagery.md`; each photo's status is also in `PHOTO` (`public/index.html`).
 
 No charts implying real data. The practices diagram shows how the practices connect, not figures; product screenshots are labelled as sample data.
 

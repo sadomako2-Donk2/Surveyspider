@@ -8,7 +8,7 @@ Rules followed:
 - No image shows or implies Afrimetrica staff, clients, participants, projects or offices. No alt text names anyone.
 - Each image appears on one page, except P05, which is used on two pages of the same practice (Research & Evaluation and its Fieldwork service).
 - Desktop: text and image side by side, about 50/50, 4:3 images. Under 860 px: text first, then the image (16:10).
-- No slideshows, overlays or animation.
+- Slideshows (owner's request): each page's image slot cycles through the photos every 5 seconds, starting with that page's own picture. There is a Pause button; it starts paused for people who ask for reduced motion; only the photo on show is downloaded with the page. About and Contact cycle through real photos only. Screenshots (Digital Solutions, Surveys) stay still. No overlays.
 
 ## Manifest
 
@@ -29,6 +29,7 @@ Rules followed:
 | `/practices/digital-solutions` | Practice intro | `screen-builder.webp` | Screenshot of Afrimetrica Surveys with sample data | Real product screenshot |
 | `/surveys` | Below the hero (was slideshow) | `screen-results.webp` | Screenshot of Afrimetrica Surveys with sample data | Real product screenshot |
 | `/training` | Executive and in-house training | `training-executive.webp` | Supplied by Afrimetrica | Real photo; licence to confirm (unchanged; slideshow removed) |
+| `/contact` | Contact intro (slideshow, real photos only) | `venues-city.webp` (Kwame Nkrumah Memorial Park, Accra) first | Supplied by Afrimetrica | Real photo; licence to confirm; also on Training venues, at the owner's request |
 | `/training/venues` | Venues intro | `venues-city.webp` | Supplied by Afrimetrica | Real photo; licence to confirm (unchanged) |
 | `/consultancy` | Sectors | `consultancy-workshop.webp` | Supplied by Afrimetrica | Real photo; licence to confirm (slideshow and card photo removed) |
 

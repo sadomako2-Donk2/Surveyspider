@@ -512,7 +512,20 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
 .hero-photo, .intro-photo { margin: 0; display: grid; gap: 6px; }
 .hero-photo img, .intro-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius-l, 18px); display: block; background: var(--surface); box-shadow: var(--shadow-1, 0 1px 3px rgba(14,29,58,.12)); }
 .img-note { font-size: .75rem; color: var(--muted); }
-@media (max-width: 860px) { .intro-media, .hero-media { grid-template-columns: 1fr; } .hero-photo img, .intro-photo img { aspect-ratio: 16 / 10; } }
+.slide-note:empty { display: none; }
+.slide-box { position: relative; overflow: hidden; border-radius: var(--radius-l, 18px); aspect-ratio: 4 / 3; background: var(--surface); box-shadow: var(--shadow-1, 0 1px 3px rgba(14,29,58,.12)); }
+.slideshow .slides { display: flex; height: 100%; transition: transform .8s ease; }
+.slideshow .slide { flex: 0 0 100%; height: 100%; }
+.hero-photo.slideshow .slide img, .intro-photo.slideshow .slide img { width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; display: block; border-radius: 0; box-shadow: none; }
+.slide-ctl { position: absolute; left: 50%; transform: translateX(-50%); bottom: 10px; display: flex; align-items: center; gap: 0; background: rgba(14,29,58,.62); border-radius: 999px; padding: 3px 8px 3px 3px; width: max-content; max-width: calc(100% - 16px); }
+.slide-ctl button { border: 0; cursor: pointer; }
+.slide-dot { width: 24px; height: 24px; border-radius: 50%; background: transparent; display: grid; place-items: center; padding: 0; }
+.slide-dot::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.65); }
+.slide-dot[aria-current="true"]::before { background: var(--gold-hi); width: 11px; height: 11px; }
+.slide-play { background: rgba(255,255,255,.16); color: #fff; border-radius: 999px; padding: 4px 11px; font: 600 .78rem var(--font-body); margin-right: 4px; }
+.slide-ctl button:focus-visible { outline: 3px solid var(--gold-hi); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .slideshow .slides { transition: none; } }
+@media (max-width: 860px) { .intro-media, .hero-media { grid-template-columns: 1fr; } .hero-photo img, .intro-photo img, .slide-box { aspect-ratio: 16 / 10; } }
 .photo-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .photo-pair .photo-frame { aspect-ratio: 4 / 3; }
 @media (max-width: 700px) { .photo-frame { aspect-ratio: 4 / 3; } .photo-pair { grid-template-columns: 1fr; } }
@@ -3076,7 +3089,44 @@ ${richSummary(st, rows)}`;
   };
   const sidePhoto = (k, cls) => pic(k, cls);
   // A page introduction with its image: text on the left, image on the right; text first on small screens.
-  const introMedia = (head, k) => `<div class="intro-media">${head}${pic(k, "intro-photo", true)}</div>`;
+  // Slideshows in each page's image slot: the page's own picture first, then the others in a fixed order.
+  // About and Contact show real photographs only (no AI illustrations, no screenshots).
+  const SLIDES_ALL = ["hero", "execEd", "dataIntel", "research", "advisory", "about", "venuesCity", "trainingExec", "analyticsTeam", "coWorkshop"];
+  const SLIDES_REAL = ["about", "venuesCity", "trainingExec", "analyticsTeam", "coWorkshop"];
+  const slideNote = (k) => { const r = PHOTO[k][3]; return r.startsWith("AI") ? "Illustrative image" : r.startsWith("Screenshot") ? "Afrimetrica Surveys, shown with sample data" : ""; };
+  let slideOrder = [], slideIdx = 0, slideFirst = "", slidePaused = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+  const slideshow = (k, cls = "intro-photo", realOnly = false) => {
+    const order = [k, ...(realOnly ? SLIDES_REAL : SLIDES_ALL).filter((x) => x !== k)];
+    if (k !== slideFirst) { slideFirst = k; slideIdx = 0; }
+    slideOrder = order;
+    const slides = order.map((x, i) => {
+      const [f, alt, pos, , small] = PHOTO[x], src = `/photos/${f}`, on = i === slideIdx;
+      const set = small ? ` ${on ? "srcset" : "data-srcset"}="${src.replace(".webp", "-640.webp")} 640w, ${src} 1200w" sizes="(max-width: 860px) calc(100vw - 32px), 600px"` : "";
+      return `<div class="slide" role="group" aria-roledescription="slide" aria-label="${i + 1} of ${order.length}"${on ? "" : ' aria-hidden="true"'}><img ${on ? "src" : "data-src"}="${src}"${set} alt="${esc(alt)}" decoding="async"${i === 0 ? ' fetchpriority="high"' : ""} style="object-position:${pos}"></div>`;
+    }).join("");
+    return `<figure class="${cls} slideshow" aria-roledescription="carousel" aria-label="Photos"><div class="slide-box"><div class="slides" style="transform:translateX(-${slideIdx * 100}%)">${slides}</div>
+      <div class="slide-ctl"><button class="slide-play" data-act="slidePause" aria-pressed="${slidePaused}">${slidePaused ? "Play" : "Pause"}</button>${order.map((_, i) => `<button class="slide-dot" data-act="slideGo" data-i="${i}" aria-label="Show photo ${i + 1}"${i === slideIdx ? ' aria-current="true"' : ""}></button>`).join("")}</div></div>
+      <figcaption class="img-note slide-note">${slideNote(order[slideIdx])}</figcaption></figure>`;
+  };
+  // Only the photo on show is downloaded with the page; the next one is fetched shortly before its turn.
+  function loadSlide(j) {
+    const imgs = document.querySelectorAll(".slideshow .slide img"), img = imgs[(j + imgs.length) % (imgs.length || 1)];
+    if (img && img.dataset.src) { if (img.dataset.srcset) { img.srcset = img.dataset.srcset; img.removeAttribute("data-srcset"); } img.src = img.dataset.src; img.removeAttribute("data-src"); }
+  }
+  function showSlide(i) {
+    const box = document.querySelector(".slideshow"); if (!box || !slideOrder.length) return;
+    slideIdx = (i + slideOrder.length) % slideOrder.length;
+    loadSlide(slideIdx); loadSlide(slideIdx + 1);
+    box.querySelector(".slides").style.transform = `translateX(-${slideIdx * 100}%)`;
+    box.querySelectorAll(".slide").forEach((s, j) => (j === slideIdx ? s.removeAttribute("aria-hidden") : s.setAttribute("aria-hidden", "true")));
+    box.querySelectorAll(".slide-dot").forEach((d, j) => (j === slideIdx ? d.setAttribute("aria-current", "true") : d.removeAttribute("aria-current")));
+    box.querySelector(".slide-note").textContent = slideNote(slideOrder[slideIdx]);
+  }
+  setInterval(() => { if (!slidePaused && !document.hidden && document.querySelector(".slideshow")) showSlide(slideIdx + 1); }, 5000);
+  new MutationObserver(() => { if (document.querySelector(".slideshow img[data-src]")) setTimeout(() => loadSlide(slideIdx + 1), 2500); }).observe(document.getElementById("main"), { childList: true });
+  // A page introduction with its image: text on the left, image on the right; text first on small screens.
+  // Screenshots stay still; photos become a slideshow.
+  const introMedia = (head, k, realOnly = false) => `<div class="intro-media">${head}${PHOTO[k][3].startsWith("Screenshot") ? pic(k, "intro-photo", true) : slideshow(k, "intro-photo", realOnly)}</div>`;
   const AUDIENCES = [
     ["Governments and public institutions", "Policy research, evaluations, data systems and training for ministries, agencies and local government."],
     ["Businesses and investors", "Market intelligence, feasibility studies, analytics and executive programmes."],
@@ -3172,7 +3222,7 @@ ${richSummary(st, rows)}`;
         <p class="lede">An independent, Africa-focused professional services firm specialising in data intelligence, research, strategic advisory and executive education, supported by digital solutions. We help governments, businesses, development institutions and civil society organisations generate credible evidence and make better decisions across Africa.</p>
         <div class="hero-ctas"><a class="btn gold big" href="#practices">Explore our practices</a><a class="btn primary big" href="#training">Executive Education</a><a class="btn big" href="#contact">Discuss a project</a></div>
       </div>
-      ${pic("hero", "hero-photo", true)}
+      ${slideshow("hero", "hero-photo")}
     </section>
     <section class="stack">
       <div class="section-head"><span class="eyebrow gold">What We Do</span><h2 class="h2xl">Five practices, one firm</h2></div>
@@ -3213,7 +3263,7 @@ ${richSummary(st, rows)}`;
   const abValues = () => `<ul class="ticks small">${AB_VALUES.map(([t, d]) => `<li><div><b>${esc(t)}</b><span>${esc(d)}</span></div></li>`).join("")}</ul>`;
   function abOverview() {
     return `<div class="intro-media"><div class="stack"><div class="page-head"><div><span class="eyebrow gold">About Afrimetrica</span><h1>An independent, Africa-focused professional services firm</h1><p class="muted" style="max-width:70ch">Afrimetrica is an independent, multidisciplinary professional services firm specialising in data intelligence, research, strategic advisory and executive education, supported by digital solutions.</p></div></div>
-      <section class="prose stack" style="gap:12px"><p>We work with governments, businesses, development institutions and civil society organisations to generate credible evidence, solve complex problems, strengthen institutional capabilities and enable better decisions across Africa.</p><p>Through our five practices and our network of researchers, analysts, advisers and executive faculty, we combine analytical rigour, practical tools and knowledge of the contexts our clients work in.</p></section></div>${pic("about", "intro-photo", true)}</div>
+      <section class="prose stack" style="gap:12px"><p>We work with governments, businesses, development institutions and civil society organisations to generate credible evidence, solve complex problems, strengthen institutional capabilities and enable better decisions across Africa.</p><p>Through our five practices and our network of researchers, analysts, advisers and executive faculty, we combine analytical rigour, practical tools and knowledge of the contexts our clients work in.</p></section></div>${slideshow("about", "intro-photo", true)}</div>
       
       <section class="stack" aria-labelledby="abPrH"><h2 id="abPrH">What We Do</h2>${practiceCards()}</section>
       <div class="area-grid">${ABOUT_MENU.slice(1).map(([k, label]) => `<a class="card area-card" href="#about/${k}"><b>${esc(label)}</b><span class="hint">${esc({ team: "The specialists behind Afrimetrica", approach: "How we run assignments, check quality and protect data", organisation: "Our five practices and how they fit together", mission: "Why we exist and what we stand for", vision: "The future we are working towards", certificates: "What our certificates of completion mean" }[k])}</span></a>`).join("")}</div>`;
@@ -4487,7 +4537,7 @@ ${richSummary(st, rows)}`;
     const st = S.settings || {}, wa = String(st.whatsapp || "").replace(/[^\d]/g, "");
     const item = (label, val) => `<div class="contact-item"><span class="hint">${label}</span>${val}</div>`;
     const details = [st.email ? item("Email", `<span class="row wrap" style="gap:8px"><b class="sel">${esc(st.email)}</b><button class="btn small ghost" data-act="copyText" data-v="${esc(st.email)}">Copy</button></span>`) : "", st.phone ? item("Phone", `<b class="sel">${esc(st.phone)}</b>`) : "", wa ? item("WhatsApp", `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Message us on WhatsApp</a>`) : "", st.address ? item("Office", `<span class="sel" style="white-space:pre-line">${esc(st.address)}</span>`) : "", st.hours ? item("Hours", esc(st.hours)) : "", st.linkedin ? item("LinkedIn", `<a href="${esc(st.linkedin)}" target="_blank" rel="noopener">Follow Afrimetrica</a>`) : ""].join("");
-    return `<div class="page-head"><div><span class="eyebrow gold">Contact</span><h1>Contact us</h1><p class="muted" style="max-width:66ch">Tell us about your question, project or programme. We reply to every enquiry within two working days and, where it helps, arrange a call to agree the scope.</p></div></div>
+    return `${introMedia(`<div class="page-head"><div><span class="eyebrow gold">Contact</span><h1>Contact us</h1><p class="muted" style="max-width:66ch">Tell us about your question, project or programme. We reply to every enquiry within two working days and, where it helps, arrange a call to agree the scope.</p></div></div>`, "venuesCity", true)}
       <div class="split">
         ${enquiryForm("contact", { title: "Send us a message", subject: true, messageLabel: "Your message" })}
         <section class="card"><h2>Contact details</h2>${details || `<p class="muted">Use the form and we'll reply by email.</p>`}
@@ -4805,6 +4855,8 @@ ${richSummary(st, rows)}`;
       case "regCancel": S.regFor = null; render(); break;
       case "enrCancel": { const x = S.enrollments.find((e2) => e2.id === id); if (x) await save(() => backend.patchPriv("enrollments", x, "cancelled"), "Registration cancelled."); break; }
       case "tplXl": exportSurveyXlsx(draftFromTemplate(b.dataset.key)); break;
+      case "slideGo": showSlide(+b.dataset.i); break;
+      case "slidePause": slidePaused = !slidePaused; b.textContent = slidePaused ? "Play" : "Pause"; b.setAttribute("aria-pressed", String(slidePaused)); break;
       case "copyText": try { await navigator.clipboard.writeText(b.dataset.v); toast("Copied."); } catch (_) { toast("Couldn't copy. Select the text instead."); } break;
       case "resendVerifyAcct": resendVerify(b); break;
       case "admTab": S.admTab = b.dataset.k; S.courseEdit = null; S.confirmDel = null; render(); break;
