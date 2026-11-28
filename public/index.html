@@ -507,7 +507,10 @@ footer { max-width: 1180px; margin: 0 auto; padding-block: 0 40px; color: var(--
 .hero-solo { grid-template-columns: minmax(0, 1fr); max-width: 860px; }
 /* page introductions and the home hero: text and image side by side, about 50/50; stacked text-first on small screens */
 .hero-media { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); padding-block: 8px 4px; }
-.intro-media { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); align-items: center; }
+.intro-media { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); align-items: start; }
+.intro-text { gap: 14px; }
+.intro-text .intro-lead { font-size: 1.12rem; font-weight: 500; line-height: 1.55; color: var(--ink, inherit); }
+.intro-text .ticks { margin: 2px 0; }
 .intro-media .page-head { align-items: flex-start; }
 .hero-photo, .intro-photo { margin: 0; display: grid; gap: 6px; }
 .hero-photo img, .intro-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius-l, 18px); display: block; background: var(--surface); box-shadow: var(--shadow-1, 0 1px 3px rgba(14,29,58,.12)); }
@@ -1158,7 +1161,7 @@ html { scroll-padding-top: calc(var(--header-h, 110px) + 16px); }
     return d.slice(0, 300);
   }
   function setPageMeta() {
-    const h1 = $("#main h1"), lead = $("#main .page-head p, #main .lede, #main .lede-sm");
+    const h1 = $("#main h1"), lead = $("#main .page-head p, #main .intro-lead, #main .lede, #main .lede-sm");
     const heading = h1 ? h1.textContent.replace(/\s+/g, " ").trim() : "";
     document.title = S.view === "home" || !heading ? SITE_TITLE : `${heading} | Afrimetrica`;
     let m = document.querySelector('meta[name="description"]');
@@ -4358,6 +4361,47 @@ ${richSummary(st, rows)}`;
       problem: "Collecting and analysing data should not require several tools, specialist software or weeks of manual work." },
   ];
   const practice = (id) => PRACTICES.find((x) => x.id === id);
+  // The introduction on each practice page: a lead, two short paragraphs, key points and next steps.
+  // Everything here restates what the practice's services and pages already offer; no client names or figures.
+  const PRACTICE_INTRO = {
+    "data-intelligence": {
+      lead: "Most organisations hold more data than they can use. Records sit in different systems, survey results go unanalysed, and figures arrive too late or too unclear to act on.",
+      paras: ["Our analysts take your data from raw files to clear answers. We clean and check it, choose the methods that fit your questions, and report the results in plain language, with tables, charts and dashboards your team can use and defend.",
+        "We work with survey, programme, administrative and market data, both quantitative and qualitative. Before we start, we agree an analysis plan, a timeline and a fixed price."],
+      points: ["Methods chosen to fit your questions", "Results explained in plain language", "Analysis files or code handed over, so the work can be repeated", "Your data used only for your project"],
+      ctas: [["Discuss your data", "prEnquiry"], ["See our services", "prSvcH"]] },
+    "research-evaluation": {
+      lead: "Programmes, policies and investments need evidence that stands up to scrutiny: what is happening, for whom, and whether it is working.",
+      paras: ["We design and run studies from the first question to the final report: research design and sampling, questionnaires and interview guides, online, telephone and face-to-face fieldwork, and independent baseline, mid-term and final evaluations.",
+        "Every study follows the same disciplined path, from inception and design through data collection and analysis to reporting, with ethics, informed consent and daily quality checks built in."],
+      points: ["Designs and sample sizes matched to your questions and budget", "Trained field teams with digital tools and daily quality checks", "Independent evaluations that explain what worked, for whom and why", "Reports and presentations written for decision-makers"],
+      ctas: [["Discuss a study", "prEnquiry"], ["See our services", "prSvcH"]] },
+    "strategy-advisory": {
+      lead: "Leaders face decisions about policy, strategy, organisation and investment where the stakes are high and the evidence is often incomplete.",
+      paras: ["We help leaders frame the decision, gather and weigh the evidence, and choose a course of action. Our work covers policy research and analysis, strategy and organisational development, and feasibility, market and baseline studies.",
+        "Our advisers work alongside our research and data teams, so recommendations rest on evidence rather than opinion and are written so your team can act on them."],
+      points: ["Options set out with the evidence and trade-offs", "Independent, practical advice", "Recommendations sized to your budget and capacity", "Executive programmes to build lasting capability"],
+      ctas: [["Discuss a decision", "prEnquiry"], ["See our services", "prSvcH"]] },
+    "executive-education": {
+      lead: "Teams need practical skills in data, research, leadership and management that they can apply at work straight away.",
+      paras: [() => `We offer ${CATALOGUE.length} courses in ${GROUPS.length} subject areas, from research methods and data analysis to leadership, strategy, finance and governance, taught in the classroom, live online or at your premises.`,
+        "Courses combine short explanations with practice on real cases and participants' own data, in small groups. Participants who attend and complete a course receive a certificate of completion."],
+      points: ["Designed around the decisions your team makes", "Your own cases and data in the exercises", "Classroom, live online or a mix of both"],
+      ctas: [["Find a course", "#training/finder"], ["Go to Executive Education", "#training"]] },
+    "digital-solutions": {
+      lead: "Collecting and analysing data should not require several tools, specialist software or weeks of manual work.",
+      paras: ["Afrimetrica Surveys brings questionnaire building, data collection and analysis together in one platform. Build a questionnaire online or upload one from Word, PDF or Excel, then collect responses online, through our participant panel or face to face with our field teams.",
+        "Built-in analysis covers charts, group comparisons, statistical tests and Excel exports, with AI-assisted question checks and insight reports grounded in your own responses. Answers are visible only to the survey's owner."],
+      points: ["One tool from questionnaire to results", "Online and face-to-face data collection", "Clear plans and prices"],
+      ctas: [["Create a survey", "#create"], ["See plans and prices", "#pricing"]] },
+  };
+  const practiceIntro = (x) => {
+    const t = PRACTICE_INTRO[x.id];
+    const cta = ([label, to], i) => to.startsWith("#") ? `<a class="btn${i ? "" : " primary"}" href="${to}">${esc(label)}</a>` : `<button class="btn${i ? "" : " primary"}" data-act="scrollToId" data-t="${to}">${esc(label)}</button>`;
+    return `<div class="stack intro-text"><div class="page-head"><div><span class="eyebrow gold">What We Do</span><h1>${esc(x.name)}</h1></div></div>
+      <p class="intro-lead">${esc(t.lead)}</p>${t.paras.map((q) => `<p class="muted">${esc(typeof q === "function" ? q() : q)}</p>`).join("")}
+      ${tickList(t.points)}<div class="row wrap">${t.ctas.map(cta).join("")}</div></div>`;
+  };
   // The image beside each practice page's introduction (each image is used on one practice page only).
   const PRACTICE_PHOTO = { "data-intelligence": "dataIntel", "research-evaluation": "research", "strategy-advisory": "advisory", "executive-education": "execEd", "digital-solutions": "shotBuilder" };
   // Which practice each consultancy service belongs to (all analytics services sit in Data & Intelligence).
@@ -4381,7 +4425,7 @@ ${richSummary(st, rows)}`;
     const deliver = [...new Set(svc.flatMap(([, s]) => s.deliverables))].slice(0, 6);
     const sectors = x.sectors === "an" ? AN_SECTORS.map((s) => [`#analytics/sector/${s.id}`, s.name]) : CO_SECTORS.map((s) => [`#consultancy/sector/${s.id}`, s.name]);
     const form = x.sectors === "an" ? anForm(`Discuss a ${x.name} project`, `Practice: ${x.name}\n`) : coForm(`Discuss a ${x.name} project`, `Practice: ${x.name}\nOur organisation and project: \nTimeline and location: `);
-    return `${prCrumbs(x.name)}${introMedia(`<div class="page-head"><div><span class="eyebrow gold">What We Do</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.problem)}</p></div></div>`, PRACTICE_PHOTO[x.id])}
+    return `${prCrumbs(x.name)}${introMedia(practiceIntro(x), PRACTICE_PHOTO[x.id])}
       <section class="stack" aria-labelledby="prSvcH"><div class="section-head"><span class="eyebrow gold">What We Do</span><h2 id="prSvcH" class="h2xl">Services</h2></div><div class="area-grid">${svc.map(([href, s]) => `<a class="card area-card" href="${href}"><b>${esc(s.name)}</b><span class="hint">${esc(s.summary)}</span></a>`).join("")}</div></section>
       <div class="split">
         <section class="card"><h2>Typical deliverables</h2>${tickList(deliver)}</section>
@@ -4389,11 +4433,11 @@ ${richSummary(st, rows)}`;
       </div>
       ${x.id === "data-intelligence" ? `<div class="feature">${sidePhoto("analyticsTeam")}<section class="card"><h2>How we work</h2>${anSteps}<p><a href="#analytics/how-we-work">More about how we work</a> · <a href="#analytics/data-security">How we protect your data</a></p><h3>Collecting data with Afrimetrica Surveys?</h3><p class="muted">Every survey run on Afrimetrica Surveys includes built-in analysis: charts, group comparisons, key drivers, statistical tests, AI-assisted reports and Excel exports.</p><a class="btn" href="#results" style="align-self:flex-start">Open Analyse</a></section></div>` : `<section class="card"><h2>How we work</h2>${coPhases}<p><a href="#about/approach">More about our approach</a></p></section>`}
       <section class="stack" aria-labelledby="prInsH"><div class="section-head"><span class="eyebrow gold">Insights</span><h2 id="prInsH">Related guides</h2></div><div class="stack" style="gap:10px">${(x.guides || []).map((id) => GUIDES.find((g) => g.id === id)).filter(Boolean).map((g) => `<a class="card guide-link" href="#resources/articles/${g.id}"><b>${esc(g.title)}</b><span class="hint">${esc(g.summary)} · ${g.minutes} min read</span></a>`).join("")}</div></section>
-      <div>${form}</div>`;
+      <div id="prEnquiry">${form}</div>`;
   }
   function prExecEd() {
     const x = practice("executive-education");
-    return `${prCrumbs(x.name)}${introMedia(`<div class="page-head"><div><span class="eyebrow gold">What We Do</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.problem)} ${esc(x.short)}</p></div></div>`, PRACTICE_PHOTO[x.id])}
+    return `${prCrumbs(x.name)}${introMedia(practiceIntro(x), PRACTICE_PHOTO[x.id])}
       <div class="split">
         <section class="card"><h2>What we offer</h2>${tickList([`${CATALOGUE.length} courses in ${GROUPS.length} subject areas, from research methods and data to leadership, strategy, finance and governance`, `Classroom courses in ${VENUES.filter((v) => !v[2]).length} African countries, with further venues in Europe, North America and Asia`, "Live online courses taught in short daily sessions", "In-house programmes tailored to your organisation, sector and data", "Certificates of completion for participants who attend and complete a course"])}<p class="hint">Certificates of completion are not accredited qualifications.</p></section>
         <section class="card"><h2>Subject areas</h2><nav class="sub-jump" aria-label="Subject areas">${GROUPS.map(([g, name]) => `<a href="#training/area/${g}">${esc(name)}</a>`).join("")}</nav></section>
@@ -4402,7 +4446,7 @@ ${richSummary(st, rows)}`;
   }
   function prDigital() {
     const x = practice("digital-solutions");
-    return `${prCrumbs(x.name)}${introMedia(`<div class="page-head"><div><span class="eyebrow gold">What We Do</span><h1>${esc(x.name)}</h1><p class="muted" style="max-width:70ch">${esc(x.problem)} ${esc(x.short)}</p></div></div>`, PRACTICE_PHOTO[x.id])}
+    return `${prCrumbs(x.name)}${introMedia(practiceIntro(x), PRACTICE_PHOTO[x.id])}
       <div class="split">
         <section class="card"><h2>Available now</h2>${tickList(["Build questionnaires online, or upload them from Word, PDF or Excel", "Collect responses online, through our participant panel, or face to face with our field teams", "Built-in analysis: charts, group comparisons, statistical tests and Excel exports", "AI-assisted question checks and insight reports, grounded in your own responses", "Clear plans and prices, with answers visible only to the survey's owner"])}</section>
         <section class="card"><h2>Start here</h2><ul class="ticks small"><li><div><a href="#surveys">Afrimetrica Surveys overview</a></div></li><li><div><a href="#create">Create a survey</a></div></li><li><div><a href="#import">Upload a questionnaire</a></div></li><li><div><a href="#paper-survey">Price face-to-face fieldwork</a></div></li><li><div><a href="#pricing">Plans and prices</a></div></li></ul></section>
