@@ -722,9 +722,9 @@ html { scroll-padding-top: calc(var(--header-h, 110px) + 16px); }
 @media (max-width: 720px) and (prefers-reduced-motion: no-preference) { .menu-icon::before, .menu-icon::after { transition: transform .15s ease, top .15s ease; } }
 
 /* process diagram: numbered steps with a connector (an ordered list, readable without styles) */
-.flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); counter-reset: step; }
+.flow { list-style: none; margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); counter-reset: step; overflow: visible; border: 0; border-radius: 0; background: none; } /* overrides the older .flow box above, which clipped the step numbers */
 .flow li { position: relative; counter-increment: step; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-m); padding: var(--space-5) var(--space-4) var(--space-4); display: flex; flex-direction: column; gap: var(--space-2); }
-.flow li::before { content: counter(step); position: absolute; top: -14px; left: var(--space-4); width: 28px; height: 28px; border-radius: 50%; background: #0e1d3a; color: var(--gold-hi); font: 700 0.85rem/28px var(--font-display); text-align: center; }
+.flow li::before { content: counter(step); position: absolute; top: -14px; left: var(--space-4); width: 28px; height: 28px; border-radius: 50%; background: #0e1d3a; color: var(--gold-hi); font: 700 0.85rem/28px var(--font-display); text-align: center; box-shadow: 0 0 0 2px var(--gold); }
 .flow li:not(:last-child)::after { content: ""; position: absolute; top: 50%; right: calc(-1 * var(--space-4)); width: var(--space-4); border-top: 2px solid var(--gold); }
 .flow b { font-family: var(--font-display); font-size: var(--step-1); }
 .flow span { color: var(--muted); font-size: 0.92rem; }
