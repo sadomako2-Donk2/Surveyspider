@@ -3077,6 +3077,20 @@ ${richSummary(st, rows)}`;
     trainingExec: ["training-executive.webp", "Professionals with laptops in a meeting around a long table in a bright conference room", "center 50%", "Supplied by Afrimetrica: licence to confirm"],
     analyticsTeam: ["analytics-team.webp", "Three women in a meeting around a table with laptops, in an office with large windows", "center 40%", "Supplied by Afrimetrica: licence to confirm"],
     coWorkshop: ["consultancy-workshop.webp", "Participants in a workshop write and draw charts on large sheets of paper spread across a table", "center 40%", "Supplied by Afrimetrica: licence to confirm"],
+    team2: ["p02-two-women-at-a-laptop.webp", "Two women discussing work at a laptop", "center 40%", "Supplied with the placement guide: source and licence to confirm (P02)", true],
+    waterfront: ["p07-waterfront-and-bridge.webp", "Aerial view of an urban waterfront with a bridge and buildings", "center 50%", "Supplied with the placement guide: source and licence to confirm (P07)", true],
+    district: ["p08-generated-business-district.webp", "Illustrative modern business district with palm trees", "center 50%", "AI illustration (placement guide P08), used at the owner's request", true],
+    digital: ["p09-digital-survey-tools.webp", "Professional using survey tools on a laptop, tablet and phone", "center 40%", "AI illustration (placement guide P09)", true],
+    execGroup: ["p10-executive-group-portrait.webp", "Illustrative group of professionals in business dress", "center 30%", "AI illustration (placement guide P10), used at the owner's request; not Afrimetrica staff", true],
+    meeting: ["p11-meeting-presentation.webp", "Presenter speaking to meeting participants", "center 40%", "Supplied with the placement guide: source and licence to confirm (P11)", true],
+    whiteboard: ["p12-whiteboard-workshop.webp", "Presenter writing on a whiteboard during a workshop", "center 40%", "Supplied with the placement guide: source and licence to confirm (P12)", true],
+    groupPres: ["p13-group-presentation.webp", "Professionals discussing a presentation", "center 40%", "Supplied with the placement guide: source and licence to confirm (P13)", true],
+    pieCharts: ["p14-printed-pie-charts.webp", "Hands holding printed charts beside a laptop", "center 50%", "Supplied with the placement guide: source and licence to confirm (P14)", true],
+    papers: ["p15-two-colleagues-reviewing-papers.webp", "Two colleagues reviewing printed documents", "center 40%", "Supplied with the placement guide: source and licence to confirm (P15)", true],
+    laptopMeeting: ["p16-meeting-around-laptop.webp", "Colleagues collaborating around a laptop", "center 40%", "Supplied with the placement guide: source and licence to confirm (P16)", true],
+    fourColleagues: ["p17-four-colleagues-at-laptops.webp", "Colleagues working together at laptops", "center 40%", "Supplied with the placement guide: source and licence to confirm (P17)", true],
+    skyline: ["p18-city-skyline-with-greenery.webp", "City skyline above trees", "center 50%", "Supplied with the placement guide: source and licence to confirm (P18)", true],
+    highRise: ["p19-high-rise-buildings-and-roads.webp", "High-rise buildings beside an urban road", "center 50%", "Supplied with the placement guide: source and licence to confirm (P19)", true],
     shotBuilder: ["screen-builder.webp", "Screenshot of the Afrimetrica Surveys questionnaire builder, showing a sample questionnaire", "top left", "Screenshot of Afrimetrica Surveys with sample data", true],
     shotResults: ["screen-results.webp", "Screenshot of Afrimetrica Surveys results, with charts for a sample survey", "top left", "Screenshot of Afrimetrica Surveys with sample data", true],
   };
@@ -3091,12 +3105,22 @@ ${richSummary(st, rows)}`;
   // A page introduction with its image: text on the left, image on the right; text first on small screens.
   // Slideshows in each page's image slot: the page's own picture first, then the others in a fixed order.
   // About and Contact show real photographs only (no AI illustrations, no screenshots).
-  const SLIDES_ALL = ["hero", "execEd", "dataIntel", "research", "advisory", "about", "venuesCity", "trainingExec", "analyticsTeam", "coWorkshop"];
-  const SLIDES_REAL = ["about", "venuesCity", "trainingExec", "analyticsTeam", "coWorkshop"];
+  // Which photos each slideshow shows (the first is the page's own picture). Every photo is used, mostly once.
+  // About and Contact show real photographs only; P10 (AI) never appears beside people's profiles.
+  const SLIDE_SETS = {
+    hero: ["hero", "team2", "district", "waterfront", "highRise"],
+    about: ["about", "groupPres", "skyline", "venuesCity"],
+    venuesCity: ["venuesCity", "waterfront", "skyline", "highRise", "about"],
+    execEd: ["execEd", "meeting", "whiteboard", "trainingExec"],
+    dataIntel: ["dataIntel", "pieCharts", "analyticsTeam"],
+    research: ["research", "papers", "coWorkshop"],
+    advisory: ["advisory", "laptopMeeting", "fourColleagues", "execGroup"],
+    shotBuilder: ["shotBuilder", "shotResults", "digital"],
+  };
   const slideNote = (k) => { const r = PHOTO[k][3]; return r.startsWith("AI") ? "Illustrative image" : r.startsWith("Screenshot") ? "Afrimetrica Surveys, shown with sample data" : ""; };
   let slideOrder = [], slideIdx = 0, slideFirst = "", slidePaused = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
-  const slideshow = (k, cls = "intro-photo", realOnly = false) => {
-    const order = [k, ...(realOnly ? SLIDES_REAL : SLIDES_ALL).filter((x) => x !== k)];
+  const slideshow = (k, cls = "intro-photo") => {
+    const order = SLIDE_SETS[k] || [k];
     if (k !== slideFirst) { slideFirst = k; slideIdx = 0; }
     slideOrder = order;
     const slides = order.map((x, i) => {
@@ -3125,8 +3149,8 @@ ${richSummary(st, rows)}`;
   setInterval(() => { if (!slidePaused && !document.hidden && document.querySelector(".slideshow")) showSlide(slideIdx + 1); }, 5000);
   new MutationObserver(() => { if (document.querySelector(".slideshow img[data-src]")) setTimeout(() => loadSlide(slideIdx + 1), 2500); }).observe(document.getElementById("main"), { childList: true });
   // A page introduction with its image: text on the left, image on the right; text first on small screens.
-  // Screenshots stay still; photos become a slideshow.
-  const introMedia = (head, k, realOnly = false) => `<div class="intro-media">${head}${PHOTO[k][3].startsWith("Screenshot") ? pic(k, "intro-photo", true) : slideshow(k, "intro-photo", realOnly)}</div>`;
+  // Pages with a set in SLIDE_SETS get a slideshow.
+  const introMedia = (head, k) => `<div class="intro-media">${head}${SLIDE_SETS[k] ? slideshow(k, "intro-photo") : pic(k, "intro-photo", true)}</div>`;
   const AUDIENCES = [
     ["Governments and public institutions", "Policy research, evaluations, data systems and training for ministries, agencies and local government."],
     ["Businesses and investors", "Market intelligence, feasibility studies, analytics and executive programmes."],
@@ -3263,7 +3287,7 @@ ${richSummary(st, rows)}`;
   const abValues = () => `<ul class="ticks small">${AB_VALUES.map(([t, d]) => `<li><div><b>${esc(t)}</b><span>${esc(d)}</span></div></li>`).join("")}</ul>`;
   function abOverview() {
     return `<div class="intro-media"><div class="stack"><div class="page-head"><div><span class="eyebrow gold">About Afrimetrica</span><h1>An independent, Africa-focused professional services firm</h1><p class="muted" style="max-width:70ch">Afrimetrica is an independent, multidisciplinary professional services firm specialising in data intelligence, research, strategic advisory and executive education, supported by digital solutions.</p></div></div>
-      <section class="prose stack" style="gap:12px"><p>We work with governments, businesses, development institutions and civil society organisations to generate credible evidence, solve complex problems, strengthen institutional capabilities and enable better decisions across Africa.</p><p>Through our five practices and our network of researchers, analysts, advisers and executive faculty, we combine analytical rigour, practical tools and knowledge of the contexts our clients work in.</p></section></div>${slideshow("about", "intro-photo", true)}</div>
+      <section class="prose stack" style="gap:12px"><p>We work with governments, businesses, development institutions and civil society organisations to generate credible evidence, solve complex problems, strengthen institutional capabilities and enable better decisions across Africa.</p><p>Through our five practices and our network of researchers, analysts, advisers and executive faculty, we combine analytical rigour, practical tools and knowledge of the contexts our clients work in.</p></section></div>${slideshow("about", "intro-photo")}</div>
       
       <section class="stack" aria-labelledby="abPrH"><h2 id="abPrH">What We Do</h2>${practiceCards()}</section>
       <div class="area-grid">${ABOUT_MENU.slice(1).map(([k, label]) => `<a class="card area-card" href="#about/${k}"><b>${esc(label)}</b><span class="hint">${esc({ team: "The specialists behind Afrimetrica", approach: "How we run assignments, check quality and protect data", organisation: "Our five practices and how they fit together", mission: "Why we exist and what we stand for", vision: "The future we are working towards", certificates: "What our certificates of completion mean" }[k])}</span></a>`).join("")}</div>`;
@@ -4537,7 +4561,7 @@ ${richSummary(st, rows)}`;
     const st = S.settings || {}, wa = String(st.whatsapp || "").replace(/[^\d]/g, "");
     const item = (label, val) => `<div class="contact-item"><span class="hint">${label}</span>${val}</div>`;
     const details = [st.email ? item("Email", `<span class="row wrap" style="gap:8px"><b class="sel">${esc(st.email)}</b><button class="btn small ghost" data-act="copyText" data-v="${esc(st.email)}">Copy</button></span>`) : "", st.phone ? item("Phone", `<b class="sel">${esc(st.phone)}</b>`) : "", wa ? item("WhatsApp", `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">Message us on WhatsApp</a>`) : "", st.address ? item("Office", `<span class="sel" style="white-space:pre-line">${esc(st.address)}</span>`) : "", st.hours ? item("Hours", esc(st.hours)) : "", st.linkedin ? item("LinkedIn", `<a href="${esc(st.linkedin)}" target="_blank" rel="noopener">Follow Afrimetrica</a>`) : ""].join("");
-    return `${introMedia(`<div class="page-head"><div><span class="eyebrow gold">Contact</span><h1>Contact us</h1><p class="muted" style="max-width:66ch">Tell us about your question, project or programme. We reply to every enquiry within two working days and, where it helps, arrange a call to agree the scope.</p></div></div>`, "venuesCity", true)}
+    return `${introMedia(`<div class="page-head"><div><span class="eyebrow gold">Contact</span><h1>Contact us</h1><p class="muted" style="max-width:66ch">Tell us about your question, project or programme. We reply to every enquiry within two working days and, where it helps, arrange a call to agree the scope.</p></div></div>`, "venuesCity")}
       <div class="split">
         ${enquiryForm("contact", { title: "Send us a message", subject: true, messageLabel: "Your message" })}
         <section class="card"><h2>Contact details</h2>${details || `<p class="muted">Use the form and we'll reply by email.</p>`}

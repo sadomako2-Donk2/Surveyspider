@@ -44,15 +44,34 @@ The screenshots were taken from a local copy of the site with a throwaway accoun
 | `fieldwork-team.webp` | Fieldwork service, Research & Advisory card | Replaced by P05 (the guide's research illustration) |
 | `vision-city.webp` | Our vision | Guide: Mission and Vision stay text-led |
 
-## Not published
+## All guide pictures in use (owner's request)
+
+The owner asked for all 20 pictures (P01–P19 and the Memorial Park photo) to be used. Each page's slideshow (`SLIDE_SETS` in `public/index.html`) shows:
+
+| Slideshow (page) | Photos, in order |
+|---|---|
+| Home | P01, P02, P08, P07, P19 |
+| About Us | Memorial Park (drummers), P13, P18, Memorial Park (monument) |
+| Contact | Memorial Park (monument), P07, P18, P19, Memorial Park (drummers) |
+| Executive Education practice | P03, P11, P12, training-executive |
+| Data & Intelligence | P04, P14, analytics-team |
+| Research & Evaluation | P05, P15, consultancy-workshop |
+| Strategy & Advisory | P06, P16, P17, P10 |
+| Digital Solutions | builder screenshot, results screenshot, P09 |
+
+Notes:
+- P08 and P10 were marked "do not publish" in the guide; they are used at the owner's request, captioned "Illustrative image", and P10 never appears on Our People or beside profiles.
+- About and Contact show real photographs only.
+- P02, P07 and P11–P19 still have **unconfirmed source and licence**; the guide notes some may be stock photos that need a licence. P02 shows third-party signage and P19 a building's branding.
+
+`tests/api.test.mjs` fails if any photo in `public/photos` is not used.
+
+## Not used
 
 | Asset | Reason |
 |---|---|
-| P08 generated business district, P10 executive group portrait | Guide: DO NOT PUBLISH (reference only) |
-| P02, P07, P11–P19 (supplied photos) | Guide: source and commercial rights unconfirmed. Ready to add once each is cleared |
-| P09 digital survey tools | Not needed: real product screenshots used instead |
-| R01–R20 stock photos | Not downloaded or verified in this round (see below). Pexels licence allows free commercial use; Unsplash licence likewise, but Unsplash+ photos are paid |
-| African Context (R04, R17, R18, P07, P18, P19) | The site has no African Context section; the guide says to skip and report rather than create one |
+| R01–R20 stock photos | Not downloaded or verified (see below). Pexels licence allows free commercial use; Unsplash licence likewise, but Unsplash+ photos are paid |
+| African Context section | The site has no such section; the city photos (P07, P18, P19) appear in the Home, About and Contact slideshows instead |
 
 ## Swapping in the real photos
 

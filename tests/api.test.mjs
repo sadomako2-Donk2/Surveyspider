@@ -140,7 +140,9 @@ check("website photos are served", pic.status === 200 && pic.headers.get("conten
   const missing = [];
   for (const [, f, , small] of used) { if ((await fetch(base + "/photos/" + f)).status !== 200) missing.push(f); if (small && (await fetch(base + "/photos/" + f.replace(".webp", "-640.webp"))).status !== 200) missing.push(f + " (640)"); }
   check("every photo the pages list is served" + (missing.length ? ": missing " + missing.join(", ") : ""), used.length >= 10 && missing.length === 0);
-  check("reference-only images (P08, P10) are never published", !/p08-|p10-/.test(page) && (await fetch(base + "/photos/p08-generated-business-district.webp")).status !== 200 && (await fetch(base + "/photos/p10-executive-group-portrait.webp")).status !== 200);
+  const files = (await import("node:fs")).readdirSync(new URL("../public/photos/", import.meta.url)).filter((f) => !/-640\.webp$|^logo-|^team-/.test(f));
+  const unused = files.filter((f) => !page.includes('"' + f + '"'));
+  check("every photo in public/photos is used on the site" + (unused.length ? ": unused " + unused.join(", ") : ""), unused.length === 0);
 }
 check("only listed photos are served (no other files)", (await fetch(base + "/photos/..%2Fserver.mjs")).status !== 200 && (await fetch(base + "/photos/missing.webp")).status !== 200);
 const anonA = (await A.call("GET", "/api/me")).json;
