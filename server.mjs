@@ -44,6 +44,9 @@ const SHELL_HEAD = `<!doctype html><html lang="en"><head><meta charset="utf-8"><
 const PAGE = SHELL_HEAD + readFileSync(path.join(here, "public", "index.html"), "utf8") + "</body></html>";
 const ICON = readFileSync(path.join(here, "public", "icon.svg"));
 // Browser libraries served from this site rather than a CDN (see public/vendor/README.md). Only these exact names.
+// Brand fonts (public/fonts): only these exact file names are served.
+const FONT_DIR = path.join(here, "public", "fonts");
+const FONTS = new Map(existsSync(FONT_DIR) ? readdirSync(FONT_DIR).filter((f) => /^[a-z0-9-]+\.woff2$/.test(f)).map((f) => [f, readFileSync(path.join(FONT_DIR, f))]) : []);
 const VENDOR_DIR = path.join(here, "public", "vendor");
 const VENDOR = new Map(existsSync(VENDOR_DIR) ? readdirSync(VENDOR_DIR).filter((f) => /^[a-z0-9.-]+\.js$/.test(f)).map((f) => [f, readFileSync(path.join(VENDOR_DIR, f))]) : []);
 // Public pages with real addresses, for search engines (written by scripts/build-pages.mjs; see that file).
@@ -640,7 +643,7 @@ async function handleApi(req, res, url) {
 // ---------- server ----------
 // Content Security Policy: scripts, styles, images and connections only from this site (plus Google Fonts).
 // 'unsafe-inline' is needed because the page's own script and styles are inline; outside scripts still can't load.
-const CSP = ["default-src 'self'", "script-src 'self' 'unsafe-inline'", "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com", "font-src 'self' https://fonts.gstatic.com",
+const CSP = ["default-src 'self'", "script-src 'self' 'unsafe-inline'", "style-src 'self' 'unsafe-inline'", "font-src 'self'",
   "img-src 'self' data: blob:", "connect-src 'self'", "worker-src 'self' blob:", "object-src 'none'", "base-uri 'self'", "form-action 'self'", "frame-ancestors 'self'"].join("; ");
 const SECURITY = { "X-Content-Type-Options": "nosniff", "Referrer-Policy": "strict-origin-when-cross-origin", "X-Frame-Options": "SAMEORIGIN",
   "Content-Security-Policy": CSP, "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=()", "Cross-Origin-Opener-Policy": "same-origin" };
@@ -670,6 +673,7 @@ export const server = http.createServer(async (req, res) => {
     if (req.method === "GET" && url.pathname === "/robots.txt") { res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "public, max-age=3600" }); return res.end(`User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /auth/\n\nSitemap: ${baseUrl(req)}/sitemap.xml\n`); }
     if (req.method === "GET" && url.pathname === "/sitemap.xml") { const b = baseUrl(req); res.writeHead(200, { "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, max-age=3600" }); return res.end(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${[...PAGES.values()].filter((p) => !p.canonical).map((p) => `<url><loc>${attr(b + p.path)}</loc></url>`).join("\n")}\n</urlset>\n`); }
     if (url.pathname === "/social.jpg" && SOCIAL) { res.writeHead(200, { "Content-Type": "image/jpeg", "Cache-Control": "public, max-age=86400" }); return res.end(SOCIAL); }
+    if (url.pathname.startsWith("/fonts/") && FONTS.has(url.pathname.slice(7))) { res.writeHead(200, { "Content-Type": "font/woff2", "Cache-Control": "public, max-age=31536000, immutable" }); return res.end(FONTS.get(url.pathname.slice(7))); }
     if (url.pathname.startsWith("/vendor/") && VENDOR.has(url.pathname.slice(8))) { res.writeHead(200, { "Content-Type": "text/javascript; charset=utf-8", "Cache-Control": "public, max-age=86400" }); return res.end(VENDOR.get(url.pathname.slice(8))); }
     if (url.pathname === "/icon.svg") { res.writeHead(200, { "Content-Type": "image/svg+xml", "Cache-Control": "public, max-age=86400" }); return res.end(ICON); }
     if (req.method === "GET" && (url.pathname === "/" || url.pathname === "/index.html")) { res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache" }); return res.end(pageHtml(PAGES.get("/") || { path: "/" }, baseUrl(req), true)); }

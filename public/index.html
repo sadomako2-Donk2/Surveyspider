@@ -1,8 +1,16 @@
 <title>Afrimetrica — Data, Research, Advisory and Executive Education</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/montserrat-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+/* Brand fonts, self-hosted (public/fonts) */
+@font-face { font-family: "Montserrat"; font-style: normal; font-weight: 600; font-display: swap; src: url(/fonts/montserrat-latin-600-normal.woff2) format("woff2"); }
+@font-face { font-family: "Montserrat"; font-style: normal; font-weight: 700; font-display: swap; src: url(/fonts/montserrat-latin-700-normal.woff2) format("woff2"); }
+@font-face { font-family: "Montserrat"; font-style: normal; font-weight: 800; font-display: swap; src: url(/fonts/montserrat-latin-800-normal.woff2) format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 400; font-display: swap; src: url(/fonts/inter-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 500; font-display: swap; src: url(/fonts/inter-latin-500-normal.woff2) format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 600; font-display: swap; src: url(/fonts/inter-latin-600-normal.woff2) format("woff2"); }
+
 /* Layout: Afrimetrica navy-and-gold app shell. Sticky top bar (logo + workspaces), one working column (max 1180px); builder, analysis and pricing split into a main column plus a side rail that stacks on phones. */
 :root {
   --bg: #f5f6f9;
@@ -25,7 +33,12 @@
   --bad: #b83a2e;
   --font-display: "Montserrat", "Segoe UI", system-ui, sans-serif;
   --font-body: "Inter", "Segoe UI", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  /* design tokens (docs/design-system.md) */
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 48px;
+  --radius-s: 8px; --radius-m: 14px; --radius-l: 18px;
+  --shadow-1: 0 8px 22px rgba(14, 29, 58, 0.1);
+  --step--1: 0.85rem; --step-0: 1rem; --step-1: 1.15rem; --step-2: 1.4rem; --step-3: clamp(1.6rem, 3vw, 2.1rem); --step-4: clamp(2.1rem, 5.4vw, 3.6rem);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -672,13 +685,54 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
 .person-meta { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
 .person-meta .pill { font-size: 0.72rem; }
 .people-filter { gap: 8px; }
+
+/* accessibility: skip link, focus ring and focus never hidden under the sticky header (WCAG 2.2: 2.4.1, 2.4.7, 2.4.11, 1.4.11) */
+:root { --focus: #0e1d3a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --focus: #f6dd96; } }
+:root[data-theme="dark"] { --focus: #f6dd96; }
+html { scroll-padding-top: calc(var(--header-h, 110px) + 16px); }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.topbar :focus-visible { outline-color: var(--gold-hi); }
+.skip { position: absolute; left: 12px; top: -60px; z-index: 100; background: #0e1d3a; color: #fff; padding: 10px 16px; border-radius: 8px; font-weight: 600; text-decoration: none; }
+.skip:focus { top: 12px; outline: 3px solid var(--gold-hi); }
+#main:focus { outline: none; }
+[aria-invalid="true"] { border-color: var(--bad) !important; box-shadow: 0 0 0 1px var(--bad); }
+.errs ul { margin: 6px 0 0; padding-left: 18px; }
+
+/* mobile menu (narrow screens) */
+.menu-btn { display: none; align-items: center; gap: 8px; order: 2; margin-left: auto; background: rgba(255, 255, 255, 0.08); color: #fff; border: 1px solid rgba(255, 255, 255, 0.28); border-radius: 999px; padding: 8px 14px; font: inherit; font-weight: 600; cursor: pointer; min-height: 40px; }
+.menu-icon, .menu-icon::before, .menu-icon::after { display: block; width: 16px; height: 2px; background: currentColor; border-radius: 2px; position: relative; }
+.menu-icon::before, .menu-icon::after { content: ""; position: absolute; left: 0; }
+.menu-icon::before { top: -5px; } .menu-icon::after { top: 5px; }
+.topbar.menu-open .menu-icon { background: transparent; }
+.topbar.menu-open .menu-icon::before { top: 0; transform: rotate(45deg); } .topbar.menu-open .menu-icon::after { top: 0; transform: rotate(-45deg); }
+@media (max-width: 720px) {
+  .menu-btn { display: inline-flex; }
+  .acct { margin-left: 8px; order: 2; }
+  .tabs { display: none; }
+  .topbar.menu-open .tabs { display: flex; flex-direction: column; align-items: stretch; gap: 2px; order: 3; flex: 1 0 100%; margin: 6px 0 4px; overflow: visible; }
+  .topbar.menu-open .tabs a { padding: 12px 14px; font-size: 1rem; min-height: 44px; }
+}
+@media (max-width: 720px) and (prefers-reduced-motion: no-preference) { .menu-icon::before, .menu-icon::after { transition: transform .15s ease, top .15s ease; } }
+
+/* process diagram: numbered steps with a connector (an ordered list, readable without styles) */
+.flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); counter-reset: step; }
+.flow li { position: relative; counter-increment: step; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-m); padding: var(--space-5) var(--space-4) var(--space-4); display: flex; flex-direction: column; gap: var(--space-2); }
+.flow li::before { content: counter(step); position: absolute; top: -14px; left: var(--space-4); width: 28px; height: 28px; border-radius: 50%; background: #0e1d3a; color: var(--gold-hi); font: 700 0.85rem/28px var(--font-display); text-align: center; }
+.flow li:not(:last-child)::after { content: ""; position: absolute; top: 50%; right: calc(-1 * var(--space-4)); width: var(--space-4); border-top: 2px solid var(--gold); }
+.flow b { font-family: var(--font-display); font-size: var(--step-1); }
+.flow span { color: var(--muted); font-size: 0.92rem; }
+.flow .flow-links { font-size: var(--step--1); }
+@media (max-width: 860px) { .flow { grid-template-columns: 1fr; gap: var(--space-5); } .flow li:not(:last-child)::after { top: auto; bottom: calc(-1 * var(--space-5)); left: 30px; right: auto; width: 0; height: var(--space-5); border-top: 0; border-left: 2px solid var(--gold); } }
 </style>
 
+<a class="skip" href="#main">Skip to main content</a>
 <header class="topbar gutter">
   <div class="topbar-inner">
     <a class="brand" href="#home" aria-label="Afrimetrica home">
       <img class="logo-header" src="/photos/logo-header.webp" width="211" height="52" alt="Afrimetrica: Data, Research, Advisory, Executive Education">
     </a>
+    <button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="tabs"><span class="menu-icon" aria-hidden="true"></span>Menu</button>
     <nav class="tabs" id="tabs" aria-label="Main"></nav>
     <div class="acct" id="acct"></div>
   </div>
@@ -949,7 +1003,7 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
       <h1>${up ? "Create your account" : "Sign in to Afrimetrica"}</h1>
       <p class="muted">${up ? "Build and launch surveys, take part and get paid, and see your results on any device." : "Pick up where you left off, on any device."}</p>
       ${S.authCfg.google ? `<a class="btn google" href="/auth/google?next=${encodeURIComponent(S.returnTo || "studies")}">${GOOGLE_G}<span>Continue with Google</span></a><div class="or"><span>or with your email</span></div>` : ""}
-      ${S.authError ? `<div class="errs">${esc(S.authError)}</div>` : ""}
+      ${S.authError ? `<div class="errs" role="alert">${esc(S.authError)}</div>` : ""}
       <form id="authForm" class="stack" novalidate>
         ${up ? `<label for="au-name">Your name<input id="au-name" autocomplete="name" maxlength="80"></label>` : ""}
         <label for="au-email">Email<input id="au-email" type="email" autocomplete="email" maxlength="160" required></label>
@@ -965,32 +1019,32 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
   async function submitAuth() {
     const up = S.authMode === "signup", email = ($("#au-email").value || "").trim(), password = $("#au-pass").value || "", name = up ? ($("#au-name").value || "").trim() : "";
     const bad = !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) ? "Enter a valid email address." : up && password.length < 8 ? "Use a password of at least 8 characters." : !password ? "Enter your password." : "";
-    if (bad) { $("#authErr").innerHTML = `<div class="errs">${esc(bad)}</div>`; return; }
+    if (bad) { $("#authErr").innerHTML = `<div class="errs" role="alert">${esc(bad)}</div>`; return; }
     const btn = $("#authForm button[type=submit]"); btn.disabled = true;
     try {
       await api("POST", up ? "/api/auth/signup" : "/api/auth/login", { email, password, name });
       S.authError = ""; S.authMode = "signin"; await reloadMe();
       toast(up ? (unverified() ? `Account created. Check ${email} for a link to confirm your address.` : "Account created. Welcome to Afrimetrica!") : "Signed in.");
       go(S.returnTo || "studies");
-    } catch (e) { btn.disabled = false; $("#authErr").innerHTML = `<div class="errs">${esc((e && e.message) || "Couldn't sign in. Please try again.")}</div>`; }
+    } catch (e) { btn.disabled = false; $("#authErr").innerHTML = `<div class="errs" role="alert">${esc((e && e.message) || "Couldn't sign in. Please try again.")}</div>`; }
   }
   async function submitForgot() {
     const email = ($("#fp-email").value || "").trim();
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { $("#authErr").innerHTML = `<div class="errs">Enter a valid email address.</div>`; return; }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { $("#authErr").innerHTML = `<div class="errs" role="alert">Enter a valid email address.</div>`; return; }
     const btn = $("#forgotForm button[type=submit]"); btn.disabled = true;
     try { await api("POST", "/api/auth/forgot", { email }); S.forgotEmail = email; S.authMode = "forgotSent"; render(); }
-    catch (e) { btn.disabled = false; $("#authErr").innerHTML = `<div class="errs">${esc((e && e.message) || "Couldn't send the email. Please try again.")}</div>`; }
+    catch (e) { btn.disabled = false; $("#authErr").innerHTML = `<div class="errs" role="alert">${esc((e && e.message) || "Couldn't send the email. Please try again.")}</div>`; }
   }
   async function submitReset() {
     const a = $("#rp-pass").value || "", b2 = $("#rp-pass2").value || "";
     const bad = a.length < 8 ? "Use a password of at least 8 characters." : a !== b2 ? "The two passwords don't match." : "";
-    if (bad) { $("#authErr").innerHTML = `<div class="errs">${esc(bad)}</div>`; return; }
+    if (bad) { $("#authErr").innerHTML = `<div class="errs" role="alert">${esc(bad)}</div>`; return; }
     const btn = $("#resetForm button[type=submit]"); btn.disabled = true;
     try {
       await api("POST", "/api/auth/reset", { token: S.resetToken, password: a });
       S.resetToken = null; S.authMode = "signin"; await reloadMe();
       toast("Password updated. You're signed in."); go(S.returnTo || "studies");
-    } catch (e) { btn.disabled = false; $("#authErr").innerHTML = `<div class="errs">${esc((e && e.message) || "Couldn't save the new password. Please try again.")}</div>`; }
+    } catch (e) { btn.disabled = false; $("#authErr").innerHTML = `<div class="errs" role="alert">${esc((e && e.message) || "Couldn't save the new password. Please try again.")}</div>`; }
   }
   async function signOut() {
     try { await api("POST", "/api/auth/logout"); } catch (e) {}
@@ -1068,7 +1122,7 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
     $("#tabs").innerHTML = TOPNAV.map(([k, v]) => `<a href="#${k}"${top === k ? ' aria-current="page"' : ""}${navDropGroups(k) ? ` data-drop="${k}"` : ""}>${v}</a>`).join("");
     const sub = $("#subnav");
     const sectionNav = { account: accNav, about: abNav, practices: prNav, training: trNav, analytics: anNav, consultancy: coNav, resources: resNav, contact: ctNav }[S.view];
-    if (sectionNav) { sub.hidden = false; sub.innerHTML = sectionNav(); }
+    if (sectionNav) { sub.hidden = false; sub.innerHTML = sectionNav(); sub.setAttribute("aria-label", `${(sub.querySelector(".subnav-label") || {}).textContent || "Section"} pages`); }
     else {
     sub.hidden = !inSurveys;
     sub.innerHTML = inSurveys ? `<div class="subnav-inner"><span class="subnav-label">Afrimetrica Surveys</span><div class="subnav-links">${SURVEY_NAV.map(([k, v]) => `<a href="#${k}"${S.view === k ? ' aria-current="page"' : ""}>${v}${k === "panel" && avail ? `<span class="count">${avail}</span>` : ""}</a>`).join("")}</div></div>` : "";
@@ -1077,6 +1131,7 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
     const msg = S.notice || (S.mode === "demo" ? "Demo mode: everything you create is saved in this browser only. Open the published page while signed in to claude.ai to share data with other people." : "") || (S.stale ? "Can't reach the saved data yet. What you see may be out of date." : "");
     b.hidden = !msg; b.textContent = msg;
     if (!msg && unverified()) { b.hidden = false; b.innerHTML = `<b>Confirm your email address.</b> We sent a link to ${esc(S.user.email)}. You can browse and save drafts now; confirm to launch surveys, take paid studies and use AI. <button type="button" class="linkbtn" data-act="resendVerify">Send it again</button>`; }
+    document.documentElement.style.setProperty("--header-h", `${($(".topbar") || {}).offsetHeight || 110}px`);
     $("#foot").innerHTML = `<div class="foot-inner"><div><img class="foot-logo" src="/photos/logo-full.webp" width="216" height="72" alt="Afrimetrica: Data, Research, Advisory, Executive Education"><br><b>Afrimetrica</b> · Data. Research. Advisory. Executive Education.<br><span class="hint">An independent, Africa-focused professional services firm specialising in data intelligence, research, strategic advisory and executive education.</span><br><span class="hint">${PRACTICES.map((x) => `<a href="#practices/${x.id}">${esc(x.name)}</a>`).join(" · ")}</span><br><span class="hint"><a href="#about/team">Our people</a> · <a href="#resources">Insights</a> · <a href="#contact">Contact</a> · <a href="#privacy">Privacy notice</a> · <a href="#terms">Terms of use</a></span></div><div class="hint">Afrimetrica Surveys platform fee ${Math.round(FEE * 100)}% of participant rewards. ${S.mode === "live" ? (API ? "Survey answers are stored on Afrimetrica's server and shown only to the survey's owner." : "Data is shared with everyone who can open this page.") : S.mode === "demo" ? "Demo data stays in this browser." : "Connecting…"}</div></div>`;
   }
   // Each page gets its own browser-tab title and description (used when people bookmark or share it).
@@ -1128,7 +1183,7 @@ footer .foot-inner { border-top: 0; padding-top: 0; }
     const all = root.matches && root.matches('a[href^="#"]') ? [root, ...root.querySelectorAll('a[href^="#"]')] : root.querySelectorAll('a[href^="#"]');
     for (const a of all) { const c = cleanPath(a.getAttribute("href").slice(1)); if (c) a.setAttribute("href", c); }
   }
-  function onNavigate() { closeNavDrop(true); route(); render(); window.scrollTo(0, 0); if (API) refreshServer().then(softRender).catch(() => {}); }
+  function onNavigate() { closeNavDrop(true); if (typeof setMenu === "function") setMenu(false); route(); render(); window.scrollTo(0, 0); if (API) refreshServer().then(softRender).catch(() => {}); }
   // Pages merged into others (the server also answers these addresses with a permanent redirect).
   const MERGED = { analytics: "practices/data-intelligence", "resources/articles": "resources" };
   function route() {
@@ -1792,7 +1847,7 @@ ${richSummary(st, rows)}`;
     const d = S.draft;
     if (status === "live") {
       const p = problems(d);
-      if (p.length) { $("#errs").innerHTML = `<div class="errs"><b>Fix these before launching:</b><ul>${p.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>`; return; }
+      if (p.length) { $("#errs").innerHTML = `<div class="errs" role="alert"><b>Fix these before launching:</b><ul>${p.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>`; return; }
     }
     const st = clone(d);
     Object.assign(st, { status, ownerId: d.ownerId || S.uid, createdAt: d.createdAt || Date.now(), updatedAt: Date.now(), target: Math.floor(+d.target) || 1, minutes: +d.minutes || 1, reward: Math.round((+d.reward || 0) * 100) / 100 });
@@ -1920,7 +1975,7 @@ ${richSummary(st, rows)}`;
       if (q.required && empty) missing.push(i + 1);
       if (!empty) ans[q.id] = v;
     });
-    if (missing.length) { $("#takeErr").innerHTML = `<div class="errs">Please answer question${missing.length > 1 ? "s" : ""} ${missing.join(", ")}.</div>`; return; }
+    if (missing.length) { $("#takeErr").innerHTML = `<div class="errs" role="alert">Please answer question${missing.length > 1 ? "s" : ""} ${missing.join(", ")}.</div>`; return; }
     const rid = st.id + "-" + S.uid;
     if (S.responses.some((r) => r.id === rid)) { toast("You have already taken this study."); S.taking = null; render(); return; }
     if (usedSlots(st.id) >= st.target) { toast("This study just filled up. Thanks for trying."); S.taking = null; render(); return; }
@@ -2499,7 +2554,7 @@ ${richSummary(st, rows)}`;
   async function saveAction() {
     const st = studyById(S.resultsId); if (!st) return;
     const title = ($("#ac-title").value || "").trim();
-    if (!title) { $("#ac-err").innerHTML = `<div class="errs">Write what you will do.</div>`; return; }
+    if (!title) { $("#ac-err").innerHTML = `<div class="errs" role="alert">Write what you will do.</div>`; return; }
     const qid = $("#ac-metric").value, q = st.questions.find((x) => x.id === qid);
     const base = q ? metricOf(q, respFor(st.id).filter((r) => r.status === "approved")) : null;
     const tv = $("#ac-target").value.trim();
@@ -2910,7 +2965,7 @@ ${richSummary(st, rows)}`;
     if (!contact.name) errs.push("Enter your name.");
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(contact.email)) errs.push("Enter a valid email address.");
     if (!$("#fw-ok").checked) errs.push("Tick the box so we can contact you.");
-    if (errs.length) { $("#fw-err").innerHTML = `<div class="errs">${errs.map(esc).join("<br>")}</div>`; return; }
+    if (errs.length) { $("#fw-err").innerHTML = `<div class="errs" role="alert">${errs.map(esc).join("<br>")}</div>`; return; }
     const F = S.f2f, sv = f2fSurvey(), q = f2fQuote(F, sv);
     const inputs = { method: F.method, n: q.n, groups: F.groups, perGroup: F.perGroup, country: F.country, setting: F.setting, audience: F.audience, capture: F.capture, minutes: q.mins, languages: F.languages, backTranslation: !!F.backTranslation, record: !!F.record, transcription: !!F.transcription, incentive: +F.incentive || 0, report: F.report, urgency: F.urgency };
     const r = { id: newId("fw"), ref: F.ref, requesterId: S.uid, status: "new", createdAt: Date.now(), contact, inputs, survey: sv ? { title: sv.title || "", questions: sv.questions.length, source: sv.source, list: sv.questions.slice(0, 150).map((x) => ({ type: x.type, text: x.text.slice(0, 300), options: (x.options || []).slice(0, 20) })) } : null, quote: { total: q.total, per: q.per, weeks: q.weeks, lines: q.lines } };
@@ -2995,22 +3050,31 @@ ${richSummary(st, rows)}`;
   const sessTaken = (s) => (typeof s.taken === "number" ? s.taken : S.enrollments.filter((e) => e.sessionId === s.id && e.status !== "cancelled").length);
   const seatsLeft = (s) => (s.seats > 0 ? Math.max(0, s.seats - sessTaken(s)) : null);
   const upcoming = (c) => (c.sessions || []).filter((s) => !s.start || s.start >= todayISO()).sort((a, b) => (a.start || "9").localeCompare(b.start || "9"));
+  // My Account › My courses: the signed-in person's own registrations (only theirs are sent by the server).
+  const ENROL_STATUS = { registered: "Registered", interest: "Interest registered", confirmed: "Place confirmed", attended: "Attended", completed: "Completed", cancelled: "Cancelled" };
+  function myCourses() {
+    const mine = S.enrollments.filter((e) => e.userId === S.uid).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    if (!mine.length) return `<p class="muted">You haven't registered for a course yet.</p>`;
+    return `<ul class="ticks small">${mine.map((e) => { const c = courseById(e.courseId), ss = c && (c.sessions || []).find((x) => x.id === e.sessionId);
+      return `<li><div><b>${esc(c ? c.title : "Course")}</b><span>${ss ? `${esc(fmtDay(ss.start))}${ss.location ? " · " + esc(ss.location) : ""} · ` : ""}${esc(ENROL_STATUS[e.status] || e.status)}</span></div></li>`; }).join("")}</ul>`;
+  }
   const myEnrol = (cid, sid) => S.enrollments.find((e) => e.userId === S.uid && e.courseId === cid && (sid === undefined || (e.sessionId || "") === sid) && e.status !== "cancelled");
   const sentenceBlocks = (t) => String(t || "").split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean).map((p) => `<p>${esc(p)}</p>`).join("");
   // Illustrative images (not Afrimetrica staff or projects); their alt text describes the scene and names no one.
+  // [file, alt text, crop position, rights status]. Rights status is for the team (docs/design-system.md), not shown.
   const PHOTO = {
-    home: ["home.webp", "A team around a laptop discussing research results, with charts and a map of Africa on a screen behind them", "center 30%"],
-    training: ["training.webp", "A trainer points to charts and a map of Africa on a screen while participants at a table listen and take notes", "center 35%"],
-    surveys: ["surveys.webp", "An interviewer with a tablet talks with a smiling market trader at her stall", "center 35%"],
-    about: ["about.webp", "Aerial view of a growing town: red-roofed houses, warehouses and green open land, with more houses in the distance", "center 55%"],
-    consultancy: ["consultancy.webp", "A consultant presents to a group around a meeting table, with a map of Africa and charts on a screen and printed reports on the table", "center 35%"],
-    venuesCity: ["venues-city.webp", "The Kwame Nkrumah Memorial Park in Accra: the monument and statue above blue fountains under a clear sky", "center 55%"],
-    trainingExec: ["training-executive.webp", "Professionals with laptops in a meeting around a long table in a bright conference room", "center 50%"],
-    analyticsTeam: ["analytics-team.webp", "Three women in a meeting around a table with laptops, in an office with large windows", "center 40%"],
-    coWorkshop: ["consultancy-workshop.webp", "Participants in a workshop write and draw charts on large sheets of paper spread across a table", "center 40%"],
-    vision: ["vision-city.webp", "Aerial view of a city of red-roofed houses and green trees, with a railway line running towards the horizon under a blue sky", "center 60%"],
-    fieldwork: ["fieldwork-team.webp", "A field team with a tablet and clipboards talks with women in a village, beside thatched houses", "center 40%"],
-    analytics: ["analytics.webp", "Three analysts look at a laptop together, with a dashboard of charts on the wall behind them", "center 8%"],
+    home: ["home.webp", "A team around a laptop discussing research results, with charts and a map of Africa on a screen behind them", "center 30%", "AI-generated: replace with an authentic photo"],
+    training: ["training.webp", "A trainer points to charts and a map of Africa on a screen while participants at a table listen and take notes", "center 35%", "AI-generated: replace with an authentic photo"],
+    surveys: ["surveys.webp", "An interviewer with a tablet talks with a smiling market trader at her stall", "center 35%", "AI-generated: replace with an authentic photo"],
+    about: ["about.webp", "Aerial view of a growing town: red-roofed houses, warehouses and green open land, with more houses in the distance", "center 55%", "Supplied by Afrimetrica: licence to confirm"],
+    consultancy: ["consultancy.webp", "A consultant presents to a group around a meeting table, with a map of Africa and charts on a screen and printed reports on the table", "center 35%", "AI-generated: replace with an authentic photo"],
+    venuesCity: ["venues-city.webp", "The Kwame Nkrumah Memorial Park in Accra: the monument and statue above blue fountains under a clear sky", "center 55%", "Supplied by Afrimetrica: licence to confirm"],
+    trainingExec: ["training-executive.webp", "Professionals with laptops in a meeting around a long table in a bright conference room", "center 50%", "Supplied by Afrimetrica: licence to confirm"],
+    analyticsTeam: ["analytics-team.webp", "Three women in a meeting around a table with laptops, in an office with large windows", "center 40%", "Supplied by Afrimetrica: licence to confirm"],
+    coWorkshop: ["consultancy-workshop.webp", "Participants in a workshop write and draw charts on large sheets of paper spread across a table", "center 40%", "Supplied by Afrimetrica: licence to confirm"],
+    vision: ["vision-city.webp", "Aerial view of a city of red-roofed houses and green trees, with a railway line running towards the horizon under a blue sky", "center 60%", "Supplied by Afrimetrica: licence to confirm"],
+    fieldwork: ["fieldwork-team.webp", "A field team with a tablet and clipboards talks with women in a village, beside thatched houses", "center 40%", "AI-generated: replace with an authentic photo"],
+    analytics: ["analytics.webp", "Three analysts look at a laptop together, with a dashboard of charts on the wall behind them", "center 8%", "AI-generated: replace with an authentic photo"],
   };
   // A photo shown beside text (for photos too small to stretch across a full-width slideshow).
   const sidePhoto = (k, cls = "side-photo") => { const [f, alt, pos] = PHOTO[k]; return `<figure class="${cls}"><img src="/photos/${f}" alt="${esc(alt)}" loading="lazy" decoding="async" style="object-position:${pos}"></figure>`; };
@@ -3112,12 +3176,13 @@ ${richSummary(st, rows)}`;
   }
   async function submitEnquiry(type) {
     const v = (k) => { const el = $(`#eq-${type}-${k}`); return el ? (el.value || "").trim() : ""; };
-    const errs = [];
-    if (!v("name")) errs.push("Enter your name.");
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v("email"))) errs.push("Enter a valid email address.");
-    if (v("msg").length < 5) errs.push("Tell us a little about what you need.");
-    if (!$(`#eq-${type}-ok`).checked) errs.push("Tick the box so we can contact you.");
-    if (errs.length) { $(`#eq-${type}-err`).innerHTML = `<div class="errs">${errs.map(esc).join("<br>")}</div>`; return; }
+    const checks = [["name", !v("name"), "Enter your name."], ["email", !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v("email")), "Enter a valid email address."],
+      ["msg", v("msg").length < 5, "Tell us a little about what you need."], ["ok", !$(`#eq-${type}-ok`).checked, "Tick the box so we can contact you."]];
+    const errId = `eq-${type}-err`, errs = checks.filter(([, bad]) => bad);
+    // Mark each field: invalid ones point to the error summary; fixed ones are cleared.
+    for (const [k, bad] of checks) { const el = $(`#eq-${type}-${k}`); if (!el) continue; if (bad) { el.setAttribute("aria-invalid", "true"); el.setAttribute("aria-describedby", errId); } else { el.removeAttribute("aria-invalid"); el.removeAttribute("aria-describedby"); } }
+    if (errs.length) { $(`#${errId}`).innerHTML = `<div class="errs" role="alert"><b>Please check ${errs.length === 1 ? "this" : "these"}:</b><ul>${errs.map(([, , m]) => `<li>${esc(m)}</li>`).join("")}</ul></div>`; $(`#eq-${type}-${errs[0][0]}`).focus(); return; }
+    $(`#${errId}`).innerHTML = "";
     const item = { id: newId("eq"), type, requesterId: S.uid, status: "new", createdAt: Date.now(),
       contact: { name: v("name"), email: v("email").toLowerCase(), phone: v("phone"), organisation: v("org") },
       subject: v("subject"), message: v("msg"), details: { service: v("service"), timeline: v("timeline"), budget: v("budget") } };
@@ -3962,7 +4027,7 @@ ${richSummary(st, rows)}`;
     if (s && !v("#rg-phone")) errs.push("Add a phone number so we can confirm your place.");
     if (s && seatsLeft(s) === 0) errs.push("Sorry, this session is full.");
     if (myEnrol(c.id, s ? s.id : "")) errs.push("You're already registered for this.");
-    if (errs.length) { $("#rg-err").innerHTML = `<div class="errs">${errs.map(esc).join("<br>")}</div>`; return; }
+    if (errs.length) { $("#rg-err").innerHTML = `<div class="errs" role="alert">${errs.map(esc).join("<br>")}</div>`; return; }
     const e = { id: newId("en"), userId: S.uid, courseId: c.id, sessionId: s ? s.id : "", status: s ? "registered" : "interest", name, email, phone: v("#rg-phone"), organisation: v("#rg-org"), notes: v("#rg-notes"), createdAt: Date.now() };
     const ok = await save(() => backend.putPriv("enrollments", e), s ? "You're registered. We'll email you to confirm your place." : "Thanks. We'll let you know when dates are announced.");
     if (ok) { S.regFor = null; render(); }
@@ -4246,6 +4311,9 @@ ${richSummary(st, rows)}`;
   function prOverview() {
     return `<div class="page-head"><div><span class="eyebrow gold">Our practices</span><h1>Five practices, one firm</h1><p class="muted" style="max-width:70ch">Afrimetrica brings data, research, advice and learning together. Each practice has its own specialists and methods, and they work together on larger assignments, from collecting the evidence to acting on it.</p></div></div>
       ${practiceCards()}
+      <section class="stack" aria-labelledby="flowH"><div class="section-head"><span class="eyebrow gold">How the practices work together</span><h2 id="flowH" class="h2xl">From evidence to decisions</h2></div>
+        <ol class="flow">${[["Collect", "Research & Evaluation designs studies and gathers data; Digital Solutions provides the survey platform.", ["research-evaluation", "digital-solutions"]], ["Analyse", "Data & Intelligence turns data into reliable, clearly explained evidence.", ["data-intelligence"]], ["Advise", "Strategy & Advisory helps leaders decide and act on the evidence.", ["strategy-advisory"]], ["Build capability", "Executive Education develops the skills to sustain the work.", ["executive-education"]]].map(([t, d, ids]) => `<li><b>${esc(t)}</b><span>${esc(d)}</span><span class="flow-links">${ids.map((id) => `<a href="#practices/${id}">${esc(practice(id).name)}</a>`).join(" · ")}</span></li>`).join("")}</ol>
+      </section>
       <section class="band"><div class="stack" style="gap:10px"><span class="eyebrow">Not sure where to start?</span><h2>Tell us what you need to decide</h2><p>Describe the question or the problem. We'll suggest the right mix of research, analysis, advice and training.</p></div>
         <div class="band-list"><a class="band-item" href="#contact"><b>Send an enquiry</b><span>We reply within two working days</span></a><a class="band-item" href="#about/team"><b>Meet our people</b><span>The specialists who do the work</span></a></div></section>`;
   }
@@ -4464,7 +4532,7 @@ ${richSummary(st, rows)}`;
     const enq = S.enquiries.filter((e) => e.requesterId === S.uid).sort((a, b) => b.createdAt - a.createdAt);
     const fw = S.fieldwork.filter((f) => f.requesterId === S.uid);
     const mine = myStudies();
-    const sec = { courses: `<section class="card"><div class="qmeta"><h2>My courses</h2><a class="btn small" href="#training">Browse courses</a></div>`, surveys: `<section class="card"><div class="qmeta"><h2>My surveys</h2><a class="btn small" href="#studies">Open My surveys</a></div><p class="muted">${mine.length ? `${mine.length} survey${mine.length === 1 ? "" : "s"}: ${mine.filter((x) => x.status === "live").length} live, ${mine.filter((x) => x.status === "draft").length} draft.` : "You haven't created a survey yet."}</p><div class="row wrap"><a class="btn small primary" href="#create">Create a survey</a><a class="btn small" href="#panel">Take paid surveys</a></div></section>`, enquiries: `<section class="card"><h2>My enquiries</h2>${enq.length || fw.length ? `<div class="table-wrap" tabindex="0"><table><thead><tr><th>Date</th><th>About</th><th>Status</th></tr></thead><tbody>${enq.map((e) => `<tr><td class="n">${fmtDate(e.createdAt)}</td><td>${esc({ analytics: "Data analysis", consultancy: "Consultancy", contact: "General", training: "Training" }[e.type] || e.type)}${e.details && e.details.service ? ` · ${esc(e.details.service)}` : ""}</td><td><span class="pill">${st[e.status] || e.status}</span></td></tr>`).join("")}${fw.map((f) => `<tr><td class="n">${fmtDate(f.createdAt)}</td><td>Paper survey fieldwork · ${esc(f.ref || "")}</td><td><span class="pill">${esc({ new: "Received", contacted: "We've been in touch", quoted: "Final quote sent", won: "Agreed", lost: "Closed" }[f.status] || f.status)}</span></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No enquiries yet. Ask us about <a href="#consultancy">consultancy</a>, <a href="#practices/data-intelligence">analysis</a> or <a href="#training">training</a>.</p>`}</section>`, profile: `<section class="card"><h2>Profile</h2>${API ? `<dl class="kv"><dt>Name</dt><dd>${esc(u.name || "—")}</dd><dt>Email</dt><dd>${esc(u.email)}</dd><dt>Sign-in</dt><dd>${u.google ? "Google" : "Email and password"}</dd><dt>Email</dt><dd>${unverified() ? `<span class="warn">Not confirmed</span> <button class="linkbtn" data-act="resendVerifyAcct">Send link again</button>` : "Confirmed"}</dd></dl><div><button class="btn small ghost" data-act="signout">Sign out</button></div>` : `<p class="muted">On claude.ai, Afrimetrica uses your Claude account.</p>`}</section>`, participant: `<section class="card"><h2>Participant profile</h2><p class="muted">${S.profile ? `${esc(S.profile.age)} · ${esc(S.profile.gender)} · ${esc(S.profile.country)} · ${esc(S.profile.occupation)}` : "Set up a short profile to take paid surveys."}</p><a class="btn small" href="#panel" style="align-self:flex-start">${S.profile ? "Studies and earnings" : "Set up profile"}</a></section>` };
+    const sec = { courses: `<section class="card"><div class="qmeta"><h2>My courses</h2><a class="btn small" href="#training">Browse courses</a></div>${myCourses()}`, surveys: `<section class="card"><div class="qmeta"><h2>My surveys</h2><a class="btn small" href="#studies">Open My surveys</a></div><p class="muted">${mine.length ? `${mine.length} survey${mine.length === 1 ? "" : "s"}: ${mine.filter((x) => x.status === "live").length} live, ${mine.filter((x) => x.status === "draft").length} draft.` : "You haven't created a survey yet."}</p><div class="row wrap"><a class="btn small primary" href="#create">Create a survey</a><a class="btn small" href="#panel">Take paid surveys</a></div></section>`, enquiries: `<section class="card"><h2>My enquiries</h2>${enq.length || fw.length ? `<div class="table-wrap" tabindex="0"><table><thead><tr><th>Date</th><th>About</th><th>Status</th></tr></thead><tbody>${enq.map((e) => `<tr><td class="n">${fmtDate(e.createdAt)}</td><td>${esc({ analytics: "Data analysis", consultancy: "Consultancy", contact: "General", training: "Training" }[e.type] || e.type)}${e.details && e.details.service ? ` · ${esc(e.details.service)}` : ""}</td><td><span class="pill">${st[e.status] || e.status}</span></td></tr>`).join("")}${fw.map((f) => `<tr><td class="n">${fmtDate(f.createdAt)}</td><td>Paper survey fieldwork · ${esc(f.ref || "")}</td><td><span class="pill">${esc({ new: "Received", contacted: "We've been in touch", quoted: "Final quote sent", won: "Agreed", lost: "Closed" }[f.status] || f.status)}</span></td></tr>`).join("")}</tbody></table></div>` : `<p class="muted">No enquiries yet. Ask us about <a href="#consultancy">consultancy</a>, <a href="#practices/data-intelligence">analysis</a> or <a href="#training">training</a>.</p>`}</section>`, profile: `<section class="card"><h2>Profile</h2>${API ? `<dl class="kv"><dt>Name</dt><dd>${esc(u.name || "—")}</dd><dt>Email</dt><dd>${esc(u.email)}</dd><dt>Sign-in</dt><dd>${u.google ? "Google" : "Email and password"}</dd><dt>Email</dt><dd>${unverified() ? `<span class="warn">Not confirmed</span> <button class="linkbtn" data-act="resendVerifyAcct">Send link again</button>` : "Confirmed"}</dd></dl><div><button class="btn small ghost" data-act="signout">Sign out</button></div>` : `<p class="muted">On claude.ai, Afrimetrica uses your Claude account.</p>`}</section>`, participant: `<section class="card"><h2>Participant profile</h2><p class="muted">${S.profile ? `${esc(S.profile.age)} · ${esc(S.profile.gender)} · ${esc(S.profile.country)} · ${esc(S.profile.occupation)}` : "Set up a short profile to take paid surveys."}</p><a class="btn small" href="#panel" style="align-self:flex-start">${S.profile ? "Studies and earnings" : "Set up profile"}</a></section>` };
     const part = (S.acc || "").split("/")[0];
     const head = `<div class="page-head"><div><span class="eyebrow gold">My Account</span><h1>${API ? `Hello${firstName(u) ? ", " + esc(firstName(u)) : ""}` : "Your account"}</h1></div>${S.isOwner ? `<a class="btn gold" href="#business">Open admin area</a>` : ""}</div>`;
     if (part === "courses") return head + sec.courses;
@@ -4517,7 +4585,7 @@ ${richSummary(st, rows)}`;
   }
   async function saveCourse() {
     const c = S.courseEdit; if (!c) return;
-    if (!String(c.title || "").trim()) { $("#ce-err").innerHTML = `<div class="errs">Give the course a title.</div>`; return; }
+    if (!String(c.title || "").trim()) { $("#ce-err").innerHTML = `<div class="errs" role="alert">Give the course a title.</div>`; return; }
     const { outcomesText, ...rest } = c;
     const course = { ...rest, title: c.title.trim(), outcomes: String(outcomesText || "").split("\n").map((x) => x.trim()).filter(Boolean), sessions: c.sessions.map((s) => ({ ...s, seats: Math.max(0, Math.floor(+s.seats || 0)), fee: Math.max(0, +s.fee || 0) })), createdAt: c.createdAt || Date.now(), updatedAt: Date.now() };
     const ok = await save(() => backend.putCourse(course), course.status === "published" ? "Course saved and published." : "Course saved as a draft.");
@@ -4555,8 +4623,8 @@ ${richSummary(st, rows)}`;
   async function saveSettings() {
     const v = (k) => ($("#st-" + k).value || "").trim();
     const x = { email: v("email"), phone: v("phone"), whatsapp: v("whatsapp"), address: v("address"), hours: v("hours"), linkedin: v("linkedin"), updatedAt: Date.now() };
-    if (x.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(x.email)) { $("#st-err").innerHTML = `<div class="errs">That email address doesn't look right.</div>`; return; }
-    if (x.linkedin && !/^https:\/\//.test(x.linkedin)) { $("#st-err").innerHTML = `<div class="errs">The LinkedIn link must start with https://</div>`; return; }
+    if (x.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(x.email)) { $("#st-err").innerHTML = `<div class="errs" role="alert">That email address doesn't look right.</div>`; return; }
+    if (x.linkedin && !/^https:\/\//.test(x.linkedin)) { $("#st-err").innerHTML = `<div class="errs" role="alert">The LinkedIn link must start with https://</div>`; return; }
     await save(() => backend.putSettings(x), "Contact details saved.");
   }
 
@@ -4668,7 +4736,7 @@ ${richSummary(st, rows)}`;
       const errs = [];
       if (!(age >= 18 && age <= 120)) errs.push("Enter an age of 18 or over.");
       if (!gender || !country || !occupation) errs.push("Choose an answer for gender, country and occupation.");
-      if (errs.length) { $("#profileErr").innerHTML = `<div class="errs">${errs.map(esc).join("<br>")}</div>`; return; }
+      if (errs.length) { $("#profileErr").innerHTML = `<div class="errs" role="alert">${errs.map(esc).join("<br>")}</div>`; return; }
       const p = { age, gender, country, occupation, updatedAt: Date.now() };
       const ok = await save(() => backend.putProfile(p));
       if (ok) { S.profile = p; S.editProfile = false; toast("Profile saved."); render(); }
@@ -4815,6 +4883,16 @@ ${richSummary(st, rows)}`;
   });
   document.addEventListener("click", (e) => { if (S.trMenu && !e.composedPath().some((n) => n.id === "subnav")) { S.trMenu = null; renderTabs(); } });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && S.trMenu) { const k = S.trMenu; S.trMenu = null; renderTabs(); const b = $(`[data-act="trMenu"][data-k="${k}"]`); if (b) b.focus(); } });
+  // Skip link: focus the main content (a #main address would be treated as a page by the router).
+  document.addEventListener("click", (e) => { const a = e.target.closest && e.target.closest("a.skip"); if (!a) return; e.preventDefault(); const m = $("#main"); m.setAttribute("tabindex", "-1"); m.focus(); });
+  // Mobile menu: the Menu button shows the main menu as a list on narrow screens.
+  function setMenu(open, focusBtn) {
+    const btn = $("#menuBtn"); if (!btn) return;
+    document.querySelector(".topbar").classList.toggle("menu-open", open); btn.setAttribute("aria-expanded", String(open));
+    if (open) { const first = $("#tabs a"); if (first) first.focus(); } else if (focusBtn) btn.focus();
+  }
+  document.addEventListener("click", (e) => { if (e.target.closest && e.target.closest("#menuBtn")) setMenu($("#menuBtn").getAttribute("aria-expanded") !== "true"); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && $("#menuBtn") && $("#menuBtn").getAttribute("aria-expanded") === "true") setMenu(false, true); });
   window.addEventListener("hashchange", onNavigate);
   window.addEventListener("popstate", onNavigate);
   // Links to public pages move between real addresses without reloading the page.

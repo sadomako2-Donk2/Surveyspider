@@ -122,7 +122,9 @@ process.env.NOINDEX = "1";
 }
 delete process.env.NOINDEX;
 const sec = await fetch(base + "/"), csp = sec.headers.get("content-security-policy") || "";
-check("pages send a content security policy that blocks outside scripts", /script-src 'self' 'unsafe-inline'(;|$)/.test(csp) && /object-src 'none'/.test(csp) && /frame-ancestors 'self'/.test(csp) && /fonts\.googleapis\.com/.test(csp));
+check("pages send a content security policy that allows only this site's scripts, styles and fonts", /script-src 'self' 'unsafe-inline'(;|$)/.test(csp) && /object-src 'none'/.test(csp) && /frame-ancestors 'self'/.test(csp) && /font-src 'self'(;|$)/.test(csp) && !/googleapis|gstatic/.test(csp));
+const font = await fetch(base + "/fonts/inter-latin-400-normal.woff2");
+check("brand fonts are served from this site, and the page loads no outside fonts", font.status === 200 && font.headers.get("content-type") === "font/woff2" && (await font.arrayBuffer()).byteLength > 10000 && !/fonts\.(googleapis|gstatic)/.test(homeHtml) && (await fetch(base + "/fonts/README.md")).status !== 200);
 check("pages send permissions and opener policies", /camera=\(\)/.test(sec.headers.get("permissions-policy") || "") && sec.headers.get("cross-origin-opener-policy") === "same-origin");
 check("HSTS is sent over https only", !sec.headers.get("strict-transport-security") && /max-age=31536000/.test((await fetch(base + "/healthz", { headers: { "X-Forwarded-Proto": "https" } })).headers.get("strict-transport-security") || ""));
 const lib = await fetch(base + "/vendor/exceljs.min.js");
