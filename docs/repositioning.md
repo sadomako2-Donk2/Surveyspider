@@ -1,5 +1,17 @@
 # Afrimetrica repositioning: handover
 
+## Decisions recorded (28 November 2026)
+
+| Question | Decision | Implemented |
+|---|---|---|
+| Leadership cards | Rename to partner titles | Leadership & Partners: Managing Partner; Partner, Data & Intelligence; Partner, Research & Evaluation; Partner, Strategy & Advisory. Practice Directors: Director, Executive Education; Director, Digital Solutions. Shown as role cards until names are added. The earlier CEO / Business Development / Finance / People / Operations roles are replaced. |
+| People's titles | Keep as they are; Stephen like the others | All seven keep their titles, in the Expert Network |
+| Africa-focused or global | Africa-focused; international venues are additional | "across Africa" wording; venues grouped Africa, Europe, North America, Asia |
+| Logo | Update | New tagline "DATA • RESEARCH • ADVISORY • EXECUTIVE EDUCATION" in the header logo, footer logo and share image (master file supplied separately) |
+| Mission | Approved | As written |
+
+Still open: staging review and production release approval.
+
 Branch: `repositioning` (from `main`). **Not deployed.** Render deploys only `main`; nothing on www.afrimetrica.com has changed.
 Source: *Afrimetrica Strategy and Claude Website Prompts* (leadership discussion paper, 28 November 2026), treated as a proposed strategy, not as evidence of appointments or capabilities.
 
@@ -82,9 +94,9 @@ Rollback: Render, surveyspider, Events, **Rollback** to the previous deploy; or 
 - [ ] Positioning line and description
 - [ ] Practice names and what each covers (section 3)
 - [ ] Navigation labels (Practices, Executive Education, Surveys, Insights)
-- [ ] Each person's title, practice and affiliation (section 4)
-- [ ] Leadership: hide, show roles, or switch to partner titles; names when ready
-- [ ] Mission wording; Africa-focused vs global wording
-- [ ] Logo artwork update
+- [x] Each person's title, practice and affiliation (kept; Expert Network)
+- [x] Leadership: partner titles (names when ready)
+- [x] Mission wording; Africa-focused wording
+- [x] Logo artwork update
 - [ ] Staging review
 - [ ] Production release
