@@ -3163,6 +3163,8 @@ ${richSummary(st, rows)}`;
     mission: ["missionMeeting", "missionTraining", "missionSpeaker", "missionAudience"],
     // Our vision: African cities and evidence-led teamwork, from photos already on the site.
     vision: ["skyline", "missionMeeting", "waterfront", "district"],
+    // About our certificates: training photos already on the site.
+    certificates: ["missionTraining", "trainingExec", "missionSpeaker", "whiteboard"],
     // Insights: AI illustrations of data and research work (owner's request).
     insights: ["dataIntel", "analyticsAI", "digital", "trainingAI"],
   };
@@ -3445,12 +3447,12 @@ ${richSummary(st, rows)}`;
     return `${abCrumbs("Our approach")}${approachBody()}`;
   }
   function abCertificates() {
-    return `${abCrumbs("About our certificates")}<div class="page-head"><div><span class="eyebrow gold">About our certificates</span><h1>Certificates of completion</h1></div></div>
-      <div class="split">
+    return `${abCrumbs("About our certificates")}${introMedia(`<div class="stack intro-text"><div class="page-head"><div><span class="eyebrow gold">About our certificates</span><h1>Certificates of completion</h1></div></div>
+      <div class="stack">
         <section class="card"><h2>What they confirm</h2><p class="muted">Afrimetrica Executive Education issues certificates of completion. They confirm that a participant attended and completed a course, and show the course title, its length, the dates and the venue (or "live online").</p></section>
         <section class="card"><h2>What they are not</h2><p class="muted">They are not accredited academic or professional qualifications, and we don't claim endorsement by any professional body. If your professional body asks you to log training hours, you can usually record an Afrimetrica course as CPD yourself; check your body's own rules.</p></section>
       </div>
-      <p><a class="btn primary" href="#training/finder">Find a course</a></p>`;
+      <p><a class="btn primary" href="#training/finder">Find a course</a></p></div>`, "certificates")}`;
   }
   function viewAbout() {
     const part = (S.ab || "").split("/")[0];

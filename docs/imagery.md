@@ -47,6 +47,7 @@ The screenshots were taken from a local copy of the site with a throwaway accoun
 | `about.webp` (aerial view of a town) | About overview | Replaced at the owner's request by the Memorial Park photo |
 | `fieldwork-team.webp` | Fieldwork service, Research & Advisory card | Replaced by P05 (the guide's research illustration) |
 | `vision-city.webp` | Our vision | Guide: Mission and Vision stay text-led |
+| About our certificates | mission-training, training-executive, mission-speaker, P12 (photos already on the site; owner's request) |
 
 ## All guide pictures in use (owner's request)
 
